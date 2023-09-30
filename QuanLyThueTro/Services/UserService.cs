@@ -1,6 +1,6 @@
 ﻿namespace QuanLyThueTro.Services
 {
-    public class UserService
+    public class UserService:IUsers
     {
     }
 }
