@@ -22,7 +22,6 @@
     <Folder Include="Controllers\" />
     <Folder Include="Mapper\" />
     <Folder Include="Dto\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
