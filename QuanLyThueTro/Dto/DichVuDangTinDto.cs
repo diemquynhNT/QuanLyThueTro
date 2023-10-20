@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace QuanLyThueTro.Model
+namespace QuanLyThueTro.Dto
 {
-    public class DichVuDangTin
+    public class DichVuDangTinDto
     {
-        [Key]
-        public string idDichVu { get; set; }
         [Required]
         [MaxLength(100)]
         public string loaiDichVu { get; set; }
@@ -13,8 +11,5 @@ namespace QuanLyThueTro.Model
         public DateTime hanDangTin { get; set; }
         [Required]
         public float giaCa { get; set; }
-
-        public virtual ICollection<TinDang> TinDangs { get; set; }
-
     }
 }

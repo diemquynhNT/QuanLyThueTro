@@ -1,4 +1,5 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging.Signing;
 using QuanLyThueTro.Data;
 using QuanLyThueTro.Services;
 
@@ -13,7 +14,8 @@ builder.Services.AddDbContext<MyDBContext>(option =>
 });
 //automapper
 builder.Services.AddAutoMapper(typeof(Program));
-//
+// Đăng ký interface và thực hiện các chức năng của nó trong file
+builder.Services.AddScoped<IExtensionService, ExtensionService>();
 builder.Services.AddScoped<IUsers, UserService>();
 
 builder.Services.AddControllers();
