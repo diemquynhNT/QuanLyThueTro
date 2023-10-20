@@ -20,6 +20,24 @@ namespace QuanLyThueTro.Services
             chucVu.idChucVu = "#RO" + num;
         }
 
+        public void AutoPK_DichVu(DichVuDangTin dichVu)
+        {
+            Random rnd = new Random();
+            string num = rnd.Next(1000, 10000000).ToString();
+            dichVu.idDichVu = "#DV" + num;
+        }
+
+        public void AutoPK_LoaiTK(LoaiTaiKhoan loaiTaiKhoan)
+        {
+            Random rnd = new Random();
+            string num = rnd.Next(1000, 10000000).ToString();
+            loaiTaiKhoan.idLoaiTK = "#TAC" + num;
+        }
+
+
+        #region Check Exist Object's name 
+        #endregion
+
         public bool IsNotExistNameChucVu(ChucVu chucVu)
         {
             var existing = _dbContext.chucVus.FirstOrDefault(x => x.tenChucVu == chucVu.tenChucVu);
@@ -32,9 +50,39 @@ namespace QuanLyThueTro.Services
             {
                 return false;
             }
-            //else if(_dbContext.chucVus.Any(u => u.tenChucVu == chucVu.tenChucVu))
-            //    return false;
             _dbContext.chucVus.Remove(existing);
+            return true;
+        }
+
+        public bool IsNotExistNameDichVu(DichVuDangTin dichVu)
+        {
+            var existing = _dbContext.dichVuDangTins.FirstOrDefault(x => x.loaiDichVu == dichVu.loaiDichVu);
+
+            if (existing == null)
+            {
+                return true;
+            }
+            if (existing.idDichVu != dichVu.idDichVu && _dbContext.dichVuDangTins.Any(x => x.loaiDichVu == dichVu.loaiDichVu))
+            {
+                return false;
+            }
+            _dbContext.dichVuDangTins.Remove(existing);
+            return true;
+        }
+
+        public bool IsNotExistNameLoaiTK(LoaiTaiKhoan loaiTaiKhoan)
+        {
+            var existing = _dbContext.loaiTaiKhoans.FirstOrDefault(x => x.tenLoaiTK == loaiTaiKhoan.tenLoaiTK);
+
+            if (existing == null)
+            {
+                return true;
+            }
+            if (existing.idLoaiTK != loaiTaiKhoan.idLoaiTK && _dbContext.loaiTaiKhoans.Any(x => x.tenLoaiTK == loaiTaiKhoan.tenLoaiTK))
+            {
+                return false;
+            }
+            _dbContext.loaiTaiKhoans.Remove(existing);
             return true;
         }
     }

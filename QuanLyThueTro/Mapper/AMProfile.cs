@@ -9,6 +9,8 @@ namespace QuanLyThueTro.Mapper
         public AMProfile()
         {
             CreateMap<ChucVuDto, ChucVu>();
+            CreateMap<LoaiTaiKhoanDto, LoaiTaiKhoan>();
+            CreateMap<DichVuDangTinDto, DichVuDangTin>();
         }
     }
 }
