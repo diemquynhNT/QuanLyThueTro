@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using NuGet.Packaging.Signing;
 using QuanLyThueTro.Data;
 using QuanLyThueTro.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,35 @@ builder.Services.AddDbContext<MyDBContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DBThueTro"));
 });
+
+
+
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+var secretKey = builder.Configuration["AppSettings:SecretKey"];
+//mã hóa secretkey
+var sk = Encoding.UTF8.GetBytes(secretKey);
+
+builder.Services.AddAuthentication
+    (JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+    opt =>
+    {
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+
+            ValidateIssuer = false,
+            ValidateAudience = false,
+
+            //ký vào token
+            ValidateIssuerSigningKey = true,
+
+            IssuerSigningKey = new SymmetricSecurityKey(sk),
+            ClockSkew = TimeSpan.Zero
+
+        };
+    }
+    );
+
+
 //automapper
 builder.Services.AddAutoMapper(typeof(Program));
 // Đăng ký interface và thực hiện các chức năng của nó trong file
@@ -32,6 +64,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();    
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
