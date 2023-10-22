@@ -30,7 +30,13 @@
     <header class="app-header">
         <div class="app-nav">
             <div class="user-wrapper">
-                <img src="" width="30px" height="30px">
+                @if (!string.IsNullOrEmpty(ViewBag.UserImageUrl))
+                {
+                    <img src="@Url.Content("~/img/@ViewBag.UserImageUrl")" alt="User Image" />
+                }else{
+                    <img src="@Url.Content("~/img/user.png")" width="30px" height="30px">
+                }
+                
                 <a class="logout_item" href="@Url.Action("Logout", "Login")">
                     <i class='app-menu__icon bx bx-log-out '></i>
                 </a>

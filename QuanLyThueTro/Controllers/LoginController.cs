@@ -55,7 +55,7 @@ namespace QuanLyThueTro.Controllers
                 {
             new Claim(ClaimTypes.Name, u.hoTen),
             new Claim("Id", u.idUser.ToString()),
-            new Claim("TokenId", Guid.NewGuid().ToString()),
+            new Claim("ImageUrl", u.hinhAnh)
             }),
 
                 Expires = DateTime.UtcNow.AddMinutes(1),
