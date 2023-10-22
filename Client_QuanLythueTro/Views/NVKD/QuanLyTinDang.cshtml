@@ -1,0 +1,143 @@
+﻿@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
+
+@{
+    ViewData["Title"] = "QuanLyTinDang";
+    Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
+    ViewBag.post = "active";
+}
+<!-- Tab panes -->
+<div class="tab-content">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tile">
+                    <div class="row" style="padding:10px;">
+                        <p>
+                            <a asp-action="CreateTinDang" class="btn btn-danger">Create New</a>
+                        </p>
+                       @* <div class="col-sm-2">
+                            <a class="btn btn-outline-dark btn-sm" title="In" onclick="printDiv('printMe')">
+                                <i class="fas fa-print"></i> In dữ liệu
+                            </a>
+                        </div>*@
+                        @*<div class="col-sm-4">
+                            @using (Html.BeginForm("QLDonHang", "KeToan", FormMethod.Post, new { @clas = "" }))
+                            {
+                                <div class="row">
+
+                                    <div class="col-sm-2">
+                                        @Html.DropDownList("thangs", (IEnumerable<SelectListItem>)TempData["thangs"], htmlAttributes: new { @class = "form-control-sm" })
+                                    </div>
+                                    <div class="col-sm-2">
+                                        @Html.DropDownList("tinhtrangdh", (IEnumerable<SelectListItem>)TempData["tinhtrangdh"], htmlAttributes: new { @class = "form-control-sm", })
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="submit" class="btn btn-danger btn-sm" value="Tìm kiếm">
+                                    </div>
+                                </div>
+                            }
+                        </div>*@
+
+                    </div>
+                    <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                        <div class="row" id="printMe">
+                            <div class="col-sm-12  table-responsive">
+                                <table class="table table-hover table-bordered js-copytextarea dataTable no-footer" cellpadding="0" cellspacing="0" border="0" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+                                    @*//Phần render từng dòng trong C#*@
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Mã DH</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Đại lý</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Điểm điểm giao</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Tình trạng thanh toán</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Ngày lập đơn</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Tổng tiền</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Tình trạng giao hàng</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Hóa đơn</th>
+                                            <th class="sorting">Chức năng</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.idTinDang)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.tieuDe)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ngayBatDau)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ngayKetThuc)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.trangThaiTinDang)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.sdtNguoiLienHe)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.nguoiLienHe)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.doiTuongChoThue)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.soLuongPhong)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ngayTaoTin)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.idKhuVuc)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.idDichVu)
+                                                </td>
+                                                <td>
+                                                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                                                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                                </td>
+                                            </tr>
+                                           
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    //In dữ liệu
+    function printDiv(divName) {
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+
+    }
+
+
+</script>
+
+
+
+
+

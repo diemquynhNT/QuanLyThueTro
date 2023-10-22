@@ -45,26 +45,34 @@ namespace Client_QuanLythueTro.Controllers
             return View();
         }
 
+        // GET: NVKDController
+        public ActionResult QuanLyTinDang()
+        {
+            List<TinDang> listTin = apiGateWay.ListTinDang();
+            return View(listTin);
+        }
+
         // GET: NVKDController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: NVKDController/Create
-        public ActionResult Create()
+        public ActionResult CreateTinDang()
         {
-            return View();
+            TinDang tin = new TinDang();
+            return View(tin);
         }
 
         // POST: NVKDController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult CreateTinDang(TinDang tin)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                apiGateWay.CreateTinDang(tin);
+                return RedirectToAction("QuanLyTinDang");
             }
             catch
             {

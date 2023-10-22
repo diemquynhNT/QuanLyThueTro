@@ -40,5 +40,38 @@ namespace Client_QuanLythueTro.APIGateWay
             return listTin;
         }
 
+        //create
+        public TinDang CreateTinDang(TinDang tin)
+        {
+            if (url.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string json = JsonConvert.SerializeObject(tin);
+            try
+            {
+                HttpResponseMessage response = httpClient.PostAsync(url, new StringContent(json, Encoding.UTF8, "application/json")).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+
+                    var data = JsonConvert.DeserializeObject<TinDang>(result);
+
+                    if (data != null)
+                        tin = data;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return tin;
+        }
+
     }
 }
