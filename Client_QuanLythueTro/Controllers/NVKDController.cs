@@ -53,9 +53,10 @@ namespace Client_QuanLythueTro.Controllers
         }
 
         // GET: NVKDController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult DetailTinDang(string id)
         {
-            return View();
+            TinDang tin = apiGateWay.GetTin(id);
+            return View(tin);
         }
 
         public ActionResult CreateTinDang()
@@ -81,19 +82,21 @@ namespace Client_QuanLythueTro.Controllers
         }
 
         // GET: NVKDController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult EditTin(string id)
         {
-            return View();
+            TinDang tin = apiGateWay.GetTin(id);
+            return View(tin);
         }
 
         // POST: NVKDController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult EditTin(TinDang tin)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                apiGateWay.UpdateTin(tin);
+                return RedirectToAction("QuanLyTinDang");
             }
             catch
             {
@@ -102,19 +105,21 @@ namespace Client_QuanLythueTro.Controllers
         }
 
         // GET: NVKDController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult DeleteTin(string id)
         {
-            return View();
+            TinDang tin = apiGateWay.GetTin(id);
+            return View(tin);
         }
 
         // POST: NVKDController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteTin(string id,TinDang tin)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                apiGateWay.DeleteTin(id);
+                return RedirectToAction("QuanLyTinDang");
             }
             catch
             {

@@ -30,19 +30,36 @@ namespace QuanLyThueTro.Controllers
         }
 
         // GET api/<TinDangController>/5
+        //Detail
         [HttpGet("{id}")]
-        public Task<TinDang> GetById(string id)
+        public async Task<ActionResult> GetById(string id)
         {
-            return _context.GetTinDangById(id);
-        }
+            try
+            {
+                TinDangVM tinvm = new TinDangVM();
+                var tin = _context.GetTinDangById(id);
+                var phong = _context.GetPhongById(id);
+                if(tin==null || phong ==null)
+                    return NotFound();
+                _mapper.Map(tin, tinvm);
+                _mapper.Map(phong, tinvm);
+                return Ok(tinvm);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
+        }
+      
         [HttpPost]
-        public async Task<ActionResult> AddTin([FromBody] TinDangVM tin)
+        public async Task<ActionResult> AddTin([FromBody] TinDangModel tin)
         {
             try
             {
                 var tinDang = _mapper.Map<TinDang>(tin);
-                await _context.AddTinDang(tinDang);
+                var phong = _mapper.Map<PhongTro>(tin);
+                await _context.AddTinDang(tinDang,phong);
                 return Ok("tao thanh cong");
             }
             catch(Exception ex)
@@ -52,15 +69,17 @@ namespace QuanLyThueTro.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, [FromBody] TinDangVM tinvVM)
+        public async Task<IActionResult> Update(string id, [FromBody] TinDangModel tinvVM)
         {
             try
             {
-                var tinFind = await _context.GetTinDangById(id);
+                var tinFind =  _context.GetTinDangById(id);
+                var phongFind = _context.GetPhongById(id);
                 if (tinFind == null)
-                    return BadRequest("khong tim thay");
+                    return NotFound("khong tim thay");
                 _mapper.Map(tinvVM, tinFind);
-                await _context.UpdateTinDang(tinFind);
+                _mapper.Map(tinvVM, phongFind);
+                await _context.UpdateTinDang(tinFind,phongFind);
                 return Ok(" cap nhat thanh cong");
             }
             catch (Exception ex)
