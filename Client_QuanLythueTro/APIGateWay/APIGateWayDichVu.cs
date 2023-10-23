@@ -5,23 +5,24 @@ using System.Text;
 
 namespace Client_QuanLythueTro.APIGateWay
 {
-    public class APIGateWayTinDang
+    public class APIGateWayDichVu
     {
-        private string url = "https://localhost:7034/api/TinDang";
+        private string urlGoiTin = "https://localhost:7034/api/DichVuDangTins";
+        private string urlTaiKhoan = "https://localhost:7034/api/LoaiTaiKhoans";
         private HttpClient httpClient = new HttpClient();
 
-        public List<TinDang> ListTinDang()
+        public List<DichVuDangTin> ListGoiTin()
         {
-            List<TinDang> listTin = new List<TinDang>();
-            if (url.Trim().Substring(0, 5).ToLower() == "https")
+            List<DichVuDangTin> listTin = new List<DichVuDangTin>();
+            if (urlGoiTin.Trim().Substring(0, 5).ToLower() == "https")
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             try
             {
-                HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                HttpResponseMessage response = httpClient.GetAsync(urlGoiTin).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     string result = response.Content.ReadAsStringAsync().Result;
-                    var datacol = JsonConvert.DeserializeObject<List<TinDang>>(result);
+                    var datacol = JsonConvert.DeserializeObject<List<DichVuDangTin>>(result);
 
                     if (datacol != null)
                         listTin = datacol;
@@ -41,63 +42,56 @@ namespace Client_QuanLythueTro.APIGateWay
         }
 
         //create
-        public TinDang CreateTin(TinDang ls)
+        public DichVuDangTin CreateGoiTin(DichVuDangTin goitin)
         {
 
-            if (url.Trim().Substring(0, 5).ToLower() == "https")
+            if (urlGoiTin.Trim().Substring(0, 5).ToLower() == "https")
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             try
             {
-                // Chuyển đối tượng LoaiSach thành định dạng JSON
-                string json = JsonConvert.SerializeObject(ls);
+                string json = JsonConvert.SerializeObject(goitin);
 
-                // Tạo nội dung yêu cầu HTTP
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                // Gửi yêu cầu POST đến URL của API để tạo LoaiSach mới
-                HttpResponseMessage response = httpClient.PostAsync(url, content).Result;
+                HttpResponseMessage response = httpClient.PostAsync(urlGoiTin, content).Result;
 
                 if (response.IsSuccessStatusCode)
                 {
-                    // Đọc dữ liệu trả về và chuyển đổi thành đối tượng LoaiSach
                     string result = response.Content.ReadAsStringAsync().Result;
-                    var data = JsonConvert.DeserializeObject<TinDang>(result);
+                    var data = JsonConvert.DeserializeObject<DichVuDangTin>(result);
 
                     if (data != null)
-                        ls = data;
+                        goitin = data;
                 }
                 else
                 {
-                    // Xử lý khi có lỗi xảy ra trong quá trình gọi API
                     string result = response.Content.ReadAsStringAsync().Result;
                     throw new Exception(result);
                 }
             }
             catch (Exception ex)
             {
-                // Xử lý lỗi chung
                 throw new Exception("Lỗi: " + ex.Message);
             }
 
-            return ls;
+            return goitin;
         }
 
 
 
-        public TinDang GetTin(string id)
+        public DichVuDangTin GetGoiTin(string id)
         {
-            TinDang tin = new TinDang();
-            url = url + "/" + id;
-            if (url.Trim().Substring(0, 5).ToLower() == "https")
+            DichVuDangTin tin = new DichVuDangTin();
+            urlGoiTin = urlGoiTin + "/" + id;
+            if (urlGoiTin.Trim().Substring(0, 5).ToLower() == "https")
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             try
             {
-                HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                HttpResponseMessage response = httpClient.GetAsync(urlGoiTin).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     string result = response.Content.ReadAsStringAsync().Result;
-                    var datacol = JsonConvert.DeserializeObject<TinDang>(result);
+                    var datacol = JsonConvert.DeserializeObject<DichVuDangTin>(result);
 
                     if (datacol != null)
                         tin = datacol;
@@ -117,18 +111,18 @@ namespace Client_QuanLythueTro.APIGateWay
         }
 
         // update
-        public TinDang UpdateTin(TinDang tin)
+        public DichVuDangTin UpdateDichVuDangTin(DichVuDangTin tin)
         {
 
-            if (url.Trim().Substring(0, 5).ToLower() == "https")
+            if (urlGoiTin.Trim().Substring(0, 5).ToLower() == "https")
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            string id = tin.idTinDang;
-            url = url + "/" + id;
+            string id = tin.idDichVu;
+            urlGoiTin = urlGoiTin + "/" + id;
             string json = JsonConvert.SerializeObject(tin);
 
             try
             {
-                HttpResponseMessage response = httpClient.PutAsync(url, new StringContent(json, Encoding.UTF8, "application/json")).Result;
+                HttpResponseMessage response = httpClient.PutAsync(urlGoiTin, new StringContent(json, Encoding.UTF8, "application/json")).Result;
                 if (!response.IsSuccessStatusCode)
                 {
                     string result = response.Content.ReadAsStringAsync().Result;
@@ -149,10 +143,10 @@ namespace Client_QuanLythueTro.APIGateWay
         {
             try
             {
-                if (url.Trim().Substring(0, 5).ToLower() == "https")
+                if (urlGoiTin.Trim().Substring(0, 5).ToLower() == "https")
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-                string deleteUrl = $"{url}/{id}";
+                string deleteUrl = $"{urlGoiTin}/{id}";
 
                 var request = new HttpRequestMessage
                 {
@@ -174,31 +168,6 @@ namespace Client_QuanLythueTro.APIGateWay
                 throw new Exception("Lỗi: " + ex.Message);
             }
         }
-        public void DuyetTin(string id, bool status)
-        {
-            try
-            {
-                var requestUrl = url + "/DuyetTin?id=" + id + "&status=" + status;
-
-                var request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri(requestUrl),
-                    Method = HttpMethod.Post
-                };
-
-                var response = httpClient.SendAsync(request).Result;
-                if (!response.IsSuccessStatusCode)
-                {
-                    string result = response.Content.ReadAsStringAsync().Result;
-                    throw new Exception(result);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Lỗi: " + ex.Message);
-            }
-        }
-
-
+        
     }
 }

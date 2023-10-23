@@ -60,7 +60,7 @@ namespace QuanLyThueTro.Controllers
         // PUT: api/DichVuDangTins/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDichVuDangTin(string id, [FromForm] DichVuDangTinDto dichVuDangTinDto)
+        public async Task<IActionResult> PutDichVuDangTin(string id, [FromBody] DichVuDangTinDto dichVuDangTinDto)
         {
             DichVuDangTin dichVuDangTin = _mapper.Map<DichVuDangTin>(dichVuDangTinDto);
             dichVuDangTin.idDichVu = id;
@@ -95,7 +95,7 @@ namespace QuanLyThueTro.Controllers
         // POST: api/DichVuDangTins
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<DichVuDangTin>> PostDichVuDangTin([FromForm] DichVuDangTinDto dichVuDangTinDto)
+        public async Task<ActionResult<DichVuDangTin>> PostDichVuDangTin([FromBody] DichVuDangTinDto dichVuDangTinDto)
         {
             DichVuDangTin dichVuDangTin = _mapper.Map<DichVuDangTin>(dichVuDangTinDto);
           if (_context.dichVuDangTins == null)

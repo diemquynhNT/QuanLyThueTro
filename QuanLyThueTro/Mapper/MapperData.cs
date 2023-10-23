@@ -22,7 +22,6 @@ namespace QuanLyThueTro.Mapper
               .ForMember(dest => dest.giaPhong, act => act.MapFrom(src => src.giaPhong))
               .ForMember(dest => dest.dienTich, act => act.MapFrom(src => src.dienTich))
               .ForMember(dest => dest.moTa, act => act.MapFrom(src => src.moTa))
-              .ForMember(dest => dest.tienNha, act => act.MapFrom(src => src.tienNha))
               .ForMember(dest => dest.tienNuoc, act => act.MapFrom(src => src.tienNuoc))
               .ForMember(dest => dest.tienDichVu, act => act.MapFrom(src => src.tienDichVu))
               .ForMember(dest => dest.tienDien, act => act.MapFrom(src => src.tienDien));
@@ -46,7 +45,6 @@ namespace QuanLyThueTro.Mapper
               .ForMember(dest => dest.giaPhong, act => act.MapFrom(src => src.giaPhong))
               .ForMember(dest => dest.dienTich, act => act.MapFrom(src => src.dienTich))
               .ForMember(dest => dest.moTa, act => act.MapFrom(src => src.moTa))
-              .ForMember(dest => dest.tienNha, act => act.MapFrom(src => src.tienNha))
               .ForMember(dest => dest.tienNuoc, act => act.MapFrom(src => src.tienNuoc))
               .ForMember(dest => dest.tienDichVu, act => act.MapFrom(src => src.tienDichVu))
               .ForMember(dest => dest.tienDien, act => act.MapFrom(src => src.tienDien));

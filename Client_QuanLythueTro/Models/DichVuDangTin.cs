@@ -1,15 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace QuanLyThueTro.Dto
+namespace Client_QuanLythueTro.Models
 {
-    public class DichVuDangTinDto
+    public class DichVuDangTin
     {
+        [Key]
+        public string idDichVu { get; set; }
         [Required]
         [MaxLength(100)]
         public string loaiDichVu { get; set; }
         [Required]
-        public int hanDangTin { get; set; }
-        [Required]
         public float giaCa { get; set; }
+
+        [Required]
+        public int hanDangTin { get; set; }
     }
 }

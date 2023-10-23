@@ -45,7 +45,6 @@ namespace Client_QuanLythueTro.Models
         [Required]
         public double dienTich { get; set; }
         public string? moTa { get; set; }
-        public float tienNha { get; set; }
         public float tienDien { get; set; }
         public float tienNuoc { get; set; }
         public float tienDichVu { get; set; }

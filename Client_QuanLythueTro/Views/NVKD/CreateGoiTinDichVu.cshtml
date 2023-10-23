@@ -1,0 +1,42 @@
+﻿@model Client_QuanLythueTro.Models.DichVuDangTin
+
+@{
+    ViewData["Title"] = "CreateGoiTinDichVu";
+    Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
+}
+
+<h1>CreateGoiTinDichVu</h1>
+
+<h4>DichVuDangTin</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateGoiTinDichVu">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.HiddenFor(model => model.idDichVu)
+            <div class="form-group">
+                <label asp-for="loaiDichVu" class="control-label"></label>
+                <input asp-for="loaiDichVu" class="form-control" />
+                <span asp-validation-for="loaiDichVu" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="giaCa" class="control-label"></label>
+                <input asp-for="giaCa" class="form-control" />
+                <span asp-validation-for="giaCa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="hanDangTin" class="control-label"></label>
+                <input asp-for="hanDangTin" class="form-control" />
+                <span asp-validation-for="hanDangTin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

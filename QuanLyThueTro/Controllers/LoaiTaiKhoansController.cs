@@ -95,7 +95,7 @@ namespace QuanLyThueTro.Controllers
         // POST: api/LoaiTaiKhoans
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<LoaiTaiKhoan>> PostLoaiTaiKhoan([FromForm] LoaiTaiKhoanDto loaiTaiKhoanDto)
+        public async Task<ActionResult<LoaiTaiKhoan>> PostLoaiTaiKhoan([FromBody] LoaiTaiKhoanDto loaiTaiKhoanDto)
         {
             LoaiTaiKhoan loaiTaiKhoan = _mapper.Map<LoaiTaiKhoan>(loaiTaiKhoanDto);
           if (_context.loaiTaiKhoans == null)

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<APIGateWayTinDang>();
+builder.Services.AddScoped<APIGateWayDichVu>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
