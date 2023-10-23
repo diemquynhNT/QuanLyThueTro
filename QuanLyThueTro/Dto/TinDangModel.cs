@@ -10,6 +10,9 @@ namespace QuanLyThueTro.Dto
         [MaxLength(200)]
         public string tieuDe { get; set; }
         [Required]
+        [MaxLength(200)]
+        public string loaiTin { get; set; }
+        [Required]
         [StringLength(10, MinimumLength = 8)]
         public string sdtNguoiLienHe { get; set; }
         [MaxLength(100)]

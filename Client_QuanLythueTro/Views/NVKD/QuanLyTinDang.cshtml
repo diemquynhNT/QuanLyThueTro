@@ -4,8 +4,8 @@
     ViewData["Title"] = "QuanLyTinDang";
     Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
     ViewBag.post = "active";
+    ViewBag.Name = "Quản lý tin đăng";
 }
-<!-- Tab panes -->
 <div class="tab-content">
     <div>
         <div class="row">
@@ -13,13 +13,13 @@
                 <div class="tile">
                     <div class="row" style="padding:10px;">
                         <p>
-                            <a asp-action="CreateTinDang" class="btn btn-danger">Create New</a>
+                            <a asp-action="CreateTinDang" class="btn btn-danger">Thêm mới</a>
                         </p>
-                       @* <div class="col-sm-2">
+                        <div class="col-sm-2">
                             <a class="btn btn-outline-dark btn-sm" title="In" onclick="printDiv('printMe')">
                                 <i class="fas fa-print"></i> In dữ liệu
                             </a>
-                        </div>*@
+                        </div>
                         @*<div class="col-sm-4">
                             @using (Html.BeginForm("QLDonHang", "KeToan", FormMethod.Post, new { @clas = "" }))
                             {
@@ -46,14 +46,13 @@
                                     @*//Phần render từng dòng trong C#*@
                                     <thead>
                                         <tr role="row">
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Mã DH</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Đại lý</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Điểm điểm giao</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Tình trạng thanh toán</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Ngày lập đơn</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Tổng tiền</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Tình trạng giao hàng</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Hóa đơn</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Mã</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Tiêu đề</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Loại</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Status</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Thông tin liên hệ</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Khu vực</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Loại dv</th>
                                             <th class="sorting">Chức năng</th>
 
                                         </tr>
@@ -69,29 +68,28 @@
                                                     @Html.DisplayFor(modelItem => item.tieuDe)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.ngayBatDau)
+                                                    @Html.DisplayFor(modelItem => item.loaiTin)
                                                 </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.ngayKetThuc)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.trangThaiTinDang)
-                                                </td>
+                                                @if(item.trangThaiTinDang)
+                                                {
+                                                    <td>
+                                                        Đã duyệt
+                                                    </td>
+                                                }
+                                                else
+                                                {
+
+                                                    <td>
+                                                        Chưa duyệt
+                                                    </td>
+                                                }
+
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.sdtNguoiLienHe)
-                                                </td>
-                                                <td>
                                                     @Html.DisplayFor(modelItem => item.nguoiLienHe)
                                                 </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.doiTuongChoThue)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.soLuongPhong)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.ngayTaoTin)
-                                                </td>
+                                                
+                                                
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.idKhuVuc)
                                                 </td>
@@ -105,9 +103,30 @@
                                                     <a href="/NVKD/DetailTinDang/@item.idTinDang" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
                                                         <i class="fas fa-info-circle"></i>
                                                     </a>
-                                                    <a href="/NVKD/DeleteTin/@item.idTinDang" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
+                                                    <a class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Delete" data-target="#DeleteModal-@item.idTinDang" data-toggle="modal">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
+                                                    <form asp-controller="NVKD" asp-action="DeleteTin" asp-route-id="@item.idTinDang" method="post">
+                                                        <div class="modal" tabindex="-1" role="dialog" style="padding:100px 350px;margin:50px;text-align:center" id="DeleteModal-@item.idTinDang">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title">Delete Confirmation @item.idTinDang</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <p style="text-align:center">Xác nhận xóa tin?</p>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                                        <input type="submit" value="Delete" class="btn btn-danger" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
                                                 </td>
                                             </tr>
                                            

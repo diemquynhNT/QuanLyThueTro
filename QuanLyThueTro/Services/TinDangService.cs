@@ -80,6 +80,11 @@ namespace QuanLyThueTro.Services
             _context.SaveChanges();
             return tin;
         }
-      
+
+        public void DuyetTin(TinDang tin,bool status)
+        {
+            tin.trangThaiTinDang = status;
+            _context.SaveChanges();
+        }
     }
 }

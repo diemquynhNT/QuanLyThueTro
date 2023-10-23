@@ -1,6 +1,7 @@
 ﻿using QuanLyThueTro.Model;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace QuanLyThueTro.Dto
 {
@@ -11,6 +12,9 @@ namespace QuanLyThueTro.Dto
         [Required]
         [MaxLength(200)]
         public string tieuDe { get; set; }
+        [Required]
+        [MaxLength(200)]
+        public string loaiTin { get; set; }
 
         public DateTime? ngayBatDau { get; set; }
 
@@ -47,5 +51,10 @@ namespace QuanLyThueTro.Dto
         public float tienDien { get; set; }
         public float tienNuoc { get; set; }
         public float tienDichVu { get; set; }
+
+        public static implicit operator TinDangVM(ActionResult v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

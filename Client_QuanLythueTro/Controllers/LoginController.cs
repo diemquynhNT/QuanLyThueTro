@@ -64,11 +64,11 @@ namespace Client_QuanLythueTro.Controllers
                 var decodedPayloadString = Encoding.UTF8.GetString(decodedPayload);
                 var payloadObject = JObject.Parse(decodedPayloadString);
                 var role = payloadObject["roles"]?.Value<string>();
-                if (role == "admin")
+                if (role == "NVKD")
                 {
                     return RedirectToAction("TrangChu", "NVKD");
                 }    
-                else if (role == "NVKD")
+                else if (role == "admin")
                     return RedirectToAction("TrangChuAdmin", "Admin");
                 return View();
               

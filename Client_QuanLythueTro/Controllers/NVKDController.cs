@@ -48,6 +48,7 @@ namespace Client_QuanLythueTro.Controllers
         // GET: NVKDController
         public ActionResult QuanLyTinDang()
         {
+            ViewBag.UserImageUrl = GetIdUser();
             List<TinDang> listTin = apiGateWay.ListTinDang();
             return View(listTin);
         }
@@ -55,12 +56,14 @@ namespace Client_QuanLythueTro.Controllers
         // GET: NVKDController/Details/5
         public ActionResult DetailTinDang(string id)
         {
+            ViewBag.UserImageUrl = GetIdUser();
             TinDang tin = apiGateWay.GetTin(id);
             return View(tin);
         }
 
         public ActionResult CreateTinDang()
         {
+            ViewBag.UserImageUrl = GetIdUser();
             TinDang tin = new TinDang();
             return View(tin);
         }
@@ -72,7 +75,7 @@ namespace Client_QuanLythueTro.Controllers
         {
             try
             {
-                apiGateWay.CreateTinDang(tin);
+                apiGateWay.CreateTin(tin);
                 return RedirectToAction("QuanLyTinDang");
             }
             catch
@@ -84,6 +87,7 @@ namespace Client_QuanLythueTro.Controllers
         // GET: NVKDController/Edit/5
         public ActionResult EditTin(string id)
         {
+            ViewBag.UserImageUrl = GetIdUser();
             TinDang tin = apiGateWay.GetTin(id);
             return View(tin);
         }
@@ -105,19 +109,21 @@ namespace Client_QuanLythueTro.Controllers
         }
 
         // GET: NVKDController/Delete/5
-        public ActionResult DeleteTin(string id)
-        {
-            TinDang tin = apiGateWay.GetTin(id);
-            return View(tin);
-        }
+        //public ActionResult DeleteTin(string id)
+        //{
+        //    TinDang tin = apiGateWay.GetTin(id);
+        //    return View(tin);
+        //}
 
         // POST: NVKDController/Delete/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteTin(string id,TinDang tin)
+        public ActionResult DeleteTin(string id)
         {
             try
             {
+                //ViewBag.UserImageUrl = GetIdUser();
                 apiGateWay.DeleteTin(id);
                 return RedirectToAction("QuanLyTinDang");
             }
@@ -125,6 +131,29 @@ namespace Client_QuanLythueTro.Controllers
             {
                 return View();
             }
+        }
+
+        [HttpPost]
+        public ActionResult DuyetTin(string id,bool status)
+        {
+            try
+            {
+                
+                apiGateWay.DuyetTin(id,status);
+                return RedirectToAction("QuanLyTinDang");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: NVKDController
+        public ActionResult QuanLyDichVu()
+        {
+            ViewBag.UserImageUrl = GetIdUser();
+            List<TinDang> listTin = apiGateWay.ListTinDang();
+            return View(listTin);
         }
     }
 }

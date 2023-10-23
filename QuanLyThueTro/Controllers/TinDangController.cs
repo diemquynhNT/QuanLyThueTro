@@ -60,7 +60,17 @@ namespace QuanLyThueTro.Controllers
                 var tinDang = _mapper.Map<TinDang>(tin);
                 var phong = _mapper.Map<PhongTro>(tin);
                 await _context.AddTinDang(tinDang,phong);
-                return Ok("tao thanh cong");
+
+                ActionResult tinvmResult = await GetById(tinDang.idTinDang);
+                if (tinvmResult is OkObjectResult okObjectResult)
+                {
+                    var tinvm = okObjectResult.Value;
+                    return CreatedAtAction("GetById", new { id = tinDang.idTinDang }, tinvm);
+                }
+                else
+                {
+                    return BadRequest("Failed to retrieve TinDangVM");
+                }
             }
             catch(Exception ex)
             {
@@ -76,11 +86,21 @@ namespace QuanLyThueTro.Controllers
                 var tinFind =  _context.GetTinDangById(id);
                 var phongFind = _context.GetPhongById(id);
                 if (tinFind == null)
-                    return NotFound("khong tim thay");
+                    return NotFound();
                 _mapper.Map(tinvVM, tinFind);
                 _mapper.Map(tinvVM, phongFind);
                 await _context.UpdateTinDang(tinFind,phongFind);
-                return Ok(" cap nhat thanh cong");
+
+                ActionResult tinvmResult = await GetById(id);
+                if (tinvmResult is OkObjectResult okObjectResult)
+                {
+                    var tinvm = okObjectResult.Value;
+                    return CreatedAtAction("GetById", new { id = id }, tinvm);
+                }
+                else
+                {
+                    return BadRequest("");
+                }
             }
             catch (Exception ex)
             {
@@ -99,6 +119,31 @@ namespace QuanLyThueTro.Controllers
                 if (tin == true)
                     return Ok("xoa thanh cong");
                 return BadRequest("loi");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        [HttpPost("DuyetTin")]
+        public async Task<ActionResult> DuyetTin(string id,bool status)
+        {
+            try
+            {
+                var tin=_context.GetTinDangById(id);
+                if (tin == null)
+                    return NotFound();
+                _context.DuyetTin(tin, status);
+                ActionResult tinvmResult = await GetById(id);
+                if (tinvmResult is OkObjectResult okObjectResult)
+                {
+                    var tinvm = okObjectResult.Value;
+                    return CreatedAtAction("GetById", new { id = id }, tinvm);
+                }
+                else
+                {
+                    return BadRequest("");
+                }
             }
             catch (Exception)
             {

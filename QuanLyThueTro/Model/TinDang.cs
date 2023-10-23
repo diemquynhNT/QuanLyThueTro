@@ -11,7 +11,11 @@ namespace QuanLyThueTro.Model
         [Required]
         [MaxLength(200)]
         public string tieuDe { get; set; }
-     
+        [Required]
+        [MaxLength(200)]
+        public string loaiTin { get; set; }
+
+
         public DateTime? ngayBatDau { get; set; }
       
         public DateTime? ngayKetThuc { get; set; }

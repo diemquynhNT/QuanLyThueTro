@@ -10,6 +10,9 @@ namespace Client_QuanLythueTro.Models
         [Required]
         [MaxLength(200)]
         public string tieuDe { get; set; }
+        [Required]
+        [MaxLength(200)]
+        public string loaiTin { get; set; }
 
         public DateTime? ngayBatDau { get; set; }
 
@@ -19,6 +22,7 @@ namespace Client_QuanLythueTro.Models
         [Required]
         [StringLength(10, MinimumLength = 8)]
         public string sdtNguoiLienHe { get; set; }
+
         [MaxLength(100)]
         public string nguoiLienHe { get; set; }
 

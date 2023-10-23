@@ -13,7 +13,9 @@ namespace QuanLyThueTro.Services
         public Task<TinDang> UpdateTinDang(TinDang tin,PhongTro phong);
         public Task<bool> DeleteTinDang(string idTinDang);
         public bool IsValidTinDang(string idTinDang);
+        public void DuyetTin(TinDang tin, bool status);
 
-      
+
+
     }
 }

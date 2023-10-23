@@ -10,6 +10,7 @@ namespace QuanLyThueTro.Mapper
         {
             CreateMap<TinDangModel, TinDang>()
               .ForMember(dest => dest.tieuDe, act => act.MapFrom(src => src.tieuDe))
+               .ForMember(dest => dest.loaiTin, act => act.MapFrom(src => src.loaiTin))
               .ForMember(dest => dest.sdtNguoiLienHe, act => act.MapFrom(src => src.sdtNguoiLienHe))
               .ForMember(dest => dest.nguoiLienHe, act => act.MapFrom(src => src.nguoiLienHe))
               .ForMember(dest => dest.doiTuongChoThue, act => act.MapFrom(src => src.doiTuongChoThue))
@@ -27,6 +28,7 @@ namespace QuanLyThueTro.Mapper
               .ForMember(dest => dest.tienDien, act => act.MapFrom(src => src.tienDien));
             CreateMap<TinDang, TinDangVM>()
               .ForMember(dest => dest.idDichVu, act => act.MapFrom(src => src.idDichVu))
+              .ForMember(dest => dest.loaiTin, act => act.MapFrom(src => src.loaiTin))
               .ForMember(dest => dest.tieuDe, act => act.MapFrom(src => src.tieuDe))
               .ForMember(dest => dest.ngayBatDau, act => act.MapFrom(src => src.ngayBatDau))
               .ForMember(dest => dest.ngayKetThuc, act => act.MapFrom(src => src.ngayKetThuc))

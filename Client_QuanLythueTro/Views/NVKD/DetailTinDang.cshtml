@@ -3,137 +3,145 @@
 @{
     ViewData["Title"] = "DetailTinDang";
     Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
+    ViewBag.post = "active";
+    ViewBag.Name = "Chi tiết";
 }
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <h3 style="text-align:center">THÔNG TIN TIN ĐĂNG -  @Html.DisplayFor(model => model.idTinDang)</h3>
+                <p>
+                    <strong>Tiêu đề:</strong>  @Html.DisplayFor(model => model.tieuDe);
+                </p>
+                <p>
+                    <strong>Trạng thái:</strong>
+                    @if(Model.trangThaiTinDang)
+                    {
+                        <p>Đã duyệt</p>
+                    }
+                    else
+                    {
+                        <p>Chưa duyệt</p>
+                        }
+                </p>
+                <p>
+                    <strong>Loại tin:</strong>
+                    @Html.DisplayFor(model => model.loaiTin) -  @Html.DisplayFor(model => model.idDichVu)
+                </p>
+                <p>
+                    <strong>Địa chỉ:</strong>
+                    @Html.DisplayFor(model => model.diaChi) -  @Html.DisplayFor(model => model.idKhuVuc)
+                </p>
+                <p>
+                    <strong>Thông tin liên hệ:</strong>
+                    @Html.DisplayFor(model => model.nguoiLienHe)-  @Html.DisplayFor(model => model.sdtNguoiLienHe)
+                </p>
+                <p>
+                    <strong>Đối tượng cho thuê:</strong>
+                    @Html.DisplayFor(model => model.doiTuongChoThue)
+                </p>
+                <p>
+                    <strong>Số lượng:</strong>
+                    @Html.DisplayFor(model => model.soLuongPhong)
+                </p>
+                <div class="row">
+                    <div class="col-sm-12 table-responsive">
+                        <table class="table table-hover table-bordered js-copytextarea dataTable no-footer" cellpadding="0" cellspacing="0" border="0" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+                            @*//Phần render từng dòng trong C#*@
+                            <thead>
+                                <tr role="row" style="text-align:center">
+                                    <th class="sorting" tabindex="0" aria-controls="sampleTable">Tiền phòng</th>
+                                    <th class="sorting" tabindex="0" aria-controls="sampleTable">Tiền nước</th>
+                                    <th class="sorting" tabindex="0" aria-controls="sampleTable">Tiền điện</th>
+                                    <th class="sorting" tabindex="0" aria-controls="sampleTable">Tiền dịch vu</th>
+                                  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td>
+                                        @Html.DisplayFor(model => model.tienNha)
+                                        </td>
 
-<h1>DetailTinDang</h1>
+                                        <td>
+                                        @Html.DisplayFor(model => model.tienNuoc)
+                                        </td>
+                                        
+                                        <td>
+                                        @Html.DisplayFor(model => model.tienDien)
+                                        </td>
+                                        <td>
+                                        @Html.DisplayFor(model => model.tienDichVu)
+                                        </td>
 
-<div>
-    <h4>TinDang</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.idTinDang)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.idTinDang)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.tieuDe)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.tieuDe)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ngayBatDau)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ngayBatDau)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ngayKetThuc)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ngayKetThuc)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.trangThaiTinDang)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.trangThaiTinDang)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.sdtNguoiLienHe)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.sdtNguoiLienHe)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.nguoiLienHe)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.nguoiLienHe)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.doiTuongChoThue)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.doiTuongChoThue)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.soLuongPhong)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.soLuongPhong)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ngayTaoTin)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ngayTaoTin)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.idKhuVuc)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.idKhuVuc)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.idDichVu)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.idDichVu)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.diaChi)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.diaChi)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.giaPhong)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.giaPhong)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.dienTich)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.dienTich)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.moTa)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.moTa)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.tienNha)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.tienNha)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.tienDien)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.tienDien)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.tienNuoc)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.tienNuoc)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.tienDichVu)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.tienDichVu)
-        </dd>
-    </dl>
+                                    </tr>
+
+                        </table>
+                    </div>
+                </div>
+
+
+                @*<div class="row element-button">
+
+                    <a class="btn btn-delete btn-sm print-file" title="In" onclick="myApp.printTable()">
+                        <i class="fas fa-print"></i> In dữ liệu
+                    </a>
+
+                </div>*@
+                <div>
+                    <a asp-action="QuanLyTinDang">Back to List</a>
+                    <a class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Delete" data-target="#Duyet-@Model.idTinDang" data-toggle="modal">
+                       Duyệt tin
+                    </a>
+                    <form asp-controller="NVKD" asp-action="DuyetTin" asp-route-id="@Model.idTinDang" method="post">
+                        <div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" tabindex="-1" role="dialog" id="Duyet-@Model.idTinDang">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Duyệt tin @Model.idTinDang</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="status">SĐT liên hệ</label>
+                                            <select class="form-control" id="status" name="status" required>
+                                                <option selected="selected">@Model.trangThaiTinDang</option>
+                                                <option value="true">True</option>
+                                                <option value="false">False</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                        <input type="submit" value="Xác nhận" class="btn btn-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
 </div>
+
+<script>
+    //In dữ liệu
+    var myApp = new function () {
+        this.printTable = function () {
+            var tab = document.getElementById('sampleTable');
+            var win = window.open('', '', 'height=800px,width=1200px');
+            win.document.write(tab.outerHTML);
+            win.document.close();
+            win.print();
+        }
+    }
+</script>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>

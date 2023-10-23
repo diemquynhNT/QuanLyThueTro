@@ -83,32 +83,32 @@ namespace QuanLyThueTro.Controllers
 
         //// POST: api/PhongTroes
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<PhongTro>> PostPhongTro(PhongTro phongTro)
-        //{
-        //  if (_context.phongTros == null)
-        //  {
-        //      return Problem("Entity set 'MyDBContext.phongTros'  is null.");
-        //  }
-        //    _context.phongTros.Add(phongTro);
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateException)
-        //    {
-        //        if (PhongTroExists(phongTro.idTinDang))
-        //        {
-        //            return Conflict();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+        [HttpPost]
+        public async Task<ActionResult<PhongTro>> PostPhongTro(PhongTro phongTro)
+        {
+            if (_context.phongTros == null)
+            {
+                return Problem("Entity set 'MyDBContext.phongTros'  is null.");
+            }
+            _context.phongTros.Add(phongTro);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (PhongTroExists(phongTro.idTinDang))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-        //    return CreatedAtAction("GetPhongTro", new { id = phongTro.idTinDang }, phongTro);
-        //}
+            return CreatedAtAction("GetPhongTro", new { id = phongTro.idTinDang }, phongTro);
+        }
 
         //// DELETE: api/PhongTroes/5
         //[HttpDelete("{id}")]
