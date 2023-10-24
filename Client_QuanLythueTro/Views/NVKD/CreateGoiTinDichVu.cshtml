@@ -1,0 +1,50 @@
+﻿@model Client_QuanLythueTro.Models.DichVuDangTin
+
+@{
+    ViewData["Title"] = "CreateGoiTinDichVu";
+    Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
+    ViewBag.services = "active";
+    ViewBag.Name = "Thêm mới";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="tile" id="printMe">
+                <div class="element-button">
+                    <h4 style="text-align:center">THÊM GÓI TIN</h4>
+                </div>
+                <form asp-action="CreateGoiTinDichVu">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    @Html.HiddenFor(model => model.idDichVu)
+                    <div class="form-group">
+                        <b>Loại tin</b>
+                        <input asp-for="loaiDichVu" class="form-control" />
+                        <span asp-validation-for="loaiDichVu" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b>Gía</b>
+                        <input asp-for="giaCa" class="form-control" />
+                        <span asp-validation-for="giaCa" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b>Hạn sử dụng</b>
+                        <input asp-for="hanDung" class="form-control" />
+                        <span asp-validation-for="hanDung" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Thêm" class="btn btn-primary" />
+                    </div>
+                </form>
+            
+</div>
+
+<div>
+    <a asp-action="QuanLyDichVu">Back to List</a>
+</div>
+</div>
+</div>
+
+</div>
+
+

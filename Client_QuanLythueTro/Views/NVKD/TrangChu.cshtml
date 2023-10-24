@@ -3,6 +3,7 @@
     ViewData["Title"] = "TrangChu";
     Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
     ViewBag.Name = "Trang chủ";
+    ViewBag.home = "active";
 }
 
 <div class="main-content">
@@ -16,7 +17,7 @@
                                 <p class="text-uppercase mb-1 text-muted">TIN ĐĂNG</p>
                                 <h4>Tổng</h4>
                                 <div style="font-size:16px">
-                                    <span class="text-success font-weight-bold ">+ </span>
+                                    <span class="text-success font-weight-bold ">+ 18 </span>
                                     <span class="text-muted">tin trong ngày</span>
                                 </div>
                             </div>
@@ -127,6 +128,9 @@
             </div>
         </div>
     </div>
+    @{
+        List<TinDang> list = ViewBag.list;
+    }
     <div class="col-md-12" id="congno">
         <div class="tile">
             <h3 class="tile-title">Danh sách tin đăng</h3>
@@ -148,16 +152,24 @@
                         </thead>
 
                         <tbody>
+                       @foreach (var item in list)
+                        {
                             <tr>
                                 <td>
+                                        @Html.DisplayFor(modelItem => item.idTinDang)
                                 </td>
                                 <td>
+                                        @Html.DisplayFor(modelItem => item.tieuDe)
                                 </td>
                                 <td>
+                                        @Html.DisplayFor(modelItem => item.idKhuVuc)
                                 </td>
                                 <td>
+                                        @Html.DisplayFor(modelItem => item.idDichVu)
                                 </td>
                                 <td>
+                                     @Html.DisplayFor(modelItem => item.sdtNguoiLienHe)
+                                      @Html.DisplayFor(modelItem => item.nguoiLienHe)
                                 </td>
                                 <td>
                                 </td>
@@ -167,6 +179,7 @@
                                     <a href="" class="btn btn-success btn-sm">Xem</a>
                                 </td>
                             </tr>
+                        }
 
                         </tbody>
                     </table>

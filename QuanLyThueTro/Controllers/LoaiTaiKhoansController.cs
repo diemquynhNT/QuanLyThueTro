@@ -60,7 +60,7 @@ namespace QuanLyThueTro.Controllers
         // PUT: api/LoaiTaiKhoans/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutLoaiTaiKhoan(string id, [FromForm] LoaiTaiKhoanDto loaiTaiKhoanDto)
+        public async Task<IActionResult> PutLoaiTaiKhoan(string id, [FromBody] LoaiTaiKhoanDto loaiTaiKhoanDto)
         {
             LoaiTaiKhoan loaiTaiKhoan = _mapper.Map<LoaiTaiKhoan>(loaiTaiKhoanDto);
             loaiTaiKhoan.idLoaiTK = id;
@@ -95,7 +95,7 @@ namespace QuanLyThueTro.Controllers
         // POST: api/LoaiTaiKhoans
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<LoaiTaiKhoan>> PostLoaiTaiKhoan([FromForm] LoaiTaiKhoanDto loaiTaiKhoanDto)
+        public async Task<ActionResult<LoaiTaiKhoan>> PostLoaiTaiKhoan([FromBody] LoaiTaiKhoanDto loaiTaiKhoanDto)
         {
             LoaiTaiKhoan loaiTaiKhoan = _mapper.Map<LoaiTaiKhoan>(loaiTaiKhoanDto);
           if (_context.loaiTaiKhoans == null)

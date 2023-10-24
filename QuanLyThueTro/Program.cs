@@ -49,6 +49,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 // Đăng ký interface và thực hiện các chức năng của nó trong file
 builder.Services.AddScoped<IExtensionService, ExtensionService>();
 builder.Services.AddScoped<IUsers, UserService>();
+builder.Services.AddScoped<ITinDang, TinDangService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

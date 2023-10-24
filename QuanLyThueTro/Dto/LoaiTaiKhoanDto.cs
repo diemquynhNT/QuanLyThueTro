@@ -10,6 +10,6 @@ namespace QuanLyThueTro.Dto
         [Required]
         public float giaTK { get; set; }
         [Required]
-        public DateTime hanSuDung { get; set; }
+        public int hanDung { get; set; }
     }
 }

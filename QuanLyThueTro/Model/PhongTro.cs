@@ -18,6 +18,9 @@ namespace QuanLyThueTro.Model
         [Required]
         public double dienTich { get; set; }
         public string? moTa { get; set; }
+        public float tienDien { get; set; }
+        public float tienNuoc { get; set; }
+        public float tienDichVu { get; set; }
 
         public virtual ICollection<Review> reviews { get; set; }
 

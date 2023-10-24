@@ -8,6 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="bootstrap" Version="5.1.0" />
+    <None Include="wwwroot\img\user.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
   </ItemGroup>

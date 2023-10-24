@@ -10,9 +10,9 @@ namespace QuanLyThueTro.Model
         [MaxLength(100)]
         public string tenLoaiTK { get; set; }
         [Required]
-        public float giaTK { get; set; }
+        public double giaTK { get; set; }
         [Required]
-        public DateTime hanSuDung { get; set; }
+        public int hanDung { get; set; }
 
         public virtual ICollection<Users> users { get; set; }
 
