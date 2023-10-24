@@ -84,6 +84,7 @@ namespace QuanLyThueTro.Services
         public void DuyetTin(TinDang tin,bool status)
         {
             tin.trangThaiTinDang = status;
+            _context.tinDangs.Update(tin);
             _context.SaveChanges();
         }
     }

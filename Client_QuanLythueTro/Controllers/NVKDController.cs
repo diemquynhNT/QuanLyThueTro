@@ -41,7 +41,7 @@ namespace Client_QuanLythueTro.Controllers
         // GET: NVKDController
         public ActionResult TrangChu()
         {
-            ViewBag.UserImageUrl = GetIdUser();
+            //ViewBag.UserImageUrl = GetIdUser();
             List<TinDang> listTin = apiGateWay.ListTinDang();
             ViewBag.list = listTin;
             return View();
@@ -50,7 +50,7 @@ namespace Client_QuanLythueTro.Controllers
         // GET: NVKDController
         public ActionResult QuanLyTinDang()
         {
-            ViewBag.UserImageUrl = GetIdUser();
+            //ViewBag.UserImageUrl = GetIdUser();
             List<TinDang> listTin = apiGateWay.ListTinDang();
             return View(listTin);
         }
@@ -58,14 +58,14 @@ namespace Client_QuanLythueTro.Controllers
         // GET: NVKDController/Details/5
         public ActionResult DetailTinDang(string id)
         {
-            ViewBag.UserImageUrl = GetIdUser();
+            //ViewBag.UserImageUrl = GetIdUser();
             TinDang tin = apiGateWay.GetTin(id);
             return View(tin);
         }
 
         public ActionResult CreateTinDang()
         {
-            ViewBag.UserImageUrl = GetIdUser();
+            //ViewBag.UserImageUrl = GetIdUser();
             TinDang tin = new TinDang();
             return View(tin);
         }
@@ -89,7 +89,7 @@ namespace Client_QuanLythueTro.Controllers
         // GET: NVKDController/Edit/5
         public ActionResult EditTin(string id)
         {
-            ViewBag.UserImageUrl = GetIdUser();
+            //ViewBag.UserImageUrl = GetIdUser();
             TinDang tin = apiGateWay.GetTin(id);
             return View(tin);
         }
@@ -155,7 +155,7 @@ namespace Client_QuanLythueTro.Controllers
         // GET: NVKDController
         public ActionResult QuanLyDichVu()
         {
-            ViewBag.UserImageUrl = GetIdUser();
+            //ViewBag.UserImageUrl = GetIdUser();
             List<DichVuDangTin> listGoiTin = apiGateWayDichVu.ListGoiTin();
             ViewBag.listTK = apiGateWayDichVu.ListTK();
             return View(listGoiTin);
@@ -163,14 +163,14 @@ namespace Client_QuanLythueTro.Controllers
         // GET: NVKDController/Details/5
         public ActionResult DetailDichVu(string id)
         {
-            ViewBag.UserImageUrl = GetIdUser();
+            //ViewBag.UserImageUrl = GetIdUser();
             TinDang tin = apiGateWay.GetTin(id);
             return View(tin);
         }
 
         public ActionResult CreateGoiTinDichVu()
         {
-            ViewBag.UserImageUrl = GetIdUser();
+            //ViewBag.UserImageUrl = GetIdUser();
             DichVuDangTin tin = new DichVuDangTin();
             return View(tin);
         }
@@ -192,7 +192,7 @@ namespace Client_QuanLythueTro.Controllers
         }
         public ActionResult EditGoiTinDichVu(string id)
         {
-            ViewBag.UserImageUrl = GetIdUser();
+            //ViewBag.UserImageUrl = GetIdUser();
             DichVuDangTin tin = apiGateWayDichVu.GetGoiTin(id);
             return View(tin);
         }
@@ -227,7 +227,7 @@ namespace Client_QuanLythueTro.Controllers
 
         public ActionResult CreateTK()
         {
-            ViewBag.UserImageUrl = GetIdUser();
+            //ViewBag.UserImageUrl = GetIdUser();
             LoaiTaiKhoan tin = new LoaiTaiKhoan();
             return View(tin);
         }
@@ -249,7 +249,7 @@ namespace Client_QuanLythueTro.Controllers
         }
         public ActionResult EditTK(string id)
         {
-            ViewBag.UserImageUrl = GetIdUser();
+            //ViewBag.UserImageUrl = GetIdUser();
             LoaiTaiKhoan tk = apiGateWayDichVu.GetTK(id);
             return View(tk);
         }

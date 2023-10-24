@@ -10,7 +10,7 @@ namespace QuanLyThueTro.Model
         [MaxLength(100)]
         public string tenLoaiTK { get; set; }
         [Required]
-        public double giaTK { get; set; }
+        public float giaTK { get; set; }
         [Required]
         public int hanDung { get; set; }
 
