@@ -1,6 +1,7 @@
 ﻿using Client_QuanLythueTro.Models;
 using Newtonsoft.Json;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace Client_QuanLythueTro.APIGateWay
@@ -18,6 +19,39 @@ namespace Client_QuanLythueTro.APIGateWay
             try
             {
                 HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var datacol = JsonConvert.DeserializeObject<List<TinDang>>(result);
+
+                    if (datacol != null)
+                        listTin = datacol;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return listTin;
+        }
+
+        public List<TinDang> FilterTin(int thang,bool status)
+        {
+            List<TinDang> listTin = new List<TinDang>();
+            url = url + "/Filter";
+            if (url.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                string apiUrlWithParams = url + "?thang=" + thang + "&status=" + status;
+
+                HttpResponseMessage response = httpClient.GetAsync(apiUrlWithParams).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     string result = response.Content.ReadAsStringAsync().Result;
@@ -202,6 +236,31 @@ namespace Client_QuanLythueTro.APIGateWay
                 throw new Exception("Lỗi: " + ex.Message);
             }
         }
+
+        public async Task AddImg(string id, IFormFile img)
+        {
+            try
+            {
+                url = url + "/SaveImages";
+                using (var httpClient = new HttpClient())
+                {
+                    using (var form = new MultipartFormDataContent())
+                    {
+                        form.Add(new StringContent(id), "tinId");
+                        form.Add(new StreamContent(img.OpenReadStream()), "file", img.FileName);
+
+                        var response = await httpClient.PostAsync(url, form);
+                        response.EnsureSuccessStatusCode();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi: " + ex.Message);
+            }
+        }
+
+
 
 
     }

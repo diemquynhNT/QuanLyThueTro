@@ -103,7 +103,7 @@ namespace QuanLyThueTro.Controllers
           {
               return Problem("Entity set 'MyDBContext.chucVus'  is null.");
           }
-            _extensionService.AutoPK_ChucVu(chucVu);
+            //_extensionService.AutoPK_ChucVu(chucVu);
             if(!_extensionService.IsNotExistNameChucVu(chucVu))
                 return BadRequest("Tên chức vụ đã tồn tại!");
             _context.chucVus.Add(chucVu);

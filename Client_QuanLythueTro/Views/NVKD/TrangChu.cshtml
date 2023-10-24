@@ -140,13 +140,10 @@
                         <thead>
                             <tr role="row">
                                 <th>Mã </th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
+                                <th>Tiêu đề</th>
+                                <th>Khu vực</th>
+                                <th>Thông tin liên hệ</th>
+                           
 
                             </tr>
                         </thead>
@@ -165,18 +162,11 @@
                                         @Html.DisplayFor(modelItem => item.idKhuVuc)
                                 </td>
                                 <td>
-                                        @Html.DisplayFor(modelItem => item.idDichVu)
-                                </td>
-                                <td>
                                      @Html.DisplayFor(modelItem => item.sdtNguoiLienHe)
                                       @Html.DisplayFor(modelItem => item.nguoiLienHe)
                                 </td>
                                 <td>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                    <a href="" class="btn btn-success btn-sm">Xem</a>
+                                        <a href="/NVKD/DetailTinDang" class="btn btn-success btn-sm">Xem</a>
                                 </td>
                             </tr>
                         }

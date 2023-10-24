@@ -1,13 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +37,7 @@
     </header>
     <aside class="app-sidebar">
         <div class="app-sidebar__user">
-            <img class="logoCompany" src="/image/HOME180 (1).png" height="70" alt="Logo">
+            <img class="logoCompany" src="@Url.Content("~/img/logo.png")" height="70" alt="Logo">
         </div>
         <hr>
         <ul class="app-menu ">
@@ -57,15 +48,15 @@
                 </a>
             </li>
             <li>
-                <a class="app-menu__item @ViewBag.home" href="">
+                <a class="app-menu__item @ViewBag.home" href="/Admin/TrangChuAdmin">
                     <i class='app-menu__icon bx bx-task'></i>
                     <span class="app-menu__label">Dashboard</span>
                 </a>
             </li>
 
             <li>
-                <a class="app-menu__item @ViewBag.user" href="">
-                    <i class='app-menu__icon bx bx-clipboard'></i><span class="app-menu__label">Quản lý người dùng</span>
+                <a class="app-menu__item @ViewBag.user" href="/Admin/QuanLyNhanVien">
+                    <i class='app-menu__icon bx bx-group'></i><span class="app-menu__label">Quản lý nhân viên</span>
                 </a>
             </li>
             @*<li>

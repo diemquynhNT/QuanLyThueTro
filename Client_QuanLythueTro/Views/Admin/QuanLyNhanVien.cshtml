@@ -1,11 +1,12 @@
-﻿@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
+﻿@model IEnumerable<Client_QuanLythueTro.Models.Users>
 
 @{
-    ViewData["Title"] = "QuanLyTinDang";
-    Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
-    ViewBag.post = "active";
-    ViewBag.Name = "Quản lý tin đăng";
+    ViewData["Title"] = "QuanLyNhanVien";
+    Layout = "~/Views/Admin/LayoutAdmin.cshtml";
+    ViewBag.user="active";
+    ViewBag.Name = "Quản lý nhân viên";
 }
+
 <div class="tab-content">
     <div>
         <div class="row">
@@ -13,47 +14,45 @@
                 <div class="tile">
                     <div class="row" style="padding:10px;">
                         <p>
-                            <a asp-action="CreateTinDang" class="btn btn-success btn-sm">Thêm mới</a>
+                            <a asp-action="CreateUser" class="btn btn-danger">Thêm mới</a>
                         </p>
                         <div class="col-sm-2">
                             <a class="btn btn-outline-dark btn-sm" title="In" onclick="printDiv('printMe')">
                                 <i class="fas fa-print"></i> In dữ liệu
                             </a>
                         </div>
-                        <div class="col-sm-4">
-                            @using (Html.BeginForm("QuanLyTinDang", "NVKD", FormMethod.Post, new { @class = "" }))
-                            {
-                                <div class="row">
+                        @*<div class="col-sm-4">
+                        @using (Html.BeginForm("QLDonHang", "KeToan", FormMethod.Post, new { @clas = "" }))
+                        {
+                        <div class="row">
 
-                                    <div class="col-sm-2">
-                                        @Html.DropDownList("thangs", (IEnumerable<SelectListItem>)TempData["thangs"], htmlAttributes: new { @class = "form-control-sm" })
-                                    </div>
-                                    <div class="col-sm-2">
-                                        @Html.DropDownList("tinhTrang", (IEnumerable<SelectListItem>)TempData["tinhTrang"], htmlAttributes: new { @class = "form-control-sm", })
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <input type="submit" class="btn btn-success btn-sm" value="Tìm kiếm">
-                                    </div>
-                                </div>
-                            }
+                        <div class="col-sm-2">
+                        @Html.DropDownList("thangs", (IEnumerable<SelectListItem>)TempData["thangs"], htmlAttributes: new { @class = "form-control-sm" })
                         </div>
+                        <div class="col-sm-2">
+                        @Html.DropDownList("tinhtrangdh", (IEnumerable<SelectListItem>)TempData["tinhtrangdh"], htmlAttributes: new { @class = "form-control-sm", })
+                        </div>
+                        <div class="col-sm-2">
+                        <input type="submit" class="btn btn-danger btn-sm" value="Tìm kiếm">
+                        </div>
+                        </div>
+                        }
+                        </div>*@
 
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12 table-responsive">
-                            <table class="table table-hover table-bordered js-copytextarea dataTable no-footer" cellpadding="0" cellspacing="0" border="0" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
-                                @*//Phần render từng dòng trong C#*@
+                    <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                        <div class="row" id="printMe">
+                            <div class="col-sm-12  table-responsive">
+                                <table class="table table-hover table-bordered js-copytextarea dataTable no-footer" cellpadding="0" cellspacing="0" border="0" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+                                    @*//Phần render từng dòng trong C#*@
                                     <thead>
                                         <tr role="row">
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Mã</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Tiêu đề</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Loại</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Họ tên</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Chức vụ</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Status</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Thông tin liên hệ</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Khu vực</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Loại dv</th>
-                                        <th class="sorting" tabindex="0" aria-controls="sampleTable">Ngày thêm</th>
-
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">SĐT</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Email</th>
                                             <th class="sorting">Chức năng</th>
 
                                         </tr>
@@ -63,51 +62,44 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.idTinDang)
+                                                    @Html.DisplayFor(modelItem => item.idUser)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.tieuDe)
+                                                    @Html.DisplayFor(modelItem => item.hoTen)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.loaiTin)
+                                                    @Html.DisplayFor(modelItem => item.idChucVu)
                                                 </td>
-                                                @if(item.trangThaiTinDang)
+                                                @if (item.trangThai)
                                                 {
                                                     <td>
-                                                        Đã duyệt
+                                                        Hoạt động
                                                     </td>
                                                 }
                                                 else
                                                 {
 
                                                     <td>
-                                                        Chưa duyệt
+                                                        Ngưng hoạt động
                                                     </td>
                                                 }
 
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.sdtNguoiLienHe)
-                                                    @Html.DisplayFor(modelItem => item.nguoiLienHe)
+                                                    @Html.DisplayFor(modelItem => item.sdtUsers)
                                                 </td>
-                                                
-                                                
+
+
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.idKhuVuc)
+                                                    @Html.DisplayFor(modelItem => item.emailUser)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.idDichVu)
-                                                </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ngayTaoTin)
-                                            </td>
-                                                <td>
-                                                    <a href="/NVKD/EditTin/@item.idTinDang" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <a href="/NVKD/DetailTinDang/@item.idTinDang" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
+                                                    <a href="/Admin/EditUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
                                                         <i class="fas fa-info-circle"></i>
                                                     </a>
-                                                    <a class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Delete" data-target="#DeleteModal-@item.idTinDang" data-toggle="modal">
+                                                    <a href="/Admin/DetailUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
+                                                        <i class="fas fa-info-circle"></i>
+                                                    </a>
+                                                   @* <a class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Delete" data-target="#DeleteModal-@item.idTinDang" data-toggle="modal">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
                                                     <form asp-controller="NVKD" asp-action="DeleteTin" asp-route-id="@item.idTinDang" method="post">
@@ -130,10 +122,10 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </form>
+                                                    </form>*@
                                                 </td>
                                             </tr>
-                                           
+
                                         }
                                     </tbody>
                                 </table>
@@ -165,8 +157,5 @@
 
 
 </script>
-
-
-
 
 

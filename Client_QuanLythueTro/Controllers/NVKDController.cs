@@ -2,10 +2,15 @@
 using Client_QuanLythueTro.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json.Linq;
 using NuGet.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Web;
+
+
+
 
 namespace Client_QuanLythueTro.Controllers
 {
@@ -46,12 +51,47 @@ namespace Client_QuanLythueTro.Controllers
             ViewBag.list = listTin;
             return View();
         }
-
+        private void BindDropDownList()
+        {
+            List<SelectListItem> m = new List<SelectListItem>();
+            m.Add(new SelectListItem { Text = "All", Value = "0" });
+            m.Add(new SelectListItem { Text = "1", Value = "1" });
+            m.Add(new SelectListItem { Text = "2", Value = "2" });
+            m.Add(new SelectListItem { Text = "3", Value = "3" });
+            m.Add(new SelectListItem { Text = "4", Value = "4" });
+            m.Add(new SelectListItem { Text = "5", Value = "5" });
+            m.Add(new SelectListItem { Text = "6", Value = "6" });
+            m.Add(new SelectListItem { Text = "7", Value = "7" });
+            m.Add(new SelectListItem { Text = "8", Value = "8" });
+            m.Add(new SelectListItem { Text = "9", Value = "9" });
+            m.Add(new SelectListItem { Text = "10", Value = "10" });
+            m.Add(new SelectListItem { Text = "11", Value = "11" });
+            m.Add(new SelectListItem { Text = "12", Value = "12" });
+            TempData["thangs"] = m;
+        }
+        private void TinhTrangTin()
+        {
+            List<SelectListItem> tinhTrang = new List<SelectListItem>();
+            tinhTrang.Add(new SelectListItem { Text = "Đã duyệt", Value = true.ToString() });
+            tinhTrang.Add(new SelectListItem { Text = "Chưa suyệt", Value = false.ToString() });
+            TempData["tinhTrang"] = tinhTrang;
+        }
         // GET: NVKDController
         public ActionResult QuanLyTinDang()
         {
             ViewBag.UserImageUrl = GetIdUser();
+            BindDropDownList();
+            TinhTrangTin();
             List<TinDang> listTin = apiGateWay.ListTinDang();
+            return View(listTin);
+        }
+        [HttpPost]
+        public ActionResult QuanLyTinDang(int thangs,bool tinhTrang)
+        {
+            ViewBag.UserImageUrl = GetIdUser();
+            BindDropDownList();
+            TinhTrangTin();
+            List<TinDang> listTin = apiGateWay.FilterTin(thangs, tinhTrang);
             return View(listTin);
         }
 
@@ -61,6 +101,19 @@ namespace Client_QuanLythueTro.Controllers
             ViewBag.UserImageUrl = GetIdUser();
             TinDang tin = apiGateWay.GetTin(id);
             return View(tin);
+        }
+        [HttpPost]
+        public ActionResult SaveImages(string tinId, IFormFile file)
+        {
+            try
+            {
+                apiGateWay.AddImg(tinId, file);
+                return RedirectToAction("QuanLyTinDang");
+            }
+            catch (Exception ex)
+            {
+                throw; 
+            }
         }
 
         public ActionResult CreateTinDang()

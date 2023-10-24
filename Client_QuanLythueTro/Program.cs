@@ -5,6 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<APIGateWayTinDang>();
 builder.Services.AddScoped<APIGateWayDichVu>();
+builder.Services.AddScoped<APIGateWayUsers>();
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -29,6 +31,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Login}/{action=Login}/{id?}");
+    pattern: "{controller=NVKD}/{action=TrangChu}/{id?}");
 
 app.Run();
