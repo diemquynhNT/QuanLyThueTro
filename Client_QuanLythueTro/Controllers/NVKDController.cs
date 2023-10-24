@@ -80,8 +80,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWay.CreateTin(tin);
                 return RedirectToAction("QuanLyTinDang");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
@@ -104,8 +105,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWay.UpdateTin(tin);
                 return RedirectToAction("QuanLyTinDang");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
@@ -129,8 +131,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWay.DeleteTin(id);
                 return RedirectToAction("QuanLyTinDang");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
@@ -144,8 +147,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWay.DuyetTin(id,status);
                 return RedirectToAction("QuanLyTinDang");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
@@ -185,8 +189,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWayDichVu.CreateGoiTin(tin);
                 return RedirectToAction("QuanLyDichVu");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
@@ -205,8 +210,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWayDichVu.UpdateDichVuDangTin(tin);
                 return RedirectToAction("QuanLyDichVu");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
@@ -219,8 +225,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWayDichVu.DeleteTin(id);
                 return RedirectToAction("QuanLyDichVu");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
@@ -242,8 +249,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWayDichVu.CreateTK(tk);
                 return RedirectToAction("QuanLyDichVu");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
@@ -262,8 +270,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWayDichVu.UpdateTK(tk);
                 return RedirectToAction("QuanLyDichVu");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
@@ -276,8 +285,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWayDichVu.DeleteTK(id);
                 return RedirectToAction("QuanLyDichVu");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }

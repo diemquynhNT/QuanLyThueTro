@@ -17,21 +17,21 @@ namespace QuanLyThueTro.Services
         {
             Random rnd = new Random();
             string num = rnd.Next(1000, 10000000).ToString();
-            chucVu.idChucVu = "#RO" + num;
+            chucVu.idChucVu = "RO" + num;
         }
 
         public void AutoPK_DichVu(GoiTinDichVu dichVu)
         {
             Random rnd = new Random();
             string num = rnd.Next(1000, 10000000).ToString();
-            dichVu.idDichVu = "#DV" + num;
+            dichVu.idDichVu = "DV" + num;
         }
 
         public void AutoPK_LoaiTK(LoaiTaiKhoan loaiTaiKhoan)
         {
             Random rnd = new Random();
             string num = rnd.Next(1000, 10000000).ToString();
-            loaiTaiKhoan.idLoaiTK = "#TAC" + num;
+            loaiTaiKhoan.idLoaiTK = "TAC" + num;
         }
 
 

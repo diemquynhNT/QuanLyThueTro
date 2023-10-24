@@ -126,7 +126,6 @@
                                 <a asp-action="CreateTK" class="btn btn-success">
                                     Thêm mới
                                 </a>
-
                             </div>
                         </div>
                         <div class="row">
@@ -137,7 +136,7 @@
                                         <tr>
 
                                             <th aria-controls="sampleTable" rowspan="1" colspan="1">Mã</th>
-                                            <th aria-controls="sampleTable" rowspan="1" colspan="1">Loạ</th>
+                                            <th aria-controls="sampleTable" rowspan="1" colspan="1">Loại</th>
                                             <th aria-controls="sampleTable" rowspan="1" colspan="1">Giá</th>
                                             <th aria-controls="sampleTable" rowspan="1" colspan="1">Hạn sử dụng</th>
                                             <th aria-controls="sampleTable" rowspan="1" colspan="1">Chức năng</th>
@@ -173,11 +172,11 @@
                                                         <a href="/NVKD/EditTK/@item.idLoaiTK" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Edit">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
-                                                        <a class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Delete" data-target="#DeleteTK-@item.idLoaiTK" data-toggle="modal">
+                                                        <a class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Delete" data-target="#DeleteModal-@item.idLoaiTK" data-toggle="modal">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
                                                         <form asp-controller="NVKD" asp-action="DeleteTK" asp-route-id="@item.idLoaiTK" method="post">
-                                                            <div class="modal" tabindex="-1" role="dialog" style="padding:100px 350px;margin:50px;text-align:center" id="#DeleteTK-@item.idLoaiTK">
+                                                            <div class="modal" tabindex="-1" role="dialog" style="padding:100px 350px;margin:50px;text-align:center" id="#DeleteModal-@item.idLoaiTK">
                                                                 <div class="modal-dialog" role="document">
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">
