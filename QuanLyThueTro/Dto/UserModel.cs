@@ -1,14 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using QuanLyThueTro.Model;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
-namespace QuanLyThueTro.Model
+namespace QuanLyThueTro.Dto
 {
-    public class Users
+    public class UserModel
     {
-        [Key]
-        public string idUser { get; set; }
-        [Required]
-        [MaxLength(100)]
+     
         public string hoTen { get; set; }
 
         [EmailAddress()]
@@ -29,18 +27,8 @@ namespace QuanLyThueTro.Model
 
         public string? hinhAnh { get; set; }
 
-        public bool trangThai { get; set; }
-
-
-        public virtual ICollection<Review> reviews { get; set; }
-        public virtual ICollection<GiaoDich> GiaoDiches { get; set; }
-        public virtual ICollection<TinYeuThich> tinYeuThiches { get; set; }
         public string? idChucVu { get; set; }
-        [ForeignKey("idChucVu")]
-        public ChucVu chucVus { get; set; }
 
         public string? idLoaiTK { get; set; }
-        [ForeignKey("idLoaiTK")]
-        public LoaiTaiKhoan loaiTaiKhoans { get; set; }
     }
 }

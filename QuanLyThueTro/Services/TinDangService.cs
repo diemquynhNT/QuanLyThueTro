@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using QuanLyThueTro.Data;
 using QuanLyThueTro.Model;
@@ -22,6 +22,7 @@ namespace QuanLyThueTro.Services
                 tin.idTinDang = getId.GenerateId(6);
                 tin.trangThaiTinDang = false;
                 tin.ngayTaoTin = DateTime.Now;
+                tin.ngayBatDau = DateTime.Now;
                 tin.idDichVu = null;
                 phong.idTinDang = tin.idTinDang;
                 _context.tinDangs.Add(tin);
@@ -87,8 +88,43 @@ namespace QuanLyThueTro.Services
         public void DuyetTin(TinDang tin,bool status)
         {
             tin.trangThaiTinDang = status;
+            if(status)
+            {
+                tin.ngayBatDau = DateTime.Today;
+                tin.ngayKetThuc = DateTime.Today.AddDays(30);
+            }    
             _context.Entry(tin).State = EntityState.Modified;
             _context.SaveChanges();
         }
+
+        public List<TinDang> Filter(int thang, bool trangThai)
+        {
+            if (thang == 0)
+                return _context.tinDangs.Where(t=>t.trangThaiTinDang==trangThai).ToList();
+            else
+                return _context.tinDangs.Where(t =>t.ngayTaoTin.Month == thang && t.trangThaiTinDang == trangThai).ToList();
+
+        }
+        public async Task<Images> AddHinhanh(string tinId, IFormFile file)
+        {
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+            var hinhanh = new Images
+            {
+                nameImage = fileName,
+                idTinDang = tinId,
+                idImage = Guid.NewGuid().GetHashCode(),
+
+            };
+            _context.ImagesPhongTro.Add(hinhanh);
+            await _context.SaveChangesAsync();
+
+            return hinhanh;
+        }
+
     }
 }

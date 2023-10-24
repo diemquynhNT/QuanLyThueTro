@@ -1,36 +1,74 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Client_QuanLythueTro.APIGateWay;
+using Client_QuanLythueTro.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
+using System.Text;
 
 namespace Client_QuanLythueTro.Controllers
 {
     public class AdminController : Controller
     {
+        private readonly APIGateWayUsers apiGateWay;
+        public AdminController(APIGateWayUsers aPIGate)
+        {
+            this.apiGateWay = aPIGate;
+        }
+        private byte[] Base64UrlDecode(string input)
+        {
+            string base64 = input.Replace('-', '+').Replace('_', '/');
+            while (base64.Length % 4 != 0)
+            {
+                base64 += '=';
+            }
+            return Convert.FromBase64String(base64);
+        }
+        public string GetIdUser()
+        {
+            string token = Request.Cookies["access_token"];
+            var tokenParts = token.Split('.');
+            var encodedPayload = tokenParts[1];
+            var decodedPayload = Base64UrlDecode(encodedPayload);
+            var decodedPayloadString = Encoding.UTF8.GetString(decodedPayload);
+            var payloadObject = JObject.Parse(decodedPayloadString);
+            var img = payloadObject["ImageUrl"]?.Value<string>();
+            return img;
+        }
         // GET: AdminController
         public ActionResult TrangChuAdmin()
         {
+            ViewBag.UserImageUrl = GetIdUser();
             return View();
         }
-
-        // GET: AdminController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult QuanLyNhanVien()
         {
-            return View();
+            List<Users> listEmloyee = apiGateWay.ListEmployee();
+            return View(listEmloyee);
         }
 
-        // GET: AdminController/Create
-        public ActionResult Create()
+        public ActionResult DetailUsers(string id)
         {
-            return View();
+            ViewBag.UserImageUrl = GetIdUser();
+            Users users = apiGateWay.GetUser(id);
+            return View(users);
+        }
+
+        public ActionResult CreateUser()
+        {
+            ViewBag.UserImageUrl = GetIdUser();
+            Users u = new Users();
+            return View(u);
         }
 
         // POST: AdminController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult CreateUser(Users u)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                apiGateWay.CreateUser(u);
+                return RedirectToAction("QuanLyNhanVien");
             }
             catch
             {
@@ -39,19 +77,22 @@ namespace Client_QuanLythueTro.Controllers
         }
 
         // GET: AdminController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult EditUsers(string id)
         {
-            return View();
+            ViewBag.UserImageUrl = GetIdUser();
+            Users users = apiGateWay.GetUser(id);
+            return View(users);
         }
 
         // POST: AdminController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult EditUsers(Users u)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                apiGateWay.UpdateUsers(u);
+                return RedirectToAction("QuanLyNhanVien");
             }
             catch
             {
@@ -59,20 +100,13 @@ namespace Client_QuanLythueTro.Controllers
             }
         }
 
-        // GET: AdminController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: AdminController/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteUsers(string id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                apiGateWay.DeleteUsers(id);
+                return RedirectToAction("QuanLyNhanVien");
             }
             catch
             {

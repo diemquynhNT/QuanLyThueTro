@@ -5,6 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<APIGateWayTinDang>();
 builder.Services.AddScoped<APIGateWayDichVu>();
+builder.Services.AddScoped<APIGateWayUsers>();
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

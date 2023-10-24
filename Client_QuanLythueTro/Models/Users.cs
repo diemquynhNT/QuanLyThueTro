@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
-namespace QuanLyThueTro.Model
+namespace Client_QuanLythueTro.Models
 {
     public class Users
     {
@@ -30,17 +31,8 @@ namespace QuanLyThueTro.Model
         public string? hinhAnh { get; set; }
 
         public bool trangThai { get; set; }
-
-
-        public virtual ICollection<Review> reviews { get; set; }
-        public virtual ICollection<GiaoDich> GiaoDiches { get; set; }
-        public virtual ICollection<TinYeuThich> tinYeuThiches { get; set; }
         public string? idChucVu { get; set; }
-        [ForeignKey("idChucVu")]
-        public ChucVu chucVus { get; set; }
 
         public string? idLoaiTK { get; set; }
-        [ForeignKey("idLoaiTK")]
-        public LoaiTaiKhoan loaiTaiKhoans { get; set; }
     }
 }

@@ -28,6 +28,11 @@ namespace QuanLyThueTro.Controllers
         {
             return _context.GetAll();
         }
+        [HttpGet("Filter")]
+        public List<TinDang> Filter(int thang,bool status)
+        {
+            return _context.Filter(thang, status);
+        }
 
         // GET api/<TinDangController>/5
         //Detail
@@ -82,16 +87,7 @@ namespace QuanLyThueTro.Controllers
                 _mapper.Map(tinvVM, phongFind);
                 await _context.UpdateTinDang(tinFind,phongFind);
 
-                ActionResult tinvmResult = await GetById(id);
-                if (tinvmResult is OkObjectResult okObjectResult)
-                {
-                    var tinvm = okObjectResult.Value;
-                    return CreatedAtAction("GetById", new { id = id }, tinvm);
-                }
-                else
-                {
-                    return BadRequest("");
-                }
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -141,5 +137,21 @@ namespace QuanLyThueTro.Controllers
                 throw;
             }
         }
+
+        [HttpPost("SaveImages")]
+        public async Task<IActionResult> AddHinhanh(string tinId, IFormFile file)
+        {
+            var tinDang =  _context.GetTinDangById(tinId);
+            if (tinDang == null)
+            {
+                return NotFound();
+            }
+            if (file == null)
+                return BadRequest();
+            _context.AddHinhanh(tinId, file);
+
+            return Ok("thanh cong");
+        }
+
     }
 }

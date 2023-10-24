@@ -49,6 +49,8 @@ namespace QuanLyThueTro.Mapper
               .ForMember(dest => dest.tienDichVu, act => act.MapFrom(src => src.tienDichVu))
               .ForMember(dest => dest.tienDien, act => act.MapFrom(src => src.tienDien));
 
+            CreateMap<UserModel, Users>();
+
 
         }
     }
