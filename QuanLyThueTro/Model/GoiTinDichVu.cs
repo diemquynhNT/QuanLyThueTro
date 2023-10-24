@@ -2,7 +2,7 @@
 
 namespace QuanLyThueTro.Model
 {
-    public class DichVuDangTin
+    public class GoiTinDichVu
     {
         [Key]
         public string idDichVu { get; set; }
@@ -11,9 +11,8 @@ namespace QuanLyThueTro.Model
         public string loaiDichVu { get; set; }
         [Required]
         public float giaCa { get; set; }
-
         [Required]
-        public int hanDangTin { get; set; }
+        public int hanDung { get; set; }
 
         public virtual ICollection<TinDang> TinDangs { get; set; }
 

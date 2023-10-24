@@ -5,25 +5,25 @@
 namespace QuanLyThueTro.Migrations
 {
     /// <inheritdoc />
-    public partial class changeType : Migration
+    public partial class deleteHanSuDung : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "tienNha",
-                table: "phongTros");
+                name: "hanDangTin",
+                table: "dichVuDangTins");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<float>(
-                name: "tienNha",
-                table: "phongTros",
-                type: "real",
+            migrationBuilder.AddColumn<int>(
+                name: "hanDangTin",
+                table: "dichVuDangTins",
+                type: "int",
                 nullable: false,
-                defaultValue: 0f);
+                defaultValue: 0);
         }
     }
 }

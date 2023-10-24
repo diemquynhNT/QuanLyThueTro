@@ -41,7 +41,7 @@ namespace QuanLyThueTro.Model
 
         public string? idDichVu { get; set; }
         [ForeignKey("idDichVu")]
-        public DichVuDangTin dichVuDangTin { get; set; }
+        public GoiTinDichVu dichVuDangTin { get; set; }
 
         public virtual ICollection<LichXemPhong> lichXemPhongs { get; set; }
         public virtual ICollection<TinYeuThich> tinYeuThiches { get; set; }

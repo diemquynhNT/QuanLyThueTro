@@ -183,7 +183,7 @@ namespace Client_QuanLythueTro.Controllers
             try
             {
                 apiGateWayDichVu.CreateGoiTin(tin);
-                return RedirectToAction("QuanLyTinDang");
+                return RedirectToAction("QuanLyDichVu");
             }
             catch
             {
@@ -196,8 +196,6 @@ namespace Client_QuanLythueTro.Controllers
             DichVuDangTin tin = apiGateWayDichVu.GetGoiTin(id);
             return View(tin);
         }
-
-        // POST: NVKDController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditGoiTinDichVu(DichVuDangTin tin)

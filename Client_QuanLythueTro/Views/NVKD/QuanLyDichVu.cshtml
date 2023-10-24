@@ -66,16 +66,38 @@
                                                         @Html.DisplayFor(modelItem => item.giaCa) 
                                                     </td>
                                                     <td>
-                                                        @Html.DisplayFor(modelItem => item.hanDangTin)
+                                                        @Html.DisplayFor(modelItem => item.hanDung)
                                                        
                                                     </td>
                                                     <td style="text-align:center">
-                                                        <a href="/NVKD/" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Edit">
+                                                        <a href="/NVKD/EditGoiTinDichVu/@item.idDichVu" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Edit">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
-                                                        <a href="" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Detail">
-                                                            <i class="fas fa-train"></i>
+                                                        <a class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Delete" data-target="#DeleteModal-@item.idDichVu" data-toggle="modal">
+                                                            <i class="fas fa-trash"></i>
                                                         </a>
+                                                        <form asp-controller="NVKD" asp-action="DeleteGoiTin" asp-route-id="@item.idDichVu" method="post">
+                                                            <div class="modal" tabindex="-1" role="dialog" style="padding:100px 350px;margin:50px;text-align:center" id="DeleteModal-@item.idDichVu">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title">Delete Confirmation @item.idDichVu</h5>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <p style="text-align:center">Xác nhận xóa gói tin dịch vụ?</p>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                                            <input type="submit" value="Delete" class="btn btn-danger" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+
                                                     </td>
                                                 </tr>
                                             }

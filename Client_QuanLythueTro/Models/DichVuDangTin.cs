@@ -13,6 +13,6 @@ namespace Client_QuanLythueTro.Models
         public float giaCa { get; set; }
 
         [Required]
-        public int hanDangTin { get; set; }
+        public int hanDung { get; set; }
     }
 }

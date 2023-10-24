@@ -12,8 +12,8 @@ using QuanLyThueTro.Data;
 namespace QuanLyThueTro.Migrations
 {
     [DbContext(typeof(MyDBContext))]
-    [Migration("20231023170927_changeType")]
-    partial class changeType
+    [Migration("20231024013552_deleteHanSuDung")]
+    partial class deleteHanSuDung
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,27 +38,6 @@ namespace QuanLyThueTro.Migrations
                     b.HasKey("idChucVu");
 
                     b.ToTable("chucVus");
-                });
-
-            modelBuilder.Entity("QuanLyThueTro.Model.DichVuDangTin", b =>
-                {
-                    b.Property<string>("idDichVu")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<float>("giaCa")
-                        .HasColumnType("real");
-
-                    b.Property<int>("hanDangTin")
-                        .HasColumnType("int");
-
-                    b.Property<string>("loaiDichVu")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("idDichVu");
-
-                    b.ToTable("dichVuDangTins");
                 });
 
             modelBuilder.Entity("QuanLyThueTro.Model.GiaoDich", b =>
@@ -88,6 +67,24 @@ namespace QuanLyThueTro.Migrations
                     b.HasIndex("idUser");
 
                     b.ToTable("giaoDiches");
+                });
+
+            modelBuilder.Entity("QuanLyThueTro.Model.GoiTinDichVu", b =>
+                {
+                    b.Property<string>("idDichVu")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<float>("giaCa")
+                        .HasColumnType("real");
+
+                    b.Property<string>("loaiDichVu")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("idDichVu");
+
+                    b.ToTable("dichVuDangTins");
                 });
 
             modelBuilder.Entity("QuanLyThueTro.Model.Images", b =>
@@ -171,11 +168,11 @@ namespace QuanLyThueTro.Migrations
                     b.Property<string>("idLoaiTK")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<float>("giaTK")
-                        .HasColumnType("real");
+                    b.Property<double>("giaTK")
+                        .HasColumnType("float");
 
-                    b.Property<int>("hanSuDung")
-                        .HasColumnType("int");
+                    b.Property<double>("hanSuDung")
+                        .HasColumnType("float");
 
                     b.Property<string>("tenLoaiTK")
                         .IsRequired()
@@ -475,7 +472,7 @@ namespace QuanLyThueTro.Migrations
 
             modelBuilder.Entity("QuanLyThueTro.Model.TinDang", b =>
                 {
-                    b.HasOne("QuanLyThueTro.Model.DichVuDangTin", "dichVuDangTin")
+                    b.HasOne("QuanLyThueTro.Model.GoiTinDichVu", "dichVuDangTin")
                         .WithMany("TinDangs")
                         .HasForeignKey("idDichVu");
 
@@ -529,7 +526,7 @@ namespace QuanLyThueTro.Migrations
                     b.Navigation("users");
                 });
 
-            modelBuilder.Entity("QuanLyThueTro.Model.DichVuDangTin", b =>
+            modelBuilder.Entity("QuanLyThueTro.Model.GoiTinDichVu", b =>
                 {
                     b.Navigation("TinDangs");
                 });

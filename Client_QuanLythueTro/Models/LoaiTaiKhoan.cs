@@ -10,9 +10,8 @@ namespace Client_QuanLythueTro.Models
         [MaxLength(100)]
         public string tenLoaiTK { get; set; }
         [Required]
-        public float giaTK { get; set; }
-
+        public double giaTK { get; set; }
         [Required]
-        public int hanSuDung { get; set; }
+        public int hanDung { get; set; }
     }
 }

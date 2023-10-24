@@ -32,14 +32,10 @@
                         <input asp-for="nguoiLienHe" class="form-control" required />
                         <span asp-validation-for="nguoiLienHe" class="text-danger"></span>
                     </div>
-                    <div class="form-group col-sm-4">
+                    <div class="form-group col-sm-6">
                         <b>
-                            SĐ
-                            <select class="form-control" asp-for="loaiTin" required>
-                                <option selected="selected">Cho thuê</option>
-                                <option selected="selected">Tìm người ở ghép</option>
-
-                            </select>T liên hệ
+                            SĐT liên hệ
+                           
                         </b>
                         <input asp-for="sdtNguoiLienHe" class="form-control" required />
                         <span asp-validation-for="sdtNguoiLienHe" class="text-danger"></span>
@@ -47,7 +43,11 @@
                     
                     <div class="form-group col-sm-4">
                         <b>Loại tin</b>
-                        
+                        <select class="form-control" asp-for="loaiTin" required>
+                            <option selected="selected">Cho thuê</option>
+                            <option selected="selected">Tìm người ở ghép</option>
+
+                        </select>
                         @*<input asp-for="loaiTin" class="form-control" required />*@
                         <span asp-validation-for="loaiTin" class="text-danger"></span>
                     </div>

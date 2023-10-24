@@ -20,17 +20,19 @@ namespace QuanLyThueTro.Controllers
         private readonly MyDBContext _context;
         private readonly IMapper _mapper;
         private readonly IExtensionService _extensionService;
+        private GenerateAlphanumericId random;
 
         public DichVuDangTinsController(MyDBContext context, IMapper mapper, IExtensionService extensionService)
         {
             _context = context;
             _mapper = mapper;
             _extensionService = extensionService;
+            random = new GenerateAlphanumericId();
         }
 
         // GET: api/DichVuDangTins
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DichVuDangTin>>> GetdichVuDangTins()
+        public async Task<ActionResult<IEnumerable<GoiTinDichVu>>> GetdichVuDangTins()
         {
           if (_context.dichVuDangTins == null)
           {
@@ -41,7 +43,7 @@ namespace QuanLyThueTro.Controllers
 
         // GET: api/DichVuDangTins/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DichVuDangTin>> GetDichVuDangTin(string id)
+        public async Task<ActionResult<GoiTinDichVu>> GetDichVuDangTin(string id)
         {
           if (_context.dichVuDangTins == null)
           {
@@ -62,7 +64,7 @@ namespace QuanLyThueTro.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDichVuDangTin(string id, [FromBody] DichVuDangTinDto dichVuDangTinDto)
         {
-            DichVuDangTin dichVuDangTin = _mapper.Map<DichVuDangTin>(dichVuDangTinDto);
+            GoiTinDichVu dichVuDangTin = _mapper.Map<GoiTinDichVu>(dichVuDangTinDto);
             dichVuDangTin.idDichVu = id;
             if (id != dichVuDangTin.idDichVu)
             {
@@ -95,9 +97,9 @@ namespace QuanLyThueTro.Controllers
         // POST: api/DichVuDangTins
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<DichVuDangTin>> PostDichVuDangTin([FromBody] DichVuDangTinDto dichVuDangTinDto)
+        public async Task<ActionResult<GoiTinDichVu>> PostDichVuDangTin([FromBody] DichVuDangTinDto dichVuDangTinDto)
         {
-            DichVuDangTin dichVuDangTin = _mapper.Map<DichVuDangTin>(dichVuDangTinDto);
+            GoiTinDichVu dichVuDangTin = _mapper.Map<GoiTinDichVu>(dichVuDangTinDto);
           if (_context.dichVuDangTins == null)
           {
               return Problem("Entity set 'MyDBContext.dichVuDangTins'  is null.");
@@ -105,11 +107,11 @@ namespace QuanLyThueTro.Controllers
             if (!_extensionService.IsNotExistNameDichVu(dichVuDangTin))
                 return BadRequest("Loại dịch vụ đã tồn tại!");
 
-            _extensionService.AutoPK_DichVu(dichVuDangTin);
+            dichVuDangTin.idDichVu = "DV" + random.GenerateId(5);
             _context.dichVuDangTins.Add(dichVuDangTin);
             try
             {
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (DbUpdateException)
             {
