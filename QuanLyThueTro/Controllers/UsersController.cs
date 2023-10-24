@@ -72,14 +72,16 @@ namespace QuanLyThueTro.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsers(string id, Users users)
+        public async Task<IActionResult> PutUsers(string id,[FromBody] UserModel userModel)
         {
-            if (id != users.idUser)
+            Users u = _context.users.Where(t => t.idUser == id).FirstOrDefault();
+            if (u==null)
             {
-                return BadRequest();
+                return NotFound();
             }
-            _context.Entry(users).State = EntityState.Modified;
 
+            _mapper.Map(userModel, u);
+            _context.users.Update(u);
             try
             {
                 await _context.SaveChangesAsync();
@@ -102,7 +104,7 @@ namespace QuanLyThueTro.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Users>> PostUsers(UserModel userModel)
+        public async Task<ActionResult<Users>> PostUsers([FromBody]UserModel userModel)
         {
             bool checkPassword = _iusers.ValidatePassword(userModel.passwordUser);
             if (!checkPassword)

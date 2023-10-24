@@ -3,14 +3,14 @@
 @{
     ViewData["Title"] = "EditUsers";
     Layout = "~/Views/Admin/LayoutAdmin.cshtml";
+
+    ViewBag.user = "active";
+    ViewBag.Name = "Edit account nhân viên";
 }
 
-<h1>EditUsers</h1>
-
-<h4>Users</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="tile" style="margin:10px 20px;">
+    <h3 class="tile-title">TẠO MỚI TÀI KHOẢN</h3>
+    <div class="tile-body contenner">
         <form asp-action="EditUsers">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">

@@ -119,6 +119,7 @@ namespace Client_QuanLythueTro.Controllers
         public ActionResult CreateTinDang()
         {
             ViewBag.UserImageUrl = GetIdUser();
+            ViewBag.ListKV = apiGateWay.ListKhuVuc();
             TinDang tin = new TinDang();
             return View(tin);
         }
@@ -213,6 +214,12 @@ namespace Client_QuanLythueTro.Controllers
             ViewBag.listTK = apiGateWayDichVu.ListTK();
             return View(listGoiTin);
         }
+        public ActionResult QuanLyTaiKhoanDV()
+        {
+            ViewBag.UserImageUrl = GetIdUser();
+            List<LoaiTaiKhoan> listtk = apiGateWayDichVu.ListTK();
+            return View(listtk);
+        }
         // GET: NVKDController/Details/5
         public ActionResult DetailDichVu(string id)
         {
@@ -293,7 +300,7 @@ namespace Client_QuanLythueTro.Controllers
             try
             {
                 apiGateWayDichVu.CreateTK(tk);
-                return RedirectToAction("QuanLyDichVu");
+                return RedirectToAction("QuanLyTaiKhoanDV");
             }
             catch
             {
@@ -303,7 +310,8 @@ namespace Client_QuanLythueTro.Controllers
         public ActionResult EditTK(string id)
         {
             ViewBag.UserImageUrl = GetIdUser();
-            LoaiTaiKhoan tk = apiGateWayDichVu.GetTK(id);
+
+            LoaiTaiKhoan tk =  apiGateWayDichVu.GetTaiKhoan(id);
             return View(tk);
         }
         [HttpPost]
@@ -313,7 +321,7 @@ namespace Client_QuanLythueTro.Controllers
             try
             {
                 apiGateWayDichVu.UpdateTK(tk);
-                return RedirectToAction("QuanLyDichVu");
+                return RedirectToAction("QuanLyTaiKhoanDV");
             }
             catch
             {
@@ -327,7 +335,7 @@ namespace Client_QuanLythueTro.Controllers
             {
                 //ViewBag.UserImageUrl = GetIdUser();
                 apiGateWayDichVu.DeleteTK(id);
-                return RedirectToAction("QuanLyDichVu");
+                return RedirectToAction("QuanLyTaiKhoanDV");
             }
             catch
             {

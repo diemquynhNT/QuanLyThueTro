@@ -94,35 +94,12 @@
                                                 </td>
                                                 <td>
                                                     <a href="/Admin/EditUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
-                                                        <i class="fas fa-info-circle"></i>
+                                                        <i class="fas fa-edit"></i>
                                                     </a>
                                                     <a href="/Admin/DetailUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
                                                         <i class="fas fa-info-circle"></i>
                                                     </a>
-                                                   @* <a class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Delete" data-target="#DeleteModal-@item.idTinDang" data-toggle="modal">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                    <form asp-controller="NVKD" asp-action="DeleteTin" asp-route-id="@item.idTinDang" method="post">
-                                                        <div class="modal" tabindex="-1" role="dialog" style="padding:100px 350px;margin:50px;text-align:center" id="DeleteModal-@item.idTinDang">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title">Delete Confirmation @item.idTinDang</h5>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <p style="text-align:center">Xác nhận xóa tin?</p>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                                                        <input type="submit" value="Delete" class="btn btn-danger" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </form>*@
+                                                  
                                                 </td>
                                             </tr>
 

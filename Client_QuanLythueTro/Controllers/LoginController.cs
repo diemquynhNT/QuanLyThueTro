@@ -50,7 +50,7 @@ namespace Client_QuanLythueTro.Controllers
                 // Lưu token vào cookie
                 var cookieOptions = new CookieOptions
                 {
-                    Expires = DateTime.UtcNow.AddDays(7),
+                    Expires = DateTime.UtcNow.AddDays(1),
                     HttpOnly = true,
                     SameSite = SameSiteMode.Strict,
                     Secure = true // Đảm bảo sử dụng giao thức HTTPS để sử dụng cookie này

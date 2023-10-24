@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
+using static System.Net.WebRequestMethods;
 
 namespace Client_QuanLythueTro.APIGateWay
 {
@@ -40,6 +41,37 @@ namespace Client_QuanLythueTro.APIGateWay
             finally { }
             return listTin;
         }
+        public List<Khuvucs> ListKhuVuc()
+        {
+            List<Khuvucs> listTin = new List<Khuvucs>();
+            url= "https://localhost:7034/api/KhuVucs";
+            if (url.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var datacol = JsonConvert.DeserializeObject<List<Khuvucs>>(result);
+
+                    if (datacol != null)
+                        listTin = datacol;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return listTin;
+        }
+
 
         public List<TinDang> FilterTin(int thang,bool status)
         {

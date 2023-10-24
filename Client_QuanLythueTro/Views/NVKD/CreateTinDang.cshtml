@@ -66,7 +66,17 @@
                   
                     <div class="form-group col-sm-6" >
                         <b>Khu vực</b>
-                        <input asp-for="idKhuVuc" class="form-control" required />
+                        <select class="form-control" asp-for="idKhuVuc" required>
+                        <option selected="selected" disabled >------Chọn-------</option>
+                        @{
+                            var ds = ViewBag.ListKV;
+                            foreach (var item in ds)
+                            {
+                                <option value="@item.idKhuVuc">@item.tenKhuVuc</option>
+                            }
+                        }
+                        </select>
+                        @*<input asp-for="idKhuVuc" class="form-control" required />*@
                         <span asp-validation-for="idKhuVuc" class="text-danger"></span>
                     </div>
                    
