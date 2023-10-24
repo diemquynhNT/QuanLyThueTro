@@ -157,7 +157,7 @@ namespace Client_QuanLythueTro.Controllers
         {
             ViewBag.UserImageUrl = GetIdUser();
             List<DichVuDangTin> listGoiTin = apiGateWayDichVu.ListGoiTin();
-            //ViewBag.listTK=apiGateWayDichV.
+            ViewBag.listTK = apiGateWayDichVu.ListTK();
             return View(listGoiTin);
         }
         // GET: NVKDController/Details/5
@@ -217,6 +217,63 @@ namespace Client_QuanLythueTro.Controllers
             {
                 //ViewBag.UserImageUrl = GetIdUser();
                 apiGateWayDichVu.DeleteTin(id);
+                return RedirectToAction("QuanLyDichVu");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public ActionResult CreateTK()
+        {
+            ViewBag.UserImageUrl = GetIdUser();
+            LoaiTaiKhoan tin = new LoaiTaiKhoan();
+            return View(tin);
+        }
+
+        // POST: NVKDController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateTK(LoaiTaiKhoan tk)
+        {
+            try
+            {
+                apiGateWayDichVu.CreateTK(tk);
+                return RedirectToAction("QuanLyDichVu");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        public ActionResult EditTK(string id)
+        {
+            ViewBag.UserImageUrl = GetIdUser();
+            LoaiTaiKhoan tk = apiGateWayDichVu.GetTK(id);
+            return View(tk);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditTK(LoaiTaiKhoan tk)
+        {
+            try
+            {
+                apiGateWayDichVu.UpdateTK(tk);
+                return RedirectToAction("QuanLyDichVu");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        [HttpPost]
+        public ActionResult DeleteTK(string id)
+        {
+            try
+            {
+                //ViewBag.UserImageUrl = GetIdUser();
+                apiGateWayDichVu.DeleteTK(id);
                 return RedirectToAction("QuanLyDichVu");
             }
             catch

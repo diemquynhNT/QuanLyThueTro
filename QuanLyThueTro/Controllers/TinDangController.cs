@@ -61,16 +61,7 @@ namespace QuanLyThueTro.Controllers
                 var phong = _mapper.Map<PhongTro>(tin);
                 await _context.AddTinDang(tinDang,phong);
 
-                ActionResult tinvmResult = await GetById(tinDang.idTinDang);
-                if (tinvmResult is OkObjectResult okObjectResult)
-                {
-                    var tinvm = okObjectResult.Value;
-                    return CreatedAtAction("GetById", new { id = tinDang.idTinDang }, tinvm);
-                }
-                else
-                {
-                    return BadRequest("Failed to retrieve TinDangVM");
-                }
+                return Ok("thanh cong");
             }
             catch(Exception ex)
             {

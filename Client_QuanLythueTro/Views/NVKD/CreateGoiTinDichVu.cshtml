@@ -8,9 +8,12 @@
 }
 
 <div class="container">
-    <div class="col-md-12">
-        <div class="tile" id="printMe">
-        <div class="row">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="tile" id="printMe">
+                <div class="element-button">
+                    <h4 style="text-align:center">THÊM GÓI TIN</h4>
+                </div>
                 <form asp-action="CreateGoiTinDichVu">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     @Html.HiddenFor(model => model.idDichVu)
