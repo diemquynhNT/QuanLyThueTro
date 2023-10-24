@@ -4,50 +4,48 @@
     ViewData["Title"] = "EditGoiTinDichVu";
     Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
     ViewBag.services = "active";
-    ViewBag.Name = "Edit";
+    ViewBag.Name = "Quản lý dịch vụ";
 }
 
 
 <div class="container">
     <div class="row">
+        <div class="col-md-3"></div>
         <div class="col-md-6">
             <div class="tile" id="printMe">
                 <div class="element-button">
-                    <h4 style="text-align:center">EDIT GÓI TIN</h4>
+                    <h4 style="text-align:center">Chỉnh sửa dịch vụ gói tin</h4>
                 </div>
-                    <form asp-action="EditGoiTinDichVu">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group">
-                            <b>Id</b>
-                            <input asp-for="idDichVu" class="form-control" readonly/>
-                            <span asp-validation-for="idDichVu" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <b>Loaại tin</b>
-                            <input asp-for="loaiDichVu" class="form-control" />
-                            <span asp-validation-for="loaiDichVu" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <b>Giá</b>
-                            <input asp-for="giaCa" class="form-control" type="number" min="0" />
-                            <span asp-validation-for="giaCa" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <b>Hạn sử dụng</b>
-                            <input asp-for="hanDung" class="form-control" />
-                            <span asp-validation-for="hanDung" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" value="Save" class="btn btn-primary" />
-                        </div>
-                    </form>
-                </div>
-            <div>
-                <a asp-action="QuanLyDichVu">Back to List</a>
+                <form asp-action="EditGoiTinDichVu">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <b>Mã gói tin</b>
+                        <input asp-for="idDichVu" class="form-control" readonly />
+                        <span asp-validation-for="idDichVu" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b>Loại gói tin</b>
+                        <input asp-for="loaiDichVu" class="form-control" />
+                        <span asp-validation-for="loaiDichVu" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b>Giá</b>
+                        <input asp-for="giaCa" class="form-control" type="number" min="0" />
+                        <span asp-validation-for="giaCa" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b>Hạn sử dụng/ngày</b>
+                        <input asp-for="hanDung" class="form-control" />
+                        <span asp-validation-for="hanDung" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Lưu lại" class="btn btn-primary" /> |
+                        <a class="btn btn-warning" href="~/NVKD/QuanLyDichVu">Trở lại</a>
+                    </div>
+                </form>
             </div>
-            </div>
-
-            
         </div>
+        <div class="col-md-3"></div>
     </div>
+</div>
 

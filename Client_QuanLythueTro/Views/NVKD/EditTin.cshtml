@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "EditTin";
     Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
+    ViewBag.services = "active";
+    ViewBag.Name = "Quản lý dịch vụ";
 }
 
 <div class="row">
@@ -107,13 +109,10 @@
                 <span asp-validation-for="tienDichVu" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+                <a class="btn btn-warning" href="~/NVKD/QuanLyDichVu"> Trở lại</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="QuanLyTinDang">Back to List</a>
 </div>
 

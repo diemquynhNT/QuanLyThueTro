@@ -136,17 +136,16 @@
             <h3 class="tile-title">Danh sách tin đăng</h3>
             <div class="row">
                 <div class="col-sm-12 table-responsive">
-                    <table class="table table-hover table-bordered js-copytextarea" role="grid">
+                    <table class="table table-hover table-bordered js-copytextarea dataTable no-footer" id="sampleTable" role="grid">
                         <thead>
                             <tr role="row">
                                 <th>Mã </th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
+                                <th>Tiêu đề</th>
+                                <th>Khu vực</th>
+                                <th>Mã dịch vụ</th>
+                                <th>Thông tin liên hệ</th>
+                                <th>Ngày tạo</th>
+                                <th>Chức năng</th>
 
                             </tr>
                         </thead>
@@ -172,11 +171,10 @@
                                       @Html.DisplayFor(modelItem => item.nguoiLienHe)
                                 </td>
                                 <td>
+                                        @Html.DisplayFor(modelItem => item.ngayTaoTin)
                                 </td>
                                 <td>
-                                </td>
-                                <td>
-                                    <a href="" class="btn btn-success btn-sm">Xem</a>
+                                        <a href="/NVKD/DetailTinDang/@item.idTinDang" class="btn btn-success btn-sm">Xem chi tiết</a>
                                 </td>
                             </tr>
                         }
