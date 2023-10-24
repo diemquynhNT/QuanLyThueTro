@@ -41,7 +41,7 @@ namespace Client_QuanLythueTro.APIGateWay
         }
 
         //create
-        public TinDang CreateTin(TinDang ls)
+        public void CreateTin(TinDang ls)
         {
 
             if (url.Trim().Substring(0, 5).ToLower() == "https")
@@ -58,21 +58,26 @@ namespace Client_QuanLythueTro.APIGateWay
                 // Gửi yêu cầu POST đến URL của API để tạo LoaiSach mới
                 HttpResponseMessage response = httpClient.PostAsync(url, content).Result;
 
-                if (response.IsSuccessStatusCode)
+                if (!response.IsSuccessStatusCode)
                 {
-                    // Đọc dữ liệu trả về và chuyển đổi thành đối tượng LoaiSach
-                    string result = response.Content.ReadAsStringAsync().Result;
-                    var data = JsonConvert.DeserializeObject<TinDang>(result);
-
-                    if (data != null)
-                        ls = data;
-                }
-                else
-                {
-                    // Xử lý khi có lỗi xảy ra trong quá trình gọi API
                     string result = response.Content.ReadAsStringAsync().Result;
                     throw new Exception(result);
                 }
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    // Đọc dữ liệu trả về và chuyển đổi thành đối tượng LoaiSach
+                //    string result = response.Content.ReadAsStringAsync().Result;
+                //    var data = JsonConvert.DeserializeObject<TinDang>(result);
+
+                //    if (data != null)
+                //        ls = data;
+                //}
+                //else
+                //{
+                //    // Xử lý khi có lỗi xảy ra trong quá trình gọi API
+                //    string result = response.Content.ReadAsStringAsync().Result;
+                //    throw new Exception(result);
+                //}
             }
             catch (Exception ex)
             {
@@ -80,7 +85,6 @@ namespace Client_QuanLythueTro.APIGateWay
                 throw new Exception("Lỗi: " + ex.Message);
             }
 
-            return ls;
         }
 
 

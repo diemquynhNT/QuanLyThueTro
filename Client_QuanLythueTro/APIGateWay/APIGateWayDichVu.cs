@@ -168,6 +168,164 @@ namespace Client_QuanLythueTro.APIGateWay
                 throw new Exception("Lỗi: " + ex.Message);
             }
         }
-        
+
+        public List<LoaiTaiKhoan> ListTK()
+        {
+            List<LoaiTaiKhoan> listtk = new List<LoaiTaiKhoan>();
+            if (urlTaiKhoan.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(urlTaiKhoan).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var datacol = JsonConvert.DeserializeObject<List<LoaiTaiKhoan>>(result);
+
+                    if (datacol != null)
+                        listtk = datacol;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return listtk;
+        }
+
+        //create
+        public LoaiTaiKhoan CreateTK(LoaiTaiKhoan tk)
+        {
+
+            if (urlTaiKhoan.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            try
+            {
+                string json = JsonConvert.SerializeObject(tk);
+
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = httpClient.PostAsync(urlTaiKhoan, content).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var data = JsonConvert.DeserializeObject<LoaiTaiKhoan>(result);
+
+                    if (data != null)
+                        tk = data;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi: " + ex.Message);
+            }
+
+            return tk;
+        }
+
+
+
+        public LoaiTaiKhoan GetTK(string id)
+        {
+            LoaiTaiKhoan tk = new LoaiTaiKhoan();
+            urlTaiKhoan = urlTaiKhoan + "/" + id;
+            if (urlTaiKhoan.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(urlTaiKhoan).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var datacol = JsonConvert.DeserializeObject<LoaiTaiKhoan>(result);
+
+                    if (datacol != null)
+                        tk = datacol;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return tk;
+        }
+
+        // update
+        public LoaiTaiKhoan UpdateTK(LoaiTaiKhoan tk)
+        {
+
+            if (urlTaiKhoan.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string id = tk.idLoaiTK;
+            urlTaiKhoan = urlTaiKhoan + "/" + id;
+            string json = JsonConvert.SerializeObject(tk);
+
+            try
+            {
+                HttpResponseMessage response = httpClient.PutAsync(urlTaiKhoan, new StringContent(json, Encoding.UTF8, "application/json")).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return tk;
+        }
+        //delete
+        public void DeleteTK(string id)
+        {
+            try
+            {
+                if (urlTaiKhoan.Trim().Substring(0, 5).ToLower() == "https")
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                string deleteUrl = $"{urlTaiKhoan}/{id}";
+
+                var request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(deleteUrl),
+                    Method = HttpMethod.Delete
+                };
+
+                var response = httpClient.SendAsync(request).Result;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi: " + ex.Message);
+            }
+        }
+
     }
 }
