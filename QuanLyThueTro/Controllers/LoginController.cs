@@ -34,13 +34,7 @@ namespace QuanLyThueTro.Controllers
             && model.password == p.passwordUser);
 
             if (user == null)
-            {
-                return Ok(new
-                {
-                    Success = false,
-                    Message = "Invalid user/pass"
-                });
-            }
+                return BadRequest();
             return Ok(new
             {
                 Success = true,
@@ -60,13 +54,11 @@ namespace QuanLyThueTro.Controllers
                 Subject = new ClaimsIdentity(new[]
                 {
             new Claim(ClaimTypes.Name, u.hoTen),
-            new Claim(ClaimTypes.Email, u.emailUser),
-            new Claim("UserName", u.userName),
             new Claim("Id", u.idUser.ToString()),
-            new Claim("TokenId", Guid.NewGuid().ToString()),
-        }),
+            new Claim("ImageUrl", u.hinhAnh)
+            }),
 
-                Expires = DateTime.UtcNow.AddMinutes(5),
+                Expires = DateTime.UtcNow.AddMinutes(1),
 
                 // Thêm các roles vào token
                 Claims = new Dictionary<string, object>

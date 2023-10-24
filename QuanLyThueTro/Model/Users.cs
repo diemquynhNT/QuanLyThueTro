@@ -27,6 +27,8 @@ namespace QuanLyThueTro.Model
         [Required]
         public string gioiTinh { get; set; }
 
+        public string? hinhAnh { get; set; }
+
         public virtual ICollection<Review> reviews { get; set; }
         public virtual ICollection<GiaoDich> GiaoDiches { get; set; }
         public virtual ICollection<TinYeuThich> tinYeuThiches { get; set; }

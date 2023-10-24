@@ -20,7 +20,7 @@ namespace QuanLyThueTro.Services
             chucVu.idChucVu = "#RO" + num;
         }
 
-        public void AutoPK_DichVu(DichVuDangTin dichVu)
+        public void AutoPK_DichVu(GoiTinDichVu dichVu)
         {
             Random rnd = new Random();
             string num = rnd.Next(1000, 10000000).ToString();
@@ -54,7 +54,7 @@ namespace QuanLyThueTro.Services
             return true;
         }
 
-        public bool IsNotExistNameDichVu(DichVuDangTin dichVu)
+        public bool IsNotExistNameDichVu(GoiTinDichVu dichVu)
         {
             var existing = _dbContext.dichVuDangTins.FirstOrDefault(x => x.loaiDichVu == dichVu.loaiDichVu);
 

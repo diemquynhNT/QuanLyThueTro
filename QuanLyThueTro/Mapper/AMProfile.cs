@@ -10,7 +10,13 @@ namespace QuanLyThueTro.Mapper
         {
             CreateMap<ChucVuDto, ChucVu>();
             CreateMap<LoaiTaiKhoanDto, LoaiTaiKhoan>();
-            CreateMap<DichVuDangTinDto, DichVuDangTin>();
+            CreateMap<DichVuDangTinDto, GoiTinDichVu>()
+            .ForMember(dest => dest.loaiDichVu, act => act.MapFrom(src => src.loaiDichVu))
+            .ForMember(dest => dest.giaCa, act => act.MapFrom(src => src.giaCa))
+            .ForMember(dest => dest.hanDung, act => act.MapFrom(src => src.hanDung))
+
+
+;
         }
     }
 }

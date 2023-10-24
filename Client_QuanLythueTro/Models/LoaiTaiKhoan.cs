@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace QuanLyThueTro.Model
+namespace Client_QuanLythueTro.Models
 {
     public class LoaiTaiKhoan
     {
@@ -13,8 +13,5 @@ namespace QuanLyThueTro.Model
         public double giaTK { get; set; }
         [Required]
         public int hanDung { get; set; }
-
-        public virtual ICollection<Users> users { get; set; }
-
     }
 }

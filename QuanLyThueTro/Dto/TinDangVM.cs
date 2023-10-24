@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using QuanLyThueTro.Model;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
-namespace QuanLyThueTro.Model
+namespace QuanLyThueTro.Dto
 {
-    public class TinDang
+    public class TinDangVM
     {
         [Key]
         public string idTinDang { get; set; }
@@ -15,18 +16,18 @@ namespace QuanLyThueTro.Model
         [MaxLength(200)]
         public string loaiTin { get; set; }
 
-
         public DateTime? ngayBatDau { get; set; }
-      
+
         public DateTime? ngayKetThuc { get; set; }
 
         [Required]
         public bool trangThaiTinDang { get; set; }
         [Required]
         [StringLength(10, MinimumLength = 8)]
-        public string sdtNguoiLienHe { get; set; } [MaxLength(100)]
+        public string sdtNguoiLienHe { get; set; }
+        [MaxLength(100)]
         public string nguoiLienHe { get; set; }
-      
+
         [Required]
         [MaxLength(100)]
         public string doiTuongChoThue { get; set; }
@@ -36,26 +37,24 @@ namespace QuanLyThueTro.Model
         public DateTime ngayTaoTin { get; set; }
 
         public string? idKhuVuc { get; set; }
-        [ForeignKey("idKhuVuc")]
-        public KhuVuc khuVucs { get; set; }
 
         public string? idDichVu { get; set; }
-        [ForeignKey("idDichVu")]
-        public GoiTinDichVu dichVuDangTin { get; set; }
+        [Required]
+        [MaxLength(100)]
+        public string diaChi { get; set; }
+        [Required]
+        public float giaPhong { get; set; }
+        [Required]
+        public double dienTich { get; set; }
+        public string? moTa { get; set; }
+        public float tienNha { get; set; }
+        public float tienDien { get; set; }
+        public float tienNuoc { get; set; }
+        public float tienDichVu { get; set; }
 
-        public virtual ICollection<LichXemPhong> lichXemPhongs { get; set; }
-        public virtual ICollection<TinYeuThich> tinYeuThiches { get; set; }
-        public virtual ICollection<Images> Images { get; set; }
-
-        public TinDang()
+        public static implicit operator TinDangVM(ActionResult v)
         {
-            lichXemPhongs = new HashSet<LichXemPhong>(); 
-            tinYeuThiches = new HashSet<TinYeuThich>(); 
-            Images = new HashSet<Images>(); 
-
+            throw new NotImplementedException();
         }
-
-
-
     }
 }
