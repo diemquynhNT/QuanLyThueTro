@@ -116,7 +116,7 @@ namespace QuanLyThueTro.Controllers
                 throw;
             }
         }
-        [HttpPost("DuyetTin")]
+        [HttpPut("DuyetTin")]
         public async Task<ActionResult> DuyetTin(string id,bool status)
         {
             try

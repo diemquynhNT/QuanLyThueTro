@@ -26,6 +26,7 @@ namespace QuanLyThueTro.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             modelBuilder.Entity<TinYeuThich>(ct =>
             {
                 ct.HasKey(t => new { t.idTinDang, t.idUser });
@@ -54,6 +55,12 @@ namespace QuanLyThueTro.Data
                 WithMany(e => e.reviews)
                .HasConstraintName("FK_review_tindang")
                .HasForeignKey(e => e.idPhongTro);
+            });
+
+            //Has Trigger
+            modelBuilder.Entity<TinDang>(entry =>
+            {
+                entry.ToTable(tb => tb.HasTrigger("tr_ThemTinSLPhong"));
             });
         }
     }

@@ -187,7 +187,7 @@ namespace Client_QuanLythueTro.APIGateWay
                 var request = new HttpRequestMessage
                 {
                     RequestUri = new Uri(requestUrl),
-                    Method = HttpMethod.Post
+                    Method = HttpMethod.Put
                 };
 
                 var response = httpClient.SendAsync(request).Result;

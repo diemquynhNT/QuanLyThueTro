@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using QuanLyThueTro.Data;
 using QuanLyThueTro.Model;
 
@@ -77,6 +78,8 @@ namespace QuanLyThueTro.Services
         {
             _context.tinDangs.Update(tin);
             _context.phongTros.Update(phong);
+            _context.Entry(tin).State = EntityState.Modified;
+            _context.Entry(phong).State = EntityState.Modified;
             _context.SaveChanges();
             return tin;
         }
@@ -84,7 +87,7 @@ namespace QuanLyThueTro.Services
         public void DuyetTin(TinDang tin,bool status)
         {
             tin.trangThaiTinDang = status;
-            _context.tinDangs.Update(tin);
+            _context.Entry(tin).State = EntityState.Modified;
             _context.SaveChanges();
         }
     }
