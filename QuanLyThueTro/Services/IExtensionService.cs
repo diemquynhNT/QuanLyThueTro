@@ -10,5 +10,6 @@ namespace QuanLyThueTro.Services
         bool IsNotExistNameLoaiTK(LoaiTaiKhoan loaiTaiKhoan);
         public void AutoPK_DichVu(GoiTinDichVu dichVu);
         bool IsNotExistNameDichVu(GoiTinDichVu dichVu);
+        public string AutoPK_Common();
     }
 }

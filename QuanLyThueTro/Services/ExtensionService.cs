@@ -20,6 +20,14 @@ namespace QuanLyThueTro.Services
             chucVu.idChucVu = "RO" + num;
         }
 
+        public string AutoPK_Common()
+        {
+            Random rnd = new Random();
+            string stRnd = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            string pK = new string(Enumerable.Repeat(stRnd, 12).Select(s => s[rnd.Next(s.Length)]).ToArray());
+            return pK;
+        }
+
         public void AutoPK_DichVu(GoiTinDichVu dichVu)
         {
             Random rnd = new Random();
