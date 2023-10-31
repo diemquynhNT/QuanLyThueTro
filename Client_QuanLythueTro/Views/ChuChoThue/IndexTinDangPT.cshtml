@@ -1,6 +1,8 @@
 ﻿@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
 @{
     ViewData["Title"] = "Trang chủ";
+    Layout = "~/Views/ChuChoThue/Layout/_LayoutChuChoThue.cshtml";
+    ViewBag.tc = "active";
 }
 
 <style>
@@ -154,10 +156,9 @@
             <ul class="list-group list-unstyled">
                 @foreach (var item in Model)
                 {
-                    if (item.trangThaiTinDang)
+                    if (!item.trangThaiTinDang)
                     {
-
-                        <li>
+                        <li onclick="window.location.assign('/ChuChoThue/DetailTinDangPT/@item.idTinDang')">
                             <div class="card text-black" style="max-width: 100%;">
                                 <div class="row g-0">
                                     <div class="col-md-4 scale-img">
@@ -189,127 +190,6 @@
                         </li>
                     }
                 }
-
-                <li>
-                    <div class="card text-black" style="max-width: 100%;">
-                        <div class="row g-0">
-                            <div class="col-md-4 scale-img">
-                                <img src="~/img/Hanoi.jpg" class="img-fluid rounded-start m-0" alt="...">
-                                <span class="images-number">18 ảnh</span>
-                                <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text text-truncate">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                    <p class="card-footer">
-                                        <span class="name-author">
-                                            <img src="~/img/user.png" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
-                                            Nancy Nguyen
-                                        </span>
-
-                                        <span class="btn-info-author">
-                                            <button type="button" class="btn btn-info">0932412345</button>
-                                            <button type="button" class="btn btn-outline-primary">Zalo</button>
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="card text-black" style="max-width: 100%;">
-                        <div class="row g-0">
-                            <div class="col-md-4 scale-img">
-                                <img src="~/img/DN.jpg" class="img-fluid rounded-start m-0" alt="...">
-                                <span class="images-number">18 ảnh</span>
-                                <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text text-truncate">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                    <p class="card-footer">
-                                        <span class="name-author">
-                                            <img src="~/img/user.png" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
-                                            Nancy Nguyen
-                                        </span>
-
-                                        <span class="btn-info-author">
-                                            <button type="button" class="btn btn-info">0932412345</button>
-                                            <button type="button" class="btn btn-outline-primary">Zalo</button>
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="card text-black" style="max-width: 100%;">
-                        <div class="row g-0">
-                            <div class="col-md-4 scale-img">
-                                <img src="~/img/tphcm.jpg" class="img-fluid rounded-start m-0" alt="...">
-                                <span class="images-number">18 ảnh</span>
-                                <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text text-truncate">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                    <p class="card-footer">
-                                        <span class="name-author">
-                                            <img src="~/img/user.png" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
-                                            Nancy Nguyen
-                                        </span>
-
-                                        <span class="btn-info-author">
-                                            <button type="button" class="btn btn-info">0932412345</button>
-                                            <button type="button" class="btn btn-outline-primary">Zalo</button>
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="card text-black" style="max-width: 100%;">
-                        <div class="row g-0">
-                            <div class="col-md-4 scale-img">
-                                <img src="~/img/tphcm.jpg" class="img-fluid rounded-start m-0" alt="...">
-                                <span class="images-number">18 ảnh</span>
-                                <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text text-truncate">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                    <p class="card-footer">
-                                        <span class="name-author">
-                                            <img src="~/img/user.png" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
-                                            Nancy Nguyen
-                                        </span>
-
-                                        <span class="btn-info-author">
-                                            <button type="button" class="btn btn-info">0932412345</button>
-                                            <button type="button" class="btn btn-outline-primary">Zalo</button>
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
             </ul>
         </div>
         <div class="col-sm-3 m-2 rounded">

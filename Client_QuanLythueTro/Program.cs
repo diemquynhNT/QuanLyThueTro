@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<APIGateWayTinDang>();
 builder.Services.AddScoped<APIGateWayDichVu>();
 builder.Services.AddScoped<APIGateWayUsers>();
+builder.Services.AddScoped<TinDang_PhongTro_GateWay>();
 
 
 // Add services to the container.
@@ -31,6 +32,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=ChuChoThue}/{action=Index}/{id?}");
+    pattern: "{controller=ChuChoThue}/{action=DetailTinDangPT}/{id?}");
 
 app.Run();

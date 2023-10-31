@@ -6,17 +6,24 @@ namespace Client_QuanLythueTro.Controllers
 {
     public class ChuChoThueController : Controller
     {
-        private readonly APIGateWayTinDang aPIGateWayTinDang;
+        private readonly TinDang_PhongTro_GateWay callTinDangPT;
 
-        public ChuChoThueController(APIGateWayTinDang aPIGateWayTinDang)
+        public ChuChoThueController(TinDang_PhongTro_GateWay callTinDangPT)
         {
-            this.aPIGateWayTinDang = aPIGateWayTinDang;
+            this.callTinDangPT = callTinDangPT;
         }
 
-        public IActionResult Index()
+        public IActionResult IndexTinDangPT()
         {
-            List<TinDang> listTin = aPIGateWayTinDang.ListTinDang();
+            List<TinDang> listTin = callTinDangPT.ListTinDangPhongTro();
             return View(listTin);
+        }
+
+        public IActionResult DetailTinDangPT(string id)
+        {
+            //TinDang tinDang = callTinDangPT.GetTinDang(id);
+            //return View(tinDang);
+            return View();
         }
     }
 }
