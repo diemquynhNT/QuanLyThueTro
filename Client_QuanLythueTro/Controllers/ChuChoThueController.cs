@@ -19,11 +19,33 @@ namespace Client_QuanLythueTro.Controllers
             return View(listTin);
         }
 
+        //
         public IActionResult DetailTinDangPT(string id)
         {
             //TinDang tinDang = callTinDangPT.GetTinDang(id);
             //return View(tinDang);
             return View();
+        }
+
+        //create tin đăng + phòng trọ
+        [HttpGet]
+        public IActionResult CreateTinDangPT()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreateTinDangPT(TinDang tinDang)
+        {
+            try
+            {
+                //callTinDangPT.CreateTinDang(tinDang);
+                return RedirectToAction("IndexTinDangPT");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message); // Thêm lỗi vào ModelState
+                return View(); // Trả về View để hiển thị lỗi
+            }
         }
     }
 }
