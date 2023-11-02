@@ -14,48 +14,50 @@ namespace Client_QuanLythueTro.Controllers
         {
             this.apiGateWay = aPIGate;
         }
-        private byte[] Base64UrlDecode(string input)
-        {
-            string base64 = input.Replace('-', '+').Replace('_', '/');
-            while (base64.Length % 4 != 0)
-            {
-                base64 += '=';
-            }
-            return Convert.FromBase64String(base64);
-        }
-        public string GetIdUser()
-        {
-            string token = Request.Cookies["access_token"];
-            var tokenParts = token.Split('.');
-            var encodedPayload = tokenParts[1];
-            var decodedPayload = Base64UrlDecode(encodedPayload);
-            var decodedPayloadString = Encoding.UTF8.GetString(decodedPayload);
-            var payloadObject = JObject.Parse(decodedPayloadString);
-            var img = payloadObject["ImageUrl"]?.Value<string>();
-            return img;
-        }
+        //private byte[] Base64UrlDecode(string input)
+        //{
+        //    string base64 = input.Replace('-', '+').Replace('_', '/');
+        //    while (base64.Length % 4 != 0)
+        //    {
+        //        base64 += '=';
+        //    }
+        //    return Convert.FromBase64String(base64);
+        //}
+        //public string GetIdUser()
+        //{
+        //    string token = Request.Cookies["access_token"];
+        //    var tokenParts = token.Split('.');
+        //    var encodedPayload = tokenParts[1];
+        //    var decodedPayload = Base64UrlDecode(encodedPayload);
+        //    var decodedPayloadString = Encoding.UTF8.GetString(decodedPayload);
+        //    var payloadObject = JObject.Parse(decodedPayloadString);
+        //    var img = payloadObject["ImageUrl"]?.Value<string>();
+        //    return img;
+        //}
         // GET: AdminController
         public ActionResult TrangChuAdmin()
         {
-            ViewBag.UserImageUrl = GetIdUser();
+            //ViewBag.UserImageUrl = GetIdUser();
             return View();
         }
         public ActionResult QuanLyNhanVien()
         {
+
+
             List<Users> listEmloyee = apiGateWay.ListEmployee();
             return View(listEmloyee);
         }
 
         public ActionResult DetailUsers(string id)
         {
-            ViewBag.UserImageUrl = GetIdUser();
+      
             Users users = apiGateWay.GetUser(id);
             return View(users);
         }
 
         public ActionResult CreateUser()
         {
-            ViewBag.UserImageUrl = GetIdUser();
+   
             Users u = new Users();
             return View(u);
         }
@@ -79,7 +81,7 @@ namespace Client_QuanLythueTro.Controllers
         // GET: AdminController/Edit/5
         public ActionResult EditUsers(string id)
         {
-            ViewBag.UserImageUrl = GetIdUser();
+
             Users users = apiGateWay.GetUser(id);
             return View(users);
         }

@@ -3,9 +3,19 @@
     ViewData["Title"] = "TrangChuAdmin";
     Layout = "~/Views/Admin/LayoutAdmin.cshtml";
     ViewBag.home = "active";
+    ViewBag.Name = "Trang chủ admin";
 }
 
 <div class="main-content">
+    @{
+        var ktr = TempData["error"];
+        if (ktr == "thanhcong")
+        {
+            <script>
+                swal("Đăng nhập thành công!","Xin chào", "success");
+            </script>
+        }
+    }
     <div class="tongquan">
         <div class="container">
             <div class="row">

@@ -75,6 +75,18 @@ namespace QuanLyThueTro.Services
             _context.SaveChanges();
             return user;
         }
+        public FileStream GetImageById(string id)
+        {
+            Users users = _context.users.SingleOrDefault(t => t.idUser == id);
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img");
+            var filePath = Path.Combine(path, users.hinhAnh);
+            if (System.IO.File.Exists(filePath))
+            {
+                var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                return fileStream;
+            }
+            return null;
 
+        }
     }
 }

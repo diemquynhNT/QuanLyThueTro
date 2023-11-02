@@ -167,5 +167,14 @@ namespace QuanLyThueTro.Controllers
         {
             return (_context.users?.Any(e => e.idUser == id)).GetValueOrDefault();
         }
+
+        [HttpGet("GetImage")]
+        public IActionResult GetImageDemo([FromQuery] string id)
+        {
+            var fileStream = _iusers.GetImageById(id);
+            if (fileStream != null)
+                return File(fileStream, "image/png");
+            return NotFound();
+        }
     }
 }

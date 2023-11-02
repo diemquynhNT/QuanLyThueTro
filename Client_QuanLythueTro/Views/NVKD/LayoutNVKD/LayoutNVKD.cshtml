@@ -1,8 +1,5 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using Microsoft.AspNetCore.Http
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,6 +23,9 @@
     <link href="~/css/mainlayout.css" rel="stylesheet" />
 </head>
 <body onload="time()" class="app sidebar-mini rtl">
+    @{
+       
+    }
     <header class="app-header">
         <div class="app-nav">
             <div class="user-wrapper">
@@ -43,6 +43,7 @@
                 <i class='app-menu__icon bx bx-log-out '></i>
                 </a>
             </div>
+           
             
         </div>
     </header>
@@ -77,6 +78,11 @@
             </li>
             <li>
                 <a class="app-menu__item @ViewBag.money" href="">
+                    <i class='app-menu__icon bx bx-clipboard'></i><span class="app-menu__label">Khu vực hoạt động</span>
+                </a>
+            </li>
+            <li>
+                <a class="app-menu__item @ViewBag.money" href="">
                     <i class='app-menu__icon bx bx-clipboard'></i><span class="app-menu__label">Giao Dịch</span>
                 </a>
             </li>
@@ -105,7 +111,7 @@
 
     </main>
     <!--dialog_message -->
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+ 
     @*  *@
     @*Tìm kiếm*@
 

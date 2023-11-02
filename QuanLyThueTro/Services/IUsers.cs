@@ -10,5 +10,6 @@ namespace QuanLyThueTro.Services
         public bool ValidatePassword(string password);
         public bool ValidateEmail(string password);
         public bool ValidatePhone(string password);
+        public FileStream GetImageById(string id);
     }
 }

@@ -31,7 +31,7 @@ namespace QuanLyThueTro.Controllers
         public IActionResult Validate(LoginModel model)
         {
             var user = _context.users.SingleOrDefault(p => p.userName == model.userName
-            && model.password == p.passwordUser);
+            && model.password == p.passwordUser && p.trangThai==true);
 
             if (user == null)
                 return BadRequest();
@@ -54,8 +54,7 @@ namespace QuanLyThueTro.Controllers
                 Subject = new ClaimsIdentity(new[]
                 {
             new Claim(ClaimTypes.Name, u.hoTen),
-            new Claim("Id", u.idUser.ToString()),
-            new Claim("ImageUrl", u.hinhAnh)
+            new Claim("idUser", u.idUser.ToString())
             }),
 
                 Expires = DateTime.UtcNow.AddMinutes(1),

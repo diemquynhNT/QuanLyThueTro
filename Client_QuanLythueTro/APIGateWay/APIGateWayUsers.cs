@@ -111,6 +111,37 @@ namespace Client_QuanLythueTro.APIGateWay
             finally { }
             return tin;
         }
+        public string GetImageUser(string idUser)
+        {
+            String img;
+            url = "https://localhost:7034/api/Users/GetImage?id=" + idUser;
+            if (url.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    byte[] imageData = response.Content.ReadAsByteArrayAsync().Result;
+                    string base64Image = Convert.ToBase64String(imageData);
+                    string imageUrl = string.Format("data:image/png;base64,{0}", base64Image);
+                    img = imageUrl;
+
+
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return img;
+        }
 
         // 
         public Users UpdateUsers(Users tin)

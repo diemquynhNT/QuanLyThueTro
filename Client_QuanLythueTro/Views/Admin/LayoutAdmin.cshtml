@@ -1,4 +1,9 @@
-﻿
+﻿@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
+@{
+    var userJson = Context.Session.GetString("user");
+    Users users = JsonConvert.DeserializeObject<Users>(userJson);
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,25 +14,25 @@
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link href="~/css/mainlayout.css" rel="stylesheet" />
 </head>
 <body onload="time()" class="app sidebar-mini rtl">
     <header class="app-header">
         <div class="app-nav">
             <div class="user-wrapper">
-                @if (!string.IsNullOrEmpty(ViewBag.UserImageUrl))
+                @if (!string.IsNullOrEmpty(users.hinhAnh))
                 {
-                    <img src="@Url.Content("~/img/@ViewBag.UserImageUrl")" alt="User Image" />
+                    <img src="@ViewBag.UserImage" alt="User Image" />
                 }else{
                     <img src="@Url.Content("~/img/user.png")" width="30px" height="30px">
                 }
-                
+                <b style="margin-left: 10px;">@users.hoTen</b>
                 <a class="logout_item" href="@Url.Action("Logout", "Login")">
                     <i class='app-menu__icon bx bx-log-out '></i>
                 </a>
@@ -38,6 +43,7 @@
     <aside class="app-sidebar">
         <div class="app-sidebar__user">
             <img class="logoCompany" src="@Url.Content("~/img/logo.png")" height="70" alt="Logo">
+
         </div>
         <hr>
         <ul class="app-menu ">
@@ -59,23 +65,10 @@
                     <i class='app-menu__icon bx bx-group'></i><span class="app-menu__label">Quản lý nhân viên</span>
                 </a>
             </li>
-            @*<li>
-                <a class="app-menu__item @ViewBag.services" href="">
-                    <i class='app-menu__icon bx bx-clipboard'></i><span class="app-menu__label">Quản lý dịch vụ</span>
-                </a>
-            </li>
-            <li>
-                <a class="app-menu__item @ViewBag.money" href="">
-                    <i class='app-menu__icon bx bx-clipboard'></i><span class="app-menu__label">Giao Dịch</span>
-                </a>
-            </li>
-            <li>
-                <a class="app-menu__item @ViewBag.thongke" href="">
-                    <i class='app-menu__icon bx bx-clipboard'></i><span class="app-menu__label">Thống kê</span>
-                </a>
-            </li>*@
+          
         </ul>
     </aside>
+   
     <main class="app-content ">
         <div class="row">
             <div class="col-md-12">
@@ -94,9 +87,10 @@
 
     </main>
     <!--dialog_message -->
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="~/Scripts/plugin/jquery.dataTables.min.js"></script>
-    <script src="~/Scripts/plugin/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="~/lib/dataTables.bootstrap.min.js"></script>
+    <script src="~/lib/jquery.dataTables.min.js></script>
     <script type="text/javascript">
         $('#sampleTable').DataTable(); //TimKiem
         //Thời Gian
