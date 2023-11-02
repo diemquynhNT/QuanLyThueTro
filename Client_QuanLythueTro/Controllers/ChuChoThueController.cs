@@ -1,7 +1,6 @@
 ﻿using Client_QuanLythueTro.APIGateWay;
 using Client_QuanLythueTro.Models;
 using Microsoft.AspNetCore.Mvc;
-using QuanLyThueTro.Dto;
 
 namespace Client_QuanLythueTro.Controllers
 {
@@ -23,9 +22,8 @@ namespace Client_QuanLythueTro.Controllers
         //
         public IActionResult DetailTinDangPT(string id)
         {
-            //TinDang tinDang = callTinDangPT.GetTinDang(id);
-            //return View(tinDang);
-            return View();
+            TinDang tinDang = callTinDangPT.GetTinDang(id);
+            return View(tinDang);
         }
 
         //create tin đăng + phòng trọ
@@ -35,12 +33,12 @@ namespace Client_QuanLythueTro.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult CreateTinDangPT(TinDangPhongTroWithoutId tinDang)
+        public IActionResult CreateTinDangPT(TinDang tinDang)
         {
             try
             {
                 callTinDangPT.CreateTinDang(tinDang);
-                ModelState.AddModelError("", "Success Message");
+                TempData["AlertMessage"] = "successful";
                 return RedirectToAction("CreateTinDangPT");
             }
             catch (Exception ex)

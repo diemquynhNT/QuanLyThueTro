@@ -32,6 +32,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=ChuChoThue}/{action=DetailTinDangPT}/{id?}");
+    pattern: "{controller=ChuChoThue}/{action=IndexTinDangPT}/{id?}");
 
 app.Run();

@@ -20,6 +20,11 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- sweetalert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.min.css" rel="stylesheet">
+
     <style>
         .sidebar {
             position: fixed;
@@ -35,10 +40,11 @@
             border-bottom: 1px solid #e6e6e6;
         }
 
-            .nav-item a:hover {
+        .nav-item a:hover {
             color: #f1f1f1;
         }
-        .active{
+
+        .active {
             background-color: white;
         }
     </style>
@@ -87,9 +93,8 @@
                         </span>
                         <span>Diễm Khang</span>
                         <p class="btn-info-author">
-                            <p>Mã thành viên: #1215120251</p>
-                            <p>Loại TK: Thường</p>
-                        </p>
+                        <p>Mã thành viên: #1215120251</p>
+                        <p>Loại TK: Thường</p>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"> Quản lý tin đăng </a>
@@ -118,7 +123,11 @@
         <div class="col-md-1 d-none d-lg-block"></div>
         <div class="col-md-10" style="padding:0px 45px;">
             @RenderBody()
+            @RenderSection("scripts", false)
         </div>
     </div>
+
+    <!-- sweetalert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.all.min.js"></script>
 </body>
 </html>

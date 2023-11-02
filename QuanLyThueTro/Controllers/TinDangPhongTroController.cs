@@ -96,7 +96,7 @@ namespace QuanLyThueTro.Controllers
         // PUT: api/TinDangPhongTro/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<ActionResult<TinDangPhongTroWithoutId>> PutTinDangPhongTro(string id, [FromForm] TinDangPhongTroWithoutId tinDangPhongTro)
+        public async Task<ActionResult<TinDangPhongTroWithoutId>> PutTinDangPhongTro(string id, [FromBody] TinDangPhongTroWithoutId tinDangPhongTro)
         {
             var tinDang = await _context.tinDangs.Where(s => s.idTinDang == id).FirstOrDefaultAsync();
             _mapper.Map(tinDangPhongTro, tinDang);
@@ -128,7 +128,7 @@ namespace QuanLyThueTro.Controllers
         // POST: api/TinDangPhongTro
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<string>> PostTinDangPhongTro([FromForm] TinDangPhongTroWithoutId tinDangPhongTro)
+        public async Task<ActionResult<string>> PostTinDangPhongTro([FromBody] TinDangPhongTroWithoutId tinDangPhongTro)
         {
             TinDang tinDang = _mapper.Map<TinDang>(tinDangPhongTro);
             PhongTro phongTro = _mapper.Map<PhongTro>(tinDangPhongTro);

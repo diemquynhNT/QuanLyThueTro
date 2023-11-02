@@ -61,43 +61,17 @@
         </div>
 
         <div class="container-fluid mt-3">
-            <h3>Phòng trọ chung cư Long Sơn mặt tiền Huỳnh Tấn Phát , Quận 7. An ninh- Thoáng mát.</h3>
-            <p><i class='bx bx-map'></i> Địa chỉ: 1349 Đường Huỳnh Tấn Phát, Phường Phú Thuận, Quận 7, Hồ Chí Minh.</p>
-            <h3 style="display:inline-block"><i class='bx bx-purchase-tag-alt'></i> 2.2 triệu/tháng</h3>
-            <span><i class='bx bx-area'></i> 15m2</span>
+            <h3>@Html.DisplayFor(modelItem => modelItem.tieuDe)</h3>
+            <p><i class='bx bx-map'></i> Địa chỉ: @Model.diaChi</p>
+            <h3 style="display:inline-block"><i class='bx bx-purchase-tag-alt'></i> @Html.DisplayFor(modelItem => modelItem.giaPhong) đồng/tháng</h3>
+            <span><i class='bx bx-area'></i> @Html.DisplayFor(modelItem => modelItem.dienTich) m<sup>2</sup></span>
             <span><i class='bx bx-time'></i> 1 giờ trước</span>
-            <span><i class='bx bx-hash'></i> 629520</span>
+            <span><i class='bx bx-hash'></i> @Html.DisplayFor(modelItem => modelItem.idTinDang)</span>
             <hr />
             <div>
                 <h4>Thông tin mô tả</h4>
                 <p>
-                    Cần cho thuê phòng riêng chung cư Long Sơn Building , Huỳnh Tấn Phát ngay mặt tiền lớn thuận tiện đi lại , không ngập nước.
-
-                    - Phòng 10m2 có thông gió vách ngăn giá 1tr7.
-
-                    - Phòng 15m2 có ban công view Phú Mỹ Hưng giá 2tr4
-
-                    - Phòng 13m2-15m2 có cửa sổ view Phú Mỹ Hưng tuờng nguyên giá 2tr2-2tr4
-
-                    - Phòng master duy nhất 1 phòng 22m2 có tolet riêng trong phòng ở dc 3 bạn giá 3tr5.
-
-                    Căn hộ thông gió nhiều thoáng mát và rất mạnh.
-
-                    - Không chung chủ, Giờ giấc tự do. Có tủ lạnh bảo quản thức ăn - nước uống và máy giặt dùng chung cho 1 căn hộ. Bảo vệ an ninh camera 24/24 ngoài hàng lang thang máy và trong căn hộ, mỗi tầng chỉ có 6 căn hộ, thiết kế căn hộ riêng biệt nên rất yên tĩnh.
-
-                    Wifi 5G mạnh vi vu. Có 2 tầng hầm gửi xe.
-
-                    Tiện ích ngay chung cư:
-
-                    - Có 6 tầng trung tâm thương mại phía trước.
-
-                    - Có sẵn Phòng Gym Power - Fisnet yoga, Sân chơi Gold 3D đang ghịnh hành. Hãng xe ô tô nổi tiếng Jeep...
-
-                    - Ngay cạnh Phú Mỹ Hưng, Quận 7, Co. Op Mart, Crescent Mall, Cầu Phú Mỹ,...
-
-                    - Ngay mặt tiền đường Huỳnh Tấn Phát bán kính 100m xung quanh đầy đủ quắn ăn, cafe, gara, tạp hoá, siêu thị đầy đủ.
-
-                    Liên hệ hoặc nhắn zalo để thêm thông tin và hẹn xem phòng.
+                    @Html.DisplayFor(modelItem => modelItem.moTa)
                 </p>
             </div>
             <div>
@@ -106,33 +80,33 @@
                     <tbody>
                         <tr>
                             <td>Mã tin:</td>
-                            <td>#1232432432</td>
+                            <td>@Html.DisplayFor(modelItem => modelItem.idTinDang)</td>
                         </tr>
                         <tr>
                             <td>Khu vực:</td>
                             <td>
-                                Cho thuê phòng trọ Hồ Chí Minh
+                                @Html.DisplayFor(modelItem => modelItem.diaChi)
                             </td>
                         </tr>
                         <tr>
                             <td>Loại tin rao:</td>
-                            <td>Phòng trọ, nhà trọ</td>
+                            <td>@Html.DisplayFor(modelItem => modelItem.loaiTin)</td>
                         </tr>
                         <tr>
                             <td>Đối tượng thuê:</td>
-                            <td>Tất cả</td>
+                            <td>@Html.DisplayFor(modelItem => modelItem.doiTuongChoThue)</td>
                         </tr>
                         <tr>
                             <td>Gói  tin:</td>
-                            <td>Tin VIP nổi bâtj</td>
+                            <td>Chưa có gói tin nào</td>
                         </tr>
                         <tr>
                             <td>Ngày đăng:</td>
-                            <td>Thứ 4, 08:44 01/11/2023</td>
+                            <td>@Html.DisplayFor(modelItem => modelItem.ngayBatDau)</td>
                         </tr>
                         <tr>
                             <td>Ngày hết hạn</td>
-                            <td>Thứ 2, 08:44 06/11/2023</td>
+                            <td>@Html.DisplayFor(modelItem => modelItem.ngayKetThuc)</td>
                         </tr>
                     </tbody>
                 </table>
@@ -143,22 +117,22 @@
                     <tbody>
                         <tr>
                             <td>Liên hệ:</td>
-                            <td>Diễm Khang</td>
+                            <td>@Html.DisplayFor(modelItem => modelItem.nguoiLienHe)</td>
                         </tr>
                         <tr>
                             <td>Điện thoại:</td>
-                            <td>0945212325</td>
+                            <td>@Html.DisplayFor(modelItem => modelItem.sdtNguoiLienHe)</td>
                         </tr>
                         <tr>
                             <td>Zalo:</td>
-                            <td>02145212325</td>
+                            <td>@Html.DisplayFor(modelItem => modelItem.sdtNguoiLienHe)</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div>
                 <h4>Bản đồ</h4>
-                <p>Địa chỉ: 1349 Đường Huỳnh Tấn Phát, Phường Phú Thuận, Quận 7, Hồ Chí Minh</p>
+                <p>Địa chỉ: @Html.DisplayFor(modelItem => modelItem.diaChi)</p>
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3920.235679656101!2d106.73478457451661!3d10.716296660301069!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752512886cec2f%3A0xbe52e1fc5cf9d206!2zQ2h1bmcgQ8awIExvbmcgU8ahbg!5e0!3m2!1svi!2s!4v1698809608937!5m2!1svi!2s" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>

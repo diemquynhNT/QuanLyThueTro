@@ -1,9 +1,25 @@
 ﻿@model Client_QuanLythueTro.Models.TinDang
+
 @{
     ViewData["Title"] = "CreateTinDangPT";
     Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
 }
-
+@{
+    // alert includ icons: question, info, success, error, warning
+    //footer: '<a href="">Why do I have this issue?</a>'
+    var checkMessage = TempData["AlertMessage"];
+    if (checkMessage == "successful")
+    {
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công',
+                text: 'Tin đăng đã lưu thành công!'
+            })
+        </script>
+        
+    }
+}
 <div class="bg-light">
     <ol class="breadcrumb list-unstyled">
         <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
@@ -19,7 +35,7 @@
         <h4>Địa chỉ cho thuê</h4>
         <form asp-action="CreateTinDangPT">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-           @*@Html.HiddenFor(model => model.idTinDang)*@
+           @Html.HiddenFor(model => model.idTinDang)
             <div class="form-group">
                 <div class="row">
                     <div class="col">
