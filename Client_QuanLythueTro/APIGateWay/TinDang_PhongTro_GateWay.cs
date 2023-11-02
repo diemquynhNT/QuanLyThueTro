@@ -2,6 +2,9 @@
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net;
+using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using QuanLyThueTro.Dto;
 
 namespace Client_QuanLythueTro.APIGateWay
 {
@@ -38,6 +41,30 @@ namespace Client_QuanLythueTro.APIGateWay
             {
                 string data = response.Content.ReadAsStringAsync().Result;
                 tinDang = JsonConvert.DeserializeObject<TinDang>(data);
+            }
+            return tinDang;
+        }
+
+        public TinDangPhongTroWithoutId CreateTinDang(TinDangPhongTroWithoutId tinDang)
+        {
+            try
+            {
+                string data = JsonConvert.SerializeObject(tinDang);
+                StringContent content = new StringContent( data, Encoding.UTF8, "application/json" );
+                HttpResponseMessage response = _httpClient.PostAsync(_httpClient.BaseAddress, content ).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string data2 = response.Content.ReadAsStringAsync().Result;
+                    tinDang = JsonConvert.DeserializeObject<TinDangPhongTroWithoutId>(data2);
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
             return tinDang;
         }

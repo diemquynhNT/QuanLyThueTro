@@ -21,7 +21,7 @@ var callApiWard = (api) => {
 }
 
 var renderData = (array, select) => {
-    let row = ' <option disable value="">Chọn</option>';
+    let row = ' <option disable value="">--------chọn---------</option>';
     array.forEach(element => {
         row += `<option value="${element.code}">${element.name}</option>`
     });
@@ -34,15 +34,17 @@ $("#province").change(() => {
     printResult();
     $("#result").text("")
     if (!$("#province").val()) {
-        $("#district").text("Abc")
-        //renderData("Chọn", "district");
+        let row = ' <option disable value="">--------chọn---------</option>';
+        document.querySelector("#district").innerHTML = row
     }
 });
 $("#district").change(() => {
     callApiWard(host + "d/" + $("#district").val() + "?depth=2");
     printResult();
+    $("#result").text("")
     if (!$("#district").val()) {
-        $("#ward").text("Abc")
+        let row = ' <option disable value="">--------chọn---------</option>';
+        document.querySelector("#ward").innerHTML = row
     }
 });
 $("#ward").change(() => {
@@ -51,13 +53,15 @@ $("#ward").change(() => {
         $("#result").text("")
     }
 })
-
+$("#street").keyup(() => {
+    printResult();
+})
+$("#number").keyup(() => {
+    printResult();
+})
 var printResult = () => {
-    if ($("#district").val() != "" && $("#province").val() != "" &&
-        $("#ward").val() != "") {
-        let result = $("#province option:selected").text() +
-            " | " + $("#district option:selected").text() + " | " +
-            $("#ward option:selected").text();
+    if ($("#district").val() != "" && $("#province").val() != "" && $("#ward").val() != "" && $("#street").val() != "") {
+        let result = $("#number").val() + " " + $("#street").val() + ", " + $("#ward option:selected").text() + ", " + $("#district option:selected").text() + ", " + $("#province option:selected").text();
         $("#result").text(result)
     }
 }

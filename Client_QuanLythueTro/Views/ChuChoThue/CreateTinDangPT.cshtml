@@ -1,4 +1,4 @@
-﻿
+﻿@model Client_QuanLythueTro.Models.TinDang
 @{
     ViewData["Title"] = "CreateTinDangPT";
     Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
@@ -14,22 +14,166 @@
 </div>
 <h3>Đăng tin mới</h3>
 <hr />
-<div>
-    <h4>Địa chỉ cho thuê</h4>
-    <h1>Chọn danh sách tỉnh</h1>
-    <form action="">
-        <select name="" id="province">
-        </select>
-        <select name="" id="district">
-            <option value="">chọn quận</option>
-        </select>
-        <select name="" id="ward">
-            <option value="">chọn phường</option>
-        </select>
-    </form>
+<div class="row">
+    <div class="col-9">
+        <h4>Địa chỉ cho thuê</h4>
+        <form asp-action="CreateTinDangPT">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           @*@Html.HiddenFor(model => model.idTinDang)*@
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <label>Chọn tỉnh thành:</label>
+                        <select name="" id="province" class="form-control" placeholder="Chọn tỉnh thành"></select>
+                    </div>
+                    <div class="col">
+                        <label>Chọn quận/huyện:</label>
+                        <select name="" id="district" class="form-control" placeholder="Chọn quận/huyện">
+                            <option value="">chọn quận</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Chọn phường/xã:</label>
+                        <select name="" id="ward" class="form-select" placeholder="Chọn phường/xã">
+                            <option value="">chọn phường</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-3 mb-5">
+                    <div class="col-3">
+                        <label>Nhập tên đường:</label>
+                        <input type="text" class="form-control" placeholder="Nhập tên đường" name="tenDuong" id="street" required>
+                    </div>
+                    <div class="col-2">
+                        <label>Nhập số nhà:</label>
+                        <input type="text" class="form-control" placeholder="Nhập số nhà" name="soNha" id="number" required>
+                    </div>
+                    <div class="col-7">
+                        <label>Địa chỉ chính xác:</label>
+                        <select class="form-select" asp-for="diaChi" required>
+                            <option id="result" selected></option>
+                        </select>
+                        <span asp-validation-for="diaChi" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <h4>Thông tin mô tả</h4>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <label class="form-label">Loại tin đăng:</label>
+                        <select class="form-select" asp-for="loaiTin" required>
+                            <option value="Phòng trọ/nhà trọ">Phòng trọ/nhà trọ</option>
+                            <option value="Nhà cho thuê">Nhà cho thuê</option>
+                            <option value="Căn hộ cho thuê">Căn hộ cho thuê</option>
+                        </select>
+                        <span asp-validation-for="loaiTin" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Đối tượng cho thuê:</label>
+                        <select class="form-select" asp-for="doiTuongChoThue" required>
+                            <option value="Tất cả">Tất cả</option>
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                        </select>
+                        <span asp-validation-for="doiTuongChoThue" class="text-danger"></span>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="form-group">
+                <label class="form-label">Tiêu đề:</label>
+                <input asp-for="tieuDe" class="form-control" required />
+                <span asp-validation-for="tieuDe" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Mô tả:</label>
+                <textarea asp-for="moTa" class="form-control" rows="8" required></textarea>
+                <span asp-validation-for="moTa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <label class="form-label">Thông tin liên hệ:</label>
+                        <input asp-for="nguoiLienHe" class="form-control" readonly  value="DiemKhang"/>
+                        <span asp-validation-for="nguoiLienHe" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Số điện thoại:</label>
+                        <input asp-for="sdtNguoiLienHe" class="form-control" readonly value="0945623212"/>
+                        <span asp-validation-for="sdtNguoiLienHe" class="text-danger"></span>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <label class="form-label">Giá cho thuê:</label>
+                        <div class="input-group mb-3">
+                            <input type="number" asp-for="giaPhong" class="form-control" placeholder="1200000" required>
+                            <span class="input-group-text">đồng/tháng</span>
+                        </div>
+                        <span asp-validation-for="giaPhong" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Diện tích:</label>
+                        <div class="input-group mb-3">
+                            <input type="number" asp-for="dienTich" class="form-control" placeholder="150" required>
+                            <span class="input-group-text">đồng/m<sup>2</sup></span>
+                        </div>
+                        <span asp-validation-for="dienTich" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Số lượng phòng trống:</label>
+                        <div class="input-group mb-3">
+                            <input type="number" asp-for="soLuongPhong" class="form-control" placeholder="10" required>
+                            <span class="input-group-text">phòng</span>
+                        </div>
+                        <span asp-validation-for="soLuongPhong" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <label class="form-label">Tiền điện:</label>
+                        <div class="input-group mb-3">
+                            <input type="number" asp-for="tienDien" class="form-control" placeholder="3500" required>
+                            <span class="input-group-text">đồng/kwh</span>
+                        </div>
+                        <span asp-validation-for="tienDien" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Tiền nước:</label>
+                        <div class="input-group mb-3">
+                            <input type="number" asp-for="tienNuoc" class="form-control" placeholder="15000" required>
+                            <span class="input-group-text">đồng/m<sup>3</sup></span>
+                        </div>
+                        <span asp-validation-for="tienNuoc" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Tiền dịch vụ:</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Gửi xe</span>
+                            <input type="number" asp-for="tienDichVu" class="form-control" placeholder="15000" required>
+                            <span class="input-group-text">đồng/tháng</span>
+                        </div>
+                        <span asp-validation-for="tienDichVu" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
 
-
-    <h2 id="result"></h2>
+            <div class="form-group m-5">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a class="btn btn-warning" href="~/NVKD/QuanLyDichVu"> Trở lại</a>
+            </div>
+        </form>
+    </div>
+    <div class="col-3">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.521571286021!2d106.68087777451706!3d10.771307259289186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f23cbaeb32d%3A0x3d32b187a53c6cf8!2zMzk5IE5ndXnhu4VuIMSQw6xuaCBDaGnhu4N1LCBQaMaw4budbmcgNSwgUXXhuq1uIDMsIFRow6BuaCBwaOG7kSBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1698851672393!5m2!1svi!2s" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    
 </div>
 
 

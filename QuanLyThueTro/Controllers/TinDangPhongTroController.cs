@@ -137,7 +137,7 @@ namespace QuanLyThueTro.Controllers
             {
                 return Problem("Entity set 'MyDBContext.tinDangs' or 'MyDBContext.phongTroes' is null.");
             }
-            tinDang.idTinDang = "TD_" + _extensionService.AutoPK_Common();
+            tinDang.idTinDang = "TD" + _extensionService.AutoPK_Common();
             DateTime today = DateTime.Now;
             tinDang.ngayTaoTin = today; // ngay tao tin
             tinDang.ngayBatDau = today;

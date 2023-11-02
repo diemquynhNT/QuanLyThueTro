@@ -1,6 +1,7 @@
 ﻿using Client_QuanLythueTro.APIGateWay;
 using Client_QuanLythueTro.Models;
 using Microsoft.AspNetCore.Mvc;
+using QuanLyThueTro.Dto;
 
 namespace Client_QuanLythueTro.Controllers
 {
@@ -34,12 +35,13 @@ namespace Client_QuanLythueTro.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult CreateTinDangPT(TinDang tinDang)
+        public IActionResult CreateTinDangPT(TinDangPhongTroWithoutId tinDang)
         {
             try
             {
-                //callTinDangPT.CreateTinDang(tinDang);
-                return RedirectToAction("IndexTinDangPT");
+                callTinDangPT.CreateTinDang(tinDang);
+                ModelState.AddModelError("", "Success Message");
+                return RedirectToAction("CreateTinDangPT");
             }
             catch (Exception ex)
             {
