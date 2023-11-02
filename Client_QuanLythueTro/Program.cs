@@ -1,4 +1,4 @@
-using Client_QuanLythueTro.APIGateWay;
+﻿using Client_QuanLythueTro.APIGateWay;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,9 +13,12 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
+
+
 var app = builder.Build();
 
 app.UseSession();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

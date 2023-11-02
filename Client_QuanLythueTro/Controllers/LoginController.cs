@@ -72,8 +72,8 @@ namespace Client_QuanLythueTro.Controllers
                 Users u = apiGateWay.GetUser(id);
                 var userJson = JsonConvert.SerializeObject(u);
 
-                String img= apiGateWay.GetImageUser(id);
-                ViewBag.img = img;
+             
+
                 HttpContext.Session.SetString("user", userJson);
 
                 var role = payloadObject["roles"]?.Value<string>();

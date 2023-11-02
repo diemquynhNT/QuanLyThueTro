@@ -16,7 +16,16 @@ builder.Services.AddDbContext<MyDBContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DBThueTro"));
 });
 
-
+//fetch
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("https://localhost:7144") 
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var secretKey = builder.Configuration["AppSettings:SecretKey"];
@@ -64,7 +73,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors();
 app.UseAuthentication();    
 app.UseHttpsRedirection();
 

@@ -26,12 +26,14 @@
     <header class="app-header">
         <div class="app-nav">
             <div class="user-wrapper">
+                <input value="@users.idUser" id="idUsers" style="display:none" />
                 @if (!string.IsNullOrEmpty(users.hinhAnh))
                 {
-                    <img src="@ViewBag.UserImage" alt="User Image" />
+                    <img id="image" alt="User Image" width="30px" height="30px" />                    
                 }else{
                     <img src="@Url.Content("~/img/user.png")" width="30px" height="30px">
                 }
+               
                 <b style="margin-left: 10px;">@users.hoTen</b>
                 <a class="logout_item" href="@Url.Action("Logout", "Login")">
                     <i class='app-menu__icon bx bx-log-out '></i>
@@ -164,6 +166,28 @@
         var barChart = new Chart(ctxb).Bar(data);
     </script>
 
+    <script>
+        function get_random_dog_image() {
+            var id = document.getElementById("idUsers").value;
+            url = "https://localhost:7034/api/Users/GetImage?id="+id;
+            console.log(url)
+
+            fetch(url)
+                .then(function (response) {
+                    return response.blob(); 
+                })
+                .then(function (data) {
+                    console.log(data);
+                    var img = document.getElementById("image");
+                    img.src = URL.createObjectURL(data); 
+                })
+                .catch(function (error) {
+                    console.log("Error: " + error);
+                });
+        }
+
+        get_random_dog_image();
+    </script>
 
 </body>
 </html>
