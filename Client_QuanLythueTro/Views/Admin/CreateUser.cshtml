@@ -6,23 +6,33 @@
     ViewBag.user = "active";
     ViewBag.Name = "Thêm account nhân viên";
 }
-
+@{
+    var ktr = TempData["mess"];
+    if (ktr == "loi")
+    {
+        <script>
+            swal("Lỗi!!", "Lỗi thông tin !!!", "success");
+        </script>
+    }
+}
 <div class="tile" style="margin:10px 20px;">
     <h3 class="tile-title">TẠO MỚI TÀI KHOẢN</h3>
     <div class="tile-body contenner">
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.idUser)
-        <form asp-action="CreateUser">
+        <form asp-action="CreateUser" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @Html.HiddenFor(model => model.idUser)
             @Html.HiddenFor(model => model.trangThai)
+            @Html.HiddenFor(model => model.hinhAnh)
             <div class="row">
 
             <p> @Html.ValidationSummary(true, "", new { @class = "text-danger" })</p>
             <div class="imgstaff col-sm-6" style="padding-left:40px;">
                 <div class="col-sm-12" style="text-align: center;">
                     <label class="control-label">Chọn hình ảnh</label>
-                    @Html.TextBox("Avatar", "", new { type = "file" })
+                   @* @Html.TextBox("Avatar", "", new { type = "file" })*@
+                        <input type="file" id="file" name="file" accept=".jpg, .jpeg, .png">
                     <br />
                     <img id="preview" class="rounded-circle " src="#" width="230" height="230" style="object-fit:cover; object-position:center; margin-bottom: 8px; text-align: center;" />
                     <br />

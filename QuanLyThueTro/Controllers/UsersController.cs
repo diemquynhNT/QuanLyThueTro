@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,13 +22,15 @@ namespace QuanLyThueTro.Controllers
         private readonly IMapper _mapper;
         private readonly IUsers _iusers;
         private GenerateAlphanumericId random;
+        public static IWebHostEnvironment _webHostEnvironment;
 
-        public UsersController(MyDBContext context,IMapper mapper,IUsers iuser)
+        public UsersController(MyDBContext context,IMapper mapper,IUsers iuser, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _mapper = mapper;
             _iusers = iuser;
             random=new GenerateAlphanumericId();
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: api/Users
@@ -104,17 +107,9 @@ namespace QuanLyThueTro.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Users>> PostUsers([FromBody]UserModel userModel)
+        public async Task<ActionResult<Users>> PostUsers([FromForm]UserModel userModel)
         {
-            bool checkPassword = _iusers.ValidatePassword(userModel.passwordUser);
-            if (!checkPassword)
-                return BadRequest("pass khong du yeu cau");
-            bool checkMail = _iusers.ValidateEmail(userModel.emailUser);
-            if (!checkMail)
-                return BadRequest("email da co nguoi su dung");
-            bool checkPhone = _iusers.ValidatePhone(userModel.sdtUsers);
-            if (!checkPhone)
-                return BadRequest("sdt da co nguoi su dung");
+            
             var users = _mapper.Map<Users>(userModel);
 
             if (_context.users == null)
@@ -123,6 +118,22 @@ namespace QuanLyThueTro.Controllers
               }
             users.trangThai = true;
             users.idUser = "NV" + random.GenerateId(5);
+            if (userModel.imge.Length > 0)
+            {
+                string path = _webHostEnvironment.WebRootPath + "\\img\\";
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+
+                }
+                using (FileStream fileStream = System.IO.File.Create(path + userModel.imge.FileName))
+                {
+                    userModel.imge.CopyTo(fileStream);
+                    fileStream.Flush();
+                    users.hinhAnh = userModel.imge.FileName;
+
+                }
+            }
             _context.users.Add(users);
             try
             {
@@ -176,5 +187,9 @@ namespace QuanLyThueTro.Controllers
                 return File(fileStream, "image/png");
             return NotFound();
         }
+
+
+
+
     }
 }

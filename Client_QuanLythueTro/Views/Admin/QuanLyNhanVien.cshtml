@@ -8,6 +8,15 @@
 }
 
 <div class="tab-content">
+    @{
+        var ktr = TempData["mess"];
+        if (ktr == "oke")
+        {
+            <script>
+                swal("Thành công", "Đăng kí tài khoản nhân viên thàn công", "success");
+            </script>
+        }
+    }
     <div>
         <div class="row">
             <div class="col-md-12">

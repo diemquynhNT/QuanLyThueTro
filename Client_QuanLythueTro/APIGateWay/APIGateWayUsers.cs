@@ -51,9 +51,25 @@ namespace Client_QuanLythueTro.APIGateWay
 
             try
             {
-                string json = JsonConvert.SerializeObject(u);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = httpClient.PostAsync(url, content).Result;
+                //MultipartFormDataContent
+                var content = new MultipartFormDataContent();
+                content.Add(new StringContent(u.hoTen), "hoTen");
+                content.Add(new StringContent(u.emailUser), "emailUser");
+                content.Add(new StringContent(u.sdtUsers), "sdtUsers");
+                content.Add(new StringContent(u.ngayThamGia.ToString()), "ngayThamGia");
+                content.Add(new StringContent(u.userName), "userName");
+                content.Add(new StringContent(u.passwordUser), "passwordUser");
+                content.Add(new StringContent(u.gioiTinh), "gioiTinh");
+                content.Add(new StringContent(u.idChucVu), "idChucVu");
+                content.Add(new StringContent(u.idLoaiTK), "idLoaiTK");
+
+                if (u.Avatar != null && u.Avatar.Length > 0)
+                {
+                    var streamContent = new StreamContent(u.Avatar.OpenReadStream());
+                    content.Add(streamContent, "imge", u.Avatar.FileName);
+                }
+                HttpClient httpClient = new HttpClient();
+                var response = httpClient.PostAsync(url, content).Result;
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -65,7 +81,6 @@ namespace Client_QuanLythueTro.APIGateWay
                 }
                 else
                 {
-                    // Xử lý khi có lỗi xảy ra trong quá trình gọi API
                     string result = response.Content.ReadAsStringAsync().Result;
                     throw new Exception(result);
                 }
@@ -73,8 +88,7 @@ namespace Client_QuanLythueTro.APIGateWay
             }
             catch (Exception ex)
             {
-                // Xử lý lỗi chung
-                throw new Exception("Lỗi: " + ex.Message);
+                throw new Exception(ex.Message);
             }
 
         }
