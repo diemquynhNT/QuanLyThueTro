@@ -25,7 +25,19 @@ namespace Client_QuanLythueTro.Controllers
             List<Users> listEmloyee = apiGateWay.ListEmployee();
             return View(listEmloyee);
         }
+        public JsonResult ValidatePass(string pass1,string pass2)
+        {
+            System.Threading.Thread.Sleep(200);
+            if (pass1 == pass2)
+            {
+                return Json(1);
+            }
+            else
+            {
+                return Json(0);
+            }
 
+        }
         public ActionResult DetailUsers(string id)
         {
       
@@ -43,12 +55,12 @@ namespace Client_QuanLythueTro.Controllers
         // POST: AdminController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateUser(Users u,IFormFile file)
+        public ActionResult CreateUser(Users u,IFormFile Avatar)
         {
             try
             {
                 
-                u.Avatar = file;
+                u.Avatar = Avatar;
                 apiGateWay.CreateUser(u);
                 TempData["mess"] = "oke";
                 return RedirectToAction("QuanLyNhanVien");
@@ -95,6 +107,35 @@ namespace Client_QuanLythueTro.Controllers
             catch
             {
                 return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ChangePassword(string id,string newPass)
+        {
+            try
+            {
+                apiGateWay.ChangePass(id,newPass);
+                ViewBag.thongbao = "thanhcong";
+                return RedirectToAction("EditUser" + id);
+            }
+            catch
+            {
+                return RedirectToAction("EditUser" + id);
+            }
+        }
+        [HttpPost]
+        public ActionResult ChangeImage(string id, IFormFile hinhthaydoi)
+        {
+            try
+            {
+                apiGateWay.ChangeImg(id, hinhthaydoi);
+                ViewBag.thongbao = "thanhcong";
+                return RedirectToAction("EditUser/"+id);
+            }
+            catch
+            {
+                return RedirectToAction("EditUser/" + id);
             }
         }
     }

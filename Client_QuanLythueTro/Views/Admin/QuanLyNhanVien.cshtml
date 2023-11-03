@@ -1,10 +1,13 @@
 ﻿@model IEnumerable<Client_QuanLythueTro.Models.Users>
-
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
 @{
     ViewData["Title"] = "QuanLyNhanVien";
     Layout = "~/Views/Admin/LayoutAdmin.cshtml";
     ViewBag.user="active";
     ViewBag.Name = "Quản lý nhân viên";
+    var userJson = Context.Session.GetString("user");
+    Users users = JsonConvert.DeserializeObject<Users>(userJson);
 }
 
 <div class="tab-content">
@@ -56,12 +59,13 @@
                                     @*//Phần render từng dòng trong C#*@
                                     <thead>
                                         <tr role="row">
+                                            @*<th class="sorting" tabindex="0" aria-controls="sampleTable">Hình</th>*@
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Mã</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Họ tên</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Chức vụ</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Status</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">SĐT</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Email</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Status</th>
                                             <th class="sorting">Chức năng</th>
 
                                         </tr>
@@ -70,6 +74,10 @@
                                         @foreach (var item in Model)
                                         {
                                             <tr>
+                                                @*<td>
+                                                    <img width="30" height="30" id="imguser-@item.idUser" onchange="GetImgUser('@item.idUser')">
+
+                                                </td>*@
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.idUser)
                                                 </td>
@@ -78,7 +86,18 @@
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.idChucVu)
+                                               
+                                                    
                                                 </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.sdtUsers)
+                                                </td>
+
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.emailUser)
+                                                </td>
+                                                 <td>
                                                 @if (item.trangThai)
                                                 {
                                                     <td>
@@ -93,23 +112,20 @@
                                                     </td>
                                                 }
 
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.sdtUsers)
                                                 </td>
+                                                @if (item.idUser != users.idUser)
+                                                {
+                                                    <td>
+                                                        <a href="/Admin/EditUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <a href="/Admin/DetailUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
+                                                            <i class="fas fa-info-circle"></i>
+                                                        </a>
 
-
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.emailUser)
-                                                </td>
-                                                <td>
-                                                    <a href="/Admin/EditUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <a href="/Admin/DetailUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
-                                                        <i class="fas fa-info-circle"></i>
-                                                    </a>
-                                                  
-                                                </td>
+                                                    </td>
+                                                }
+                                                
                                             </tr>
 
                                         }
@@ -140,6 +156,24 @@
         document.body.innerHTML = originalContents;
 
     }
+    function GetImgUser(id) {
+        var url = "https://localhost:7034/api/Users/GetImage?id=" + id;
+
+        fetch(url)
+            .then(function (response) {
+                return response.blob();
+            })
+            .then(function (data) {
+                var img = document.getElementById("imguser-" + id);
+                img.src = URL.createObjectURL(data);
+                img.style.visibility = "visible";
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+            });
+    }
+
+
 
 
 </script>

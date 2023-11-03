@@ -37,6 +37,13 @@ namespace QuanLyThueTro.Services
                 return true;
             return false;
         }
+        public bool ValidateUserName(string users)
+        {
+            var p = _context.users.Where(t => t.userName == users).FirstOrDefault();
+            if (p == null)
+                return true;
+            return false;
+        }
 
         public async Task<Users> ResetAccount(Users user)
         {

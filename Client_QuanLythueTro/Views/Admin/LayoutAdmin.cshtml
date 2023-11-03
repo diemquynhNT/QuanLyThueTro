@@ -21,6 +21,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link href="~/css/mainlayout.css" rel="stylesheet" />
+
+
+
 </head>
 <body onload="time()" class="app sidebar-mini rtl">
     <header class="app-header">
@@ -90,9 +93,12 @@
     </main>
     <!--dialog_message -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/lib/datatables.bootstrap.min.js"></script>
+    <script src="~/lib/jquery.datatables.min.js"></script>
+    <script type="text/javascript">$('#sampleTable').DataTable();</script>
 
-    <script src="~/lib/dataTables.bootstrap.min.js"></script>
-    <script src="~/lib/jquery.dataTables.min.js></script>
+
+
     <script type="text/javascript">
         $('#sampleTable').DataTable(); //TimKiem
         //Thời Gian
@@ -170,7 +176,7 @@
         function get_random_dog_image() {
             var id = document.getElementById("idUsers").value;
             url = "https://localhost:7034/api/Users/GetImage?id="+id;
-            console.log(url)
+         
 
             fetch(url)
                 .then(function (response) {
