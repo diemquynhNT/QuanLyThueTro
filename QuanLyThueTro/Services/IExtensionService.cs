@@ -11,5 +11,6 @@ namespace QuanLyThueTro.Services
         public void AutoPK_DichVu(GoiTinDichVu dichVu);
         bool IsNotExistNameDichVu(GoiTinDichVu dichVu);
         public string AutoPK_Common();
+        public int AutoPK_IntCommon();
     }
 }

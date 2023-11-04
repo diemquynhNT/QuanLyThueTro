@@ -11,9 +11,9 @@ namespace QuanLyThueTro.Dto
         public string tieuDe { get; set; }
         public string loaiTin { get; set; }
 
-        //public DateTime? ngayBatDau { get; set; }
+        public DateTime? ngayBatDau { get; set; }
 
-        //public DateTime? ngayKetThuc { get; set; }
+        public DateTime? ngayKetThuc { get; set; }
 
         //[Required]
         //public bool trangThaiTinDang { get; set; }
@@ -45,7 +45,7 @@ namespace QuanLyThueTro.Dto
         public float tienNuoc { get; set; } //phongtro
         public float tienDichVu { get; set; } //phongtro
 
-        public TinDangPhongTroVM(string idTinDang, string tieuDe, string loaiTin, string sdtNguoiLienHe, string nguoiLienHe, string doiTuongChoThue, int soLuongPhong, string diaChi, float giaPhong, double dienTich, string? moTa, float tienDien, float tienNuoc, float tienDichVu)
+        public TinDangPhongTroVM(string idTinDang, string tieuDe, string loaiTin, DateTime? ngayBatDau, DateTime? ngayKetThuc, string sdtNguoiLienHe, string nguoiLienHe, string doiTuongChoThue, int soLuongPhong, string diaChi, float giaPhong, double dienTich, string? moTa, float tienDien, float tienNuoc, float tienDichVu)
         {
             this.idTinDang = idTinDang;
             this.tieuDe = tieuDe;
@@ -61,6 +61,8 @@ namespace QuanLyThueTro.Dto
             this.tienDien = tienDien;
             this.tienNuoc = tienNuoc;
             this.tienDichVu = tienDichVu;
+            this.ngayBatDau = ngayBatDau;
+            this.ngayKetThuc = ngayKetThuc;
         }
 
         public TinDangPhongTroVM()

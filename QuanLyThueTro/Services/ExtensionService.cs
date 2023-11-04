@@ -28,6 +28,15 @@ namespace QuanLyThueTro.Services
             return pK;
         }
 
+        public int AutoPK_IntCommon()
+        {
+            Random rnd = new Random();
+            string stRnd = "0123456789";
+            string pK = new string(Enumerable.Repeat(stRnd, 12).Select(s => s[rnd.Next(s.Length)]).ToArray());
+            int pkN = (int)Int64.Parse(pK);
+            return pkN;
+        }
+
         public void AutoPK_DichVu(GoiTinDichVu dichVu)
         {
             Random rnd = new Random();

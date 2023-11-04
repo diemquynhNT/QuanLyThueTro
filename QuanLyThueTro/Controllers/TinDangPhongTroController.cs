@@ -21,11 +21,13 @@ namespace QuanLyThueTro.Controllers
         private readonly MyDBContext _context;
         private readonly IMapper _mapper;
         private readonly IExtensionService _extensionService;
-        public TinDangPhongTroController(MyDBContext context, IMapper mapper, IExtensionService extensionService)
+        private readonly IPhotoService _photoService;
+        public TinDangPhongTroController(MyDBContext context, IMapper mapper, IExtensionService extensionService, IPhotoService photoService)
         {
             _context = context;
             _mapper = mapper;
             _extensionService = extensionService;
+            _photoService = photoService;
         }
 
         // GET: api/TinDangPhongTro
@@ -44,6 +46,8 @@ namespace QuanLyThueTro.Controllers
                 TinDangPhongTroVM dto = new TinDangPhongTroVM(item.idTinDang,
                               item.tieuDe,
                               item.loaiTin,
+                              item.ngayBatDau,
+                              item.ngayKetThuc,
                               item.sdtNguoiLienHe,
                               item.nguoiLienHe,
                               item.doiTuongChoThue,
@@ -67,7 +71,7 @@ namespace QuanLyThueTro.Controllers
         {
             if (_context.tinDangs == null)
             {
-                return NotFound();
+                return NotFound("Không tìm thấy tin đăng có mã này");
             }
             var tinDang = await _context.tinDangs.FindAsync(id);
 
@@ -79,6 +83,8 @@ namespace QuanLyThueTro.Controllers
             TinDangPhongTroVM dto = new TinDangPhongTroVM(tinDang.idTinDang,
                           tinDang.tieuDe,
                           tinDang.loaiTin,
+                          tinDang.ngayBatDau,
+                          tinDang.ngayKetThuc,
                           tinDang.sdtNguoiLienHe,
                           tinDang.nguoiLienHe,
                           tinDang.doiTuongChoThue,
@@ -194,6 +200,39 @@ namespace QuanLyThueTro.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+        //Images
+        [HttpPost("AddImages")]
+        public async Task<ActionResult<Images>> AddImagesAsync(string tinDangId, IFormFile file)
+        {
+            bool tindangR = TinDangExists(tinDangId);
+            
+            if (!tindangR)
+                return NotFound("Không tìm thấy tin đăng có mã này");
+            if (file == null)
+                return BadRequest();
+            
+            //upload on cloud
+            var result = await _photoService.AddImageAsync(file);
+            if(result.Error != null)
+            {
+                return BadRequest("Không lưu lên cloud được: "+result.Error.Message);
+            }
+            var images = new Images
+            {
+                nameImage = result.SecureUrl.AbsoluteUri,
+                idTinDang = tinDangId
+            };
+            _context.ImagesPhongTro.Add(images);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+            return images;
         }
 
         private bool TinDangExists(string id)
