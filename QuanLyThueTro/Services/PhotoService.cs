@@ -27,8 +27,8 @@ namespace QuanLyThueTro.Services
             {
                 using var stream = file.OpenReadStream();
                 var uploadParams = new ImageUploadParams {
-                    File = new FileDescription(file.Name, stream),
-                    Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face")
+                    File = new FileDescription(file.Name, stream)
+                    //Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face")
                 };
                 uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
@@ -36,9 +36,9 @@ namespace QuanLyThueTro.Services
             return uploadResult;
         }
 
-        public async Task<DeletionResult> DeleteImageAsync(string tinDangId)
+        public async Task<DeletionResult> DeleteImageAsync(string publicId)
         {
-            var deleteParams = new DeletionParams(tinDangId);
+            var deleteParams = new DeletionParams(publicId);
             var result = await _cloudinary.DestroyAsync(deleteParams);
             return result;
         }

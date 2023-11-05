@@ -71,7 +71,7 @@ namespace QuanLyThueTro.Controllers
         {
             if (_context.tinDangs == null)
             {
-                return NotFound("Không tìm thấy tin đăng có mã này");
+                return NotFound();
             }
             var tinDang = await _context.tinDangs.FindAsync(id);
 
@@ -199,7 +199,7 @@ namespace QuanLyThueTro.Controllers
             _context.phongTros.Remove(phongTro);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok("Đã xóa tin đăng");
         }
         //Images
         [HttpPost("AddImages")]
@@ -216,12 +216,13 @@ namespace QuanLyThueTro.Controllers
             var result = await _photoService.AddImageAsync(file);
             if(result.Error != null)
             {
-                return BadRequest("Không lưu lên cloud được: "+result.Error.Message);
+                return BadRequest("Không lưu lên cloud được: " + result.Error.Message);
             }
             var images = new Images
             {
                 nameImage = result.SecureUrl.AbsoluteUri,
-                idTinDang = tinDangId
+                idTinDang = tinDangId,
+                publicId = result.PublicId
             };
             _context.ImagesPhongTro.Add(images);
             try
@@ -235,6 +236,46 @@ namespace QuanLyThueTro.Controllers
             return images;
         }
 
+        [HttpGet("GetImages/{idTinDang}")]
+        public async Task<ActionResult<List<string>>> GetImageTinDangById(string idTinDang)
+        {
+            var flag = TinDangExists(idTinDang);
+
+            if (!flag)
+            {
+                return NotFound("Không tìm thấy tin đăng có mã này");
+            }
+            List<string> urls = new List<string>();
+            foreach(var image in _context.ImagesPhongTro)
+            {
+                if(image.idTinDang == idTinDang)
+                {
+                    urls.Add(image.nameImage);
+                }
+            }
+            return urls;
+        }
+        [HttpDelete("DeleteImages/{idTinDang}")]
+        public async Task<IActionResult> DeleteImageAsync(string idTinDang)
+        {
+            var flag = TinDangExists(idTinDang);
+
+            if (!flag)
+            {
+                return NotFound("Không tìm thấy tin đăng có mã này");
+            }
+            foreach (var image in _context.ImagesPhongTro)
+            {
+                if (image.idTinDang == idTinDang)
+                {
+                    _context.ImagesPhongTro.Remove(image);
+                    await _photoService.DeleteImageAsync(image.publicId);
+                }
+            }
+            await _context.SaveChangesAsync();
+
+            return Ok("Đã xóa tin đăng");
+        }
         private bool TinDangExists(string id)
         {
             return (_context.tinDangs?.Any(e => e.idTinDang == id)).GetValueOrDefault();
