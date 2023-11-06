@@ -38,6 +38,7 @@ namespace Client_QuanLythueTro.Controllers
             try
             {
                 callTinDangPT.CreateTinDang(tinDang);
+                //callTinDangPT.CreateImage()
                 TempData["AlertMessage"] = "successful";
                 return RedirectToAction("CreateTinDangPT");
             }

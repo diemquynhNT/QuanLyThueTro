@@ -44,6 +44,9 @@ builder.Services.AddAuthentication
     }
     );
 
+//add cors
+builder.Services.AddCors();
+
 
 //automapper
 builder.Services.AddAutoMapper(typeof(Program));
@@ -73,5 +76,9 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+//cors
+app.UseCors(options =>
+     options.WithOrigins("http://localhost:7144")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
 app.Run();

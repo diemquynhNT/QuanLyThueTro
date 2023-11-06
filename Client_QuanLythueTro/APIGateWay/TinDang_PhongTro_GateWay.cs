@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using QuanLyThueTro.Model;
 
 namespace Client_QuanLythueTro.APIGateWay
 {
@@ -61,6 +62,31 @@ namespace Client_QuanLythueTro.APIGateWay
                 throw new Exception(ex.Message);
             }
             return tinDang;
+        }
+
+        public void CreateImage(string idTinDang, IFormFile file)
+        {
+            try
+            {
+                _httpClient.BaseAddress = new Uri(baseAddress + "/AddImages");
+                var formData = new MultipartFormDataContent();
+                formData.Add(new StringContent(idTinDang), "tinDangId");
+                formData.Add(new StreamContent((Stream)file), "file", file.FileName);
+
+                //string data = JsonConvert.SerializeObject(idTinDang, file);
+                //StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = _httpClient.PostAsync(_httpClient.BaseAddress, formData).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            //return tinDang;
         }
     }
 }
