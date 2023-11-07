@@ -101,11 +101,11 @@ namespace Client_QuanLythueTro.Controllers
             try
             {
                 TinDang newTin=await apiGateWay.CreateTin(tin);
+                TempData["mess"] = "thanhcong";
                 return RedirectToAction("AddImgToTinDang", new { idTinDang = newTin.idTinDang });
             }
             catch (Exception ex)
             {
-                // Handle the exception appropriately (e.g., log, display an error message, etc.)
                 return Content("Error: " + ex.Message);
             }
         }

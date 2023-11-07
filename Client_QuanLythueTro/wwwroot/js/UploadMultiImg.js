@@ -1,7 +1,6 @@
 ﻿let queuedImgArray = [],
     savedForm = document.querySelector("#saved-form"),
     savedDiv = document.querySelector(".saved-div"),
-    queuedDiv = document.querySelector(".queued-div"),
     inputDiv = document.querySelector(".input-div"),
     input = document.querySelector(".input-div input"),
     serverMess = document.querySelector(".server-message"),

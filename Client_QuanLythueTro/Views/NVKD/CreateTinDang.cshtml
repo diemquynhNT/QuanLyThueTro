@@ -25,7 +25,6 @@
                         <b>Khu vực</b>
                             <select class="form-control" asp-for="idKhuVuc" id="idKhuVuc" required>
                             <option selected="selected" disabled>------Chọn-------</option>
-                           
                         </select>
                         <span asp-validation-for="idKhuVuc" class="text-danger"></span>
                     </div>
@@ -63,33 +62,33 @@
                     </div>
                     <div class="form-group col-sm-6">
                         <b>Số lượng phòng</b>
-                        <input asp-for="soLuongPhong" class="form-control" required />
+                            <input asp-for="soLuongPhong" class="form-control" required min="1" />
                         <span asp-validation-for="soLuongPhong" class="text-danger"></span>
                     </div>
                     <div class="form-group col-sm-6">
                         <b>Diện tích</b>
-                        <input asp-for="dienTich" class="form-control" required type="number" />
+                        <input asp-for="dienTich" class="form-control" required type="number" min="1" />
                         <span asp-validation-for="dienTich" class="text-danger"></span>
                     </div>
 
                     <div class="form-group col-sm-6">
                         <b>Giá phòng (/tháng)</b>
-                        <input asp-for="giaPhong" class="form-control" required type="number" />
+                            <input asp-for="giaPhong" class="form-control" required type="number" min="1" />
                         <span asp-validation-for="giaPhong" class="text-danger"></span>
                     </div>
                     <div class="form-group col-sm-6">
                         <b>Tiền điện</b>
-                        <input asp-for="tienDien" class="form-control" required min="0" type="number" />
+                            <input asp-for="tienDien" class="form-control" required min="0" type="number" min="1" />
                         <span asp-validation-for="tienDien" class="text-danger"></span>
                     </div>
                     <div class="form-group col-sm-6">
                         <b>Tiền nước</b>
-                        <input asp-for="tienNuoc" class="form-control" required min="0" type="number" />
+                            <input asp-for="tienNuoc" class="form-control" required min="0" type="number" min="1" />
                         <span asp-validation-for="tienNuoc" class="text-danger"></span>
                     </div>
                     <div class="form-group col-sm-6">
                         <b>Tiền dịch vụ</b>
-                        <input asp-for="tienDichVu" class="form-control" required min="0" type="number" />
+                            <input asp-for="tienDichVu" class="form-control" required min="0" type="number" min="1" />
                         <span asp-validation-for="tienDichVu" class="text-danger"></span>
                     </div>
                     <hr />
@@ -105,23 +104,11 @@
                         <input asp-for="sdtNguoiLienHe" class="form-control" required min="10" max="10" />
                         <span asp-validation-for="sdtNguoiLienHe" class="text-danger"></span>
                     </div>
-                  @* <div class="form-group col-sm-12">
-                        <h3>Chọn hình</h3>
-                            <div class="input-div">
-                                <input type="file" class="listimg" name="listimg"
-                                       multiple accept="image/png, image/jpeg, image/jpg">
-                            </div>
-                            <div id="saved-form">
-                                <div class="saved-div"></div>
-                            </div>
-                           
-                    </div>*@
                     <div class="form-group">
-                        <input type="submit" value="Thêm" class="btn btn-primary" />
+                        <input type="submit" value="Thêm" class="btn btn-success btn-sm" />
                     </div>
                 </div>
              </form>
-               
             </div>
             <div class="col-sm-4" style="background-color:blue">
                 <div class="form-group col-sm-6">
@@ -130,14 +117,10 @@
                     <span class="text-danger"></span>
                 </div>
             </div>
-     
         </div>
-        <div>
-            <a asp-action="QuanLyTinDang" class="btn btn-warning btn-sm">Back to List</a>
-        </div>
-        
-            
-
+    </div>
+    <div>
+        <a asp-action="QuanLyTinDang" class="btn btn-warning btn-sm">Back to List</a>
     </div>
 </div>
 

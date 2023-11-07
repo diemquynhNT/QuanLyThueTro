@@ -82,6 +82,8 @@ namespace QuanLyThueTro.Controllers
         {
             try
             {
+                if (list.Count == 0)
+                    return BadRequest();
                 foreach (var f in list)
                 {
                     _context.AddHinhanh(id, f);
@@ -132,15 +134,31 @@ namespace QuanLyThueTro.Controllers
                 throw;
             }
         }
-        [HttpPost("DuyetTin")]
-        public async Task<ActionResult> DuyetTin(string id,bool status)
+        [HttpPut("DuyetTin")]
+        public async Task<ActionResult> DuyetTin(string id)
         {
             try
             {
                 var tin=_context.GetTinDangById(id);
                 if (tin == null)
                     return NotFound();
-                _context.DuyetTin(tin, status);
+                _context.DuyetTin(tin);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        [HttpPut("HuyDuyetTin")]
+        public async Task<ActionResult> HuyDuyetTin(string id)
+        {
+            try
+            {
+                var tin = _context.GetTinDangById(id);
+                if (tin == null)
+                    return NotFound();
+                _context.HuyDuyetTin(tin);
                 return Ok();
             }
             catch (Exception)

@@ -49,6 +49,33 @@ namespace QuanLyThueTro.Controllers
 
             return images;
         }
+        [HttpGet("GetListByIdTin")]
+        public async Task<ActionResult<IEnumerable<Images>>> GetListByIdTin(string id)
+        {
+            if (_context.ImagesPhongTro == null)
+            {
+                return NotFound();
+            }
+            return await _context.ImagesPhongTro.Where(t=>t.idTinDang==id).ToListAsync();
+        }
+
+        [HttpGet("GetImageDisplay")]
+        public async Task<ActionResult> GetImageDisplay(int id)
+        {
+            if (_context.ImagesPhongTro == null)
+            {
+                return NotFound();
+            }
+            Images hinh = _context.ImagesPhongTro.SingleOrDefault(t => t.idImage == id);
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img");
+            var filePath = Path.Combine(path, hinh.nameImage);
+            if (System.IO.File.Exists(filePath))
+            {
+                var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                return File(fileStream, "image/png");
+            }
+            return null;
+        }
 
         // PUT: api/Images/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -109,7 +136,11 @@ namespace QuanLyThueTro.Controllers
             {
                 return NotFound();
             }
-
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", images.nameImage);
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
             _context.ImagesPhongTro.Remove(images);
             await _context.SaveChangesAsync();
 

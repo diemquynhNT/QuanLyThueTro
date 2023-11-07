@@ -39,7 +39,7 @@ namespace QuanLyThueTro.Services
                 throw;
             }
         }
-        public async Task<Images> AddHinhanh(string tinId, IFormFile file)
+        public async Task AddHinhanh(string tinId, IFormFile file)
         {
             Images hinh = new Images();
             if (file.Length > 0)
@@ -61,9 +61,7 @@ namespace QuanLyThueTro.Services
                 }
             }
             _context.ImagesPhongTro.Add(hinh);
-            await _context.SaveChangesAsync();
-
-            return hinh;
+            _context.SaveChanges();
         }
 
 
@@ -112,14 +110,18 @@ namespace QuanLyThueTro.Services
             return tin;
         }
 
-        public void DuyetTin(TinDang tin,bool status)
+        public void DuyetTin(TinDang tin)
         {
-            tin.trangThaiTinDang = status;
-            if(status)
-            {
-                tin.ngayBatDau = DateTime.Today;
-                tin.ngayKetThuc = DateTime.Today.AddDays(30);
-            }    
+            tin.trangThaiTinDang = true;
+            tin.ngayBatDau = DateTime.Today;
+            tin.ngayKetThuc = DateTime.Today.AddDays(30);
+            _context.SaveChanges();
+        }
+        public void HuyDuyetTin(TinDang tin)
+        {
+            tin.trangThaiTinDang = false;
+            tin.ngayBatDau = null;
+            tin.ngayKetThuc = null;
             _context.SaveChanges();
         }
 

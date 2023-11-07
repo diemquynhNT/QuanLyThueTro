@@ -7,11 +7,11 @@
     ViewBag.Name = "Đăng tin";
 }
 <link href="~/css/uploadimg.css" rel="stylesheet" />
-<div class="container">
-    <div class="tile" id="printMe">
+                <div class="container">
+                    <div class="tile">
                         <div class="form-group col-sm-12">
                             <h3>Chọn hình</h3>
-                            <form id="imageUploadForm">
+                            <div id="imageUploadForm">
                                 <div class="input-div">
                                     <input type="file" class="listimg" id="listimg" name="listimg" multiple accept="image/png, image/jpeg, image/jpg">
                                 </div>
@@ -19,54 +19,61 @@
                                     <div class="saved-div"></div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" value="Cập nhật" class="btn btn-success btn-sm" />
+                                    <input type="submit" onclick="ClickUpdateImage()" value="Cập nhật" class="btn btn-success btn-sm" />
                                 </div>
-                            </form>
+                            </div>
                         </div>
 
                     </div>
-        <div>
-            <a asp-action="QuanLyTinDang" class="btn btn-warning btn-sm">Bỏ qua</a>
+                    <a asp-action="QuanLyTinDang" class="btn btn-warning btn-sm">Bỏ qua</a>
+                <div>
         </div>
-        <input value="@ViewBag.id" id="idTin" />
+        <input value="@ViewBag.id" id="idTin" style="visibility:hidden" />
     </div>
-</div>
 <script src="~/js/uploadmultiimg.js"></script>
 <script>
-    document.getElementById("imageUploadForm").addEventListener("submit", function (event) {
-        event.preventDefault();
-        var formData = new FormData();
-        var files = document.querySelector('input[type="file"]').files;
+    async function ClickUpdateImage() {
         var id = document.getElementById("idTin").value;
-        console.log(id);
-        console.log(files);
-        for (var i = 0; i < files.length; i++) {
-            formData.append("list", files[i]);
+        const formData = new FormData();
+        const imageFiles = document.getElementById("listimg").files;
+        for (let i = 0; i < imageFiles.length; i++) {
+            formData.append("list", imageFiles[i]);
         }
         formData.append("id", id);
-        fetch("https://localhost:7034/api/TinDang/AddImageToTinDang?id="+id, {
-            method: "POST",
-            body: formData,
-        })
-            .then(function (response) {
-                if (response.ok) {
-                    console.log("oke");
-                    alert("thanh cong")
-                } else {
-                    alert("loi")
-                    throw new Error("loi");
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    });
 
+        var url = "https://localhost:7034/api/TinDang/AddImageToTinDang?id=" + id;
+        const response = await fetch(url, {
+            method: "POST",
+            body: formData
+        });
+
+        if (response.ok) {
+            console.log("oke");
+            alert("thanh cong")
+            BackToList()
+        } else {
+            console.error("Lỗi:", response.status);
+        }
+    }
+
+    
     function BackToList()
     {
-        window.location.href = "https://example.com";
+        window.location.href = "https://localhost:7144/NVKD/QuanLyTinDang";
     }
 
 </script>
+<script>
+    var ktr = '@(TempData["mess"] as string)';
+    if (ktr) {
+        Swal.fire({
+            icon: "success",
+            title: "Thành công",
+            text: "Thêm thành công!"
+        });
+    }
+</script>
+
+
 
 
