@@ -1,0 +1,72 @@
+﻿@model Client_QuanLythueTro.Models.images
+
+@{
+    ViewData["Title"] = "AddImgToTinDang";
+    Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
+    ViewBag.post = "active";
+    ViewBag.Name = "Đăng tin";
+}
+<link href="~/css/uploadimg.css" rel="stylesheet" />
+<div class="container">
+    <div class="tile" id="printMe">
+                        <div class="form-group col-sm-12">
+                            <h3>Chọn hình</h3>
+                            <form id="imageUploadForm">
+                                <div class="input-div">
+                                    <input type="file" class="listimg" id="listimg" name="listimg" multiple accept="image/png, image/jpeg, image/jpg">
+                                </div>
+                                <div id="saved-form">
+                                    <div class="saved-div"></div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Cập nhật" class="btn btn-success btn-sm" />
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+        <div>
+            <a asp-action="QuanLyTinDang" class="btn btn-warning btn-sm">Bỏ qua</a>
+        </div>
+        <input value="@ViewBag.id" id="idTin" />
+    </div>
+</div>
+<script src="~/js/uploadmultiimg.js"></script>
+<script>
+    document.getElementById("imageUploadForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        var formData = new FormData();
+        var files = document.querySelector('input[type="file"]').files;
+        var id = document.getElementById("idTin").value;
+        console.log(id);
+        console.log(files);
+        for (var i = 0; i < files.length; i++) {
+            formData.append("list", files[i]);
+        }
+        formData.append("id", id);
+        fetch("https://localhost:7034/api/TinDang/AddImageToTinDang?id="+id, {
+            method: "POST",
+            body: formData,
+        })
+            .then(function (response) {
+                if (response.ok) {
+                    console.log("oke");
+                    alert("thanh cong")
+                } else {
+                    alert("loi")
+                    throw new Error("loi");
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    });
+
+    function BackToList()
+    {
+        window.location.href = "https://example.com";
+    }
+
+</script>
+
+

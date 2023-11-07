@@ -16,11 +16,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="col-sm-6">
                 <div class="row">
-                   @* <h5 style="padding-left:10px">THÔNG TIN TÀI KHOẢN</h5>*@
+                 
                    <div class="col-sm-12" style="text-align: center;">
-                            @*<label class="control-label">Chọn hình ảnh</label>
-                            <input type="file" id="Avatar" name="Avatar" style="padding-bottom: 20px;" />
-                            <br />*@
                             <img id="hinh" class="rounded-circle" width="150" height="150" style="margin-bottom: 14px; text-align: center;" />
                             <br />
                             <a class="btn btn-sm" ata-toggle="tooltip" title="Đổi password" data-toggle="modal" data-target="#ChangeImage">
@@ -57,6 +54,7 @@
                         <b>Số điện thoại liên lạc</b>
                         <input asp-for="sdtUsers" class="form-control" required />
                         <span asp-validation-for="sdtUsers" class="text-danger"></span>
+                        <p id=""></p>
                     </div>
                     <div class="form-group col-sm-6">
                         <b>Ngày tham gia</b>
@@ -114,16 +112,19 @@
             </div>
         </form>
         <div class="row" style="padding:10px;">
-            <a asp-action="QuanLyNhanVien">Back to List</a>
             <div class="col-sm-2">
-                <a class="btn btn-outline-secondary" ata-toggle="tooltip" title="Đổi password" data-toggle="modal" data-target="#ChangePassModal">
+                <a asp-action="QuanLyNhanVien" class="btn btn-outline-secondary btn-sm">Back to List</a>
+            </div>
+            
+            <div class="col-sm-2">
+                <a class="btn btn-warning btn-sm" ata-toggle="tooltip" title="Đổi password" data-toggle="modal" data-target="#ChangePassModal">
                     Đổi mật khẩu
                 </a>
             </div>
             @if(Model.trangThai)
             {
                 <div class="col-sm-2">
-                    <a class="btn btn-outline-danger" onclick="TerminateUser()">
+                    <a class="btn btn-danger btn-sm" ata-toggle="tooltip" title="Vô hiệu hóa" data-toggle="modal" data-target="#TerminalUser">
                         Vô hiệu hóa
                     </a>
                 </div>
@@ -131,7 +132,7 @@
             else
             {
                 <div class="col-sm-2">
-                    <a class="btn btn-outline-success">
+                    <a class="btn btn-success btn-sm" ata-toggle="tooltip" title="Kích hoạt" data-toggle="modal" data-target="#KichHoatUser">
                         Kích hoạt
                     </a>
                 </div>
@@ -199,6 +200,36 @@
     </div>
 </form>
 
+<div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="TerminalUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4 style="text-align:center;padding:20px 20px 0px 20px;">
+                    XÁC NHẬN VÔ HIỆU HÓA @Model.hoTen - @Model.idUser
+                </h4>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
+                <button class="btn btn-danger" onclick="TerminateUser()"  type="submit">Hủy kích hoạt</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="KichHoatUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4 style="text-align:center;padding:20px;">
+                    XÁC NHẬN KÍCH HOẠT @Model.hoTen - @Model.idUser
+                </h4>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
+                <button class="btn btn-danger" onclick="TerminateUser()" type="submit">Hủy kích hoạt</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     var idUser = document.getElementById("idUser").value;
@@ -296,10 +327,8 @@
     }
 
     function GetImg() {
-       
         urlU = "https://localhost:7034/api/Users/GetImage?id=" + idUser;
         console.log(urlU)
-
         fetch(urlU)
             .then(function (response) {
                 return response.blob();

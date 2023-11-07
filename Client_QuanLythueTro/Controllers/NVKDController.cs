@@ -12,6 +12,7 @@ using System.Web;
 
 
 
+
 namespace Client_QuanLythueTro.Controllers
 {
     public class NVKDController : Controller
@@ -88,7 +89,6 @@ namespace Client_QuanLythueTro.Controllers
         public ActionResult CreateTinDang()
         {
            
-            ViewBag.ListKV = apiGateWay.ListKhuVuc();
             TinDang tin = new TinDang();
             return View(tin);
         }
@@ -96,17 +96,23 @@ namespace Client_QuanLythueTro.Controllers
         // POST: NVKDController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateTinDang(TinDang tin)
+        public async Task<ActionResult> CreateTinDang(TinDang tin)
         {
             try
             {
-                apiGateWay.CreateTin(tin);
-                return RedirectToAction("QuanLyTinDang");
+                TinDang newTin=await apiGateWay.CreateTin(tin);
+                return RedirectToAction("AddImgToTinDang", new { idTinDang = newTin.idTinDang });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                // Handle the exception appropriately (e.g., log, display an error message, etc.)
+                return Content("Error: " + ex.Message);
             }
+        }
+        public ActionResult AddImgToTinDang(string idTinDang)
+        {
+            ViewBag.id = idTinDang;
+            return View();
         }
 
         // GET: NVKDController/Edit/5

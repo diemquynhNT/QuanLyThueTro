@@ -70,6 +70,21 @@
                     <i class='app-menu__icon bx bx-group'></i><span class="app-menu__label">Quản lý nhân viên</span>
                 </a>
             </li>
+            <li>
+                <a class="app-menu__item @ViewBag.user" href="/Admin/">
+                    <i class='app-menu__icon bx bx-group'></i><span class="app-menu__label">Quản lý khách hàng</span>
+                </a>
+            </li>
+            <li>
+                <a class="app-menu__item @ViewBag.user" href="/Admin/">
+                    <i class='app-menu__icon '></i><span class="app-menu__label">Quản lý quaảng cáo</span>
+                </a>
+            </li>
+            <li>
+                <a class="app-menu__item @ViewBag.user" href="/Admin/">
+                    <i class='app-menu__icon bx '></i><span class="app-menu__label">Thông tin công ty</span>
+                </a>
+            </li>
           
         </ul>
     </aside>
@@ -176,8 +191,6 @@
         function get_random_dog_image() {
             var id = document.getElementById("idUsers").value;
             url = "https://localhost:7034/api/Users/GetImage?id="+id;
-         
-
             fetch(url)
                 .then(function (response) {
                     return response.blob(); 

@@ -16,6 +16,7 @@ namespace QuanLyThueTro.Services
         public void DuyetTin(TinDang tin, bool status);
         public List<TinDang> Filter(int thang, bool trangThai);
         public Task<Images> AddHinhanh(string tinId, IFormFile file);
+        public Task<Images> GetImage(string idTin);
 
 
 

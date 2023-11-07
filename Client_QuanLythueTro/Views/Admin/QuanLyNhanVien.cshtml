@@ -86,18 +86,14 @@
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.idChucVu)
-                                               
-                                                    
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.sdtUsers)
                                                 </td>
-
-
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.emailUser)
                                                 </td>
-                                                 <td>
+                                            
                                                 @if (item.trangThai)
                                                 {
                                                     <td>
@@ -112,19 +108,19 @@
                                                     </td>
                                                 }
 
-                                                </td>
-                                                @if (item.idUser != users.idUser)
-                                                {
-                                                    <td>
+                                                  <td>
+                                                      @if (item.idUser != users.idUser)
+                                                     {
+                                                  
                                                         <a href="/Admin/EditUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         <a href="/Admin/DetailUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
                                                             <i class="fas fa-info-circle"></i>
                                                         </a>
-
+                                                    }
                                                     </td>
-                                                }
+                                                
                                                 
                                             </tr>
 
@@ -144,18 +140,18 @@
 </div>
 
 <script>
-    //In dữ liệu
-    function printDiv(divName) {
-        var printContents = document.getElementById(divName).innerHTML;
-        var originalContents = document.body.innerHTML;
+    ////In dữ liệu
+    //function printDiv(divName) {
+    //    var printContents = document.getElementById(divName).innerHTML;
+    //    var originalContents = document.body.innerHTML;
 
-        document.body.innerHTML = printContents;
+    //    document.body.innerHTML = printContents;
 
-        window.print();
+    //    window.print();
 
-        document.body.innerHTML = originalContents;
+    //    document.body.innerHTML = originalContents;
 
-    }
+    //}
     function GetImgUser(id) {
         var url = "https://localhost:7034/api/Users/GetImage?id=" + id;
 

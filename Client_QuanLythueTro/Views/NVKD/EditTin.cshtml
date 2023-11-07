@@ -6,6 +6,7 @@
     ViewBag.post = "active";
     ViewBag.Name = "Edittin";
 }
+<link href="~/css/uploadimg.css" rel="stylesheet" />
 <div class="container">
     <div class="col-md-12">
         <div class="tile" id="printMe">
@@ -19,8 +20,6 @@
                 @Html.HiddenFor(model => model.trangThaiTinDang)
 
         <div class="row">
-
-
             <div class="form-group col-sm-12">
                 <b>Tiêu đề</b>
                 <input asp-for="tieuDe" class="form-control" />
@@ -68,40 +67,53 @@
                 <span asp-validation-for="idDichVu" class="text-danger"></span>
             </div>
            
-            <div class="form-group col-sm-4">
+            <div class="form-group col-sm-6">
                 <b>Giá thuê</b>
                 <input asp-for="giaPhong" class="form-control" type="number" min="0" />
                 <span asp-validation-for="giaPhong" class="text-danger"></span>
             </div>
-            <div class="form-group col-sm-4">
+            <div class="form-group col-sm-6">
                 <b>Diện tích</b>
                 <input asp-for="dienTich" class="form-control" />
                 <span asp-validation-for="dienTich" class="text-danger"></span>
             </div>
         
           
-            <div class="form-group col-sm-4">
+            <div class="form-group col-sm-6">
                 <b>Tiền điện</b>
                     <input asp-for="tienDien" class="form-control" type="number" min="0" />
                 <span asp-validation-for="tienDien" class="text-danger"></span>
             </div>
-            <div class="form-group col-sm-4">
+            <div class="form-group col-sm-6">
                 <b>Tiền nước</b>
                     <input asp-for="tienNuoc" class="form-control" type="number" min="0" />
                 <span asp-validation-for="tienNuoc" class="text-danger"></span>
             </div>
-            <div class="form-group col-sm-4">
+            <div class="form-group col-sm-6">
                 <b>Tiền dịch vụ</b>
                     <input asp-for="tienDichVu" class="form-control" type="number" min="0" />
                 <span asp-validation-for="tienDichVu" class="text-danger"></span>
             </div>
-                <div class="form-group col-sm-12">
+                <div class="form-group col-sm-6">
                     <label asp-for="moTa" class="control-label"></label>
                     <input asp-for="moTa" class="form-control" />
                     <span asp-validation-for="moTa" class="text-danger"></span>
                 </div>
                 </div>
-
+                <div class="form-group col-sm-12">
+                    <h3>Chọn hình</h3>
+                    <div id="imageUploadForm">
+                        <div class="input-div">
+                            <input type="file" class="listimg" id="listimg" name="listimg" multiple accept="image/png, image/jpeg, image/jpg">
+                        </div>
+                        <div id="saved-form">
+                            <div class="saved-div"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Cập nhật" class="btn btn-success btn-sm" />
+                        </div>
+                    </div>
+                </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -115,3 +127,5 @@
 </div>
 
 </div>
+<script src="~/js/uploadmultiimg.js"></script>
+<script src="~/js/uploadmultiimg.js"></script>
