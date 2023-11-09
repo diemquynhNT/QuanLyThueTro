@@ -20,7 +20,7 @@
                    <div class="col-sm-12" style="text-align: center;">
                             <img id="hinh" class="rounded-circle" width="150" height="150" style="margin-bottom: 14px; text-align: center;" />
                             <br />
-                            <a class="btn btn-sm" ata-toggle="tooltip" title="Đổi password" data-toggle="modal" data-target="#ChangeImage">
+                            <a class="btn btn-sm">
                                 Đổi hình
                             </a>
                         </div>
@@ -152,7 +152,6 @@
     }
 }
 
-<!-- Modal -->
 <form asp-controller="Admin" asp-action="ChangePassword" method="post" >
     <div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="ChangePassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -173,15 +172,14 @@
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
-                    <button class="btn btn-danger" id="btnSave" type="submit">Thay đổi</button>
+                    <button class="btn btn-success" id="btnSave" type="submit">Thay đổi</button>
                 </div>
             </div>
         </div>
     </div>
 </form>
-
-<form asp-controller="Admin" asp-action="ChangeImage" method="post" enctype="multipart/form-data">
-    <div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="ChangeImage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<input name="id" id="id" class="form-control" value="@Model.idUser" style="visibility:hidden" />
+   <div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="ChangeImage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -190,15 +188,14 @@
                     <br />
                     <img id="hinhchon"  class="rounded-circle" width="150" height="150" style="margin-bottom: 14px; text-align: center;" />
                 </div>
-                <input name="id" id="id" class="form-control" value="@Model.idUser" style="visibility:hidden" />
                 <div class="modal-footer">
                     <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
-                    <button class="btn btn-danger" type="submit">Thay đổi</button>
+                <button class="btn btn-success btn-sm" onclick="ChangeImageUsers()" type="submit">Thay đổi</button>
                 </div>
             </div>
         </div>
     </div>
-</form>
+
 
 <div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="TerminalUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -242,6 +239,25 @@
             img.src = reader.result;
         }
         reader.readAsDataURL(input.files[0]);
+    }
+    function ChangeImageUsers() {
+        url = "https://localhost:7034/api/Users/ChangeImage?id=" + idUser;
+        console.log(url)
+        const imageFiles = document.getElementById("hinhthaydoi").files;
+        formData.append("file", imageFiles);
+        formData.append("id", idUser);
+        const response = await fetch(url, {
+            method: "POST",
+            body: formData
+        });
+        if (response.ok) {
+            console.log("oke");
+            alert("thanh cong")
+            location.reload()
+        } else {
+            console.error("Lỗi:", response.status);
+        }
+        
     }
 
 

@@ -10,6 +10,35 @@ namespace Client_QuanLythueTro.APIGateWay
         private string url = "https://localhost:7034/api/Users";
         private HttpClient httpClient = new HttpClient();
 
+        public List<Users> ListUsers()
+        {
+            List<Users> list = new List<Users>();
+            if (url.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var datacol = JsonConvert.DeserializeObject<List<Users>>(result);
+
+                    if (datacol != null)
+                        list = datacol;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return list;
+        }
         public List<Users> ListEmployee()
         {
             List<Users> listEmployee = new List<Users>();

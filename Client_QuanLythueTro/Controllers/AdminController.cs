@@ -17,6 +17,7 @@ namespace Client_QuanLythueTro.Controllers
         
         public ActionResult TrangChuAdmin()
         {
+            List<Users> listUser = apiGateWay.ListUsers().Where(t=>t. tidLoaiTK == "NV");
             return View();
         }
         public ActionResult QuanLyNhanVien()
@@ -81,20 +82,20 @@ namespace Client_QuanLythueTro.Controllers
         }
 
         // POST: AdminController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EditUsers(Users u)
-        {
-            try
-            {
-                apiGateWay.UpdateUsers(u);
-                return RedirectToAction("QuanLyNhanVien");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult EditUsers(Users u)
+        //{
+        //    try
+        //    {
+        //        apiGateWay.UpdateUsers(u);
+        //        return RedirectToAction("QuanLyNhanVien");
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
 
         [HttpPost]
         public ActionResult DeleteUsers(string id)
@@ -117,26 +118,13 @@ namespace Client_QuanLythueTro.Controllers
             {
                 apiGateWay.ChangePass(id,newPass);
                 ViewBag.thongbao = "thanhcong";
-                return RedirectToAction("EditUser" + id);
-            }
-            catch
-            {
-                return RedirectToAction("EditUser" + id);
-            }
-        }
-        [HttpPost]
-        public ActionResult ChangeImage(string id, IFormFile hinhthaydoi)
-        {
-            try
-            {
-                apiGateWay.ChangeImg(id, hinhthaydoi);
-                ViewBag.thongbao = "thanhcong";
-                return RedirectToAction("EditUser/"+id);
+                return RedirectToAction("EditUser/" + id);
             }
             catch
             {
                 return RedirectToAction("EditUser/" + id);
             }
         }
+       
     }
 }
