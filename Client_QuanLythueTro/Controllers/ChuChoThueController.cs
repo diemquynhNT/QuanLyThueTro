@@ -48,5 +48,15 @@ namespace Client_QuanLythueTro.Controllers
                 return View(); // Trả về View để hiển thị lỗi
             }
         }
+
+        [HttpPost]
+        public JsonResult CreateImage(string idTinDang, IFormFileCollection files)
+        {
+            foreach(var file in files)
+            {
+                callTinDangPT.CreateImage(idTinDang, file);
+            }
+            return new JsonResult(Ok());
+        }
     }
 }
