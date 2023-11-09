@@ -250,7 +250,7 @@
     
 </div>
 
-<script type="text/javascript">
+<script>
     const inputImg = document.querySelector('#input-img')
     let filenames = [];
     inputImg.addEventListener('change', (e) => {
@@ -270,27 +270,35 @@
             document.querySelector('.preview2').appendChild(img);console.log(filenames);
         }
         
-    })
-    
-    $("#btnPost").click(function () {
-        $.ajax({
-            type: "POST",
-            url: "/ChuChoThue/CreateImage",
-            data: { 
-                "idTinDang": $("#btnPost").val(),
-                "files": filenames
-            },
-            success: function (response) {
-                alert("Hello: " + response.Name + " .\nCurrent Date and Time: " + response.DateTime);
-            },
-            failure: function (response) {
-                alert(response.responseText);
-            },
-            error: function (response) {
-                alert(response.responseText);
-            }
-        });
     });
+    $(document).ready(function () {
+        $("#btnPost").click(function () {
+            alert("Nút đã được click!");
+            
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("CreateImage")",
+                dataType: 'json',
+                data: {
+                    idTinDang: "TD_Ham4vYWW1aez",
+                    files: filenames
+                }, 
+                success: function (response) {
+                    alert("Hello: " + response.Name + " .\nCurrent Date and Time: " + response.DateTime);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            }).done(function (response) {
+                alert(response);
+            });
+        });
+    
+    });
+    
     
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
