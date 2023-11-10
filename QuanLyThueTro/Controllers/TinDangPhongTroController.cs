@@ -134,7 +134,7 @@ namespace QuanLyThueTro.Controllers
         // POST: api/TinDangPhongTro
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<string>> PostTinDangPhongTro([FromBody] TinDangPhongTroWithoutId tinDangPhongTro)
+        public async Task<ActionResult<TinDang>> PostTinDangPhongTro([FromBody] TinDangPhongTroWithoutId tinDangPhongTro)
         {
             TinDang tinDang = _mapper.Map<TinDang>(tinDangPhongTro);
             PhongTro phongTro = _mapper.Map<PhongTro>(tinDangPhongTro);
@@ -177,7 +177,7 @@ namespace QuanLyThueTro.Controllers
                     throw;
                 }
             }
-            return tinDang.idTinDang;
+            return tinDang;
         }
 
         // DELETE: api/TinDangPhongTro/5
@@ -203,35 +203,38 @@ namespace QuanLyThueTro.Controllers
         }
         //Images
         [HttpPost("AddImages")]
-        public async Task<ActionResult<Images>> AddImagesAsync(string tinDangId, IFormFile file)
+        public async Task<ActionResult<Images>> AddImagesAsync(string tinDangId, IFormFileCollection files)
         {
             bool tindangR = TinDangExists(tinDangId);
             
             if (!tindangR)
                 return NotFound("Không tìm thấy tin đăng có mã này");
-            if (file == null)
+            if (files == null)
                 return BadRequest();
-            
-            //upload on cloud
-            var result = await _photoService.AddImageAsync(file);
-            if(result.Error != null)
+            var images = new Images();
+            foreach (var image in files)
             {
-                return BadRequest("Không lưu lên cloud được: " + result.Error.Message);
-            }
-            var images = new Images
-            {
-                nameImage = result.SecureUrl.AbsoluteUri,
-                idTinDang = tinDangId,
-                publicId = result.PublicId
-            };
-            _context.ImagesPhongTro.Add(images);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw;
+                //upload on cloud
+                var result = await _photoService.AddImageAsync(image);
+                if (result.Error != null)
+                {
+                    return BadRequest("Không lưu lên cloud được: " + result.Error.Message);
+                }
+                images = new Images
+                {
+                    nameImage = result.SecureUrl.AbsoluteUri,
+                    idTinDang = tinDangId,
+                    publicId = result.PublicId
+                };
+                _context.ImagesPhongTro.Add(images);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException)
+                {
+                    throw;
+                }
             }
             return images;
         }

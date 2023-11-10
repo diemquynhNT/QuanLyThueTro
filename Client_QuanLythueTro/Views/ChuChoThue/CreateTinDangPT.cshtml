@@ -67,7 +67,7 @@
 <div class="row">
     <div class="col-9">
         <h4>Địa chỉ cho thuê</h4>
-        <form asp-action="CreateTinDangPT">
+        <form asp-action="CreateTinDangPT" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
            @Html.HiddenFor(model => model.idTinDang)
             <div class="form-group">
@@ -223,7 +223,7 @@
                             <i class="fas fa-cloud-upload-alt"></i>
                             <span>Upload to preview image</span>
                         </label>
-                        <input type="file" hidden id="input-img" multiple/>
+                        <input type="file" name="files" hidden id="input-img" multiple />
                     </div>
                     <div class="col-6 sroll-row">
                         <div class="preview2">
@@ -237,13 +237,12 @@
 
             @*end image*@
             <div class="form-group m-5">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input id ="btnPost" type="submit" value="Create" class="btn btn-primary" />
                 
                 <a class="btn btn-warning" href="~/NVKD/QuanLyDichVu"> Trở lại</a>
             </div>
         </form>
     </div>
-    <input id="btnPost" value="Test ajax" class="btn btn-primary" />
     <div class="col-3">
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.521571286021!2d106.68087777451706!3d10.771307259289186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f23cbaeb32d%3A0x3d32b187a53c6cf8!2zMzk5IE5ndXnhu4VuIMSQw6xuaCBDaGnhu4N1LCBQaMaw4budbmcgNSwgUXXhuq1uIDMsIFRow6BuaCBwaOG7kSBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1698851672393!5m2!1svi!2s" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
@@ -252,13 +251,13 @@
 
 <script>
     const inputImg = document.querySelector('#input-img')
-    let filenames = [];
+    const formData = new FormData();
     inputImg.addEventListener('change', (e) => {
         let files = e.target.files
         if (!files) return
         for(let i=0; i< files.length;i++){
             let file = files[i];
-            filenames.push(file);
+            formData.append("files", file);
             let img = document.createElement('img')
             img.src = URL.createObjectURL(file)
             img.style.width = '100%';
@@ -267,37 +266,28 @@
             img.style.objectPosition = 'center';
             img.style.borderRadius = '6px';
             img.style.padding = '3px';
-            document.querySelector('.preview2').appendChild(img);console.log(filenames);
+            document.querySelector('.preview2').appendChild(img);
         }
-        
+        console.log(formData.values);
     });
-    $(document).ready(function () {
-        $("#btnPost").click(function () {
-            alert("Nút đã được click!");
-            
-            $.ajax({
-                type: 'POST',
-                url: "@Url.Action("CreateImage")",
-                dataType: 'json',
-                data: {
-                    idTinDang: "TD_Ham4vYWW1aez",
-                    files: filenames
-                }, 
-                success: function (response) {
-                    alert("Hello: " + response.Name + " .\nCurrent Date and Time: " + response.DateTime);
-                },
-                failure: function (response) {
-                    alert(response.responseText);
-                },
-                error: function (response) {
-                    alert(response.responseText);
-                }
-            }).done(function (response) {
-                alert(response);
-            });
+    $("#btnPost").click(function () {
+        $.ajax({
+            url: '/ChuChoThue/CreateImage',
+            type: "POST",
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            data: formData,
+            async: false,
+            success: function (result) {
+                //success
+                alert(result);
+            },
+            error: function (err) {
+                alert(err.statusText);
+            }
         });
-    
     });
+    
     
     
 </script>

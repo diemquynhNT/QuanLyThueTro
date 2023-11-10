@@ -64,14 +64,15 @@ namespace Client_QuanLythueTro.APIGateWay
             return tinDang;
         }
 
-        public void CreateImage(string idTinDang, IFormFile file)
+        public void CreateImage(string idTinDang, IFormFileCollection files)
         {
             try
             {
+                _httpClient = new HttpClient();
                 _httpClient.BaseAddress = new Uri(baseAddress + "/AddImages");
                 var formData = new MultipartFormDataContent();
                 formData.Add(new StringContent(idTinDang), "tinDangId");
-                formData.Add(new StreamContent((Stream)file), "file", file.FileName);
+                formData.Add(new StreamContent((Stream)files), "files");
 
                 //string data = JsonConvert.SerializeObject(idTinDang, file);
                 //StringContent content = new StringContent(data, Encoding.UTF8, "application/json");

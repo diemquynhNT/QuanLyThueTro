@@ -37,8 +37,9 @@ namespace Client_QuanLythueTro.Controllers
         {
             try
             {
-                callTinDangPT.CreateTinDang(tinDang);
-                //callTinDangPT.CreateImage()
+                tinDang = callTinDangPT.CreateTinDang(tinDang);
+                var files = CreateImage();
+                callTinDangPT.CreateImage(tinDang.idTinDang, files);
                 TempData["AlertMessage"] = "successful";
                 return RedirectToAction("CreateTinDangPT");
             }
@@ -50,13 +51,10 @@ namespace Client_QuanLythueTro.Controllers
         }
 
         [HttpPost]
-        public JsonResult CreateImage(string idTinDang, IFormFileCollection files)
+        public IFormFileCollection CreateImage()
         {
-            foreach(var file in files)
-            {
-                callTinDangPT.CreateImage(idTinDang, file);
-            }
-            return new JsonResult(Ok());
+            IFormFileCollection files = Request.Form.Files;
+            return files;
         }
     }
 }
