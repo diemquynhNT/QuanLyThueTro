@@ -43,13 +43,13 @@ namespace QuanLyThueTro.Model
         [ForeignKey("idDichVu")]
         public GoiTinDichVu dichVuDangTin { get; set; }
 
-        public virtual ICollection<LichXemPhong> lichXemPhongs { get; set; }
+        public virtual ICollection<LichXemPhongDto> lichXemPhongs { get; set; }
         public virtual ICollection<TinYeuThich> tinYeuThiches { get; set; }
         public virtual ICollection<Images> Images { get; set; }
 
         public TinDang()
         {
-            lichXemPhongs = new HashSet<LichXemPhong>(); 
+            lichXemPhongs = new HashSet<LichXemPhongDto>(); 
             tinYeuThiches = new HashSet<TinYeuThich>(); 
             Images = new HashSet<Images>(); 
 
