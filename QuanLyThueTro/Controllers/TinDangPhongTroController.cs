@@ -202,20 +202,20 @@ namespace QuanLyThueTro.Controllers
             return Ok("Đã xóa tin đăng");
         }
         //Images
-        [HttpPost("AddImages")]
-        public async Task<ActionResult<Images>> AddImagesAsync(string tinDangId, IFormFileCollection files)
+        [HttpPost("AddImages/{tinDangId}")]
+        public async Task<ActionResult<Images>> AddImageAsync(string tinDangId, IFormFileCollection files)
         {
             bool tindangR = TinDangExists(tinDangId);
             
             if (!tindangR)
                 return NotFound("Không tìm thấy tin đăng có mã này");
             if (files == null)
-                return BadRequest();
+                return BadRequest("Hình null");
             var images = new Images();
-            foreach (var image in files)
+            foreach(var file in files)
             {
                 //upload on cloud
-                var result = await _photoService.AddImageAsync(image);
+                var result = await _photoService.AddImageAsync(file);
                 if (result.Error != null)
                 {
                     return BadRequest("Không lưu lên cloud được: " + result.Error.Message);

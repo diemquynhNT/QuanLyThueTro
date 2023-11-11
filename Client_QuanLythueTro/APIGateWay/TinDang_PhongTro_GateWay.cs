@@ -57,7 +57,13 @@ namespace Client_QuanLythueTro.APIGateWay
                     string result = response.Content.ReadAsStringAsync().Result;
                     throw new Exception(result);
                 }
-            }catch (Exception ex)
+                string result2 = response.Content.ReadAsStringAsync().Result;
+                var datacol = JsonConvert.DeserializeObject<TinDang>(result2);
+
+                if (datacol.idTinDang != null)
+                    tinDang = datacol;
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -69,25 +75,48 @@ namespace Client_QuanLythueTro.APIGateWay
             try
             {
                 _httpClient = new HttpClient();
-                _httpClient.BaseAddress = new Uri(baseAddress + "/AddImages");
-                var formData = new MultipartFormDataContent();
-                formData.Add(new StringContent(idTinDang), "tinDangId");
-                formData.Add(new StreamContent((Stream)files), "files");
-
+                _httpClient.BaseAddress = new Uri(baseAddress + "/AddImages/" + idTinDang);
+                if(files != null)
+                {
+                    
+                }var formData = new MultipartFormDataContent();
+                    foreach (var file in files)
+                    {
+                        
+                        //formData.Add(new StringContent(idTinDang), "tinDangId");
+                        formData.Add(new StreamContent(file.OpenReadStream()), "files", file.FileName);
+                        
+                    }
+                        HttpResponseMessage response = _httpClient.PostAsync(_httpClient.BaseAddress, formData).Result;
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            string result = response.Content.ReadAsStringAsync().Result;
+                            throw new Exception(result);
+                        }
                 //string data = JsonConvert.SerializeObject(idTinDang, file);
                 //StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = _httpClient.PostAsync(_httpClient.BaseAddress, formData).Result;
-                if (!response.IsSuccessStatusCode)
-                {
-                    string result = response.Content.ReadAsStringAsync().Result;
-                    throw new Exception(result);
-                }
+                
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
             //return tinDang;
+        }
+
+        public List<string> ListImages(string idTinDang)
+        {
+            List<string> imgList = new List<string>();
+            _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri(baseAddress + "/GetImages/" + idTinDang);
+            HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                imgList = JsonConvert.DeserializeObject<List<string>>(data);
+            }
+            return imgList;
         }
     }
 }

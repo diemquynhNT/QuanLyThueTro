@@ -1,8 +1,10 @@
-﻿@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
+﻿@using Client_QuanLythueTro.APIGateWay;
+@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
 @{
     ViewData["Title"] = "Trang chủ";
     Layout = "~/Views/ChuChoThue/Layout/_LayoutChuChoThue.cshtml";
     ViewBag.tc = "active";
+    TinDang_PhongTro_GateWay callTinDangPT = new TinDang_PhongTro_GateWay();
 }
 
 <style>
@@ -158,11 +160,12 @@
                 {
                     if (!item.trangThaiTinDang)
                     {
+                        List<string> imgList = callTinDangPT.ListImages(item.idTinDang);
                         <li onclick="window.location.assign('/ChuChoThue/DetailTinDangPT/@item.idTinDang')">
                             <div class="card text-black" style="max-width: 100%;">
                                 <div class="row g-0">
                                     <div class="col-md-4 scale-img">
-                                        <img src="~/img/tphcm.jpg" class="img-fluid rounded-start m-0" alt="...">
+                                        <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">
                                         <span class="images-number">18 ảnh</span>
                                         <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
                                     </div>

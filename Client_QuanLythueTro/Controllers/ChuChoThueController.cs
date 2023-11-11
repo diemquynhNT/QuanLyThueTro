@@ -23,6 +23,9 @@ namespace Client_QuanLythueTro.Controllers
         public IActionResult DetailTinDangPT(string id)
         {
             TinDang tinDang = callTinDangPT.GetTinDang(id);
+            List<string> imgList = new List<string>();
+            imgList = callTinDangPT.ListImages(id);
+            ViewBag.listImg = imgList.ToList();
             return View(tinDang);
         }
 
