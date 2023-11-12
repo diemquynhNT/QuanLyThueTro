@@ -46,7 +46,7 @@ namespace Client_QuanLythueTro.Controllers
                 var files = CreateImage();
                 callTinDangPT.CreateImage(tinDang.idTinDang, files);
                 TempData["AlertMessage"] = "successful";
-                return RedirectToAction("CreateTinDangPT");
+                return View();
             }
             catch (Exception ex)
             {
@@ -70,5 +70,19 @@ namespace Client_QuanLythueTro.Controllers
             return View(lichXemList);
         }
 
+        [HttpGet]
+        public IActionResult CreateLichXem()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateLichXem(LichXemPhong lichXemPhong)
+        {
+            lichXemPhong.idLichXem = "auto";
+            _callLichXemPhong.CreateLichXem(lichXemPhong);
+            TempData["AlertMessage"] = "successful";
+            return View();
+        }
     }
 }

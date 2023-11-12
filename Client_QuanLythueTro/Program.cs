@@ -7,6 +7,7 @@ builder.Services.AddScoped<APIGateWayTinDang>();
 builder.Services.AddScoped<APIGateWayDichVu>();
 builder.Services.AddScoped<APIGateWayUsers>();
 builder.Services.AddScoped<TinDang_PhongTro_GateWay>();
+builder.Services.AddScoped<LichXemPhong_GateWay>();
 
 
 // Add services to the container.
