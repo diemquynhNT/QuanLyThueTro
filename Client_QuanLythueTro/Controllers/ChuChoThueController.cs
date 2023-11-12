@@ -84,5 +84,36 @@ namespace Client_QuanLythueTro.Controllers
             TempData["AlertMessage"] = "successful";
             return View();
         }
+
+
+        [HttpGet]
+        public IActionResult EditLichXem(string id)
+        {
+            LichXemPhong lichXem = _callLichXemPhong.GetLichXem(id);
+            return View(lichXem);
+        }
+
+        [HttpPost]
+        public IActionResult EditLichXem(LichXemPhong lichXemPhong)
+        {
+            _callLichXemPhong.EditLichXem(lichXemPhong.idLichXem, lichXemPhong);
+            TempData["AlertMessage"] = "successful";
+            return RedirectToAction("QLLichXemPhong");
+        }
+
+        //[HttpGet]
+        //public IActionResult GetDeleteLichXem(string id)
+        //{
+        //    ViewBag.strID = id;
+        //    return RedirectToAction("QLLichXemPhong");
+        //}
+
+        [HttpPost]
+        public IActionResult DeleteLichXem(string id)
+        {
+            _callLichXemPhong.DeleteLichXem(id);
+            TempData["AlertMessage"] = "successful";
+            return RedirectToAction("QLLichXemPhong");
+        }
     }
 }

@@ -4,7 +4,46 @@
     Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
 }
 
+@{
+    // alert includ icons: question, info, success, error, warning
+    //footer: '<a href="">Why do I have this issue?</a>'
+    var checkMessage = TempData["AlertMessage"];
+    if (checkMessage == "successful")
+    {
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công',
+                text: 'Xóa lịch xem thành công!'
+            })
+        </script>
 
+    }
+}
+<script>
+
+    function onDeleteLichXem(id) {
+        debugger
+        console.log(id);
+        var confirmation = confirm("Bạn có chắc chắn muốn xóa không?");
+        if (confirmation) {
+            var formData = new FormData();
+            formData.append('id', id);
+
+            $.ajax({
+                url: '/ChuChoThue/DeleteLichXem',
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: formData,
+                async: false,
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        }
+    }
+</script>
 
 <div class="row">
     <div class="col-sm-5">
@@ -49,7 +88,9 @@
                 </tr>
             </thead>
             <tbody>
-                @{int stt=0;}
+                @{
+                    int stt = 0;
+                }
                 @foreach (var item in Model)
                 {
                     stt = stt + 1;
@@ -69,12 +110,12 @@
                             {
                                 <span class="badge bg-danger">Chưa duyệt</span>
                             }
-                            </td>
+                        </td>
                         <td style="text-align:center">
-                            <a href="/ChuChoThue/EditLichXem/@item.idLichXem" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Edit">
+                            <a href="/ChuChoThue/EditLichXem/@item.idLichXem" class="btn btn-primary" ata-toggle="tooltip" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a href="/ChuChoThue/Delete/@item.idLichXem" class="btn btn-outline-danger btn-sm" ata-toggle="tooltip" title="Delete">
+                            <a href="" onclick="onDeleteLichXem('@item.idLichXem')" class="btn btn-outline-danger btn-sm" title="Delete">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </td>
@@ -94,10 +135,11 @@
                 </tr>
             </tfoot>
         </table>
-    
+
     </div>
 </div>
 
 <script>
     new DataTable('#example');
+    
 </script>
