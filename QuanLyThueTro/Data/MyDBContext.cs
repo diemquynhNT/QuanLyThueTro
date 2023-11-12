@@ -62,6 +62,10 @@ namespace QuanLyThueTro.Data
             {
                 entry.ToTable(tb => tb.HasTrigger("tr_ThemTinSLPhong"));
             });
+            modelBuilder.Entity<LichXemPhong>(entry =>
+            {
+                entry.ToTable(tb => tb.HasTrigger("tr_ChuThueHuyLichXem"));
+            });
         }
     }
 }

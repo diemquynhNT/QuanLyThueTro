@@ -32,8 +32,8 @@ namespace QuanLyThueTro.Services
         {
             Random rnd = new Random();
             string stRnd = "0123456789";
-            string pK = new string(Enumerable.Repeat(stRnd, 12).Select(s => s[rnd.Next(s.Length)]).ToArray());
-            int pkN = (int)Int64.Parse(pK);
+            string pK = new string(Enumerable.Repeat(stRnd, 6).Select(s => s[rnd.Next(s.Length)]).ToArray());
+            int pkN = (int)(uint)long.Parse(pK);
             return pkN;
         }
 

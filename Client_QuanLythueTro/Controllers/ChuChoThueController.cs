@@ -7,10 +7,12 @@ namespace Client_QuanLythueTro.Controllers
     public class ChuChoThueController : Controller
     {
         private readonly TinDang_PhongTro_GateWay callTinDangPT;
+        private readonly LichXemPhong_GateWay _callLichXemPhong;
 
-        public ChuChoThueController(TinDang_PhongTro_GateWay callTinDangPT)
+        public ChuChoThueController(TinDang_PhongTro_GateWay callTinDangPT, LichXemPhong_GateWay callLichXemPhong)
         {
             this.callTinDangPT = callTinDangPT;
+            _callLichXemPhong = callLichXemPhong;
         }
 
         public IActionResult IndexTinDangPT()
@@ -59,5 +61,14 @@ namespace Client_QuanLythueTro.Controllers
             IFormFileCollection files = Request.Form.Files;
             return files;
         }
+
+
+        //Lich xem phong
+        public IActionResult QLLichXemPhong()
+        {
+            List<LichXemPhong> lichXemList = _callLichXemPhong.ListLichXemPhong();
+            return View(lichXemList);
+        }
+
     }
 }

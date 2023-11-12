@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using QuanLyThueTro.Data;
 using QuanLyThueTro.Dto;
@@ -18,11 +20,13 @@ namespace QuanLyThueTro.Controllers
     {
         private readonly MyDBContext _context;
         private readonly IExtensionService _extension;
+        private readonly IMapper _mapper;
 
-        public LichXemPhongsController(MyDBContext context, IExtensionService extension)
+        public LichXemPhongsController(MyDBContext context, IExtensionService extension, IMapper mapper)
         {
             _context = context;
             _extension = extension;
+            _mapper = mapper;
         }
 
         // GET: api/LichXemPhongs
@@ -54,7 +58,7 @@ namespace QuanLyThueTro.Controllers
             return lichXemPhong;
         }
 
-        [HttpGet("GetByIdTinDang/{id}")]
+        [HttpGet("GetByIdTinDang/{idTinDang}")]
         public async Task<ActionResult<List<LichXemPhong>>> GetLichXemPhongByIdTinDang(string idTinDang)
         {
             if (_context.lichXemPhongs == null)
@@ -71,16 +75,31 @@ namespace QuanLyThueTro.Controllers
             return lichXemPhong;
         }
 
+        [HttpGet("GetByDay/{ngayXem}")]
+        public async Task<ActionResult<List<LichXemPhong>>> GetLichXemPhongByDay(DateTime ngayXem)
+        {
+            if (_context.lichXemPhongs == null)
+            {
+                return NotFound();
+            }
+
+            var lichXemPhong = _context.lichXemPhongs.Where(s => s.ngayXem.Date == ngayXem.Date).ToList();
+
+            if (lichXemPhong == null)
+            {
+                return NotFound();
+            }
+
+            return lichXemPhong;
+        }
+
         // PUT: api/LichXemPhongs/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutLichXemPhong(string id, [FromBody] LichXemPhongDto lichXemPhong)
+        public async Task<IActionResult> PutLichXemPhong(string id, [FromBody] LichXemPhongDto lichXemPhongdto)
         {
-            if (id != lichXemPhong.idLichXem)
-            {
-                return BadRequest();
-            }
-            
+            LichXemPhong lichXemPhong = _mapper.Map<LichXemPhong>(lichXemPhongdto);
+            lichXemPhong.idLichXem = id;
             _context.Entry(lichXemPhong).State = EntityState.Modified;
 
             try
@@ -105,13 +124,14 @@ namespace QuanLyThueTro.Controllers
         // POST: api/LichXemPhongs
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<LichXemPhong>> PostLichXemPhong([FromBody] LichXemPhong lichXemPhong)
+        public async Task<ActionResult<LichXemPhong>> PostLichXemPhong([FromBody] LichXemPhongDto lichXemPhongdto)
         {
           if (_context.lichXemPhongs == null)
           {
               return Problem("Entity set 'MyDBContext.lichXemPhongs'  is null.");
           }
-            lichXemPhong.idLichXem = _extension.AutoPK_Common();
+            LichXemPhong lichXemPhong = _mapper.Map<LichXemPhong>(lichXemPhongdto);
+            lichXemPhong.idLichXem = _extension.AutoPK_Common() + _extension.AutoPK_IntCommon();
             _context.lichXemPhongs.Add(lichXemPhong);
             try
             {
@@ -145,9 +165,16 @@ namespace QuanLyThueTro.Controllers
             {
                 return NotFound();
             }
-
-            _context.lichXemPhongs.Remove(lichXemPhong);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.lichXemPhongs.Remove(lichXemPhong);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            
 
             return NoContent();
         }
