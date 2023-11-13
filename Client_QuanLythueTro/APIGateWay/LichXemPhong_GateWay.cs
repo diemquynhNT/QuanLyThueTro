@@ -103,9 +103,9 @@ namespace Client_QuanLythueTro.APIGateWay
                     throw new Exception("Error Occured at the API Endpoint, Error Info. " + result);
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception("Error Occured at the API Endpoint, Error Info. " + ex.Message);
+                throw;
             }
             finally { }
             return;

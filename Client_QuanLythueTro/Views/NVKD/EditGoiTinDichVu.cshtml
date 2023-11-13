@@ -6,7 +6,33 @@
     ViewBag.services = "active";
     ViewBag.Name = "Quản lý dịch vụ";
 }
+@{
+    // alert includ icons: question, info, success, error, warning
+    //footer: '<a href="">Why do I have this issue?</a>'
+    var checkMessage = TempData["AlertMessage"];
+    if (checkMessage == "successful")
+    {
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công',
+                text: 'Xóa lịch xem thành công!'
+            })
+        </script>
 
+    }
+    if (checkMessage == "failed")
+    {
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Đã có lỗi xảy ra',
+                text: 'Chỉ được xóa lịch xem trước 24h tính từ ngày xem!'
+            })
+        </script>
+
+    }
+}
 
 <div class="container">
     <div class="row">

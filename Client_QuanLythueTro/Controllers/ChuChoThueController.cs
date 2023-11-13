@@ -112,7 +112,6 @@ namespace Client_QuanLythueTro.Controllers
         public IActionResult DeleteLichXem(string id)
         {
             _callLichXemPhong.DeleteLichXem(id);
-            TempData["AlertMessage"] = "successful";
             return RedirectToAction("QLLichXemPhong");
         }
     }
