@@ -33,8 +33,8 @@
                 {
                     string act = "";
                     if (i == 0) act = "active";
-                    <div class="carousel-item @act" style="width:100%; height:100%;">
-                        <img src="@listImg[i]" alt="Los Angeles" class="d-block" style="width:100%; height:100%; object-fit: cover;">
+                    <div class="carousel-item @act" style="width:100%; height:100%; text-align:center; background-color:black;">
+                        <img src="@listImg[i]" alt="Los Angeles" class="d-block" style="height:100%; object-fit: cover; margin:auto;">
                         
                     </div>
                 }
@@ -54,7 +54,7 @@
             <p><i class='bx bx-map'></i> Địa chỉ: @Model.diaChi</p>
             <h3 style="display:inline-block"><i class='bx bx-purchase-tag-alt'></i> @Html.DisplayFor(modelItem => modelItem.giaPhong) đồng/tháng</h3>
             <span><i class='bx bx-area'></i> @Html.DisplayFor(modelItem => modelItem.dienTich) m<sup>2</sup></span>
-            <span><i class='bx bx-time'></i> 1 giờ trước</span>
+            <span><i class='bx bx-time'></i> @Html.DisplayFor(modelItem => modelItem.luotTruyCap) lượt xem</span>
             <span><i class='bx bx-hash'></i> @Html.DisplayFor(modelItem => modelItem.idTinDang)</span>
             <hr />
             <div>

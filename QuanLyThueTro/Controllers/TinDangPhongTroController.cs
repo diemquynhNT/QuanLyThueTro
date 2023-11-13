@@ -58,7 +58,8 @@ namespace QuanLyThueTro.Controllers
                               moTa: phongTro.moTa,
                               tienDien: phongTro.tienDien,
                               tienNuoc: phongTro.tienNuoc,
-                              tienDichVu: phongTro.tienDichVu);
+                              tienDichVu: phongTro.tienDichVu,
+                              item.luotTruyCap);
                 mergeList.Add(dto);
             }
             await _context.DisposeAsync();
@@ -79,6 +80,8 @@ namespace QuanLyThueTro.Controllers
             {
                 return NotFound();
             }
+            _extensionService.GoUpLuotTruyCap(tinDang);
+            Thread.Sleep(2000);
             var phongTro = _context.phongTros.Where(s => s.idTinDang == tinDang.idTinDang).FirstOrDefault();
             TinDangPhongTroVM dto = new TinDangPhongTroVM(tinDang.idTinDang,
                           tinDang.tieuDe,
@@ -95,7 +98,8 @@ namespace QuanLyThueTro.Controllers
                           moTa: phongTro.moTa,
                           tienDien: phongTro.tienDien,
                           tienNuoc: phongTro.tienNuoc,
-                          tienDichVu: phongTro.tienDichVu);
+                          tienDichVu: phongTro.tienDichVu,
+                          tinDang.luotTruyCap);
             return dto;
         }
 

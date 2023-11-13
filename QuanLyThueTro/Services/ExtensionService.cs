@@ -102,5 +102,20 @@ namespace QuanLyThueTro.Services
             _dbContext.loaiTaiKhoans.Remove(existing);
             return true;
         }
+
+        public void GoUpLuotTruyCap(TinDang tinDang)
+        {
+            tinDang.luotTruyCap+=1;
+            _dbContext.Entry(tinDang).State = EntityState.Modified;
+            try
+            {
+                _dbContext.SaveChangesAsync();
+                
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+        }
     }
 }

@@ -48,5 +48,6 @@ namespace Client_QuanLythueTro.Models
         public float tienDien { get; set; }
         public float tienNuoc { get; set; }
         public float tienDichVu { get; set; }
+        public int luotTruyCap { get; set; }
     }
 }

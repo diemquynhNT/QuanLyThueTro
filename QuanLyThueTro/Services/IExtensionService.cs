@@ -12,5 +12,6 @@ namespace QuanLyThueTro.Services
         bool IsNotExistNameDichVu(GoiTinDichVu dichVu);
         public string AutoPK_Common();
         public int AutoPK_IntCommon();
+        public void GoUpLuotTruyCap(TinDang tinDang);
     }
 }
