@@ -2,6 +2,8 @@
 @{
     ViewData["Title"] = "CreateLichXem";
     Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
+    if (ViewBag.ListIdTD == null)
+        ViewBag.ListIdTD = new SelectList("Chưa có tin đăng", "Chưa có tin đăng");
 }
 @{
     // alert includ icons: question, info, success, error, warning
@@ -34,7 +36,9 @@
                 </div>
                 <div class="col-sm-4">
                     <label class="form-label">Chọn tin đăng:</label>
-                    <input type="text" class="form-control" asp-for="idTinDang">
+                    <select class="form-select" asp-for="idTinDang" asp-items="@ViewBag.ListIdTD">
+                        <option value="">Chọn tin đăng</option>
+                    </select>
                     <span asp-validation-for="idTinDang" class="text-danger"></span>
                 </div>
                 <div class="col-sm-4">

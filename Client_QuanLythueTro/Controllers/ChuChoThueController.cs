@@ -1,6 +1,7 @@
 ﻿using Client_QuanLythueTro.APIGateWay;
 using Client_QuanLythueTro.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Client_QuanLythueTro.Controllers
 {
@@ -73,6 +74,14 @@ namespace Client_QuanLythueTro.Controllers
         [HttpGet]
         public IActionResult CreateLichXem()
         {
+            var list = callTinDangPT.ListTinDangPhongTro().ToList();
+            ViewBag.ListIdTD = list
+                .Select(x => new SelectListItem
+                {
+                    Value = x.idTinDang,
+                    Text = x.idTinDang
+                })
+                .ToList();
             return View();
         }
 
