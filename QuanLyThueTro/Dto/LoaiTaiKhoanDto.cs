@@ -11,5 +11,7 @@ namespace QuanLyThueTro.Dto
         public float giaTK { get; set; }
         [Required]
         public int hanDung { get; set; }
+        [Required]
+        public int soLuongDangTai { get; set; }
     }
 }

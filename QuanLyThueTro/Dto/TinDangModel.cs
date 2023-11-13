@@ -36,7 +36,7 @@ namespace QuanLyThueTro.Dto
         public float tienDien { get; set; }
         public float tienNuoc { get; set; }
         public float tienDichVu { get; set; }
-
+        public string? idUser { get; set; }
         //public List<IFormFile> listimg { get; set; }
 
 

@@ -13,6 +13,9 @@ namespace QuanLyThueTro.Model
         public float giaTK { get; set; }
         [Required]
         public int hanDung { get; set; }
+        public bool trangThaiSuDung { get; set; }
+        [Required]
+        public int soLuongDangTai { get; set; }
 
         public virtual ICollection<Users> users { get; set; }
 

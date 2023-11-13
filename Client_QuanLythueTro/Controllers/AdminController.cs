@@ -17,7 +17,7 @@ namespace Client_QuanLythueTro.Controllers
         
         public ActionResult TrangChuAdmin()
         {
-            List<Users> listUser = apiGateWay.ListUsers().Where(t=>t. tidLoaiTK == "NV");
+            
             return View();
         }
         public ActionResult QuanLyNhanVien()
@@ -72,7 +72,12 @@ namespace Client_QuanLythueTro.Controllers
                 return View();
             }
         }
-
+        // GET: AdminController/Edit/5
+        public ActionResult EditProfile(string id)
+        {
+            Users users = apiGateWay.GetUser(id);
+            return View(users);
+        }
         // GET: AdminController/Edit/5
         public ActionResult EditUsers(string id)
         {
@@ -82,20 +87,20 @@ namespace Client_QuanLythueTro.Controllers
         }
 
         // POST: AdminController/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult EditUsers(Users u)
-        //{
-        //    try
-        //    {
-        //        apiGateWay.UpdateUsers(u);
-        //        return RedirectToAction("QuanLyNhanVien");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditUsers(Users u)
+        {
+            try
+            {
+                apiGateWay.UpdateUsers(u);
+                return RedirectToAction("QuanLyNhanVien");
+            }
+            catch
+            {
+                return View();
+            }
+        }
 
         [HttpPost]
         public ActionResult DeleteUsers(string id)

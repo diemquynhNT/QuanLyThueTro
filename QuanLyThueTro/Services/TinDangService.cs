@@ -23,11 +23,11 @@ namespace QuanLyThueTro.Services
         {
             try
             {
-                tin.idTinDang = getId.GenerateId(6);
+                tin.idTinDang ="T"+ getId.GenerateId(6);
                 tin.trangThaiTinDang = false;
                 tin.ngayTaoTin = DateTime.Now;
                 tin.ngayBatDau = null;
-                tin.idDichVu = null;
+                tin.idDichVu = "BT";
                 phong.idTinDang = tin.idTinDang;
                 _context.tinDangs.Add(tin);
                 _context.phongTros.Add(phong);

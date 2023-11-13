@@ -35,6 +35,7 @@ namespace QuanLyThueTro.Model
         public virtual ICollection<Review> reviews { get; set; }
         public virtual ICollection<GiaoDich> GiaoDiches { get; set; }
         public virtual ICollection<TinYeuThich> tinYeuThiches { get; set; }
+        public virtual ICollection<TinDang> tinDangs { get; set; }
         public string? idChucVu { get; set; }
         [ForeignKey("idChucVu")]
         public ChucVu chucVus { get; set; }

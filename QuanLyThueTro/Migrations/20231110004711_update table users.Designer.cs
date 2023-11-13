@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuanLyThueTro.Data;
 
@@ -11,9 +12,11 @@ using QuanLyThueTro.Data;
 namespace QuanLyThueTro.Migrations
 {
     [DbContext(typeof(MyDBContext))]
-    partial class MyDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231110004711_update table users")]
+    partial class updatetableusers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,12 +84,6 @@ namespace QuanLyThueTro.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("trangThaiSuDung")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("viTriHienThi")
-                        .HasColumnType("int");
 
                     b.HasKey("idDichVu");
 
@@ -180,16 +177,10 @@ namespace QuanLyThueTro.Migrations
                     b.Property<int>("hanDung")
                         .HasColumnType("int");
 
-                    b.Property<int>("soLuongDangTai")
-                        .HasColumnType("int");
-
                     b.Property<string>("tenLoaiTK")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("trangThaiSuDung")
-                        .HasColumnType("bit");
 
                     b.HasKey("idLoaiTK");
 

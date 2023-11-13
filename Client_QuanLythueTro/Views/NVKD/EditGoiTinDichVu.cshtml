@@ -18,27 +18,45 @@
                     <form asp-action="EditGoiTinDichVu">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
-                            <b>Id</b>
+                            <b>Mã gói dịch vụ</b>
                             <input asp-for="idDichVu" class="form-control" readonly/>
                             <span asp-validation-for="idDichVu" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <b>Loaại tin</b>
-                            <input asp-for="loaiDichVu" class="form-control" />
+                            <b>Gói tin dịch vụ: </b>
+                        <input asp-for="loaiDichVu" class="form-control" required />
                             <span asp-validation-for="loaiDichVu" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <b>Giá</b>
-                            <input asp-for="giaCa" class="form-control" type="number" min="0" />
+                            <b>Giá gói dịch vụ</b>
+                        <input asp-for="giaCa" class="form-control" type="number" min="1" required />
                             <span asp-validation-for="giaCa" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <b>Hạn sử dụng</b>
-                            <input asp-for="hanDung" class="form-control" />
+                        <input asp-for="hanDung" class="form-control" required />
                             <span asp-validation-for="hanDung" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Save" class="btn btn-primary" />
+                            <b>Vị trí hiển thị</b>
+                            <input asp-for="viTriHienThi" class="form-control" type="number" min="1" required />
+                            <span asp-validation-for="viTriHienThi" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <b>Trạng thái sử dụng</b>
+                        <select class="form-control" asp-for="trangThaiSuDung" id="trangThaiSuDung" required>
+                            <option selected="selected" >@Model.trangThaiSuDung</option>
+                            @if(Model.trangThaiSuDung==true)
+                            {
+                                <option value="false" >Hủy</option>
+                            }else
+                            {
+                                <option value="true">Kích hoạt</option>
+                            }
+                        </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-success" />
                         </div>
                     </form>
                 </div>

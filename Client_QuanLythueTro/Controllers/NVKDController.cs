@@ -19,10 +19,13 @@ namespace Client_QuanLythueTro.Controllers
     {
         private readonly APIGateWayTinDang apiGateWay;
         private readonly APIGateWayDichVu apiGateWayDichVu;
-        public NVKDController(APIGateWayTinDang aPIGate, APIGateWayDichVu apiGateWayDichVu)
+        private readonly APIGateWayKhuVuc apiGateWayKhuVuc;
+
+        public NVKDController(APIGateWayTinDang aPIGate, APIGateWayDichVu apiGateWayDichVu, APIGateWayKhuVuc APIGateWayKhuVuc)
         {
             this.apiGateWay = aPIGate;
             this.apiGateWayDichVu = apiGateWayDichVu;
+            this.apiGateWayKhuVuc = APIGateWayKhuVuc;
         }
        
         // GET: NVKDController
@@ -138,23 +141,11 @@ namespace Client_QuanLythueTro.Controllers
                 return View();
             }
         }
-
-        // GET: NVKDController/Delete/5
-        //public ActionResult DeleteTin(string id)
-        //{
-        //    TinDang tin = apiGateWay.GetTin(id);
-        //    return View(tin);
-        //}
-
-        // POST: NVKDController/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult DeleteTin(string id)
         {
             try
             {
-                //ViewBag.UserImageUrl = GetIdUser();
                 apiGateWay.DeleteTin(id);
                 return RedirectToAction("QuanLyTinDang");
             }
@@ -314,6 +305,12 @@ namespace Client_QuanLythueTro.Controllers
             {
                 return View();
             }
+        }
+
+        public ActionResult QuanLyKhuVuc()
+        {
+            List<Khuvucs> list=apiGateWayKhuVuc.ListKhuvuc();
+            return View(list);
         }
 
 

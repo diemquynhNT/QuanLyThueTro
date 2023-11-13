@@ -17,7 +17,7 @@ namespace QuanLyThueTro.Services
         {
             Random rnd = new Random();
             string num = rnd.Next(1000, 10000000).ToString();
-            chucVu.idChucVu = "#RO" + num;
+            chucVu.idChucVu = "RO" + num;
         }
 
         public void AutoPK_DichVu(GoiTinDichVu dichVu)

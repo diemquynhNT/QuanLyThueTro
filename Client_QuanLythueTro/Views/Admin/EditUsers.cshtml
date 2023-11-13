@@ -20,7 +20,7 @@
                    <div class="col-sm-12" style="text-align: center;">
                             <img id="hinh" class="rounded-circle" width="150" height="150" style="margin-bottom: 14px; text-align: center;" />
                             <br />
-                            <a class="btn btn-sm">
+                            <a class="btn btn-sm" ata-toggle="tooltip" title="Đổi password" data-toggle="modal" data-target="#ChangeImage">
                                 Đổi hình
                             </a>
                         </div>
@@ -117,7 +117,7 @@
             </div>
             
             <div class="col-sm-2">
-                <a class="btn btn-warning btn-sm" ata-toggle="tooltip" title="Đổi password" data-toggle="modal" data-target="#ChangePassModal">
+                <a class="btn btn-warning btn-sm" ata-toggle="tooltip" title="Vô hiệu hóa" data-toggle="modal" data-target="#ChangePassModal">
                     Đổi mật khẩu
                 </a>
             </div>
@@ -152,7 +152,6 @@
     }
 }
 
-<form asp-controller="Admin" asp-action="ChangePassword" method="post" >
     <div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="ChangePassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -162,35 +161,33 @@
                     </h4>
                     <div class="form-group">
                         <b>Nhập mật khẩu mới</b>
-                        <input id="newPass" name="newPass" class="form-control" type="password"  />
+                        <input id="newPass" name="newPass" class="form-control" type="password" required />
                     </div>
                     <div class="form-group">
                         <b>Xác nhận mật khẩu</b>
-                        <input name="repass" id="repass" class="form-control" type="password" onchange="ValidatePass()" />
+                    <input name="repass" id="repass" class="form-control" type="password" onchange="ValidatePass()" />
                     </div>
-                    <input name="id" id="id" class="form-control" value="@Model.idUser" style="visibility:hidden"/>
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
-                    <button class="btn btn-success" id="btnSave" type="submit">Thay đổi</button>
+                    <button class="btn btn-success" onclick="changePass()" id="btnSave" type="submit">Thay đổi</button>
                 </div>
             </div>
         </div>
     </div>
-</form>
-<input name="id" id="id" class="form-control" value="@Model.idUser" style="visibility:hidden" />
+
    <div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="ChangeImage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">
                     <label class="control-label">Chọn hình ảnh</label>
-                    <input type="file" id="hinhthaydoi" name="hinhthaydoi" style="padding-bottom: 20px;" onchange="showImagePreview(event)" required />
+                <input type="file" id="hinhthaydoi" name="hinhthaydoi" style="padding-bottom: 20px;" onchange="showImagePreview(event)" required />
                     <br />
                     <img id="hinhchon"  class="rounded-circle" width="150" height="150" style="margin-bottom: 14px; text-align: center;" />
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
-                <button class="btn btn-success btn-sm" onclick="ChangeImageUsers()" type="submit">Thay đổi</button>
+                <button class="btn btn-success btn-sm" onclick="changeUserImage()" type="submit">Thay đổi</button>
                 </div>
             </div>
         </div>
@@ -227,7 +224,8 @@
         </div>
     </div>
 </div>
-
+@*<input name="idUser" id="idUser" class="form-control" value="@Model.idUser" style="visibility:hidden" />
+*@
 <script>
     var idUser = document.getElementById("idUser").value;
 
@@ -240,107 +238,101 @@
         }
         reader.readAsDataURL(input.files[0]);
     }
-    function ChangeImageUsers() {
-        url = "https://localhost:7034/api/Users/ChangeImage?id=" + idUser;
-        console.log(url)
+    async function changeUserImage() {
+        var url = "https://localhost:7034/api/Users/ChangeImage?id=" + idUser;
+        const formData = new FormData();
         const imageFiles = document.getElementById("hinhthaydoi").files;
-        formData.append("file", imageFiles);
+        formData.append("file", imageFiles[0]);
         formData.append("id", idUser);
-        const response = await fetch(url, {
-            method: "POST",
+        const options = {
+            method: "PUT",
             body: formData
-        });
-        if (response.ok) {
-            console.log("oke");
-            alert("thanh cong")
-            location.reload()
-        } else {
-            console.error("Lỗi:", response.status);
+        };
+        try {
+            const response = await fetch(url, options);
+            if (response.ok) {
+                alert("Đã thay đổi hình !!");
+                location.reload();
+            } else {
+                console.error("Bug", response.status);
+            }
+        } catch (error) {
+            console.error("Lỗi:", error);
         }
-        
     }
-
-
-    function ValidatePhone() {
-        var index = document.getElementById("sdtUsers").value;
-        url = "https://localhost:7034/api/Users/ValidatePhone?index=" + index;
-        console.log(url)
-
-        fetch(url)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                console.log("data" + data);
-                if (data === true) {
-                    document.getElementById("sdtUsers").style.borderColor = "green";
-                    document.getElementById("noti").innerText = "";
-                    document.getElementById("btnSave").style.visibility = "visible";
-                } else {
-                    document.getElementById("sdtUsers").style.borderColor = "red";
-                    document.getElementById("noti").innerText = "Đã tồn tại";
-                    document.getElementById("btnSave").style.visibility = "hidden";
-                }
-
-            })
-            .catch(function (error) {
-                console.log("Error: " + error);
-            });
-    }
-
     function ValidatePass() {
-        var p1 = document.getElementById("newPass").value;
-        var p2 = document.getElementById("repass").value;
+        var p1 = document.getElementById('newPass').value;
+        var p2 = document.getElementById('repass').value;
+        console.log("p" + p1+" "+p2);
         var url = `https://localhost:7034/api/Users/ValidatePass?pass=${p1}&repass=${p2}`;
-        console.log(url)
         fetch(url)
             .then(function (response) {
-                return response.json();
+                if (response.ok) {
+                    return response.json();
+                }
             })
             .then(function (data) {
-                console.log("data" + data);
+                console.log("data", data);
                 if (data === true) {
                     document.getElementById("newPass").style.borderColor = "green";
                     document.getElementById("repass").style.borderColor = "green";
                     document.getElementById("btnSave").style.visibility = "visible";
                 } else {
-                    document.getElementById("newPass").style.borderColor = "green";
-                    document.getElementById("repass").style.borderColor = "green";
+                    document.getElementById("newPass").style.borderColor = "red";
+                    document.getElementById("repass").style.borderColor = "red";
                     document.getElementById("btnSave").style.visibility = "hidden";
                 }
-
             })
             .catch(function (error) {
-                console.log("Error: " + error);
+                console.error("Error:", error);
             });
+    }
+
+    function changePass() {
+        var p1 = document.getElementById('newPass').value;
+        var url = `https://localhost:7034/api/Users/ChangePass?id=${idUser}&pass=${p1}`;
+        const options = {
+            method: "PUT"
+        };
+        try {
+            const response = fetch(url, options);
+            if (response.ok) {
+                alert("Đã đổi mật khẩu !!");
+                location.reload();
+            } else {
+                console.error("Bug", response.status);
+            }
+        } catch (error) {
+            console.error("Lỗi:", error);
+        }
     }
     
-    function ValidateEmail() {
-        var index = document.getElementById("emailUser").value;
-        url = "https://localhost:7034/api/Users/ValidateEmail?index=" + index;
-        console.log(url)
+    //function ValidateEmail() {
+    //    var index = document.getElementById("emailUser").value;
+    //    url = "https://localhost:7034/api/Users/ValidateEmail?index=" + index;
+    //    console.log(url)
 
-        fetch(url)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                console.log("data" + data);
-                if (data === true) {
-                    document.getElementById("emailUser").style.borderColor = "green";
-                    document.getElementById("mess").innerText = "";
-                    document.getElementById("btnSave").style.visibility = "visible";
-                } else {
-                    document.getElementById("emailUser").style.borderColor = "red";
-                    document.getElementById("mess").innerText = "Đã tồn tại";
-                    document.getElementById("btnSave").style.visibility = "hidden";
-                }
+    //    fetch(url)
+    //        .then(function (response) {
+    //            return response.json();
+    //        })
+    //        .then(function (data) {
+    //            console.log("data" + data);
+    //            if (data === true) {
+    //                document.getElementById("emailUser").style.borderColor = "green";
+    //                document.getElementById("mess").innerText = "";
+    //                document.getElementById("btnSave").style.visibility = "visible";
+    //            } else {
+    //                document.getElementById("emailUser").style.borderColor = "red";
+    //                document.getElementById("mess").innerText = "Đã tồn tại";
+    //                document.getElementById("btnSave").style.visibility = "hidden";
+    //            }
 
-            })
-            .catch(function (error) {
-                console.log("Error: " + error);
-            });
-    }
+    //        })
+    //        .catch(function (error) {
+    //            console.log("Error: " + error);
+    //        });
+    //}
 
     function GetImg() {
         urlU = "https://localhost:7034/api/Users/GetImage?id=" + idUser;
@@ -360,9 +352,6 @@
     }
 
     GetImg();
-
-
-
     function TerminateUser() {
         var url = "https://localhost:7034/api/Users/TerminateUser?id=" + idUser;
         fetch(url, {

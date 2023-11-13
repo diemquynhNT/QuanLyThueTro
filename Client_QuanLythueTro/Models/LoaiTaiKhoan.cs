@@ -13,5 +13,8 @@ namespace Client_QuanLythueTro.Models
         public float giaTK { get; set; }
         [Required]
         public int hanDung { get; set; }
+        public bool trangThaiSuDung { get; set; }
+        [Required]
+        public int soLuongDangTai { get; set; }
     }
 }

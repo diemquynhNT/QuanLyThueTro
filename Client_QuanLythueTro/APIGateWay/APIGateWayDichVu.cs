@@ -11,6 +11,7 @@ namespace Client_QuanLythueTro.APIGateWay
         private string urlTaiKhoan = "https://localhost:7034/api/LoaiTaiKhoans";
         private HttpClient httpClient = new HttpClient();
 
+        //goi tin
         public List<DichVuDangTin> ListGoiTin()
         {
             List<DichVuDangTin> listTin = new List<DichVuDangTin>();
@@ -119,7 +120,6 @@ namespace Client_QuanLythueTro.APIGateWay
             string id = tin.idDichVu;
             urlGoiTin = urlGoiTin + "/" + id;
             string json = JsonConvert.SerializeObject(tin);
-
             try
             {
                 HttpResponseMessage response = httpClient.PutAsync(urlGoiTin, new StringContent(json, Encoding.UTF8, "application/json")).Result;
