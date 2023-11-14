@@ -90,8 +90,13 @@
                                                         Chưa duyệt
                                                     </td>
                                                 }
+
+                                                @{
+                                                var ngaybd = String.Format("{0:d/M/yyyy}", item.ngayBatDau);
+                                                var ngaykt = String.Format("{0:d/M/yyyy}", item.ngayKetThuc);
+                                                }
                                                 <td>
-                                                    @item.ngayBatDau - @item.ngayKetThuc
+                                                @ngaybd - @ngaykt
                                                 </td>
                                                 
                                                 <td>

@@ -122,8 +122,11 @@
                 .then(function (data) {
                     console.log("data: " + data);
                     if (data === true) {
-                        swal("Yêu cầu thành công", "Hãy kiểm tra email để nhận mật khẩu mới!", "success");
-                        window.location.href = 'https://localhost:7144/Login/LoginCustomer';
+                        swal("Yêu cầu thành công", "Hãy kiểm tra email để nhận mật khẩu mới!", "success")
+                            .then((value) => {
+                                window.location.href = 'https://localhost:7144/Login/LoginCustomer';
+                            });
+
                     } else {
                         swal("Lỗi", "Không tìm thấy người dùng sử dụng email trên!", "error");
                     }

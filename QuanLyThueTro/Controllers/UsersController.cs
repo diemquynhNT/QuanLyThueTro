@@ -233,7 +233,7 @@ namespace QuanLyThueTro.Controllers
             
         }
         [HttpPut("ChangePass")]
-        public IActionResult ChangePass(string id, string pass)
+        public IActionResult ChangePass([FromForm]string id, [FromForm] string pass)
         {
             var user = _context.users.SingleOrDefault(t => t.idUser == id);
             if (user == null)

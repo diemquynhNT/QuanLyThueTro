@@ -68,7 +68,7 @@ namespace QuanLyThueTro.Services
                 message.Subject = "Reset Account";
                 message.Body = new TextPart("plain")
                 {
-                    Text = "Mật khẩu đăng nhập mới: " + newPassword
+                    Text = "Mật khẩu đăng nhập mới của user: "+user.userName+" là: " + newPassword 
                 };
 
                 // Cấu hình SmtpClient
@@ -120,12 +120,12 @@ namespace QuanLyThueTro.Services
             var newPassword = getId.GenerateId(8);
             user.passwordUser = newPassword;
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Contact", "contactcentersgt@gmail.com"));
+            message.From.Add(new MailboxAddress("Thông báo", "contactcentersgt@gmail.com"));
             message.To.Add(new MailboxAddress("Tên người nhận", user.emailUser));
             message.Subject = "Quên mật khẩu";
             message.Body = new TextPart("plain")
             {
-                Text = "Mật khẩu đăng nhập mới: " + newPassword
+                Text = "Mật khẩu đăng nhập mới của user: " + user.userName + " là: " + newPassword
             };
 
             using (var smtpClient = new SmtpClient())

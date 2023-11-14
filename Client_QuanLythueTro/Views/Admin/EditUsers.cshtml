@@ -251,8 +251,9 @@
         try {
             const response = await fetch(url, options);
             if (response.ok) {
-                swal("Yêu cầu thành công", "Đã thay đổi hình !", "success");
-                location.reload();
+                swal("Yêu cầu thành công", "Đã đổi hình thành công!", "success").then(() => {
+                    location.reload();
+                });
             } else {
                 console.error("Bug", response.status);
             }
@@ -290,23 +291,34 @@
 
     function changePass() {
         var p1 = document.getElementById('newPass').value;
-        var url = `https://localhost:7034/api/Users/ChangePass?id=${idUser}&pass=${p1}`;
-        console.log(url)
+        var url = `https://localhost:7034/api/Users/ChangePass`;
+        console.log(url);
+        const formData = new FormData();
+        formData.append('id', idUser);
+        formData.append('pass', p1);
         const options = {
-            method: "PUT"
+            method: "PUT",
+            body: formData
         };
         try {
-            const response = fetch(url, options);
-            if (response.ok) {
-                swal("Yêu cầu thành công", "Đã đổi mật khẩu!", "success");
-                location.reload();
-            } else {
-                swal("Lỗi !!!", "Không thể đổi mật khẩu!", "error");
-            }
+            fetch(url, options)
+                .then(response => {
+                    if (response.ok) {
+                        swal("Yêu cầu thành công", "Đã đổi mật khẩu!", "success").then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        swal("Lỗi !!!", "Không thể đổi mật khẩu!", "error");
+                    }
+                })
+                .catch(error => {
+                    console.error("Lỗi:", error);
+                });
         } catch (error) {
             console.error("Lỗi:", error);
         }
     }
+
 
     function KichHoat() {
         var url = "https://localhost:7034/api/Users/ResetAccount";
@@ -331,7 +343,9 @@
             .then(function (data) {
                 console.log("data: " + data);
                 if (data === true) {
-                    swal("Yêu cầu thành công", "Đã kích hoạt thành công !!!", "success");
+                    swal("Yêu cầu thành công", "Đã kích hoạt lại!", "success").then(() => {
+                        location.reload();
+                    });
                 } else {
                     swal("Lỗi", "Lỗi!", "error");
                 }
@@ -374,8 +388,9 @@
             })
             .then(function (data) {
                 console.log(data);
-                swal("Yêu cầu thành công", "Đã hủy kích hoạt account!", "success");
-                location.reload();
+                swal("Yêu cầu thành công", "Đã hủy tài khoản!", "success").then(() => {
+                    location.reload();
+                });
             })
             .catch(function (error) {
                 console.log("Error: " + error);
