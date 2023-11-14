@@ -1,0 +1,383 @@
+﻿@model Client_QuanLythueTro.Models.Users
+
+@{
+    ViewData["Title"] = "EditGuest";
+    Layout = "~/Views/Admin/LayoutAdmin.cshtml";
+    ViewBag.guest = "active";
+    ViewBag.Name = "Thông tin khách hàng";
+}
+<div class="tile" style="margin:10px 20px;">
+    <h3 class="tile-title">THÔNG TIN KHÁCH HÀNG</h3>
+    <div class="tile-body contenner">
+        <form asp-action="EditUsers">
+            <div class="row">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="col-sm-6">
+                    <div class="row">
+
+                        <div class="col-sm-12" style="text-align: center;">
+                            <img id="hinh" class="rounded-circle" width="150" height="150" style="margin-bottom: 14px; text-align: center;" />
+                            <br />
+                           @* <a class="btn btn-sm" ata-toggle="tooltip" title="Đổi password" data-toggle="modal" data-target="#ChangeImage">
+                                Đổi hình
+                            </a>*@
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label asp-for="userName" class="control-label"></label>
+                            <input asp-for="userName" class="form-control" readonly/>
+                            <span asp-validation-for="userName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label asp-for="passwordUser" class="control-label"></label>
+                            <input asp-for="passwordUser" class="form-control" type="password" readonly value="@Model.passwordUser" />
+                            <span asp-validation-for="passwordUser" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="row">
+                        <h5>THÔNG TIN CÁ NHÂN</h5>
+                        <div class="form-group col-sm-12">
+                            <b>Họ và tên</b>
+                            <input asp-for="hoTen" class="form-control" readonly />
+                            <span asp-validation-for="hoTen" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>Email</b>
+                            <input asp-for="emailUser" class="form-control" required />
+                            <span asp-validation-for="emailUser" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>Số điện thoại liên lạc</b>
+                            <input asp-for="sdtUsers" class="form-control" required />
+                            <span asp-validation-for="sdtUsers" class="text-danger"></span>
+                            <p id=""></p>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>Ngày tham gia</b>
+                            <input asp-for="ngayThamGia" class="form-control" readonly type="date" />
+                            <span asp-validation-for="ngayThamGia" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>giới tính</b>
+                            <input asp-for="gioiTinh" class="form-control" />
+                            <span asp-validation-for="gioiTinh" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>ID</b>
+                            <input asp-for="idUser" id="idUser" class="form-control" readonly />
+                            <span asp-validation-for="idUser" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>Tài khoản</b>
+                            <input asp-for="idLoaiTK" class="form-control" readonly />
+                            <span asp-validation-for="idLoaiTK" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            @Html.LabelFor(model => model.idChucVu, "Mã chức vụ", htmlAttributes: new { @class = "control-label" })
+                            <select class="form-control" asp-for="idChucVu" readonly>
+                                <option value="@Model.idChucVu">@Model.idChucVu</option>
+                            </select>
+                            @Html.ValidationMessageFor(model => model.idChucVu, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>Trạng thái</b>
+                            @{
+                                string status;
+                                if (Model.trangThai)
+                                {
+                                    status = "Đang hoạt động";
+                                }
+                                else
+                                {
+                                    status = "Đã hủy kích hoạt";
+                                }
+
+                            }
+                            <input class="form-control" value="@status" readonly />
+                            <input class="form-check-input" asp-for="trangThai" style="visibility:hidden" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Cập nhật" class="btn btn-success" />
+                    </div>
+                </div>
+
+
+            </div>
+        </form>
+        <div class="row" style="padding:10px;">
+            <div class="col-sm-2">
+                <a asp-action="QuanLyKhachHang" class="btn btn-outline-secondary btn-sm">Back to List</a>
+            </div>
+
+           @* <div class="col-sm-2">
+                <a class="btn btn-warning btn-sm" ata-toggle="tooltip" title="Vô hiệu hóa" data-toggle="modal" data-target="#ChangePassModal">
+                    Đổi mật khẩu
+                </a>
+            </div>*@
+            @if (Model.trangThai)
+            {
+                <div class="col-sm-2">
+                    <a class="btn btn-danger btn-sm" ata-toggle="tooltip" title="Vô hiệu hóa" data-toggle="modal" data-target="#TerminalUser">
+                        Vô hiệu hóa
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="col-sm-2">
+                    <a class="btn btn-success btn-sm" ata-toggle="tooltip" title="Kích hoạt" data-toggle="modal" data-target="#KichHoatUser">
+                        Kích hoạt
+                    </a>
+                </div>
+            }
+
+
+        </div>
+    </div>
+</div>
+@{
+    var ktr = ViewBag.thongbao;
+    if (ktr == "thanhcong")
+    {
+        <script>
+            swal("Thành công", "Cập nhật thành công", "success");
+        </script>
+    }
+}
+
+@*<div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="ChangePassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4 style="text-align:center;padding:20px;">
+                    ĐỔI MẬT KHẨU
+                </h4>
+                <div class="form-group">
+                    <b>Nhập mật khẩu mới</b>
+                    <input id="newPass" name="newPass" class="form-control" type="password" required />
+                </div>
+                <div class="form-group">
+                    <b>Xác nhận mật khẩu</b>
+                    <input name="repass" id="repass" class="form-control" type="password" onchange="ValidatePass()" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
+                <button class="btn btn-success" onclick="changePass()" id="btnSave" type="submit">Thay đổi</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+@*<div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="ChangeImage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <label class="control-label">Chọn hình ảnh</label>
+                <input type="file" id="hinhthaydoi" name="hinhthaydoi" style="padding-bottom: 20px;" onchange="showImagePreview(event)" required />
+                <br />
+                <img id="hinhchon" class="rounded-circle" width="150" height="150" style="margin-bottom: 14px; text-align: center;" />
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
+                <button class="btn btn-success btn-sm" onclick="changeUserImage()" type="submit">Thay đổi</button>
+            </div>
+        </div>
+    </div>
+</div>
+*@
+
+<div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="TerminalUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4 style="text-align:center;padding:20px 20px 0px 20px;">
+                    XÁC NHẬN VÔ HIỆU HÓA @Model.hoTen - @Model.idUser
+                </h4>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
+                <button class="btn btn-danger" onclick="TerminateUser()" type="submit">Hủy kích hoạt</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="KichHoatUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4 style="text-align:center;padding:20px;">
+                    XÁC NHẬN KÍCH HOẠT @Model.hoTen - @Model.idUser
+                </h4>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
+                <button class="btn btn-success" onclick="KichHoat()" type="submit">Kích hoạt</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*<input name="idUser" id="idUser" class="form-control" value="@Model.idUser" style="visibility:hidden" />
+*@
+<script>
+    var idUser = document.getElementById("idUser").value;
+    //console.log(idUser)
+    //function showImagePreview(event) {
+    //    var input = event.target;
+    //    var img = document.getElementById("hinhchon");
+    //    var reader = new FileReader();
+    //    reader.onload = function () {
+    //        img.src = reader.result;
+    //    }
+    //    reader.readAsDataURL(input.files[0]);
+    //}
+    //async function changeUserImage() {
+    //    var url = "https://localhost:7034/api/Users/ChangeImage?id=" + idUser;
+    //    const formData = new FormData();
+    //    const imageFiles = document.getElementById("hinhthaydoi").files;
+    //    formData.append("file", imageFiles[0]);
+    //    formData.append("id", idUser);
+    //    const options = {
+    //        method: "PUT",
+    //        body: formData
+    //    };
+    //    try {
+    //        const response = await fetch(url, options);
+    //        if (response.ok) {
+    //            swal("Yêu cầu thành công", "Đã thay đổi hình !", "success");
+    //            location.reload();
+    //        } else {
+    //            console.error("Bug", response.status);
+    //        }
+    //    } catch (error) {
+    //        console.error("Lỗi:", error);
+    //    }
+    //}
+    //function ValidatePass() {
+    //    var p1 = document.getElementById('newPass').value;
+    //    var p2 = document.getElementById('repass').value;
+    //    console.log("p" + p1 + " " + p2);
+    //    var url = `https://localhost:7034/api/Users/ValidatePass?pass=${p1}&repass=${p2}`;
+    //    fetch(url)
+    //        .then(function (response) {
+    //            if (response.ok) {
+    //                return response.json();
+    //            }
+    //        })
+    //        .then(function (data) {
+    //            console.log("data", data);
+    //            if (data === true) {
+    //                document.getElementById("newPass").style.borderColor = "green";
+    //                document.getElementById("repass").style.borderColor = "green";
+    //                document.getElementById("btnSave").style.visibility = "visible";
+    //            } else {
+    //                document.getElementById("newPass").style.borderColor = "red";
+    //                document.getElementById("repass").style.borderColor = "red";
+    //                document.getElementById("btnSave").style.visibility = "hidden";
+    //            }
+    //        })
+    //        .catch(function (error) {
+    //            console.error("Error:", error);
+    //        });
+    //}
+
+    //function changePass() {
+    //    var p1 = document.getElementById('newPass').value;
+    //    var url = `https://localhost:7034/api/Users/ChangePass?id=${idUser}&pass=${p1}`;
+    //    const options = {
+    //        method: "PUT"
+    //    };
+    //    try {
+    //        const response = fetch(url, options);
+    //        if (response.ok) {
+    //            swal("Yêu cầu thành công", "Đã đổi mật khẩu!", "success");
+    //            location.reload();
+    //        } else {
+    //            swal("Lỗi !!!", "Không thể đổi mật khẩu!", "error");
+    //        }
+    //    } catch (error) {
+    //        console.error("Lỗi:", error);
+    //    }
+    //}
+
+    function KichHoat() {
+        var url = "https://localhost:7034/api/Users/ResetAccount";
+        console.log(url)
+        const formData = new FormData();
+        formData.append('idUser', idUser);
+        const options = {
+            method: "PUT",
+            body: formData
+        };
+        swal({
+            title: "Đang xử lý yêu cầu",
+            text: "Vui lòng đợi trong khi chúng tôi xử lý yêu cầu của bạn...",
+            button: false
+        });
+
+        fetch(url, options)
+            .then(function (response) {
+                if (response.ok)
+                    return response.json();
+            })
+            .then(function (data) {
+                console.log("data: " + data);
+                if (data === true) {
+                    swal("Yêu cầu thành công", "Đã kích hoạt thành công !!!", "success");
+                } else {
+                    swal("Lỗi", "Lỗi!", "error");
+                }
+                location.reload();
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+            });
+    }
+
+    function GetImg() {
+        urlU = "https://localhost:7034/api/Users/GetImage?id=" + idUser;
+        console.log(urlU)
+        fetch(urlU)
+            .then(function (response) {
+                return response.blob();
+            })
+            .then(function (data) {
+                console.log(data);
+                var hinh = document.getElementById("hinh");
+                hinh.src = URL.createObjectURL(data);
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+            });
+    }
+
+    GetImg();
+    function TerminateUser() {
+        var url = "https://localhost:7034/api/Users/TerminateUser?id=" + idUser;
+        fetch(url, {
+            method: "PUT"
+        })
+            .then(function (response) {
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    throw new Error("Error terminating user");
+                }
+            })
+            .then(function (data) {
+                console.log(data);
+                swal("Yêu cầu thành công", "Đã hủy kích hoạt account!", "success");
+                location.reload();
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+                alert("loi")
+            });
+    }
+
+
+
+</script>

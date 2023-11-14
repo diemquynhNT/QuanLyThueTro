@@ -26,6 +26,13 @@ namespace Client_QuanLythueTro.Controllers
             List<Users> listEmloyee = apiGateWay.ListEmployee();
             return View(listEmloyee);
         }
+
+        public ActionResult QuanLyKhachHang()
+        {
+
+            List<Users> list = apiGateWay.ListGuest();
+            return View(list);
+        }
         public JsonResult ValidatePass(string pass1,string pass2)
         {
             System.Threading.Thread.Sleep(200);
@@ -130,6 +137,33 @@ namespace Client_QuanLythueTro.Controllers
                 return RedirectToAction("EditUser/" + id);
             }
         }
-       
+
+        public ActionResult EditGuest(string id)
+        {
+
+            Users users = apiGateWay.GetUser(id);
+            return View(users);
+        }
+
+        // POST: AdminController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditGuest(Users u)
+        {
+            try
+            {
+                apiGateWay.UpdateUsers(u);
+                return RedirectToAction("QuanLyKhachHang");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        public ActionResult DetailGuest(string id)
+        {
+            Users users = apiGateWay.GetUser(id);
+            return View(users);
+        }
     }
 }

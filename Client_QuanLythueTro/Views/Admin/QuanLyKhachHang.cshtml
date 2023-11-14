@@ -1,13 +1,10 @@
 ﻿@model IEnumerable<Client_QuanLythueTro.Models.Users>
-@using Newtonsoft.Json
-@using Microsoft.AspNetCore.Http
+
 @{
-    ViewData["Title"] = "QuanLyNhanVien";
+    ViewData["Title"] = "Quản lý khách hàng";
     Layout = "~/Views/Admin/LayoutAdmin.cshtml";
-    ViewBag.user="active";
-    ViewBag.Name = "Quản lý nhân viên";
-    var userJson = Context.Session.GetString("user");
-    Users users = JsonConvert.DeserializeObject<Users>(userJson);
+    ViewBag.guest = "active";
+    ViewBag.Name = "Quản lý tài khoản khách hàng";
 }
 
 <div class="tab-content">
@@ -25,15 +22,11 @@
             <div class="col-md-12">
                 <div class="tile">
                     <div class="row" style="padding:10px;">
-                        <p>
+                       @* <p>
                             <a asp-action="CreateUser" class="btn btn-success btn-sm">Thêm mới</a>
-                        </p>
-                        @*<div class="col-sm-2">
-                            <a class="btn btn-outline-dark btn-sm" title="In" onclick="printDiv('printMe')">
-                                <i class="fas fa-print"></i> In dữ liệu
-                            </a>
-                        </div>*@
-                       @* <div class="col-sm-4">
+                        </p>*@
+                      
+                        @*<div class="col-sm-4">
                         @using (Html.BeginForm("QLDonHang", "KeToan", FormMethod.Post, new { @clas = "" }))
                         {
                         <div class="row">
@@ -62,7 +55,8 @@
                                             @*<th class="sorting" tabindex="0" aria-controls="sampleTable">Hình</th>*@
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Mã</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Họ tên</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Chức vụ</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Loại khách hàng</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Loại tài khoản</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">SĐT</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Email</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Status</th>
@@ -75,9 +69,9 @@
                                         {
                                             <tr>
                                                 @*<td>
-                                                    <img width="30" height="30" id="imguser-@item.idUser" onchange="GetImgUser('@item.idUser')">
+                                            <img width="30" height="30" id="imguser-@item.idUser" onchange="GetImgUser('@item.idUser')">
 
-                                                </td>*@
+                                            </td>*@
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.idUser)
                                                 </td>
@@ -88,12 +82,15 @@
                                                     @Html.DisplayFor(modelItem => item.idChucVu)
                                                 </td>
                                                 <td>
+                                                    @Html.DisplayFor(modelItem => item.idLoaiTK)
+                                                </td>
+                                                <td>
                                                     @Html.DisplayFor(modelItem => item.sdtUsers)
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.emailUser)
                                                 </td>
-                                            
+
                                                 @if (item.trangThai)
                                                 {
                                                     <td>
@@ -108,20 +105,17 @@
                                                     </td>
                                                 }
 
-                                                  <td>
-                                                      @if (item.idUser != users.idUser)
-                                                     {
-                                                  
-                                                        <a href="/Admin/EditUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
-                                                        <a href="/Admin/DetailUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
-                                                            <i class="fas fa-info-circle"></i>
-                                                        </a>
-                                                    }
-                                                    </td>
-                                                
-                                                
+                                                <td>
+                                                 <a href="/Admin/EditGuest/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
+                                                  <i class="fas fa-edit"></i>
+                                                 </a>
+                                                <a href="/Admin/DetailUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
+                                                    <i class="fas fa-info-circle"></i>
+                                                 </a>
+                                                    
+                                                </td>
+
+
                                             </tr>
 
                                         }
@@ -130,44 +124,9 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
     </div>
 
 </div>
-
-<script>
-    ////In dữ liệu
-    //function printDiv(divName) {
-    //    var printContents = document.getElementById(divName).innerHTML;
-    //    var originalContents = document.body.innerHTML;
-
-    //    document.body.innerHTML = printContents;
-
-    //    window.print();
-
-    //    document.body.innerHTML = originalContents;
-
-    //}
-    function GetImgUser(id) {
-        var url = "https://localhost:7034/api/Users/GetImage?id=" + id;
-
-        fetch(url)
-            .then(function (response) {
-                return response.blob();
-            })
-            .then(function (data) {
-                var img = document.getElementById("imguser-" + id);
-                img.src = URL.createObjectURL(data);
-                img.style.visibility = "visible";
-            })
-            .catch(function (error) {
-                console.log("Error: " + error);
-            });
-    }
-</script>
-
-

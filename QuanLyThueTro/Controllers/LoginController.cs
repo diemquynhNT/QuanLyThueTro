@@ -27,11 +27,11 @@ namespace QuanLyThueTro.Controllers
             _appSettings = optionsMonitor.CurrentValue;
         }
 
-        [HttpPost("Login")]
+        [HttpPost("LoginEmployee")]
         public IActionResult Validate(LoginModel model)
         {
             var user = _context.users.SingleOrDefault(p => p.userName == model.userName
-            && model.password == p.passwordUser && p.trangThai==true);
+            && model.password == p.passwordUser && p.trangThai==true && (p.idChucVu == "NVKD" || p.idChucVu == "Admin"));
 
             if (user == null)
                 return BadRequest();
@@ -42,6 +42,22 @@ namespace QuanLyThueTro.Controllers
                 Data = GenerateToken(user)
             });
         }
+        [HttpPost("LoginGuest")]
+        public IActionResult LoginGuest(LoginModel model)
+        {
+            var user = _context.users.SingleOrDefault(p => p.userName == model.userName
+            && model.password == p.passwordUser && p.trangThai == true && (p.idChucVu == "CT" || p.idChucVu == "NT"));
+
+            if (user == null)
+                return BadRequest();
+            return Ok(new
+            {
+                Success = true,
+                Message = "Authentication success",
+                Data = GenerateToken(user)
+            });
+        }
+
 
 
         private string GenerateToken(Users u)

@@ -48,7 +48,7 @@ namespace Client_QuanLythueTro.Controllers
                 password = password
             };
 
-            var response = await _httpClient.PostAsJsonAsync("https://localhost:7034/api/Login/Login", data);
+            var response = await _httpClient.PostAsJsonAsync("https://localhost:7034/api/Login/LoginEmployee", data);
             if (response.IsSuccessStatusCode)
             {
                 var token = await response.Content.ReadAsStringAsync();
@@ -61,9 +61,6 @@ namespace Client_QuanLythueTro.Controllers
                 var id = payloadObject["idUser"]?.Value<string>();
                 Users u = apiGateWay.GetUser(id);
                 var userJson = JsonConvert.SerializeObject(u);
-
-             
-
                 HttpContext.Session.SetString("user", userJson);
 
                 var role = payloadObject["roles"]?.Value<string>();
@@ -96,6 +93,49 @@ namespace Client_QuanLythueTro.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> LoginCustomer(string username, string password)
+        {
+            var data = new
+            {
+                userName = username,
+                password = password
+            };
+
+            var response = await _httpClient.PostAsJsonAsync("https://localhost:7034/api/Login/LoginGuest", data);
+            if (response.IsSuccessStatusCode)
+            {
+                var token = await response.Content.ReadAsStringAsync();
+
+                var tokenParts = token.Split('.');
+                var encodedPayload = tokenParts[1];
+                var decodedPayload = Base64UrlDecode(encodedPayload);
+                var decodedPayloadString = Encoding.UTF8.GetString(decodedPayload);
+                var payloadObject = JObject.Parse(decodedPayloadString);
+                var id = payloadObject["idUser"]?.Value<string>();
+
+                Users u = apiGateWay.GetUser(id);
+                var userJson = JsonConvert.SerializeObject(u);
+                HttpContext.Session.SetString("user", userJson);
+
+                var role = payloadObject["roles"]?.Value<string>();
+                TempData["error"] = "thanhcong";
+                if (role == "CT")
+                {
+                    return RedirectToAction("TrangChu", "NVKD");
+                }
+                else if (role == "NT")
+                    return RedirectToAction("TrangChu", "");
+
+                return View();
+
+            }
+            else
+            {
+                TempData["error"] = "loginfailed";
+                return View("LoginCustomer");
+            }
+        }
         public IActionResult Register()
         {
             Users u = new Users();
@@ -105,11 +145,15 @@ namespace Client_QuanLythueTro.Controllers
         public IActionResult Register(Users u,IFormFile hinh)
         {
             u.Avatar = hinh;
-            u.idLoaiTK = "TAC5066216";
+            u.idLoaiTK = "BT";
             u.ngayThamGia = DateTime.Today;
             apiGateWay.CreateUser(u);
-            TempData["mess"] = "oke";
+            TempData["error"] = "dangkithanhcong";
             return View("LoginCustomer");
+        }
+        public IActionResult QuenMatKhau()
+        {
+            return View();
         }
     }
 }

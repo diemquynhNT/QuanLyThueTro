@@ -1,12 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MailKit.Security;
+using Microsoft.EntityFrameworkCore;
+using MimeKit;
 using QuanLyThueTro.Data;
 using QuanLyThueTro.Model;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
+using MailKit.Net.Smtp;
+using SmtpClient = MailKit.Net.Smtp.SmtpClient;
+using System;
 
 namespace QuanLyThueTro.Services
 {
-    public class UserService:IUsers
+    public class UserService : IUsers
     {
         private MyDBContext _context;
         private GenerateAlphanumericId getId;
@@ -14,6 +20,7 @@ namespace QuanLyThueTro.Services
         public UserService(MyDBContext context)
         {
             _context = context;
+            getId = new GenerateAlphanumericId();
         }
         public bool ValidatePassword(string password)
         {
@@ -45,35 +52,43 @@ namespace QuanLyThueTro.Services
             return false;
         }
 
-        public async Task<Users> ResetAccount(Users user)
+        public bool ResetAccount(String id)
         {
-            //user.statusUser = true;
-            //var newPassword = generateId.GenerateId(5);
-            //user.passWord = newPassword;
+            var user = _context.users.Where(t => t.idUser == id).FirstOrDefault();
+            if (user == null)
+                return false;
 
-            //var message = new MimeMessage();
-            //message.From.Add(new MailboxAddress("Contact", "contactcentersgt@gmail.com"));
-            //message.To.Add(new MailboxAddress("Tên người nhận", user.emailAddress));
-            //message.Subject = "Reset Account";
-            //message.Body = new TextPart("plain")
-            //{
-            //    Text = "new password: " + newPassword
-            //};
+                 user.trangThai = true;
+                var newPassword = getId.GenerateId(8);
+                user.passwordUser = newPassword;
 
-            //// Cấu hình SmtpClient
-            //using (var smtpClient = new SmtpClient())
-            //{
-            //    smtpClient.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-            //    smtpClient.Authenticate("contactcentersgt@gmail.com", "akoi wjtt rpzd xpmw");
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Contact", "contactcentersgt@gmail.com"));
+                message.To.Add(new MailboxAddress("Tên người nhận", user.emailUser));
+                message.Subject = "Reset Account";
+                message.Body = new TextPart("plain")
+                {
+                    Text = "Mật khẩu đăng nhập mới: " + newPassword
+                };
 
-            //    // Gửi email
-            //    smtpClient.Send(message);
+                // Cấu hình SmtpClient
+                using (var smtpClient = new SmtpClient())
+                {
+                    smtpClient.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                    smtpClient.Authenticate("contactcentersgt@gmail.com", "akoi wjtt rpzd xpmw");
 
-            //    // Đóng kết nối
-            //    smtpClient.Disconnect(true);
-            //    _context.SaveChanges();
-                return user;
-            }
+                    // Gửi email
+                    smtpClient.Send(message);
+
+                    // Đóng kết nối
+                    smtpClient.Disconnect(true);
+                  
+                }
+                _context.SaveChanges();
+                return true;
+
+
+        }
         
 
         public async Task<Users> TerminateUser(Users user)
@@ -94,6 +109,34 @@ namespace QuanLyThueTro.Services
             }
             return null;
 
+        }
+
+        public bool QuenMatKhau(string email)
+        {
+            var user = _context.users.Where(t => t.emailUser == email).FirstOrDefault();
+            if (user == null)
+                return false;
+
+            var newPassword = getId.GenerateId(8);
+            user.passwordUser = newPassword;
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("Contact", "contactcentersgt@gmail.com"));
+            message.To.Add(new MailboxAddress("Tên người nhận", user.emailUser));
+            message.Subject = "Quên mật khẩu";
+            message.Body = new TextPart("plain")
+            {
+                Text = "Mật khẩu đăng nhập mới: " + newPassword
+            };
+
+            using (var smtpClient = new SmtpClient())
+            {
+                smtpClient.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                smtpClient.Authenticate("contactcentersgt@gmail.com", "akoi wjtt rpzd xpmw");
+                smtpClient.Send(message);
+                smtpClient.Disconnect(true);
+            }
+            _context.SaveChanges();
+            return true;
         }
     }
 }

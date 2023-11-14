@@ -6,7 +6,8 @@ namespace QuanLyThueTro.Services
     {
         public Task<Users> TerminateUser(Users user);
         // khoi phuc va gui mk moi cho mail
-        public Task<Users> ResetAccount(Users user);
+        public bool ResetAccount(String id);
+        public bool QuenMatKhau(String email);
         public bool ValidatePassword(string password);
         public bool ValidateEmail(string password);
         public bool ValidatePhone(string password);

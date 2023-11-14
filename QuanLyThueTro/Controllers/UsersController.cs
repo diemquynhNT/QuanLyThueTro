@@ -52,7 +52,16 @@ namespace QuanLyThueTro.Controllers
             {
                 return NotFound();
             }
-            return await _context.users.Where(t=>t.idLoaiTK=="NV").ToListAsync();
+            return await _context.users.Where(t=>t.idChucVu=="NVKD" || t.idChucVu=="Admin").ToListAsync();
+        }
+        [HttpGet("GetGuest")]
+        public async Task<ActionResult<IEnumerable<Users>>> GetGuest()
+        {
+            if (_context.users == null)
+            {
+                return NotFound();
+            }
+            return await _context.users.Where(t => t.idChucVu == "CT" || t.idChucVu == "NT").ToListAsync();
         }
 
         // GET: api/Users/5
@@ -285,6 +294,19 @@ namespace QuanLyThueTro.Controllers
             }
 
 
+        }
+
+        [HttpPut("ResetAccount")]
+        public async Task<IActionResult> ResetAccount([FromForm]string idUser)
+        {
+            bool result = _iusers.ResetAccount(idUser);
+            return Ok(result);
+        }
+        [HttpPut("QuenMatKhau")]
+        public async Task<IActionResult> QuenMatKhau([FromForm]string email)
+        {
+            bool result= _iusers.QuenMatKhau(email);
+            return Ok(result);
         }
 
 
