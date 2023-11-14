@@ -52,16 +52,6 @@ namespace Client_QuanLythueTro.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var token = await response.Content.ReadAsStringAsync();
-               
-                //var cookieOptions = new CookieOptions
-                //{
-                //    Expires = DateTime.UtcNow.AddDays(1),
-                //    HttpOnly = true,
-                //    SameSite = SameSiteMode.Strict,
-                //    Secure = true
-                //};
-
-                //Response.Cookies.Append("access_token", token, cookieOptions);
                 
                 var tokenParts = token.Split('.');
                 var encodedPayload = tokenParts[1];
@@ -102,5 +92,24 @@ namespace Client_QuanLythueTro.Controllers
             return RedirectToAction("Login");
         }
 
+        public IActionResult LoginCustomer()
+        {
+            return View();
+        }
+        public IActionResult Register()
+        {
+            Users u = new Users();
+            return View(u);
+        }
+        [HttpPost]
+        public IActionResult Register(Users u,IFormFile hinh)
+        {
+            u.Avatar = hinh;
+            u.idLoaiTK = "TAC5066216";
+            u.ngayThamGia = DateTime.Today;
+            apiGateWay.CreateUser(u);
+            TempData["mess"] = "oke";
+            return View("LoginCustomer");
+        }
     }
 }

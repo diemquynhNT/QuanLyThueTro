@@ -50,7 +50,8 @@
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Loại</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Thông tin liên hệ</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Khu vực</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Status</th>>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Status</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Hạn</th>>
                                             <th class="sorting">Chức năng</th>
 
                                         </tr>
@@ -89,6 +90,9 @@
                                                         Chưa duyệt
                                                     </td>
                                                 }
+                                                <td>
+                                                    @item.ngayBatDau - @item.ngayKetThuc
+                                                </td>
                                                 
                                                 <td>
                                                     <a href="/NVKD/EditTin/@item.idTinDang" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">

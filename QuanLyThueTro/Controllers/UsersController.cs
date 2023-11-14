@@ -119,7 +119,10 @@ namespace QuanLyThueTro.Controllers
                   return Problem("Entity set 'MyDBContext.users'  is null.");
               }
             users.trangThai = true;
-            users.idUser = "NV" + random.GenerateId(5);
+            if(users.idChucVu=="Admin"|| users.idChucVu == "NVKD")
+                users.idUser = "NV" + random.GenerateId(5);
+            users.idUser = "KH" + random.GenerateId(5);
+
             if (userModel.imge.Length > 0)
             {
                 string path = _webHostEnvironment.WebRootPath + "\\img\\";
@@ -211,16 +214,6 @@ namespace QuanLyThueTro.Controllers
         [HttpGet("ValidatePass")]
         public IActionResult ValidatePass(string pass,string repass)
         {
-            //if(id!=null)
-            //{
-            //    var user = _context.users.SingleOrDefault(t => t.idUser == id);
-            //    if (user == null)
-            //    {
-            //        return NotFound();
-            //    }
-            //    if (pass != user.passwordUser)
-            //        return Ok(false);
-            //}    
                 bool validate = _iusers.ValidatePassword(pass);
                 if (!validate)
                     return Ok(false);
