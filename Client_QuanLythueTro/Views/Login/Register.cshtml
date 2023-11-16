@@ -1,0 +1,312 @@
+﻿@model Client_QuanLythueTro.Models.Users
+
+@{
+   
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+</head>
+<body>
+    @if (TempData["errorInfo"] != null)
+    {
+        <script>
+            swal({
+                title: "@TempData["errorInfo"]",
+                icon: "warning",
+                button: "Thoát",
+            });
+        </script>
+    }
+    <form asp-action="Register" enctype="multipart/form-data">
+        <div class="container">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.idUser)
+            @Html.HiddenFor(model => model.ngayThamGia)
+            @Html.HiddenFor(model => model.idLoaiTK)
+            @Html.HiddenFor(model => model.trangThai)
+            @Html.HiddenFor(model => model.Avatar)
+            <div class="bg-white shadow rounded-lg d-block d-sm-flex">
+
+                <div class="profile-tab-nav border-right">
+                    <div class="p-4">
+                        <h4>Chọn hình đại diện</h4>
+                        <div style="width: 100%; height: auto; border-radius:50%;">
+                            <br />
+@*                            @Html.TextBox("hinhAnh", "", new { type = "file" })
+                            *@                           
+                            <input type="file" class="hinh" id="hinh" required name="hinh" multiple accept="image/png, image/jpeg, image/jpg">
+                            <br />
+                            <br />
+                            <img id="preview" src="#" width="95px" height="95px" style="visibility: hidden; border-radius: 50%; margin-bottom: 20px;" />
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+                        <h3 class="mb-4">Thông tin cá nhân</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Họ và tên</label>
+                                    @Html.EditorFor(model => model.hoTen, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                    @Html.ValidationMessageFor(model => model.hoTen, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Số điện thoại</label>
+                                    @Html.EditorFor(model => model.sdtUsers, new { htmlAttributes = new { @class = "form-control", required = "required",@id="sdtUsers",onchange = "ValidatePhone()" } })
+                                    @Html.ValidationMessageFor(model => model.sdtUsers, "", new { @class = "text-danger" })
+                                    <p id="checkPhone"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    @Html.EditorFor(model => model.emailUser, new { htmlAttributes = new { @class = "form-control", required = "required", @id = "emailUser", onchange = "ValidateEmail()" } })
+                                    @Html.ValidationMessageFor(model => model.emailUser, "", new { @class = "text-danger" })
+                                    <span id="mess"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Giới tính</label>
+                                    <select name="gioiTinh" class="form-control form-select">
+                                        <option value="Nam">Nam</option>
+                                        <option value="Nu">Nữ</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Loại tài khoản</label>
+                                    <select name="idChucVu" class="form-control form-select">
+                                        <option value="CT">Chủ thuê</option>
+                                        <option value="NT">Người đi thuê</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="mb-4">Tài khoản</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Username</label>
+                                    @Html.EditorFor(model => model.userName, new { htmlAttributes = new { @class = "form-control", required = "required", @placeholder = "Tên đăng nhập", @id = "Username", onchange = "ValidateUserName()" } })
+                                    @Html.ValidationMessageFor(model => model.userName, "", new { @class = "text-danger" })
+                                    <span id="status"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    @Html.EditorFor(model => model.passwordUser, new { htmlAttributes = new { @class = "form-control", @type = "password",@id="passwordUser",@placeholder = "Nhập mật khẩu" } })
+                                    @Html.ValidationMessageFor(model => model.passwordUser, "", new { @class = "text-danger" })
+                                    <span class="focus-input100"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Nhập lại password</label>
+                                    <input class="form-control col-md-12 text-box single-line" type="password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Xác thực mật khẩu" onchange="ValidatePass()" />
+                              
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div style="text-align: center; margin-top: 10px;">
+                                <input class="btn btn-outline-dark btn-sm" type="submit" id="btnSave" value="Đăng ký ngay" />
+                                <br /> <hr />
+                                <span>Bạn đã có tài khoản?</span>
+                                <a class="" href="/Guest/LoginGuest"><u>Đăng nhập</u></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    
+
+    <script>
+        hinh.onchange = evt => {
+            const [file] = hinh.files
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                document.getElementById("preview").style.visibility = "visible";
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+        function setColorSuccess(index, idInput) {
+            document.getElementById(index).style.borderColor = "green";
+            document.getElementById("btnSave").style.visibility = "visible";
+            
+        }
+        function setColorFailed(index, idInput,mess) {
+            document.getElementById(index).style.borderColor = "red";
+            alert(mess)
+            document.getElementById("btnSave").style.visibility = "hidden";
+        }
+
+        function ValidateUserName() {
+            var index = document.getElementById("Username").value;
+            console.log("user" + index)
+            url = "https://localhost:7034/api/Users/ValidateUserName?index=" + index;
+            console.log(url)
+
+            fetch(url)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    console.log("data" + data);
+                    if (data === true) {
+                        setColorSuccess("Username", "status");
+                    } else {
+                        setColorFailed("Username", "status", "Đã có người sử dụng!!!")
+                    }
+
+                })
+                .catch(function (error) {
+                    console.log("Error: " + error);
+                });
+        }
+
+        function ValidatePhone() {
+            var index = document.getElementById("sdtUsers").value;
+            url = "https://localhost:7034/api/Users/ValidatePhone?index=" + index;
+            console.log(url)
+            fetch(url)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    console.log("data" + data);
+                    if (data === true) {
+                        setColorSuccess("sdtUsers", "checkPhone")
+                    } else {
+                        setColorFailed("sdtUsers", "checkPhone", "SDT chưa hợp lệ !!!")
+                    }
+
+                })
+                .catch(function (error) {
+                    console.log("Error: " + error);
+                });
+        }
+
+        function ValidateEmail() {
+            var index = document.getElementById("emailUser").value;
+            url = "https://localhost:7034/api/Users/ValidateEmail?index=" + index;
+            console.log(url)
+
+            fetch(url)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    console.log("data" + data);
+                    if (data === true) {
+                        setColorSuccess("emailUser","mess")
+                    } else {
+                        setColorFailed("emailUser", "mess", "Email chưa hợp lệ !!!")
+                    }
+
+                })
+                .catch(function (error) {
+                    console.log("Error: " + error);
+                });
+        }
+       
+        function ValidatePass() {
+            var p1 = document.getElementById('passwordUser').value;
+            var p2 = document.getElementById('ConfirmPassword').value;
+            console.log("p" + p1 + " " + p2);
+            var url = `https://localhost:7034/api/Users/ValidatePass?pass=${p1}&repass=${p2}`;
+            fetch(url)
+                .then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                })
+                .then(function (data) {
+                    console.log("data", data);
+                    if (data === true) {
+                        document.getElementById("passwordUser").style.borderColor = "green";
+                        document.getElementById("ConfirmPassword").style.borderColor = "green";
+                        document.getElementById("btnSave").style.visibility = "visible";
+                    } else {
+                        document.getElementById("passwordUser").style.borderColor = "red";
+                        document.getElementById("ConfirmPassword").style.borderColor = "red";
+                        document.getElementById("btnSave").style.visibility = "hidden";
+
+                    }
+                })
+                .catch(function (error) {
+                    console.error("Error:", error);
+                });
+        }
+
+
+
+        
+
+
+    </script>
+
+    <script type="text/javascript">
+        //show - hide mật khẩu
+        function myFunction() {
+            var x = document.getElementById("myInput");
+            if (x.type === "password") {
+                x.type = "text"
+            } else {
+                x.type = "password";
+            }
+        }
+        $(".click-eye").click(function () {
+            $(this).toggleClass("bx-show bx-hide");
+            var input = $($(this).attr("toggle"));
+            if (input.attr("type") == "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
+            }
+        });
+        const ipnElement = document.querySelector('#UserPassword')
+        const spanElement = document.querySelector('#spanElement')
+        // step 2
+        spanElement.addEventListener('click', function () {
+            // step 3
+            const currentType = ipnElement.getAttribute('type')
+            // step 4
+            ipnElement.setAttribute(
+                'type',
+                currentType === 'password' ? 'text' : 'password'
+            )
+        })
+    </script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #00A8AA;
+            background: -webkit-linear-gradient(-135deg,#0D4671,#92E1E2);
+            background: -o-linear-gradient(-135deg,#0D4671,#92E1E2);
+            background: -moz-linear-gradient(-135deg,#0D4671,#92E1E2);
+            background: linear-gradient(-135deg,#0D4671,#92E1E2) background-size: cover;
+            background-repeat: no-repeat;
+        }
+    </style>
+</body>
+</html>

@@ -25,10 +25,9 @@ namespace QuanLyThueTro.Dto
         [Required]
         public string gioiTinh { get; set; }
 
-        public string? hinhAnh { get; set; }
-
         public string? idChucVu { get; set; }
 
         public string? idLoaiTK { get; set; }
+        public IFormFile imge { get; set; }
     }
 }

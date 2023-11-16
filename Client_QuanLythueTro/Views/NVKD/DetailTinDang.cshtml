@@ -80,60 +80,13 @@
                         </table>
                     </div>
                 </div>
-                
-
-
-                @*<div class="row element-button">
-
+                <div class="row element-button">
                     <a class="btn btn-delete btn-sm print-file" title="In" onclick="myApp.printTable()">
                         <i class="fas fa-print"></i> In dữ liệu
                     </a>
-
-                </div>*@
-                <div>
-                    <a class="btn btn-warning" href="/NVKD/QuanLyTinDang"> Trở lại</a>
-                    <a class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Delete" data-target="#Duyet-@Model.idTinDang" data-toggle="modal">
-                       Duyệt tin
-                    </a>
-                    <form asp-controller="NVKD" asp-action="DuyetTin" asp-route-id="@Model.idTinDang" method="post">
-                        <div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" tabindex="-1" role="dialog" id="Duyet-@Model.idTinDang">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Duyệt tin @Model.idTinDang</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <label for="status">SĐT liên hệ</label>
-                                            <select class="form-control" id="status" name="status" required>
-                                                <option selected="selected">@Model.trangThaiTinDang</option>
-                                                <option value="true">True</option>
-                                                <option value="false">False</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                        <input type="submit" value="Xác nhận" class="btn btn-danger" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </form>
                 </div>
-
-
             </div>
         </div>
-        <form method="post" enctype="multipart/form-data" asp-action="SaveImages">
-            <input type="hidden" name="tinId" value="@Model.idTinDang" />
-            <input type="file" name="file" multiple accept="image/*" />
-            <input type="submit" value="Upload" />
-        </form>
     </div>
 
 </div>

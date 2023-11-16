@@ -4,6 +4,7 @@ using QuanLyThueTro.Data;
 using QuanLyThueTro.Dto;
 using QuanLyThueTro.Model;
 using QuanLyThueTro.Services;
+using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -29,13 +30,11 @@ namespace QuanLyThueTro.Controllers
             return _context.GetAll();
         }
         [HttpGet("Filter")]
-        public List<TinDang> Filter(int thang,bool status)
+        public List<TinDang> Filter(int thang, bool status)
         {
             return _context.Filter(thang, status);
         }
 
-        // GET api/<TinDangController>/5
-        //Detail
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(string id)
         {
@@ -44,7 +43,7 @@ namespace QuanLyThueTro.Controllers
                 TinDangVM tinvm = new TinDangVM();
                 var tin = _context.GetTinDangById(id);
                 var phong = _context.GetPhongById(id);
-                if(tin==null || phong ==null)
+                if (tin == null || phong == null)
                     return NotFound();
                 _mapper.Map(tin, tinvm);
                 _mapper.Map(phong, tinvm);
@@ -56,7 +55,7 @@ namespace QuanLyThueTro.Controllers
             }
 
         }
-      
+
         [HttpPost]
         public async Task<ActionResult> AddTin([FromBody] TinDangModel tin)
         {
@@ -64,16 +63,39 @@ namespace QuanLyThueTro.Controllers
             {
                 var tinDang = _mapper.Map<TinDang>(tin);
                 var phong = _mapper.Map<PhongTro>(tin);
-                await _context.AddTinDang(tinDang,phong);
-
-                return Ok("thanh cong");
+                await _context.AddTinDang(tinDang, phong);
+                var u = _context.GetTinDangById(tinDang.idTinDang);
+                //foreach (var f in tin.listimg)
+                //{
+                //    _context.AddHinhanh(u.idTinDang, f);
+                //}
+                return Ok(u);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
+        [HttpPost("AddImageToTinDang")]
+        public async Task<ActionResult> AddImageToTinDang(List<IFormFile> list,string id )
+        {
+            try
+            {
+                if (list.Count == 0)
+                    return BadRequest();
+                foreach (var f in list)
+                {
+                    _context.AddHinhanh(id, f);
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, [FromBody] TinDangModel tinvVM)
         {
@@ -113,24 +135,31 @@ namespace QuanLyThueTro.Controllers
             }
         }
         [HttpPut("DuyetTin")]
-        public async Task<ActionResult> DuyetTin(string id,bool status)
+        public async Task<ActionResult> DuyetTin(string id)
         {
             try
             {
                 var tin=_context.GetTinDangById(id);
                 if (tin == null)
                     return NotFound();
-                _context.DuyetTin(tin, status);
-                ActionResult tinvmResult = await GetById(id);
-                if (tinvmResult is OkObjectResult okObjectResult)
-                {
-                    var tinvm = okObjectResult.Value;
-                    return CreatedAtAction("GetById", new { id = id }, tinvm);
-                }
-                else
-                {
-                    return BadRequest("");
-                }
+                _context.DuyetTin(tin);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        [HttpPut("HuyDuyetTin")]
+        public async Task<ActionResult> HuyDuyetTin(string id)
+        {
+            try
+            {
+                var tin = _context.GetTinDangById(id);
+                if (tin == null)
+                    return NotFound();
+                _context.HuyDuyetTin(tin);
+                return Ok();
             }
             catch (Exception)
             {
@@ -138,17 +167,15 @@ namespace QuanLyThueTro.Controllers
             }
         }
 
-        [HttpPost("SaveImages")]
-        public async Task<IActionResult> AddHinhanh(string tinId, IFormFile file)
+        [HttpPost("GetImage")]
+        public async Task<IActionResult> GetImage(string tinId)
         {
             var tinDang =  _context.GetTinDangById(tinId);
             if (tinDang == null)
             {
                 return NotFound();
             }
-            if (file == null)
-                return BadRequest();
-            _context.AddHinhanh(tinId, file);
+            
 
             return Ok("thanh cong");
         }

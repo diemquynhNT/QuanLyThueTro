@@ -28,7 +28,6 @@ namespace QuanLyThueTro.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/LoaiTaiKhoans
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LoaiTaiKhoan>>> GetloaiTaiKhoans()
         {
@@ -102,9 +101,10 @@ namespace QuanLyThueTro.Controllers
           {
               return Problem("Entity set 'MyDBContext.loaiTaiKhoans'  is null.");
           }
-            if (!_extensionService.IsNotExistNameLoaiTK(loaiTaiKhoan))
-                return BadRequest("Tên loại tài khoản đã tồn tại!");
+            //if (!_extensionService.IsNotExistNameLoaiTK(loaiTaiKhoan))
+            //    return BadRequest("Tên loại tài khoản đã tồn tại!");
             _extensionService.AutoPK_LoaiTK(loaiTaiKhoan) ;
+            loaiTaiKhoan.trangThaiSuDung = true;
             _context.loaiTaiKhoans.Add(loaiTaiKhoan);
             try
             {

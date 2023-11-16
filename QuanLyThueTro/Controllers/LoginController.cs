@@ -27,11 +27,26 @@ namespace QuanLyThueTro.Controllers
             _appSettings = optionsMonitor.CurrentValue;
         }
 
-        [HttpPost("Login")]
+        [HttpPost("LoginEmployee")]
         public IActionResult Validate(LoginModel model)
         {
             var user = _context.users.SingleOrDefault(p => p.userName == model.userName
-            && model.password == p.passwordUser);
+            && model.password == p.passwordUser && p.trangThai==true && (p.idChucVu == "NVKD" || p.idChucVu == "Admin"));
+
+            if (user == null)
+                return BadRequest();
+            return Ok(new
+            {
+                Success = true,
+                Message = "Authentication success",
+                Data = GenerateToken(user)
+            });
+        }
+        [HttpPost("LoginGuest")]
+        public IActionResult LoginGuest(LoginModel model)
+        {
+            var user = _context.users.SingleOrDefault(p => p.userName == model.userName
+            && model.password == p.passwordUser && p.trangThai == true && (p.idChucVu == "CT" || p.idChucVu == "NT"));
 
             if (user == null)
                 return BadRequest();
@@ -44,6 +59,7 @@ namespace QuanLyThueTro.Controllers
         }
 
 
+
         private string GenerateToken(Users u)
         {
             var jwtToken = new JwtSecurityTokenHandler();
@@ -54,8 +70,7 @@ namespace QuanLyThueTro.Controllers
                 Subject = new ClaimsIdentity(new[]
                 {
             new Claim(ClaimTypes.Name, u.hoTen),
-            new Claim("Id", u.idUser.ToString()),
-            new Claim("ImageUrl", u.hinhAnh)
+            new Claim("idUser", u.idUser.ToString())
             }),
 
                 Expires = DateTime.UtcNow.AddMinutes(1),

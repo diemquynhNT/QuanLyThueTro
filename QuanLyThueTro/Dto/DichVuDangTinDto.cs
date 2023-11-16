@@ -10,8 +10,9 @@ namespace QuanLyThueTro.Dto
         public string loaiDichVu { get; set; }
         [Required]
         public float giaCa { get; set; }
-
         [Required]
         public int hanDung { get; set; }
+
+        public int viTriHienThi { get; set; }
     }
 }

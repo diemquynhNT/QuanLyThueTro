@@ -14,48 +14,48 @@ namespace Client_QuanLythueTro.Controllers
         {
             this.apiGateWay = aPIGate;
         }
-        private byte[] Base64UrlDecode(string input)
-        {
-            string base64 = input.Replace('-', '+').Replace('_', '/');
-            while (base64.Length % 4 != 0)
-            {
-                base64 += '=';
-            }
-            return Convert.FromBase64String(base64);
-        }
-        public string GetIdUser()
-        {
-            string token = Request.Cookies["access_token"];
-            var tokenParts = token.Split('.');
-            var encodedPayload = tokenParts[1];
-            var decodedPayload = Base64UrlDecode(encodedPayload);
-            var decodedPayloadString = Encoding.UTF8.GetString(decodedPayload);
-            var payloadObject = JObject.Parse(decodedPayloadString);
-            var img = payloadObject["ImageUrl"]?.Value<string>();
-            return img;
-        }
-        // GET: AdminController
+        
         public ActionResult TrangChuAdmin()
         {
-            ViewBag.UserImageUrl = GetIdUser();
+            
             return View();
         }
         public ActionResult QuanLyNhanVien()
         {
+
             List<Users> listEmloyee = apiGateWay.ListEmployee();
             return View(listEmloyee);
         }
 
+        public ActionResult QuanLyKhachHang()
+        {
+
+            List<Users> list = apiGateWay.ListGuest();
+            return View(list);
+        }
+        public JsonResult ValidatePass(string pass1,string pass2)
+        {
+            System.Threading.Thread.Sleep(200);
+            if (pass1 == pass2)
+            {
+                return Json(1);
+            }
+            else
+            {
+                return Json(0);
+            }
+
+        }
         public ActionResult DetailUsers(string id)
         {
-            ViewBag.UserImageUrl = GetIdUser();
+      
             Users users = apiGateWay.GetUser(id);
             return View(users);
         }
 
         public ActionResult CreateUser()
         {
-            ViewBag.UserImageUrl = GetIdUser();
+   
             Users u = new Users();
             return View(u);
         }
@@ -63,23 +63,32 @@ namespace Client_QuanLythueTro.Controllers
         // POST: AdminController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateUser(Users u)
+        public ActionResult CreateUser(Users u,IFormFile Avatar)
         {
             try
             {
+                
+                u.Avatar = Avatar;
                 apiGateWay.CreateUser(u);
+                TempData["mess"] = "oke";
                 return RedirectToAction("QuanLyNhanVien");
             }
             catch
             {
+                TempData["mess"] = "loi";
                 return View();
             }
         }
-
+        // GET: AdminController/Edit/5
+        public ActionResult EditProfile(string id)
+        {
+            Users users = apiGateWay.GetUser(id);
+            return View(users);
+        }
         // GET: AdminController/Edit/5
         public ActionResult EditUsers(string id)
         {
-            ViewBag.UserImageUrl = GetIdUser();
+
             Users users = apiGateWay.GetUser(id);
             return View(users);
         }
@@ -112,6 +121,49 @@ namespace Client_QuanLythueTro.Controllers
             {
                 return View();
             }
+        }
+
+        [HttpPost]
+        public ActionResult ChangePassword(string id,string newPass)
+        {
+            try
+            {
+                apiGateWay.ChangePass(id,newPass);
+                ViewBag.thongbao = "thanhcong";
+                return RedirectToAction("EditUser/" + id);
+            }
+            catch
+            {
+                return RedirectToAction("EditUser/" + id);
+            }
+        }
+
+        public ActionResult EditGuest(string id)
+        {
+
+            Users users = apiGateWay.GetUser(id);
+            return View(users);
+        }
+
+        // POST: AdminController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditGuest(Users u)
+        {
+            try
+            {
+                apiGateWay.UpdateUsers(u);
+                return RedirectToAction("QuanLyKhachHang");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        public ActionResult DetailGuest(string id)
+        {
+            Users users = apiGateWay.GetUser(id);
+            return View(users);
         }
     }
 }

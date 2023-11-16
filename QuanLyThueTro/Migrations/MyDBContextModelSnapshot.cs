@@ -82,6 +82,12 @@ namespace QuanLyThueTro.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<bool>("trangThaiSuDung")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("viTriHienThi")
+                        .HasColumnType("int");
+
                     b.HasKey("idDichVu");
 
                     b.ToTable("dichVuDangTins");
@@ -181,10 +187,16 @@ namespace QuanLyThueTro.Migrations
                     b.Property<int>("hanDung")
                         .HasColumnType("int");
 
+                    b.Property<int>("soLuongDangTai")
+                        .HasColumnType("int");
+
                     b.Property<string>("tenLoaiTK")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("trangThaiSuDung")
+                        .HasColumnType("bit");
 
                     b.HasKey("idLoaiTK");
 
@@ -294,6 +306,9 @@ namespace QuanLyThueTro.Migrations
                     b.Property<string>("idKhuVuc")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("idUser")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("loaiTin")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -337,11 +352,11 @@ namespace QuanLyThueTro.Migrations
                     b.HasIndex("idDichVu");
 
                     b.HasIndex("idKhuVuc");
+                    
+                    b.HasIndex("idUser");
 
-                    b.ToTable("tinDangs", t =>
-                        {
-                            t.HasTrigger("tr_ThemTinSLPhong");
-                        });
+                    b.ToTable("tinDangs");
+
                 });
 
             modelBuilder.Entity("QuanLyThueTro.Model.TinYeuThich", b =>
@@ -496,9 +511,15 @@ namespace QuanLyThueTro.Migrations
                         .WithMany("TinDangs")
                         .HasForeignKey("idKhuVuc");
 
+                    b.HasOne("QuanLyThueTro.Model.Users", "users")
+                        .WithMany("tinDangs")
+                        .HasForeignKey("idUser");
+
                     b.Navigation("dichVuDangTin");
 
                     b.Navigation("khuVucs");
+
+                    b.Navigation("users");
                 });
 
             modelBuilder.Entity("QuanLyThueTro.Model.TinYeuThich", b =>
@@ -581,6 +602,8 @@ namespace QuanLyThueTro.Migrations
                     b.Navigation("GiaoDiches");
 
                     b.Navigation("reviews");
+
+                    b.Navigation("tinDangs");
 
                     b.Navigation("tinYeuThiches");
                 });

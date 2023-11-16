@@ -14,12 +14,12 @@
                     <div class="row" style="padding:10px;">
                         <p>
                             <a asp-action="CreateTinDang" class="btn btn-success btn-sm">Thêm mới</a>
-                        </p>
+                        </p>@*
                         <div class="col-sm-2">
                             <a class="btn btn-outline-dark btn-sm" title="In" onclick="printDiv('printMe')">
                                 <i class="fas fa-print"></i> In dữ liệu
                             </a>
-                        </div>
+                        </div>*@
                         <div class="col-sm-4">
                             @using (Html.BeginForm("QuanLyTinDang", "NVKD", FormMethod.Post, new { @class = "" }))
                             {
@@ -48,12 +48,10 @@
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Mã</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Tiêu đề</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Loại</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Status</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Thông tin liên hệ</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Khu vực</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Loại dv</th>
-                                        <th class="sorting" tabindex="0" aria-controls="sampleTable">Ngày thêm</th>
-
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Status</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Hạn</th>>
                                             <th class="sorting">Chức năng</th>
 
                                         </tr>
@@ -71,7 +69,15 @@
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.loaiTin)
                                                 </td>
-                                                @if(item.trangThaiTinDang)
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.sdtNguoiLienHe)
+                                                    @Html.DisplayFor(modelItem => item.nguoiLienHe)
+                                                </td>
+                                                
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.idKhuVuc)
+                                                </td>
+                                                @if (item.trangThaiTinDang)
                                                 {
                                                     <td>
                                                         Đã duyệt
@@ -85,21 +91,14 @@
                                                     </td>
                                                 }
 
+                                                @{
+                                                var ngaybd = String.Format("{0:d/M/yyyy}", item.ngayBatDau);
+                                                var ngaykt = String.Format("{0:d/M/yyyy}", item.ngayKetThuc);
+                                                }
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.sdtNguoiLienHe)
-                                                    @Html.DisplayFor(modelItem => item.nguoiLienHe)
+                                                @ngaybd - @ngaykt
                                                 </td>
                                                 
-                                                
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.idKhuVuc)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.idDichVu)
-                                                </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ngayTaoTin)
-                                            </td>
                                                 <td>
                                                     <a href="/NVKD/EditTin/@item.idTinDang" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
                                                         <i class="fas fa-edit"></i>
@@ -114,13 +113,9 @@
                                                         <div class="modal" tabindex="-1" role="dialog" style="padding:100px 350px;margin:50px;text-align:center" id="DeleteModal-@item.idTinDang">
                                                             <div class="modal-dialog" role="document">
                                                                 <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title">Delete Confirmation @item.idTinDang</h5>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
+                                                                    
                                                                     <div class="modal-body">
+                                                                    <h5 class="modal-title">Delete Confirmation @item.idTinDang</h5>
                                                                         <p style="text-align:center">Xác nhận xóa tin?</p>
                                                                     </div>
                                                                     <div class="modal-footer">
@@ -140,8 +135,6 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -154,7 +147,6 @@
     function printDiv(divName) {
         var printContents = document.getElementById(divName).innerHTML;
         var originalContents = document.body.innerHTML;
-
         document.body.innerHTML = printContents;
 
         window.print();
@@ -162,8 +154,6 @@
         document.body.innerHTML = originalContents;
 
     }
-
-
 </script>
 
 

@@ -1,8 +1,13 @@
 ﻿using Client_QuanLythueTro.Models;
 using Newtonsoft.Json;
+using System.IO;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using static System.Net.WebRequestMethods;
+using System.Net.Http;
 
 namespace Client_QuanLythueTro.APIGateWay
 {
@@ -40,6 +45,37 @@ namespace Client_QuanLythueTro.APIGateWay
             finally { }
             return listTin;
         }
+        public List<Khuvucs> ListKhuVuc()
+        {
+            List<Khuvucs> listTin = new List<Khuvucs>();
+            url= "https://localhost:7034/api/KhuVucs";
+            if (url.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var datacol = JsonConvert.DeserializeObject<List<Khuvucs>>(result);
+
+                    if (datacol != null)
+                        listTin = datacol;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return listTin;
+        }
+
 
         public List<TinDang> FilterTin(int thang,bool status)
         {
@@ -74,55 +110,93 @@ namespace Client_QuanLythueTro.APIGateWay
             return listTin;
         }
 
-        //create
-        public void CreateTin(TinDang ls)
-        {
+        //public async Task CreateTinAsync(TinDang tin)
+        //{
+        //    if (url.Trim().Substring(0, 5).ToLower() == "https")
+        //        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
+        //    try
+        //    {
+        //        var content = new MultipartFormDataContent();
+        //        content.Add(new StringContent(tin.tieuDe), "tieuDe");
+        //        content.Add(new StringContent(tin.loaiTin), "loaiTin");
+        //        content.Add(new StringContent(tin.sdtNguoiLienHe), "sdtNguoiLienHe");
+        //        content.Add(new StringContent(tin.nguoiLienHe), "nguoiLienHe");
+        //        content.Add(new StringContent(tin.doiTuongChoThue), "doiTuongChoThue");
+        //        content.Add(new StringContent(tin.soLuongPhong.ToString()), "soLuongPhong");
+        //        content.Add(new StringContent(tin.idKhuVuc), "idKhuVuc");
+        //        content.Add(new StringContent(tin.diaChi), "diaChi");
+        //        content.Add(new StringContent(tin.giaPhong.ToString()), "giaPhong");
+        //        content.Add(new StringContent(tin.dienTich.ToString()), "dienTich");
+        //        content.Add(new StringContent(tin.moTa), "moTa");
+        //        content.Add(new StringContent(tin.tienDien.ToString()), "tienDien");
+        //        content.Add(new StringContent(tin.tienNuoc.ToString()), "tienNuoc");
+        //        content.Add(new StringContent(tin.tienDichVu.ToString()), "tienDichVu");
+        //        content.Add(new StringContent(tin.soLuongPhong.ToString()), "soLuongPhong");
+        //        foreach (var item in tin.listimg)
+        //        {
+        //            var streamContent = new StreamContent(item.OpenReadStream());
+        //            streamContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+        //            {
+        //                Name = "listimg",
+        //                FileName = item.FileName
+        //            };
+        //            content.Add(streamContent);
+        //        }
+
+        //        HttpResponseMessage response = await httpClient.PostAsync(url, content);
+
+        //        if (!response.IsSuccessStatusCode)
+        //        {
+        //            string result =await response.Content.ReadAsStringAsync();
+        //            throw new Exception(result);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("Lỗi: " + ex.Message);
+        //    }
+        //}
+
+        public async Task<TinDang> CreateTin(TinDang tin)
+        {
+            TinDang newtin = new TinDang();
             if (url.Trim().Substring(0, 5).ToLower() == "https")
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             try
             {
-                // Chuyển đối tượng LoaiSach thành định dạng JSON
-                string json = JsonConvert.SerializeObject(ls);
+                var options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve
+                };
 
-                // Tạo nội dung yêu cầu HTTP
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                string tinJson = System.Text.Json.JsonSerializer.Serialize(tin, options);
+                var content = new StringContent(tinJson, Encoding.UTF8, "application/json");
 
-                // Gửi yêu cầu POST đến URL của API để tạo LoaiSach mới
-                HttpResponseMessage response = httpClient.PostAsync(url, content).Result;
+                HttpResponseMessage response = await httpClient.PostAsync(url, content);
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    string result = response.Content.ReadAsStringAsync().Result;
+                    string result = await response.Content.ReadAsStringAsync();
                     throw new Exception(result);
-                }
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    // Đọc dữ liệu trả về và chuyển đổi thành đối tượng LoaiSach
-                //    string result = response.Content.ReadAsStringAsync().Result;
-                //    var data = JsonConvert.DeserializeObject<TinDang>(result);
+                }else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var data = JsonConvert.DeserializeObject<TinDang>(result);
 
-                //    if (data != null)
-                //        ls = data;
-                //}
-                //else
-                //{
-                //    // Xử lý khi có lỗi xảy ra trong quá trình gọi API
-                //    string result = response.Content.ReadAsStringAsync().Result;
-                //    throw new Exception(result);
-                //}
+                    if (data != null)
+                        newtin = data;
+                }    
             }
             catch (Exception ex)
             {
-                // Xử lý lỗi chung
                 throw new Exception("Lỗi: " + ex.Message);
             }
+            return newtin;
 
         }
-
-
-
+       
         public TinDang GetTin(string id)
         {
             TinDang tin = new TinDang();

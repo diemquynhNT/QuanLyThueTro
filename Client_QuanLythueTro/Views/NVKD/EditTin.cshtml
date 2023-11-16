@@ -6,109 +6,374 @@
     ViewBag.post = "active";
     ViewBag.Name = "Edittin";
 }
+<link href="~/css/uploadimg.css" rel="stylesheet" />
 <div class="container">
     <div class="col-md-12">
         <div class="tile" id="printMe">
             <h4 style="text-align:center">EDIT TIN MỚI</h4>
-        <form asp-action="EditTin">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @Html.HiddenFor(model => model.idTinDang)
+            <form asp-action="EditTin">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @Html.HiddenFor(model => model.idTinDang)
                 @Html.HiddenFor(model => model.ngayBatDau)
                 @Html.HiddenFor(model => model.ngayKetThuc)
                 @Html.HiddenFor(model => model.ngayTaoTin)
                 @Html.HiddenFor(model => model.trangThaiTinDang)
-
-        <div class="row">
-
-
-            <div class="form-group col-sm-12">
-                <b>Tiêu đề</b>
-                <input asp-for="tieuDe" class="form-control" />
-                <span asp-validation-for="tieuDe" class="text-danger"></span>
-            </div>
+                <div class="row">
+                    <div class="form-group col-sm-12">
+                        <b>Tiêu đề</b>
+                        <input asp-for="tieuDe" class="form-control" required />
+                        <span asp-validation-for="tieuDe" class="text-danger"></span>
+                    </div>
                     <div class="form-group col-sm-12">
                         <b>Loại tin</b>
-                        <input asp-for="loaiTin" class="form-control" />
+                        <input asp-for="loaiTin" class="form-control" required />
                         <span asp-validation-for="loaiTin" class="text-danger"></span>
                     </div>
-            <div class="form-group col-sm-6">
-                <b>SĐT liên hệ</b>                
-                    <input asp-for="sdtNguoiLienHe" class="form-control" />
-                <span asp-validation-for="sdtNguoiLienHe" class="text-danger"></span>
-            </div>
-            <div class="form-group col-sm-6">
-                <label asp-for="nguoiLienHe" class="control-label"></label>
-                <input asp-for="nguoiLienHe" class="form-control" />
-                <span asp-validation-for="nguoiLienHe" class="text-danger"></span>
-            </div>
-            <div class="form-group col-sm-6">
-                <b>Đối tượng cho thuê</b>                
-                <input asp-for="doiTuongChoThue" class="form-control" />
-                <span asp-validation-for="doiTuongChoThue" class="text-danger"></span>
-            </div>
+                    <hr />
+                    <h4 class="col-sm-12">">THÔNG TIN LIÊN HỆ</h4>
+                    <hr />
+                    <div class="form-group col-sm-6">
+                        <b>Người liên hệ</b>
+                        <input asp-for="nguoiLienHe" class="form-control" required />
+                        <span asp-validation-for="nguoiLienHe" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>SĐT liên hệ</b>
+                        <input asp-for="sdtNguoiLienHe" class="form-control" required />
+                        <span asp-validation-for="sdtNguoiLienHe" class="text-danger"></span>
+                    </div>
+                    <hr />
+                    <h4 class="col-sm-12">THÔNG TIN ĐĂNG TIN</h4>
+                    <hr />
+                    <div class="form-group col-sm-12">
+                        <b>Đối tượng cho thuê</b>
+                        <input asp-for="doiTuongChoThue" class="form-control" required />
+                        <span asp-validation-for="doiTuongChoThue" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Trạng thái</b>
+                        @{
+                            string status;
+                            if (Model.trangThaiTinDang)
+                            {
+                                status = "Đã duyệt";
+                            }
+                            else
+                            {
+                                status = "Chưa duyệt";
+                            }
 
-            <div class="form-group col-sm-6">
-                <b>Số lượng phòng</b>
-                <input asp-for="soLuongPhong" class="form-control" type="number" min="1" />
-                <span asp-validation-for="soLuongPhong" class="text-danger"></span>
-            </div>
-            <div class="form-group col-sm-6">
-                <b>Khu vực</b>
-                <input asp-for="idKhuVuc" class="form-control"readonly />
-                <span asp-validation-for="idKhuVuc" class="text-danger"></span>
-            </div>
-                <div class="form-group">
-                    <b>Địa chỉ</b>
-                    <input asp-for="diaChi" class="form-control" />
-                    <span asp-validation-for="diaChi" class="text-danger"></span>
-                </div>
-            <div class="form-group col-sm-6">
-                <b>Dịch vụ</b>
-                <input asp-for="idDichVu" class="form-control" readonly/>
-                <span asp-validation-for="idDichVu" class="text-danger"></span>
-            </div>
-           
-            <div class="form-group col-sm-4">
-                <b>Giá thuê</b>
-                <input asp-for="giaPhong" class="form-control" type="number" min="0" />
-                <span asp-validation-for="giaPhong" class="text-danger"></span>
-            </div>
-            <div class="form-group col-sm-4">
-                <b>Diện tích</b>
-                <input asp-for="dienTich" class="form-control" />
-                <span asp-validation-for="dienTich" class="text-danger"></span>
-            </div>
-        
-          
-            <div class="form-group col-sm-4">
-                <b>Tiền điện</b>
-                    <input asp-for="tienDien" class="form-control" type="number" min="0" />
-                <span asp-validation-for="tienDien" class="text-danger"></span>
-            </div>
-            <div class="form-group col-sm-4">
-                <b>Tiền nước</b>
-                    <input asp-for="tienNuoc" class="form-control" type="number" min="0" />
-                <span asp-validation-for="tienNuoc" class="text-danger"></span>
-            </div>
-            <div class="form-group col-sm-4">
-                <b>Tiền dịch vụ</b>
-                    <input asp-for="tienDichVu" class="form-control" type="number" min="0" />
-                <span asp-validation-for="tienDichVu" class="text-danger"></span>
-            </div>
-                <div class="form-group col-sm-12">
-                    <label asp-for="moTa" class="control-label"></label>
-                    <input asp-for="moTa" class="form-control" />
-                    <span asp-validation-for="moTa" class="text-danger"></span>
-                </div>
-                </div>
+                        }
+                        <input class="form-control" value="@status" readonly />
 
-            <div class="form-group">
-                <input type="submit" value="Lưu" class="btn btn-primary" />
-                <a class="btn btn-warning" href="~/NVKD/QuanLyDichVu"> Trở lại</a>
-            </div>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Ngày tạo</b>
+                        <input value="@Model.ngayTaoTin" readonly class="form-control" />
 
-        </form>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Ngày bắt đầu đăng</b>
+                        <input value="@Model.ngayBatDau" readonly class="form-control" />
+
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Hạn kết thúc</b>
+                        <input value="@Model.ngayKetThuc" readonly class="form-control" />
+                    </div>
+                    <hr />
+                    <h4 class="col-sm-12">THÔNG TIN PHÒNG</h4>
+                    <hr />
+                    <div class="form-group col-sm-6">
+                        <b>Khu vực</b>
+                        <input asp-for="idKhuVuc" class="form-control" readonly />
+                        <span asp-validation-for="idKhuVuc" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Địa chỉ</b>
+                        <input asp-for="diaChi" class="form-control" required />
+                        <span asp-validation-for="diaChi" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Số lượng phòng</b>
+                        <input asp-for="soLuongPhong" class="form-control" type="number" min="1" required />
+                        <span asp-validation-for="soLuongPhong" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Dịch vụ</b>
+                        <input asp-for="idDichVu" class="form-control" readonly />
+                        <span asp-validation-for="idDichVu" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        <b>Giá thuê</b>
+                        <input asp-for="giaPhong" class="form-control" type="number" min="1" required />
+                        <span asp-validation-for="giaPhong" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Diện tích</b>
+                        <input asp-for="dienTich" class="form-control" required min="1" />
+                        <span asp-validation-for="dienTich" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Tiền điện</b>
+                        <input asp-for="tienDien" class="form-control" type="number" min="1" required />
+                        <span asp-validation-for="tienDien" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Tiền nước</b>
+                        <input asp-for="tienNuoc" class="form-control" type="number" min="1" required />
+                        <span asp-validation-for="tienNuoc" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Tiền dịch vụ</b>
+                        <input asp-for="tienDichVu" class="form-control" type="number" min="1" required />
+                        <span asp-validation-for="tienDichVu" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <b>Mô tả</b>
+                        @*<input asp-for="moTa" class="form-control" />*@
+                        <textarea asp-for="moTa" class="form-control" rows="9" cols="70" required></textarea>
+                        <span asp-validation-for="moTa" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <input type="submit" value="Cập nhật thông tin" class="btn-success btn-sm" />
+                    </div>
+                </div>
+            </form>
+            <div class="form-group col-sm-12">
+                <h3>Hình ảnh</h3>
+                <a class="btn btn-sm" ata-toggle="tooltip" title="Thêm hình" data-toggle="modal" data-target="#MoreImage">
+                    Thêm hình
+                </a>
+                <div>
+                    <div id="img-form">
+                        <div class="queued-div"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input value="@Model.idTinDang" id="idTin" style="visibility:hidden" />
+<div class="row" style="padding:10px;">
+    <div class="col-sm-2">
+        <a asp-action="QuanLyTinDang" class=" btn btn-warning btn-sm">Back to List</a>
+    </div>
+    @if (Model.trangThaiTinDang)
+    {
+        <div class="col-sm-2">
+            <a class="btn btn-danger btn-sm" ata-toggle="tooltip" title="Hủy duyệt" data-toggle="modal" data-target="#HuyDuyet">
+                Hủy duyệt
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="col-sm-2">
+            <a class="btn btn-success btn-sm" ata-toggle="tooltip" title="Kích hoạt" data-toggle="modal" data-target="#Duyet">
+                Duyệt tin
+            </a>
+        </div>
+    }
+</div>
+<div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="Duyet" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4 style="text-align:center;padding:20px 20px 0px 20px;">
+                    XÁC NHẬN DUYỆT TIN @Model.idTinDang
+                </h4>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
+                <button class="btn btn-success" onclick="DuyetTin()" type="submit">Duyệt</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="HuyDuyet" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4 style="text-align:center;padding:20px 20px 0px 20px;">
+                    XÁC NHẬN HỦY DUYỆT TIN @Model.idTinDang
+                </h4>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
+                <button class="btn btn-success" onclick="HuyDuyetTin()" type="submit">Hủy Duyệt</button>
+            </div>
+        </div>
     </div>
 </div>
 
+<div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="MoreImage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-group col-sm-12">
+                    <h3>Chọn hình</h3>
+                    <div id="imageUploadForm">
+                        <div class="input-div">
+                            <input type="file" class="listimg" id="listimg" name="listimg" multiple accept="image/png, image/jpeg, image/jpg">
+                        </div>
+                        <div id="saved-form">
+                            <div class="saved-div"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" onclick="ClickUpdateImage()" value="Cập nhật" class="btn btn-success btn-sm" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+<input value="@ViewBag.id" id="idTin" style="visibility:hidden" />
+<script src="~/js/uploadmultiimg.js"></script>
+<script>
+    let listImg = [];
+    let displayDiv = document.querySelector(".queued-div");
+    var id = document.getElementById("idTin").value;
+
+    function getDisplayListImg() {
+        var url = 'https://localhost:7034/api/Images/GetListByIdTin?id=' + id;
+        fetch(url)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                console.log(data);
+                listImg = data;
+                display();
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+            });
+    }
+
+    function GetSrcImg(id) {
+        var url = "https://localhost:7034/api/Images/GetImageDisplay?id=" + id;
+        console.log(url);
+        return fetch(url)
+            .then(function (response) {
+                return response.blob();
+            })
+            .then(function (data) {
+                console.log(data);
+                var imgURL = URL.createObjectURL(data);
+                return imgURL;
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+            });
+    }
+
+    function display() {
+        let images = "";
+        console.log(listImg.length);
+        for (var i = 0; i < listImg.length; i++) {
+            var idImg = listImg[i].idImage;
+            GetSrcImg(idImg)
+                .then(function (imgURL) {
+                    images += `
+                                <div class="image">
+                                    <img src="${imgURL}" alt="image">
+                                        <span onclick="deleteImages(${idImg})">&times;</span>
+                                </div>`
+
+                    displayDiv.innerHTML = images;
+
+                });
+        }
+    }
+    getDisplayListImg();
+
+
+    function deleteImages(idImg) {
+
+        if (confirm("Xóa hình") == true) {
+            var url = "https://localhost:7034/api/images/" + idImg;
+            fetch(url, {
+                method: 'delete'
+            })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new error("loi");
+                    }
+                    alert("xóa thành công");
+                    listImg.splice(idImg, 1)
+                    display()
+                })
+                .catch(function (error) {
+                    console.log("error: " + error);
+                });
+        }
+
+    }
+
+    function DuyetTin() {
+        var url = "https://localhost:7034/api/TinDang/DuyetTin?id=" + id;
+        fetch(url, {
+            method: "PUT"
+        })
+            .then(function (response) {
+                return response.blob();
+            })
+            .then(function (data) {
+                alert("thanh cong")
+                location.reload();
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+                alert("loi")
+            });
+    }
+    function HuyDuyetTin() {
+        var url = "https://localhost:7034/api/TinDang/HuyDuyetTin?id=" + id;
+        fetch(url, {
+            method: "PUT"
+        })
+            .then(function (response) {
+                return response.blob();
+            })
+            .then(function (data) {
+                alert("thanh cong")
+                location.reload();
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+                alert("loi")
+            });
+    }
+
+    async function ClickUpdateImage() {
+        const formData = new FormData();
+        const imageFiles = document.getElementById("listimg").files;
+        for (let i = 0; i < imageFiles.length; i++) {
+            formData.append("list", imageFiles[i]);
+        }
+        formData.append("id", id);
+
+        var url = "https://localhost:7034/api/TinDang/AddImageToTinDang?id=" + id;
+        const response = await fetch(url, {
+            method: "POST",
+            body: formData
+        });
+
+        if (response.ok) {
+            console.log("oke");
+            alert("thanh cong")
+            location.reload()
+        } else {
+            console.error("Lỗi:", response.status);
+        }
+    }
+
+</script>

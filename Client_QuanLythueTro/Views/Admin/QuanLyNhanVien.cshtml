@@ -1,27 +1,39 @@
 ﻿@model IEnumerable<Client_QuanLythueTro.Models.Users>
-
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
 @{
     ViewData["Title"] = "QuanLyNhanVien";
     Layout = "~/Views/Admin/LayoutAdmin.cshtml";
     ViewBag.user="active";
     ViewBag.Name = "Quản lý nhân viên";
+    var userJson = Context.Session.GetString("user");
+    Users users = JsonConvert.DeserializeObject<Users>(userJson);
 }
 
 <div class="tab-content">
+    @{
+        var ktr = TempData["mess"];
+        if (ktr == "oke")
+        {
+            <script>
+                swal("Thành công", "Đăng kí tài khoản nhân viên thàn công", "success");
+            </script>
+        }
+    }
     <div>
         <div class="row">
             <div class="col-md-12">
                 <div class="tile">
                     <div class="row" style="padding:10px;">
                         <p>
-                            <a asp-action="CreateUser" class="btn btn-danger">Thêm mới</a>
+                            <a asp-action="CreateUser" class="btn btn-success btn-sm">Thêm mới</a>
                         </p>
-                        <div class="col-sm-2">
+                        @*<div class="col-sm-2">
                             <a class="btn btn-outline-dark btn-sm" title="In" onclick="printDiv('printMe')">
                                 <i class="fas fa-print"></i> In dữ liệu
                             </a>
-                        </div>
-                        @*<div class="col-sm-4">
+                        </div>*@
+                       @* <div class="col-sm-4">
                         @using (Html.BeginForm("QLDonHang", "KeToan", FormMethod.Post, new { @clas = "" }))
                         {
                         <div class="row">
@@ -47,12 +59,13 @@
                                     @*//Phần render từng dòng trong C#*@
                                     <thead>
                                         <tr role="row">
+                                            @*<th class="sorting" tabindex="0" aria-controls="sampleTable">Hình</th>*@
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Mã</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Họ tên</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Chức vụ</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Status</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">SĐT</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Email</th>
+                                            <th class="sorting" tabindex="0" aria-controls="sampleTable">Status</th>
                                             <th class="sorting">Chức năng</th>
 
                                         </tr>
@@ -61,6 +74,10 @@
                                         @foreach (var item in Model)
                                         {
                                             <tr>
+                                                @*<td>
+                                                    <img width="30" height="30" id="imguser-@item.idUser" onchange="GetImgUser('@item.idUser')">
+
+                                                </td>*@
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.idUser)
                                                 </td>
@@ -70,6 +87,13 @@
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.idChucVu)
                                                 </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.sdtUsers)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.emailUser)
+                                                </td>
+                                            
                                                 @if (item.trangThai)
                                                 {
                                                     <td>
@@ -84,46 +108,20 @@
                                                     </td>
                                                 }
 
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.sdtUsers)
-                                                </td>
-
-
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.emailUser)
-                                                </td>
-                                                <td>
-                                                    <a href="/Admin/EditUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
-                                                        <i class="fas fa-info-circle"></i>
-                                                    </a>
-                                                    <a href="/Admin/DetailUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
-                                                        <i class="fas fa-info-circle"></i>
-                                                    </a>
-                                                   @* <a class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Delete" data-target="#DeleteModal-@item.idTinDang" data-toggle="modal">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                    <form asp-controller="NVKD" asp-action="DeleteTin" asp-route-id="@item.idTinDang" method="post">
-                                                        <div class="modal" tabindex="-1" role="dialog" style="padding:100px 350px;margin:50px;text-align:center" id="DeleteModal-@item.idTinDang">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title">Delete Confirmation @item.idTinDang</h5>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <p style="text-align:center">Xác nhận xóa tin?</p>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                                                        <input type="submit" value="Delete" class="btn btn-danger" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </form>*@
-                                                </td>
+                                                  <td>
+                                                      @if (item.idUser != users.idUser)
+                                                     {
+                                                  
+                                                        <a href="/Admin/EditUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <a href="/Admin/DetailUsers/@item.idUser" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
+                                                            <i class="fas fa-info-circle"></i>
+                                                        </a>
+                                                    }
+                                                    </td>
+                                                
+                                                
                                             </tr>
 
                                         }
@@ -142,20 +140,34 @@
 </div>
 
 <script>
-    //In dữ liệu
-    function printDiv(divName) {
-        var printContents = document.getElementById(divName).innerHTML;
-        var originalContents = document.body.innerHTML;
+    ////In dữ liệu
+    //function printDiv(divName) {
+    //    var printContents = document.getElementById(divName).innerHTML;
+    //    var originalContents = document.body.innerHTML;
 
-        document.body.innerHTML = printContents;
+    //    document.body.innerHTML = printContents;
 
-        window.print();
+    //    window.print();
 
-        document.body.innerHTML = originalContents;
+    //    document.body.innerHTML = originalContents;
 
+    //}
+    function GetImgUser(id) {
+        var url = "https://localhost:7034/api/Users/GetImage?id=" + id;
+
+        fetch(url)
+            .then(function (response) {
+                return response.blob();
+            })
+            .then(function (data) {
+                var img = document.getElementById("imguser-" + id);
+                img.src = URL.createObjectURL(data);
+                img.style.visibility = "visible";
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+            });
     }
-
-
 </script>
 
 

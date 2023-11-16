@@ -1,4 +1,9 @@
-﻿
+﻿@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
+@{
+    var userJson = Context.Session.GetString("user");
+    Users users = JsonConvert.DeserializeObject<Users>(userJson);
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,25 +14,32 @@
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+@*    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+*@    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <link href="~/css/mainlayout.css" rel="stylesheet" />
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+
+
+
 </head>
 <body onload="time()" class="app sidebar-mini rtl">
     <header class="app-header">
         <div class="app-nav">
             <div class="user-wrapper">
-                @if (!string.IsNullOrEmpty(ViewBag.UserImageUrl))
+                <input value="@users.idUser" id="idUsers" style="display:none" />
+                @if (!string.IsNullOrEmpty(users.hinhAnh))
                 {
-                    <img src="@Url.Content("~/img/@ViewBag.UserImageUrl")" alt="User Image" />
+                    <img id="image" alt="User Image" width="30px" height="30px" />                    
                 }else{
                     <img src="@Url.Content("~/img/user.png")" width="30px" height="30px">
                 }
-                
+               
+                <b style="margin-left: 10px;">@users.hoTen</b>
                 <a class="logout_item" href="@Url.Action("Logout", "Login")">
                     <i class='app-menu__icon bx bx-log-out '></i>
                 </a>
@@ -38,6 +50,7 @@
     <aside class="app-sidebar">
         <div class="app-sidebar__user">
             <img class="logoCompany" src="@Url.Content("~/img/logo.png")" height="70" alt="Logo">
+
         </div>
         <hr>
         <ul class="app-menu ">
@@ -59,23 +72,25 @@
                     <i class='app-menu__icon bx bx-group'></i><span class="app-menu__label">Quản lý nhân viên</span>
                 </a>
             </li>
+            <li>
+                <a class="app-menu__item @ViewBag.guest" href="/Admin/QuanLyKhachHang">
+                    <i class='app-menu__icon bx bx-group'></i><span class="app-menu__label">Quản lý khách hàng</span>
+                </a>
+            </li>
             @*<li>
-                <a class="app-menu__item @ViewBag.services" href="">
-                    <i class='app-menu__icon bx bx-clipboard'></i><span class="app-menu__label">Quản lý dịch vụ</span>
-                </a>
-            </li>
-            <li>
-                <a class="app-menu__item @ViewBag.money" href="">
-                    <i class='app-menu__icon bx bx-clipboard'></i><span class="app-menu__label">Giao Dịch</span>
-                </a>
-            </li>
-            <li>
-                <a class="app-menu__item @ViewBag.thongke" href="">
-                    <i class='app-menu__icon bx bx-clipboard'></i><span class="app-menu__label">Thống kê</span>
+                <a class="app-menu__item @ViewBag.adver" href="/Admin/">
+                    <i class='app-menu__icon '></i><span class="app-menu__label">Quản lý quảng cáo</span>
                 </a>
             </li>*@
+            <li>
+                <a class="app-menu__item @ViewBag.info" href="/Admin/">
+                    <i class='app-menu__icon bx '></i><span class="app-menu__label">Thông tin công ty</span>
+                </a>
+            </li>
+          
         </ul>
     </aside>
+   
     <main class="app-content ">
         <div class="row">
             <div class="col-md-12">
@@ -94,9 +109,12 @@
 
     </main>
     <!--dialog_message -->
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="~/Scripts/plugin/jquery.dataTables.min.js"></script>
-    <script src="~/Scripts/plugin/dataTables.bootstrap.min.js"></script>
+    <script src="~/lib/datatables.bootstrap.min.js"></script>
+    <script src="~/lib/jquery.datatables.min.js"></script>
+    <script type="text/javascript">$('#sampleTable').DataTable();</script>
+
+
+
     <script type="text/javascript">
         $('#sampleTable').DataTable(); //TimKiem
         //Thời Gian
@@ -170,6 +188,26 @@
         var barChart = new Chart(ctxb).Bar(data);
     </script>
 
+    <script>
+        function get_random_dog_image() {
+            var id = document.getElementById("idUsers").value;
+            url = "https://localhost:7034/api/Users/GetImage?id="+id;
+            fetch(url)
+                .then(function (response) {
+                    return response.blob(); 
+                })
+                .then(function (data) {
+                    console.log(data);
+                    var img = document.getElementById("image");
+                    img.src = URL.createObjectURL(data); 
+                })
+                .catch(function (error) {
+                    console.log("Error: " + error);
+                });
+        }
+
+        get_random_dog_image();
+    </script>
 
 </body>
 </html>

@@ -34,5 +34,6 @@ namespace Client_QuanLythueTro.Models
         public string? idChucVu { get; set; }
 
         public string? idLoaiTK { get; set; }
+        public IFormFile Avatar { get; set; }
     }
 }
