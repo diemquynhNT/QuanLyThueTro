@@ -1,16 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Client_QuanLythueTro.Models
+namespace QuanLyThueTro.Model
 {
-    public class images
+    public class Images
     {
         [Key]
         public int idImage { get; set; }
-        [Required]
         public string nameImage { get; set; }
 
         public string idTinDang { get; set; }
 
+      
     }
 }
