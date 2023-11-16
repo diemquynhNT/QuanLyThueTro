@@ -8,7 +8,7 @@ namespace QuanLyThueTro.Model
         [Key]
         public int idImage { get; set; }
         public string nameImage { get; set; }
-        public string publicId { get; set; }
+
         public string idTinDang { get; set; }
 
       
