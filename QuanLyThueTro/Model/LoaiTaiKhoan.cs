@@ -12,7 +12,10 @@ namespace QuanLyThueTro.Model
         [Required]
         public float giaTK { get; set; }
         [Required]
-        public DateTime hanSuDung { get; set; }
+        public int hanDung { get; set; }
+        public bool trangThaiSuDung { get; set; }
+        [Required]
+        public int soLuongDangTai { get; set; }
 
         public virtual ICollection<Users> users { get; set; }
 

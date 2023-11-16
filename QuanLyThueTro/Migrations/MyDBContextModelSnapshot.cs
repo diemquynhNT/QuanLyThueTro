@@ -37,22 +37,6 @@ namespace QuanLyThueTro.Migrations
                     b.ToTable("chucVus");
                 });
 
-            modelBuilder.Entity("QuanLyThueTro.Model.DichVuDangTin", b =>
-                {
-                    b.Property<string>("idDichVu")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<float>("giaCa")
-                        .HasColumnType("real");
-
-                    b.Property<DateTime>("hanDangTin")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("idDichVu");
-
-                    b.ToTable("dichVuDangTins");
-                });
-
             modelBuilder.Entity("QuanLyThueTro.Model.GiaoDich", b =>
                 {
                     b.Property<string>("idGiaoDich")
@@ -80,6 +64,33 @@ namespace QuanLyThueTro.Migrations
                     b.HasIndex("idUser");
 
                     b.ToTable("giaoDiches");
+                });
+
+            modelBuilder.Entity("QuanLyThueTro.Model.GoiTinDichVu", b =>
+                {
+                    b.Property<string>("idDichVu")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<float>("giaCa")
+                        .HasColumnType("real");
+
+                    b.Property<int>("hanDung")
+                        .HasColumnType("int");
+
+                    b.Property<string>("loaiDichVu")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("trangThaiSuDung")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("viTriHienThi")
+                        .HasColumnType("int");
+
+                    b.HasKey("idDichVu");
+
+                    b.ToTable("dichVuDangTins");
                 });
 
             modelBuilder.Entity("QuanLyThueTro.Model.Images", b =>
@@ -166,13 +177,19 @@ namespace QuanLyThueTro.Migrations
                     b.Property<float>("giaTK")
                         .HasColumnType("real");
 
-                    b.Property<DateTime>("hanSuDung")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("hanDung")
+                        .HasColumnType("int");
+
+                    b.Property<int>("soLuongDangTai")
+                        .HasColumnType("int");
 
                     b.Property<string>("tenLoaiTK")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("trangThaiSuDung")
+                        .HasColumnType("bit");
 
                     b.HasKey("idLoaiTK");
 
@@ -197,6 +214,15 @@ namespace QuanLyThueTro.Migrations
 
                     b.Property<string>("moTa")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("tienDichVu")
+                        .HasColumnType("real");
+
+                    b.Property<float>("tienDien")
+                        .HasColumnType("real");
+
+                    b.Property<float>("tienNuoc")
+                        .HasColumnType("real");
 
                     b.HasKey("idTinDang");
 
@@ -273,10 +299,18 @@ namespace QuanLyThueTro.Migrations
                     b.Property<string>("idKhuVuc")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("ngayBatDau")
+                    b.Property<string>("idUser")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("loaiTin")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("ngayBatDau")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ngayKetThuc")
+                    b.Property<DateTime?>("ngayKetThuc")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("ngayTaoTin")
@@ -309,6 +343,8 @@ namespace QuanLyThueTro.Migrations
 
                     b.HasIndex("idKhuVuc");
 
+                    b.HasIndex("idUser");
+
                     b.ToTable("tinDangs");
                 });
 
@@ -340,6 +376,9 @@ namespace QuanLyThueTro.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("hinhAnh")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("hoTen")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -363,6 +402,9 @@ namespace QuanLyThueTro.Migrations
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
+
+                    b.Property<bool>("trangThai")
+                        .HasColumnType("bit");
 
                     b.Property<string>("userName")
                         .IsRequired()
@@ -450,7 +492,7 @@ namespace QuanLyThueTro.Migrations
 
             modelBuilder.Entity("QuanLyThueTro.Model.TinDang", b =>
                 {
-                    b.HasOne("QuanLyThueTro.Model.DichVuDangTin", "dichVuDangTin")
+                    b.HasOne("QuanLyThueTro.Model.GoiTinDichVu", "dichVuDangTin")
                         .WithMany("TinDangs")
                         .HasForeignKey("idDichVu");
 
@@ -458,9 +500,15 @@ namespace QuanLyThueTro.Migrations
                         .WithMany("TinDangs")
                         .HasForeignKey("idKhuVuc");
 
+                    b.HasOne("QuanLyThueTro.Model.Users", "users")
+                        .WithMany("tinDangs")
+                        .HasForeignKey("idUser");
+
                     b.Navigation("dichVuDangTin");
 
                     b.Navigation("khuVucs");
+
+                    b.Navigation("users");
                 });
 
             modelBuilder.Entity("QuanLyThueTro.Model.TinYeuThich", b =>
@@ -504,7 +552,7 @@ namespace QuanLyThueTro.Migrations
                     b.Navigation("users");
                 });
 
-            modelBuilder.Entity("QuanLyThueTro.Model.DichVuDangTin", b =>
+            modelBuilder.Entity("QuanLyThueTro.Model.GoiTinDichVu", b =>
                 {
                     b.Navigation("TinDangs");
                 });
@@ -543,6 +591,8 @@ namespace QuanLyThueTro.Migrations
                     b.Navigation("GiaoDiches");
 
                     b.Navigation("reviews");
+
+                    b.Navigation("tinDangs");
 
                     b.Navigation("tinYeuThiches");
                 });

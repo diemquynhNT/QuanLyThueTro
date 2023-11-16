@@ -27,9 +27,15 @@ namespace QuanLyThueTro.Model
         [Required]
         public string gioiTinh { get; set; }
 
+        public string? hinhAnh { get; set; }
+
+        public bool trangThai { get; set; }
+
+
         public virtual ICollection<Review> reviews { get; set; }
         public virtual ICollection<GiaoDich> GiaoDiches { get; set; }
         public virtual ICollection<TinYeuThich> tinYeuThiches { get; set; }
+        public virtual ICollection<TinDang> tinDangs { get; set; }
         public string? idChucVu { get; set; }
         [ForeignKey("idChucVu")]
         public ChucVu chucVus { get; set; }

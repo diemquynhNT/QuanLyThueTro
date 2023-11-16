@@ -1,0 +1,180 @@
+﻿
+@{
+    ViewData["Title"] = "TrangChu";
+    Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
+    ViewBag.Name = "Trang chủ";
+    ViewBag.home = "active";
+}
+
+<div class="main-content">
+    <div class="tongquan">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <a href="">
+                        <div class="stat-card">
+                            <div class="stat-card__content">
+                                <p class="text-uppercase mb-1 text-muted">TIN ĐĂNG</p>
+                                <h4>Tổng</h4>
+                                <div style="font-size:16px">
+                                    <span class="text-success font-weight-bold ">+ 18 </span>
+                                    <span class="text-muted">tin trong ngày</span>
+                                </div>
+                            </div>
+                            <div class="stat-card__icon stat-card__icon--success">
+                                <div class="stat-card__icon-circle" style=" background: rgba(0, 123, 255, 0.2);">
+                                    <i class="fa fa-clipboard-check" style="color: rgb(0, 28, 64);"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-4">
+                    <a href="#idcho">
+                        <div class="stat-card">
+                            <div class="stat-card__content">
+                                <p class="text-uppercase mb-1 text-muted">TIN CHỜ DUYỆT</p>
+                                <h4> 76 Tin</h4>
+                                <div style="font-size:16px">
+                                    <span class="text-success font-weight-bold ">+</span>
+                                    <span class="text-muted">tin mới</span>
+                                </div>
+                            </div>
+                            <div class="stat-card__icon stat-card__icon--success">
+                                <div class="stat-card__icon-circle" style=" background: rgba(0, 123, 255, 0.2);">
+                                    <i class="fa fa-dolly" style="color: rgb(0, 28, 64);"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-4">
+                    <a href="">
+                        <div class="stat-card">
+                            <div class="stat-card__content">
+                                <p class="text-uppercase mb-1 text-muted">GIAO DỊCH</p>
+                                <h4> 432 giao dịch</h4>
+                                <div style="font-size:16px">
+                                    <span class="text-success font-weight-bold ">+</span>
+                                    <span class="text-muted"> giao dịch mới</span>
+                                </div>
+                            </div>
+                            <div class="stat-card__icon stat-card__icon--success">
+                                <div class="stat-card__icon-circle" style=" background: rgba(0, 123, 255, 0.2);">
+                                    <i class="fa fa-truck" style="color: rgb(0, 28, 64);"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+                <div class="col-sm-4">
+                    <a href="#tinhtrangdl">
+                        <div class="stat-card">
+                            <div class="stat-card__content">
+                                <p class="text-uppercase mb-1 text-muted">GÓI TIN</p>
+                                <h4>10 gói</h4>
+                                <div style="font-size:16px">
+                                    <span class="text-muted">34 Sắp hết hạn</span>
+                                </div>
+                            </div>
+                            <div class="stat-card__icon stat-card__icon--success">
+                                <div class="stat-card__icon-circle" style="background: rgba(0, 123, 255, 0.2); ">
+                                    <i class="fa fa-user-alt" style="color: #007bff;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-4">
+                    <a href="#congno">
+                        <div class="stat-card">
+                            <div class="stat-card__content">
+                                <p class="text-uppercase mb-1 text-muted">GÓI TÀI KHOẢN</p>
+                                <h4>
+                                    2 Gói /h4>
+                                    <div style="font-size:16px">
+                                        <span class="text-muted">2 Loại</span>
+                                    </div>
+                            </div>
+                            <div class="stat-card__icon stat-card__icon--success">
+                                <div class="stat-card__icon-circle" style="background: #CBFAD5; ">
+                                    <i class="fa fa-money-bill" style="color: green;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-sm-4">
+                    <a href="">
+                        <div class="stat-card">
+                            <div class="stat-card__content">
+                                <p class="text-uppercase mb-1 text-muted">DOANH THU</p>
+                                <h4>doanh thu</h4>
+                                <div style="font-size:16px">
+                                    <span class="text-muted">Doanh thu tính theo tháng</span>
+                                </div>
+                            </div>
+                            <div class="stat-card__icon stat-card__icon--success">
+                                <div class="stat-card__icon-circle" style="background: rgba(0, 123, 255, 0.2); ">
+                                    <i class="fa fa-money-check-alt" style="color: #007bff;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    @{
+        List<TinDang> list = ViewBag.list;
+    }
+    <div class="col-md-12" id="congno">
+        <div class="tile">
+            <h3 class="tile-title">Danh sách tin đăng</h3>
+            <div class="row">
+                <div class="col-sm-12 table-responsive">
+                    <table class="table table-hover table-bordered js-copytextarea" role="grid">
+                        <thead>
+                            <tr role="row">
+                                <th>Mã </th>
+                                <th>Tiêu đề</th>
+                                <th>Khu vực</th>
+                                <th>Thông tin liên hệ</th>
+                           
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                       @foreach (var item in list)
+                        {
+                            <tr>
+                                <td>
+                                        @Html.DisplayFor(modelItem => item.idTinDang)
+                                </td>
+                                <td>
+                                        @Html.DisplayFor(modelItem => item.tieuDe)
+                                </td>
+                                <td>
+                                        @Html.DisplayFor(modelItem => item.idKhuVuc)
+                                </td>
+                                <td>
+                                     @Html.DisplayFor(modelItem => item.sdtNguoiLienHe)
+                                      @Html.DisplayFor(modelItem => item.nguoiLienHe)
+                                </td>
+                                <td>
+                                        <a href="/NVKD/DetailTinDang" class="btn btn-success btn-sm">Xem</a>
+                                </td>
+                            </tr>
+                        }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

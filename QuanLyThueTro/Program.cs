@@ -1,6 +1,10 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using NuGet.Packaging.Signing;
 using QuanLyThueTro.Data;
 using QuanLyThueTro.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,10 +15,50 @@ builder.Services.AddDbContext<MyDBContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DBThueTro"));
 });
+
+//fetch
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("https://localhost:7144") 
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+var secretKey = builder.Configuration["AppSettings:SecretKey"];
+//mã hóa secretkey
+var sk = Encoding.UTF8.GetBytes(secretKey);
+
+builder.Services.AddAuthentication
+    (JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+    opt =>
+    {
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+
+            ValidateIssuer = false,
+            ValidateAudience = false,
+
+            //ký vào token
+            ValidateIssuerSigningKey = true,
+
+            IssuerSigningKey = new SymmetricSecurityKey(sk),
+            ClockSkew = TimeSpan.Zero
+
+        };
+    }
+    );
+
+
 //automapper
 builder.Services.AddAutoMapper(typeof(Program));
-//
+// Đăng ký interface và thực hiện các chức năng của nó trong file
+builder.Services.AddScoped<IExtensionService, ExtensionService>();
 builder.Services.AddScoped<IUsers, UserService>();
+builder.Services.AddScoped<ITinDang, TinDangService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -29,7 +73,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors();
+app.UseAuthentication();    
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

@@ -11,7 +11,7 @@ namespace QuanLyThueTro.Data
         public DbSet<ThanhPho> thanhPhos { get; set; }
         public DbSet<KhuVuc> khuVucs { get; set; }
         public DbSet<TinDang> tinDangs { get; set; }
-        public DbSet<DichVuDangTin> dichVuDangTins { get; set; }
+        public DbSet<GoiTinDichVu> dichVuDangTins { get; set; }
         public DbSet<LichXemPhong> lichXemPhongs { get; set; }
         public DbSet<PhongTro> phongTros { get; set; }
         public DbSet<Users> users { get; set; }

@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Client_QuanLythueTro.Models.Khuvucs>
+
+@{
+    ViewData["Title"] = "QuanLyKhuVuc";
+    Layout = "~/Views/Admin/LayoutAdmin.cshtml";
+    ViewBag.kv="active";
+    ViewBag.name = "Khu vực hoạt động";
+}
+
+<h1>QuanLyKhuVuc</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.idKhuVuc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.tenKhuVuc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.moTa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.idThanhPho)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.idKhuVuc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.tenKhuVuc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.moTa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.idThanhPho)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,257 @@
+﻿@model Client_QuanLythueTro.Models.Users
+
+@{
+    ViewData["Title"] = "CreateUser";
+    Layout = "~/Views/Admin/LayoutAdmin.cshtml";
+    ViewBag.user = "active";
+    ViewBag.Name = "Thêm account nhân viên";
+}
+@{
+    var ktr = TempData["mess"];
+    if (ktr == "loi")
+    {
+        <script>
+            swal("Lỗi!!", "Lỗi thông tin !!!", "success");
+        </script>
+    }
+}
+<div class="tile" style="margin:10px 20px;">
+    <h3 class="tile-title">TẠO MỚI TÀI KHOẢN</h3>
+    <div class="tile-body contenner">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.idUser)
+        <form asp-action="CreateUser" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.HiddenFor(model => model.idUser)
+            @Html.HiddenFor(model => model.trangThai)
+            @Html.HiddenFor(model => model.hinhAnh)
+            <div class="row">
+
+            <p> @Html.ValidationSummary(true, "", new { @class = "text-danger" })</p>
+            <div class="imgstaff col-sm-6" style="padding-left:40px;">
+                <div class="col-sm-12" style="text-align: center;">
+                    <label class="control-label">Chọn hình ảnh</label>
+                   @* @Html.TextBox("Avatar", "", new { type = "file" })*@
+                        <input type="file" id="Avatar" name="Avatar" accept=".jpg, .jpeg, .png" required>
+                    <br />
+                    <img id="preview" class="rounded-circle " src="#" width="230" height="230" style="object-fit:cover; object-position:center; margin-bottom: 8px; text-align: center;" />
+                    <br />
+                </div>
+                <h5 style="margin-top: 15px;">ĐĂNG KÍ TÀI KHOẢN</h5>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.userName, "Tên đăng nhập", htmlAttributes: new { @class = "control-label" })
+                        <input class="form-control" type="text" asp-for="userName" id="usernames" required="required" onchange="ValidateUserName()" />
+                        <p id="check"></p>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <b>Password</b>
+                            <input class="form-control" type="password" asp-for="passwordUser" id="passwordUser" required="required" />
+                        @Html.ValidationMessageFor(model => model.passwordUser, "", new { @class = "text-danger" })
+                    </div>
+                        <div class="form-group col-md-6">
+                          <b>RePassword</b>
+                            <input class="form-control" type="password" name="rePass" id="rePass" required="required" onchange="ValidatePassword()" />
+                            <span id="status"></span>
+                        </div>
+
+                </div>
+            </div>
+            <div class="info-staff col-sm-6">
+                <h5>THÔNG TIN CÁ NHÂN</h5>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.hoTen, "Họ và tên", htmlAttributes: new { @class = "control-label" })
+                        <input class="form-control" type="text" asp-for="hoTen" required="required" />
+                        @Html.ValidationMessageFor(model => model.hoTen, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.gioiTinh, "Giới tính", htmlAttributes: new { @class = "control-label" })
+                        <select class="form-control" asp-for="gioiTinh">
+                            <option>Nam</option>
+                            <option>Nữ</option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.gioiTinh, "", new { @class = "text-danger", required = "required" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.sdtUsers, "Số điện thoại", htmlAttributes: new { @class = "control-label" })
+                            <input class="form-control" type="text" asp-for="sdtUsers" id="sdtUsers" required="required" onchange="ValidatePhone()" />
+                            @*@Html.ValidationMessageFor(model => model.Sdt, "", new { @class = "text-danger" })*@
+                        <span id="noti"></span>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.emailUser, htmlAttributes: new { @class = "control-label" })
+                            <input class="form-control" type="text" asp-for="emailUser" id="emailUser" required="required" onchange="ValidateEmail()" />
+                            @*@Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })*@
+                        <span id="mess"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.ngayThamGia, htmlAttributes: new { @class = "control-label" })
+                            <input class="form-control" type="date" asp-for="ngayThamGia" required="required" placeholder="Nhập ngày" />
+                    </div>
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.idChucVu, "Mã chức vụ", htmlAttributes: new { @class = "control-label" })
+                            <select class="form-control" asp-for="idChucVu">
+                                <option>NVKD</option>
+                                <option>admin</option>
+                            </select>
+                            @Html.ValidationMessageFor(model => model.idChucVu, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            @Html.LabelFor(model => model.idLoaiTK, "Loại tài khoản", htmlAttributes: new { @class = "control-label" })
+                            <input asp-for="idLoaiTK" class="form-control" value="NV" readonly />
+                            <span asp-validation-for="idLoaiTK" class="text-danger"></span>
+                        </div>
+
+                    <div class="form-group col-md-12">
+                        <input type="submit" value="Save Account" id="btnSave" class="btn btn-success btn-sm" />
+                        <a href="/Admin/ListOfStaff" class="btn btn-warning btn-sm">Quay lại danh sách</a>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+        </form>
+    </div>
+    <div>
+        <a asp-action="QuanLyNhanVien">Back to List</a>
+    </div>
+</div>
+
+@* script của upload *@
+
+<script>
+    Avatar.onchange = evt => {
+        const [file] = Avatar.files
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            $("#preview").removeClass("hidden");
+        }
+    }
+</script>
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="Scripts/jquery-1.4.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+   
+    function ValidateUserName() {
+        var index = document.getElementById("usernames").value;
+        console.log("user" + index)
+        url = "https://localhost:7034/api/Users/ValidateUserName?index=" + index;
+        console.log(url)
+
+        fetch(url)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                console.log("data"+data);
+                if (data === true) {
+                    document.getElementById("usernames").style.borderColor = "green";
+                    document.getElementById("check").innerText = "";
+                    document.getElementById("btnSave").style.visibility = "visible";
+                } else {
+                    document.getElementById("usernames").style.borderColor = "red";
+                    document.getElementById("check").innerText = "Tên người dùng đã tồn tại"; 
+                    document.getElementById("btnSave").style.visibility = "hidden";
+                }
+               
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+            });
+    }
+
+    function ValidatePhone() {
+        var index = document.getElementById("sdtUsers").value;
+        url = "https://localhost:7034/api/Users/ValidatePhone?index=" + index;
+        console.log(url)
+
+        fetch(url)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                console.log("data"+data);
+                if (data === true) {
+                    document.getElementById("sdtUsers").style.borderColor = "green";
+                    document.getElementById("noti").innerText = "";
+                    document.getElementById("btnSave").style.visibility = "visible";
+                } else {
+                    document.getElementById("sdtUsers").style.borderColor = "red";
+                    document.getElementById("noti").innerText = "Đã tồn tại"; 
+                    document.getElementById("btnSave").style.visibility = "hidden";
+                }
+               
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+            });
+    }
+    function ValidateEmail() {
+        var index = document.getElementById("emailUser").value;
+        url = "https://localhost:7034/api/Users/ValidateEmail?index=" + index;
+        console.log(url)
+
+        fetch(url)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                console.log("data" + data);
+                if (data === true) {
+                    document.getElementById("emailUser").style.borderColor = "green";
+                    document.getElementById("mess").innerText = "";
+                    document.getElementById("btnSave").style.visibility = "visible";
+                } else {
+                    document.getElementById("emailUser").style.borderColor = "red";
+                    document.getElementById("mess").innerText = "Đã tồn tại";
+                    document.getElementById("btnSave").style.visibility = "hidden";
+                }
+
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+            });
+    }
+
+  
+
+    function ValidatePassword() {
+        $("#status").html("check ...");
+       
+
+        var p1 = document.getElementById("rePass").value;
+        var p2 = document.getElementById("passwordUser").value;
+        console.log("pas"+p1)
+        console.log("re"+p2)
+
+        $.post("@Url.Action("ValidatePass", "Admin")",
+            {
+                pass1: $("#passwordUser").val(),
+                pass2: $("#rePass").val()
+            },
+            function (data) {
+                if (data == 1) {
+                    $("#status").html('<font color="Green">Available!</font>');
+                    $("#rePass").css("border-color", "Green");
+                    document.getElementById("btnSave").style.visibility = "visible";
+                }
+                else {
+                    $("#status").html('<font color="Red"> Chưa trùng với password đã nhập !!</font>');
+                    $("#rePass").css("border-color", "Red");
+                    document.getElementById("btnSave").style.visibility = "hidden";
+                }
+            }
+        )
+    }
+
+    
+</script>
+
+
+

@@ -1,0 +1,82 @@
+﻿@model Client_QuanLythueTro.Models.DichVuDangTin
+
+@{
+    ViewData["Title"] = "CreateGoiTinDichVu";
+    Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
+    ViewBag.services = "active";
+    ViewBag.Name = "Thêm mới";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="tile" id="printMe">
+                <div class="element-button">
+                    <h4 style="text-align:center">THÊM GÓI TIN</h4>
+                </div>
+                <form asp-action="CreateGoiTinDichVu">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    @Html.HiddenFor(model => model.idDichVu)
+                    @Html.HiddenFor(model => model.trangThaiSuDung)
+                    <div class="form-group">
+                        <b>Gói tin dịch vụ :</b>
+                        <input asp-for="loaiDichVu" class="form-control" required id="loaiDichVu" onchange=" ValidateLoaiTin()" />
+                        <span asp-validation-for="loaiDichVu" class="text-danger"></span>
+                        <p id="noti"></p>
+                    </div>
+                    <div class="form-group">
+                        <b>Giá tiền gói dịch vụ :</b>
+                        <input asp-for="giaCa" class="form-control" required type="number" min="1" />
+                        <span asp-validation-for="giaCa" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b>Hạn sử dụng</b>
+                        <input asp-for="hanDung" class="form-control" type="number" min="5" required />
+                        <span asp-validation-for="hanDung" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b>Vị trí hiển thị</b>
+                        <input asp-for="viTriHienThi" class="form-control" type="number" min="1" required/>
+                        <span asp-validation-for="viTriHienThi" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Thêm" class="btn btn-success btn-sm" />
+                    </div>
+                </form>
+             </div>
+        <div>
+             <a asp-action="QuanLyDichVu">Back to List</a>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    function ValidateLoaiTin() {
+        var index = document.getElementById("loaiDichVu").value;
+        url = "https://localhost:7034/api/DichVuDangTins/ValidateDichVu?name=" + index;
+        console.log(url)
+
+        fetch(url)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                if (data === true) {
+                    document.getElementById("loaiDichVu").style.borderColor = "green";
+                    document.getElementById("noti").innerText = "";
+                    document.getElementById("btnSave").style.visibility = "visible";
+                } else {
+                    document.getElementById("loaiDichVu").style.borderColor = "red";
+                    document.getElementById("noti").style.color = "red";
+                    document.getElementById("noti").innerText = "Đã tồn tại";
+                    document.getElementById("btnSave").style.visibility = "hidden";
+                }
+
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+            });
+    }
+</script>
+
+
