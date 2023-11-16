@@ -69,7 +69,7 @@ namespace Client_QuanLythueTro.Controllers
                 {
                     return RedirectToAction("TrangChu", "NVKD");
                 }    
-                else if (role == "RO4174131")
+                else if (role == "admin")
                     return RedirectToAction("TrangChuAdmin", "Admin");
                
                 return View();
@@ -122,10 +122,10 @@ namespace Client_QuanLythueTro.Controllers
                 TempData["error"] = "thanhcong";
                 if (role == "CT")
                 {
-                    return RedirectToAction("TrangChu", "NVKD");
+                    return RedirectToAction("IndexTinDangPT", "ChuChoThue");
                 }
                 else if (role == "NT")
-                    return RedirectToAction("TrangChu", "");
+                    return RedirectToAction("IndexTinDangPT", "ChuChoThue");
 
                 return View();
 
