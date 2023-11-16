@@ -31,7 +31,6 @@ namespace Client_QuanLythueTro.Controllers
         // GET: NVKDController
         public ActionResult TrangChu()
         {
-           
             List<TinDang> listTin = apiGateWay.ListTinDang();
             ViewBag.list = listTin;
             return View();
@@ -83,7 +82,6 @@ namespace Client_QuanLythueTro.Controllers
         // GET: NVKDController/Details/5
         public ActionResult DetailTinDang(string id)
         {
-           
             TinDang tin = apiGateWay.GetTin(id);
             return View(tin);
         }
@@ -91,7 +89,7 @@ namespace Client_QuanLythueTro.Controllers
 
         public ActionResult CreateTinDang()
         {
-           
+
             TinDang tin = new TinDang();
             return View(tin);
         }
@@ -110,6 +108,7 @@ namespace Client_QuanLythueTro.Controllers
             catch (Exception ex)
             {
                 return Content("Error: " + ex.Message);
+
             }
         }
         public ActionResult AddImgToTinDang(string idTinDang)
@@ -121,7 +120,6 @@ namespace Client_QuanLythueTro.Controllers
         // GET: NVKDController/Edit/5
         public ActionResult EditTin(string id)
         {
-          
             TinDang tin = apiGateWay.GetTin(id);
             return View(tin);
         }
@@ -136,8 +134,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWay.UpdateTin(tin);
                 return RedirectToAction("QuanLyTinDang");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
@@ -149,8 +148,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWay.DeleteTin(id);
                 return RedirectToAction("QuanLyTinDang");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
@@ -164,8 +164,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWay.DuyetTin(id,status);
                 return RedirectToAction("QuanLyTinDang");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
@@ -175,7 +176,6 @@ namespace Client_QuanLythueTro.Controllers
         // GET: NVKDController
         public ActionResult QuanLyDichVu()
         {
-           
             List<DichVuDangTin> listGoiTin = apiGateWayDichVu.ListGoiTin();
             ViewBag.listTK = apiGateWayDichVu.ListTK();
             return View(listGoiTin);
@@ -189,13 +189,12 @@ namespace Client_QuanLythueTro.Controllers
         // GET: NVKDController/Details/5
         public ActionResult DetailDichVu(string id)
         {
-          
             TinDang tin = apiGateWay.GetTin(id);
             return View(tin);
         }
 
         public ActionResult CreateGoiTinDichVu()
-        { 
+        {
             DichVuDangTin tin = new DichVuDangTin();
             return View(tin);
         }
@@ -210,14 +209,14 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWayDichVu.CreateGoiTin(tin);
                 return RedirectToAction("QuanLyDichVu");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
         public ActionResult EditGoiTinDichVu(string id)
         {
-           
             DichVuDangTin tin = apiGateWayDichVu.GetGoiTin(id);
             return View(tin);
         }
@@ -230,8 +229,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWayDichVu.UpdateDichVuDangTin(tin);
                 return RedirectToAction("QuanLyDichVu");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
@@ -244,15 +244,15 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWayDichVu.DeleteTin(id);
                 return RedirectToAction("QuanLyDichVu");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
 
         public ActionResult CreateTK()
         {
-           
             LoaiTaiKhoan tin = new LoaiTaiKhoan();
             return View(tin);
         }
@@ -267,14 +267,14 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWayDichVu.CreateTK(tk);
                 return RedirectToAction("QuanLyTaiKhoanDV");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
         public ActionResult EditTK(string id)
         {
-          
             LoaiTaiKhoan tk =  apiGateWayDichVu.GetTaiKhoan(id);
             return View(tk);
         }
@@ -287,8 +287,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWayDichVu.UpdateTK(tk);
                 return RedirectToAction("QuanLyTaiKhoanDV");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
@@ -301,8 +302,9 @@ namespace Client_QuanLythueTro.Controllers
                 apiGateWayDichVu.DeleteTK(id);
                 return RedirectToAction("QuanLyTaiKhoanDV");
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }

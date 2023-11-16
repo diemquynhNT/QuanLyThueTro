@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<APIGateWayTinDang>();
 builder.Services.AddScoped<APIGateWayDichVu>();
 builder.Services.AddScoped<APIGateWayUsers>();
+builder.Services.AddScoped<TinDang_PhongTro_GateWay>();
+builder.Services.AddScoped<LichXemPhong_GateWay>();
 builder.Services.AddScoped<APIGateWayKhuVuc>();
 
 

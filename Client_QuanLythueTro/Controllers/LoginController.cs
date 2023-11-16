@@ -69,7 +69,7 @@ namespace Client_QuanLythueTro.Controllers
                 {
                     return RedirectToAction("TrangChu", "NVKD");
                 }    
-                else if (role == "admin")
+                else if (role == "RO4174131")
                     return RedirectToAction("TrangChuAdmin", "Admin");
                
                 return View();

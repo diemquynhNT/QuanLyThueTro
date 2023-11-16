@@ -105,7 +105,7 @@ namespace Client_QuanLythueTro.APIGateWay
             }
             catch (Exception ex)
             {
-                throw new Exception("loi" + ex.Message);
+                throw new Exception("Lỗi: " + ex.Message);
             }
             finally { }
             return tin;
@@ -133,7 +133,7 @@ namespace Client_QuanLythueTro.APIGateWay
             }
             catch (Exception ex)
             {
-                throw new Exception("loi" + ex.Message);
+                throw new Exception("Lỗi: " + ex.Message);
             }
             finally { }
             return tin;
@@ -193,7 +193,7 @@ namespace Client_QuanLythueTro.APIGateWay
             }
             catch (Exception ex)
             {
-                throw new Exception("loi" + ex.Message);
+                throw new Exception("Lỗi: " + ex.Message);
             }
             finally { }
             return listtk;
@@ -259,7 +259,7 @@ namespace Client_QuanLythueTro.APIGateWay
             }
             catch (Exception ex)
             {
-                throw new Exception("loi" + ex.Message);
+                throw new Exception("Lỗi: " + ex.Message);
             }
             finally { }
             return tin;
@@ -291,7 +291,7 @@ namespace Client_QuanLythueTro.APIGateWay
             }
             catch (Exception ex)
             {
-                throw new Exception("loi" + ex.Message);
+                throw new Exception("Lỗi: " + ex.Message);
             }
             finally { }
             return tk;

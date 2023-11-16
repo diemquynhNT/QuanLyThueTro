@@ -9,15 +9,16 @@
 
 <div class="container">
     <div class="row">
+        <div class="col-md-3"></div>
         <div class="col-md-6">
             <div class="tile" id="printMe">
                 <div class="element-button">
-                    <h4 style="text-align:center">edit TÀI KHOẢN DỊCH VỤ</h4>
+                    <h4 style="text-align:center">Chỉnh sửa dịch vụ loại tài khoản</h4>
                 </div>
                 <form asp-action="EditTK">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <b>Id</b>
+                        <b>Mã loại tài khoản</b>
                         <input asp-for="idLoaiTK" class="form-control" readonly />
                         <span asp-validation-for="idLoaiTK" class="text-danger"></span>
                     </div>
@@ -27,22 +28,22 @@
                         <span asp-validation-for="tenLoaiTK" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <b>Gía</b>
+                        <b>Giá</b>
                         <input asp-for="giaTK" class="form-control" type="number" min="0" required />
                         <span asp-validation-for="giaTK" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <b>Hạn dùng</b>
+                        <b>Hạn dùng/ngày</b>
                         <input asp-for="hanDung" class="form-control" type="number" min="0" required />
                         <span asp-validation-for="hanDung" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <input type="submit" value="Save" class="btn btn-primary" />
+                        <input type="submit" value="Lưu lại" class="btn btn-primary" /> |
+                        <a class="btn btn-warning" href="~/NVKD/QuanLyDichVu"> Trở lại</a>
                     </div>
                 </form>
             </div>
         </div>
-
         <div>
             <a asp-action="QuanLyDichVu">Back to List</a>
         </div

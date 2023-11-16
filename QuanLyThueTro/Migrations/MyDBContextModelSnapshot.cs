@@ -109,6 +109,10 @@ namespace QuanLyThueTro.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("publicId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("idImage");
 
                     b.HasIndex("idTinDang");
@@ -166,7 +170,10 @@ namespace QuanLyThueTro.Migrations
 
                     b.HasIndex("idTinDang");
 
-                    b.ToTable("lichXemPhongs");
+                    b.ToTable("lichXemPhongs", t =>
+                        {
+                            t.HasTrigger("tr_ChuThueHuyLichXem");
+                        });
                 });
 
             modelBuilder.Entity("QuanLyThueTro.Model.LoaiTaiKhoan", b =>
@@ -307,6 +314,9 @@ namespace QuanLyThueTro.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int>("luotTruyCap")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ngayBatDau")
                         .HasColumnType("datetime2");
 
@@ -342,10 +352,11 @@ namespace QuanLyThueTro.Migrations
                     b.HasIndex("idDichVu");
 
                     b.HasIndex("idKhuVuc");
-
+                    
                     b.HasIndex("idUser");
 
                     b.ToTable("tinDangs");
+
                 });
 
             modelBuilder.Entity("QuanLyThueTro.Model.TinYeuThich", b =>

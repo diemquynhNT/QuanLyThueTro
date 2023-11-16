@@ -17,13 +17,13 @@
             <h5 class="btn btn-outline-success">Tài khoản</h5>
             </a>
     </li>
-    
+
 </ul>
 
 <div class="tab-content">
     
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <div class="tile">
                     <h2 class="tile-title">DANH SÁCH GÓI DICH VỤ</h2>
                     <div class="tile-body">
@@ -38,12 +38,12 @@
                             <div class="col-sm-12 table-responsive">
                                 <table class="table table-hover table-bordered js-copytextarea dataTable no-footer" cellpadding="0" cellspacing="0" border="0" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
                                     @*//Phần render từng dòng trong C#*@
-                                    <thead style="background-color: #ffd43b;">
+                                    <thead style="background-color: #ffd43b; text-align:center;">
                                         <tr>
                                             <th aria-controls="sampleTable" rowspan="1" colspan="1">Mã</th>
                                             <th aria-controls="sampleTable" rowspan="1" colspan="1">Loại gói tin</th>
                                             <th aria-controls="sampleTable" rowspan="1" colspan="1">Giá</th>
-                                            <th aria-controls="sampleTable" rowspan="1" colspan="1">Hạn</th>
+                                            <th aria-controls="sampleTable" rowspan="1" colspan="1">Hạn sử dụng/ngày</th>
                                             <th aria-controls="sampleTable" rowspan="1" colspan="1">Chức năng</th>
                                         </tr>
                                     </thead>
@@ -66,11 +66,11 @@
                                                         @Html.DisplayFor(modelItem => item.loaiDichVu)
                                                     </td>
                                                     <td>
-                                                        @Html.DisplayFor(modelItem => item.giaCa) 
+                                                        @Html.DisplayFor(modelItem => item.giaCa)
                                                     </td>
                                                     <td>
                                                         @Html.DisplayFor(modelItem => item.hanDung)
-                                                       
+
                                                     </td>
                                                     <td style="text-align:center">
                                                         <a href="/NVKD/EditGoiTinDichVu/@item.idDichVu" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="Edit">
@@ -84,17 +84,17 @@
                                                                 <div class="modal-dialog" role="document">
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">
-                                                                            <h5 class="modal-title">Delete Confirmation @item.idDichVu</h5>
+                                                                            <h5 class="modal-title">Xác nhận xóa dịch vụ gói tin mã @item.idDichVu</h5>
                                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                                 <span aria-hidden="true">&times;</span>
                                                                             </button>
                                                                         </div>
                                                                         <div class="modal-body">
-                                                                            <p style="text-align:center">Xác nhận xóa gói tin dịch vụ?</p>
+                                                                            <p style="text-align:center">Bạn có muốn xóa gói tin dịch vụ này?</p>
                                                                         </div>
                                                                         <div class="modal-footer">
-                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                                                            <input type="submit" value="Delete" class="btn btn-danger" />
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Không</button>
+                                                                            <input type="submit" value="Đồng ý" class="btn btn-danger" />
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -114,10 +114,15 @@
 
                 </div>
             </div>
-        </div>
-    </div>
-
-    
+            <div class="col-md-4">
+                <div class="container">
+                    <p class="msg">
+                        Dịch vụ gói tin
+                    </p>
+                </div>
+                
             </div>
-     
-          
+        </div>
+    </div>   
+            </div>
+

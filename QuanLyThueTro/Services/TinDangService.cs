@@ -1,5 +1,7 @@
+
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 ﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using QuanLyThueTro.Data;
 using QuanLyThueTro.Dto;
@@ -106,6 +108,8 @@ namespace QuanLyThueTro.Services
         {
             _context.tinDangs.Update(tin);
             _context.phongTros.Update(phong);
+            _context.Entry(tin).State = EntityState.Modified;
+            _context.Entry(phong).State = EntityState.Modified;
             _context.SaveChanges();
             return tin;
         }

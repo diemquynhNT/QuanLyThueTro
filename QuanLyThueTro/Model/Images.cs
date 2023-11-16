@@ -9,7 +9,7 @@ namespace QuanLyThueTro.Model
         public int idImage { get; set; }
         [Required]
         public string nameImage { get; set; }
-
+        public string publicId { get; set; }
         public string idTinDang { get; set; }
         [ForeignKey("idTinDang")]
         public TinDang tinDangs { get; set; }

@@ -4,16 +4,43 @@
     ViewData["Title"] = "EditGoiTinDichVu";
     Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
     ViewBag.services = "active";
-    ViewBag.Name = "Edit";
+    ViewBag.Name = "Quản lý dịch vụ";
 }
+@{
+    // alert includ icons: question, info, success, error, warning
+    //footer: '<a href="">Why do I have this issue?</a>'
+    var checkMessage = TempData["AlertMessage"];
+    if (checkMessage == "successful")
+    {
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công',
+                text: 'Xóa lịch xem thành công!'
+            })
+        </script>
 
+    }
+    if (checkMessage == "failed")
+    {
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Đã có lỗi xảy ra',
+                text: 'Chỉ được xóa lịch xem trước 24h tính từ ngày xem!'
+            })
+        </script>
+
+    }
+}
 
 <div class="container">
     <div class="row">
+        <div class="col-md-3"></div>
         <div class="col-md-6">
             <div class="tile" id="printMe">
                 <div class="element-button">
-                    <h4 style="text-align:center">EDIT GÓI TIN</h4>
+                    <h4 style="text-align:center">Chỉnh sửa dịch vụ gói tin</h4>
                 </div>
                     <form asp-action="EditGoiTinDichVu">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -64,8 +91,8 @@
                 <a asp-action="QuanLyDichVu">Back to List</a>
             </div>
             </div>
-
-            
         </div>
+        <div class="col-md-3"></div>
     </div>
+</div>
 
