@@ -6,130 +6,109 @@
     ViewBag.tc = "active";
     TinDang_PhongTro_GateWay callTinDangPT = new TinDang_PhongTro_GateWay();
 }
-
-<style>
-    .scale-img {
-        position: relative;
-        overflow: hidden;
-    }
-
-        .scale-img img {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-    .card-body {
-        text-align: left;
-    }
-
-    .images-number {
-        position: absolute;
-        bottom: 3px;
-        left: 5px;
-        background: rgba(0,0,0,.5);
-        color: #fff;
-        padding: 3px 5px;
-        border-radius: 3px;
-        font-size: .9rem;
-        pointer-events: none;
-    }
-
-    .post-save {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        background: rgba(0,0,0,.5);
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1;
-        cursor: pointer;
-    }
-
-    .card-footer {
-        margin-bottom: 0px;
-        color: #8a8d91;
-        justify-content: space-between;
-        display: flex;
-    }
-
-    .name-author {
-        padding-top: 5px;
-    }
-
-    .section {
-        text-align: left;
-        margin-bottom: 20px;
-        padding: 20px;
-        background-color: #fff;
-        border: 1px solid #dedede;
-        border-radius: 8px;
-    }
-
-    .list-group {
-        cursor: pointer;
-    }
-
-    .dropdown {
-        width: 20%;
-    }
-
-        .dropdown button {
-            width: 100%;
-        }
-</style>
-
+<link href="~/css/search-pop.css" rel="stylesheet" />
 <div class="text-center bg-light">
-    <div class="d-inline-flex justify-content-center bg-warning mt-2" style="width: 100%;">
-        <div class="p-2 dropdown">
-            <button class="btn btn-light mb-0">Nhà trọ, phòng trọ</button>
-        </div>
-        <div class="p-2 dropdown">
-            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown">
-                Địa điểm
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Link 1</a></li>
-                <li><a class="dropdown-item" href="#">Link 2</a></li>
-                <li><a class="dropdown-item" href="#">Link 3</a></li>
-            </ul>
-        </div>
-        <div class="p-2 dropdown">
-            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown">
-                Giá thuê
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Link 1</a></li>
-                <li><a class="dropdown-item" href="#">Link 2</a></li>
-                <li><a class="dropdown-item" href="#">Link 3</a></li>
-            </ul>
-        </div>
-        <div class="p-2 dropdown">
-            <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown">
-                Diện tích
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Link 1</a></li>
-                <li><a class="dropdown-item" href="#">Link 2</a></li>
-                <li><a class="dropdown-item" href="#">Link 3</a></li>
-            </ul>
-        </div>
-        <div class="p-2 dropdown">
-            <button type="button" class="btn btn-primary">
-                Tìm kiếm
-            </button>
-        </div>
+@*    SEARCH*@
+    <div class="search-content">
+        <section id="filter-top-inner">
+            <section id="filter-top">
+                <div class="filter-body">
+                    <div class="filter-item ">
+                        <span>
+                            <i class="fas fa-home"></i>
+                            <strong>Phòng trọ, nhà trọ</strong>
+                        </span>
+                    </div>
+                    <div class="filter-item" onclick="showPopup('city')">
+                        <span id="diadiem"> <i class="fas fa-map"></i>Địa điểm</span>
+                    </div>
+                    <div class="filter-item " onclick="showPopup('price')">
+                        <span id="giachon"> <i class='bx bx-purchase-tag-alt'></i></i>Chọn giá</span>
+                    </div>
+                    <div class="filter-item " onclick="showPopup('dientich')">
+                        <span id="dientichchon"><i class='bx bx-area'></i>Chọn diện tích</span>
+                    </div>
+                    <div class="filter-item submit">
+                        <span>Tìm kiếm</span>
+                    </div>
+                </div>
+
+                <!-- POP CITY -->
+                <div class="filter-popup js-filter-popup js-filter-popup-city" data-popup-type="city">
+                    <div class="filter-popup-header">
+                        <span class="header-label">Địa điểm tìm kiếm</span>
+                        <div class="popup-close" onclick="closePopup('city')"><i class="fas fa-times"></i></div>
+                    </div>
+                    <div class="filter-popup-content">
+                        <div id="filter-popup-city-option" class="filter-list-option">
+                            <ul>
+                                <li class="selected" onclick="selectLocation(this)">Toàn quốc</li>
+                                <li class="" onclick="selectLocation(this)">Hồ Chí Minh</li>
+                                <li class="" onclick="selectLocation(this)">Hà Nội</li>
+                                <li class="" onclick="selectLocation(this)">Đà Nẵng</li>
+                                <li class="" onclick="selectLocation(this)">Hà Nội</li>
+                                <li class="" onclick="selectLocation(this)">Đồng Nai</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-popup has-footer js-filter-popup js-filter-popup-price" data-popup-type="price">
+                    <div class="filter-popup-header">
+                        <span class="header-label">Giá lựa chọn</span>
+                        <div class="popup-close" onclick="closePopup('price')"><i class="fas fa-times"></i></div>
+                    </div>
+                    <div class="filter-popup-content-search">
+                        <div class="pop-show-price">
+                            <header>
+                                <h4>Chọn giá phòng</h4>
+                                <div class="price-input">
+                                    <div class="field">
+                                        <span>Min</span>
+                                        <input value="0" type="number" class="input-min">
+                                    </div>
+                                    <div class="separator">-</div>
+                                    <div class="field">
+                                        <span>Max</span>
+                                        <input value="15000" type="number" class="input-max">
+                                    </div>
+                                </div>
+                                <div class="slider">
+                                    <div class="progress" id="progress"></div>
+                                </div>
+                                <div class="range-input">
+                                    <input type="range" class="range-min" id="range-min" min="0" max="15000" value="0">
+                                    <input type="range" class="range-max" id="range-max" min="0" max="15000" value="15000">
+
+                                </div>
+                            </header>
+                            <button class="btnSavePrice btn btn-success" onclick="getDatatoPrice()">Xác nhận</button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="filter-popup js-filter-popup js-filter-popup-dientich" data-popup-type="dientich">
+                    <div class="filter-popup-header">
+                        <span class="header-label">Diện tích</span>
+                        <div class="popup-close" onclick="closePopup('dientich')"><i class="fas fa-times"></i></div>
+                    </div>
+                    <div class="filter-popup-content">
+                        <div id="filter-popup-city-option" class="filter-list-option">
+                            <ul>
+                                <li class="selected" onclick="selectDienTich(this)">Dưới 20</li>
+                                <li class="" onclick="selectDienTich(this)">Từ 20m - 30m</li>
+                                <li class="" onclick="selectDienTich(this)">Từ 30m - 70m</li>
+                                <li class="" onclick="selectDienTich(this)">Từ 70m - 90m</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
     </div>
-    <h1 class="display-4">Welcome to Home 180</h1>
-    <p>Kênh thông tin phòng trọ đứng thứ #12 tại Việt nam</p>
+    @*BODY*@
+    <div class="title-header">
+        <h2>Welcome to Home 180</h2>
+        <p>Kênh thông tin cung cấp dịch vụ phòng trọ hàng đầu tại Việt nam</p>
+    </div>
     <div class="d-flex justify-content-center mb-3">
         <div class="card m-2" style="width:230px">
             <img class="card-img-top" src="~/img/TPHCM.jpg" alt="Card image" style="width:100%; height: 120px">
@@ -153,47 +132,64 @@
 
     <div class="row g-0">
         <div class="col-sm-8 m-2 rounded" style="border: 1px solid #dedede;">
-            <h5>Tin nổi bật</h5>
-            <h6>6/190 bài đăng được hiển thị</h6>
+            <div class="content-news">
+                <div class="header-news">
+                    <h5>Tin nổi bật</h5>
+                    <h6>6/190 bài đăng được hiển thị</h6>
+                </div>
             <ul class="list-group list-unstyled">
                 @foreach (var item in Model)
                 {
                     if (!item.trangThaiTinDang)
                     {
                         List<string> imgList = callTinDangPT.ListImages(item.idTinDang);
-                        <li onclick="window.location.assign('/ChuChoThue/DetailTinDangPT/@item.idTinDang')">
-                            <div class="card text-black" style="max-width: 100%;">
-                                <div class="row g-0">
-                                    <div class="col-md-4 scale-img">
-                                        <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">
-                                        <span class="images-number">18 ảnh</span>
-                                        <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="card-body">
-                                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.tieuDe)</h5>
-                                            <p class="card-text text-truncate">@Html.DisplayFor(modelItem => item.moTa)</p>
-                                            <p class="card-text">@Html.DisplayFor(modelItem => item.diaChi)</p>
-                                            <p class="card-text"><small class="text-muted">Lượt truy cập: @Html.DisplayFor(modelItem => item.luotTruyCap)</small></p>
-                                            <p class="card-footer">
-                                                <span class="name-author">
-                                                    <img src="~/img/user.png" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
-                                                    @Html.DisplayFor(modelItem => item.nguoiLienHe)
-                                                </span>
-
-                                                <span class="btn-info-author">
-                                                    <button type="button" class="btn btn-info">@Html.DisplayFor(modelItem => item.sdtNguoiLienHe)</button>
-                                                    <button type="button" class="btn btn-outline-primary">Zalo</button>
-                                                </span>
-                                            </p>
+                            <li class="post-item" onclick="window.location.assign('/ChuChoThue/DetailTinDangPT/@item.idTinDang')" style="padding-bottom:10px">
+                                <div class="card text-black" style="max-width: 100%;">
+                                    <div class="row g-0">
+                                        <div class="col-md-4 scale-img">
+                                            <img src="/image/demo.jpg" class="img-fluid rounded-start m-0" alt="...">
+                                            <!-- @*<img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">*@ -->
+                                            <span class="images-number">18 ảnh</span>
+                                            <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="post-info">
+                                                <h5 class="post-title" style="color: red;">
+                                                    @Html.DisplayFor(modelItem => item.tieuDe)
+                                                </h5>
+                                                @{
+                                                    var tienPhong = string.Format("{0:0,0 vnđ}", item.giaPhong);
+                                                }
+                                                <div class="price-home clearfix">
+                                                    <span class="post-price"> @tienPhong/tháng</span>
+                                                    <span class="post-acreage">@Html.DisplayFor(modelItem => item.dienTich)m²</span>
+                                                    <span class="post-location">
+                                                        @Html.DisplayFor(modelItem => item.diaChi)
+                                                    </span>
+                                                </div>
+                                                <p class="post-summary">
+                                                    @Html.DisplayFor(modelItem => item.moTa)
+                                                </p>
+                                                <p class="card-text"><small class="text-muted">Lượt truy cập: @Html.DisplayFor(modelItem => item.luotTruyCap)</small></p>
+                                                <p class="card-footer">
+                                                    <span class="name-author">
+                                                        <img src="~/img/user.png" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
+                                                        @Html.DisplayFor(modelItem => item.nguoiLienHe)
+                                                    </span>
+                                                    <span class="btn-info-author">
+                                                        <button type="button" class="btn btn-info">@Html.DisplayFor(modelItem => item.sdtNguoiLienHe)</button>
+                                                        <button type="button" class="btn btn-outline-primary">Zalo</button>
+                                                    </span>
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </li>
+                            </li>
                     }
                 }
             </ul>
+        </div>
         </div>
         <div class="col-sm-3 m-2 rounded">
             <section class="section">
@@ -296,3 +292,5 @@
     </div>
 
 </div>
+<script src="~/js/search.js"></script>
+
