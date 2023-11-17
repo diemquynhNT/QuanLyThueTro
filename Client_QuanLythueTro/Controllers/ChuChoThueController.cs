@@ -2,6 +2,7 @@
 using Client_QuanLythueTro.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Client_QuanLythueTro.Controllers
 {
@@ -14,6 +15,14 @@ namespace Client_QuanLythueTro.Controllers
         {
             this.callTinDangPT = callTinDangPT;
             _callLichXemPhong = callLichXemPhong;
+        }
+
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("access_token");
+
+            return RedirectToAction("IndexTinDangPT", new RouteValueDictionary(
+                                   new { controller = "ChuChoThue", action = "IndexTinDangPT", Id = "" }));
         }
 
         public IActionResult IndexTinDangPT()

@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
+@{
+    var userJson = Context.Session.GetString("user");
+    Users user = null;
+    if (userJson != null)
+    {
+        user = JsonConvert.DeserializeObject<Users>(userJson);
+    }
+}
+
+
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -20,6 +32,7 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    
 </head>
 <body>
     @*navigation*@
@@ -34,12 +47,43 @@
             </div>
             <div class="p-2 navbar navbar-expand-sm bg-light justify-content-center">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link text-primary" href="#"><i class='bx bx-user'></i> Đăng nhập</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-info" href="#"><i class='bx bxs-user-plus'></i> Đăng ký</a>
-                    </li>
+                    @{
+                        if(user == null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-primary" href="~/Login/LoginCustomer"><i class='bx bx-user'></i> Đăng nhập</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-info" href="#"><i class='bx bxs-user-plus'></i> Đăng ký</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class=" nav-item">
+                                <div class="dropdown">
+                                    <a class="nav-link dropdown-toggle user-wrapper" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        @if (string.IsNullOrEmpty(user.hinhAnh))
+                                        {
+                                            <img id="imgUser" alt="User Image" width="37px" height="37px" />
+
+                                        }
+                                        else
+                                        {
+                                            <img src="@Url.Content("~/img/Hanoi.jpg")" width="37px" height="37px">
+                                        }
+                                        <b style="">Xin chào, @user.hoTen</b>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink" style="z-index: 1030;">
+                                        <li><a class="dropdown-item" href="#">Quản lý tài khoản</a></li>
+                                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("Logout", "ChuChoThue")">Đăng xuất</a></li>
+                                    </ul>
+                                </div>
+                                
+                            </li>
+                        }
+                    }
+                    
                     <li class="nav-item">
                         <a class="nav-link text-muted" href="#"><i class='bx bx-heart'></i> Yêu thích</a>
                     </li>

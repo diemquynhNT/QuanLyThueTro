@@ -81,7 +81,7 @@ namespace QuanLyThueTro.Controllers
                 return NotFound();
             }
             _extensionService.GoUpLuotTruyCap(tinDang);
-            Thread.Sleep(2000);
+            Thread.Sleep(200);
             var phongTro = _context.phongTros.Where(s => s.idTinDang == tinDang.idTinDang).FirstOrDefault();
             TinDangPhongTroVM dto = new TinDangPhongTroVM(tinDang.idTinDang,
                           tinDang.tieuDe,
