@@ -19,8 +19,7 @@ namespace Client_QuanLythueTro.Controllers
 
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("access_token");
-
+            HttpContext.Session.Clear();
             return RedirectToAction("IndexTinDangPT", new RouteValueDictionary(
                                    new { controller = "ChuChoThue", action = "IndexTinDangPT", Id = "" }));
         }
@@ -39,6 +38,12 @@ namespace Client_QuanLythueTro.Controllers
             imgList = callTinDangPT.ListImages(id);
             ViewBag.listImg = imgList.ToList();
             return View(tinDang);
+        }
+
+        public IActionResult QLTinDangPT()
+        {
+            IEnumerable<TinDang> tinDangs = callTinDangPT.ListTinDangPhongTro();
+            return View(tinDangs);
         }
 
         //create tin đăng + phòng trọ
