@@ -1,10 +1,21 @@
 ﻿@using Client_QuanLythueTro.APIGateWay;
 @model IEnumerable<Client_QuanLythueTro.Models.TinDang>
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
 @{
     ViewData["Title"] = "Trang chủ";
     Layout = "~/Views/ChuChoThue/Layout/_LayoutChuChoThue.cshtml";
     ViewBag.tc = "active";
     TinDang_PhongTro_GateWay callTinDangPT = new TinDang_PhongTro_GateWay();
+}
+
+@{
+    var userJson = Context.Session.GetString("user");
+    Users user = null;
+    if (userJson != null)
+    {
+        user = JsonConvert.DeserializeObject<Users>(userJson);
+    }
 }
 <link href="~/css/search-pop.css" rel="stylesheet" />
 <div class="text-center bg-light">
@@ -147,9 +158,9 @@
                                 <div class="card text-black" style="max-width: 100%;">
                                     <div class="row g-0">
                                         <div class="col-md-4 scale-img">
-                                            <img src="/image/demo.jpg" class="img-fluid rounded-start m-0" alt="...">
+                                            <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">
                                             <!-- @*<img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">*@ -->
-                                            <span class="images-number">18 ảnh</span>
+                                            <span class="images-number">@imgList.Count ảnh</span>
                                             <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
                                         </div>
                                         <div class="col-md-8">
@@ -170,10 +181,10 @@
                                                 <p class="post-summary">
                                                     @Html.DisplayFor(modelItem => item.moTa)
                                                 </p>
-                                                <p class="card-text"><small class="text-muted">Lượt truy cập: @Html.DisplayFor(modelItem => item.luotTruyCap)</small></p>
+                                                <p class="card-text"><small class="text-muted">Lượt xem: @Html.DisplayFor(modelItem => item.luotTruyCap)</small></p>
                                                 <p class="card-footer">
                                                     <span class="name-author">
-                                                        <img src="~/img/user.png" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
+                                                        <img src="@user.hinhAnh" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
                                                         @Html.DisplayFor(modelItem => item.nguoiLienHe)
                                                     </span>
                                                     <span class="btn-info-author">

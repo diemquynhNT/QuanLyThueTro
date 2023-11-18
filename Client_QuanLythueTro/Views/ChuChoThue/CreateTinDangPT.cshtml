@@ -1,10 +1,19 @@
 ﻿@model Client_QuanLythueTro.Models.TinDang
-
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
 @{
     ViewData["Title"] = "CreateTinDangPT";
     Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
 }
 
+@{
+    var userJson = Context.Session.GetString("user");
+    Users user = null;
+    if (userJson != null)
+    {
+        user = JsonConvert.DeserializeObject<Users>(userJson);
+    }
+}
 @{
     // alert includ icons: question, info, success, error, warning
     //footer: '<a href="">Why do I have this issue?</a>'
@@ -138,12 +147,12 @@
                 <div class="row">
                     <div class="col">
                         <label class="form-label">Thông tin liên hệ:</label>
-                        <input asp-for="nguoiLienHe" class="form-control" readonly  value="DiemKhang"/>
+                        <input asp-for="nguoiLienHe" class="form-control" readonly  value="@user.hoTen"/>
                         <span asp-validation-for="nguoiLienHe" class="text-danger"></span>
                     </div>
                     <div class="col">
                         <label class="form-label">Số điện thoại:</label>
-                        <input asp-for="sdtNguoiLienHe" class="form-control" readonly value="0945623212"/>
+                        <input asp-for="sdtNguoiLienHe" class="form-control" readonly value="@user.sdtUsers"/>
                         <span asp-validation-for="sdtNguoiLienHe" class="text-danger"></span>
                     </div>
                 </div>

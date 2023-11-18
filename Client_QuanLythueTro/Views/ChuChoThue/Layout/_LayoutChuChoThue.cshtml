@@ -40,8 +40,6 @@
 
                 </a>
             </div>
-            @if(userJson!=null)
-                users= JsonConvert.DeserializeObject<Users>(userJson);
             <div class="p-2 navbar navbar-expand-sm bg-light justify-content-center">
                 <ul class="navbar-nav">
                     @{
@@ -52,6 +50,12 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-info" href="#"><i class='bx bxs-user-plus'></i> Đăng ký</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-muted" onclick="alert('Vui lòng đăng nhập để xem được nội dung này!');" href="#"><i class='bx bx-heart'></i> Yêu thích</a>
+                            </li>
+                            <li class="nav-item">
+                                <a type="button" class="btn btn-danger" onclick="alert('Vui lòng đăng nhập để tạo tin đăng!');" href=""><i class='bx bx-plus'></i> Đăng tin mới</a>
                             </li>
                         }
                         else
@@ -78,15 +82,16 @@
                                 </div>
                                 
                             </li>
+                            
+                            <li class="nav-item">
+                                <a class="nav-link text-muted" href="#"><i class='bx bx-heart'></i> Yêu thích</a>
+                            </li>
+                            <li class="nav-item">
+                                <a type="button" class="btn btn-danger" href="/ChuChoThue/CreateTinDangPT"><i class='bx bx-plus'></i> Đăng tin mới</a>
+                            </li>
                         }
                     }
                     
-                    <li class="nav-item">
-                        <a class="nav-link text-muted" href="#"><i class='bx bx-heart'></i> Yêu thích</a>
-                    </li>
-                    <li class="nav-item">
-                        <a type="button" class="btn btn-danger" href="/ChuChoThue/CreateTinDangPT"><i class='bx bx-plus'></i> Đăng tin mới</a>
-                    </li>
                 </ul>
                 
             </div>
