@@ -40,5 +40,6 @@ namespace QuanLyThueTro.Dto
         public float tienDien { get; set; } //phongtro
         public float tienNuoc { get; set; } //phongtro
         public float tienDichVu { get; set; } //phongtro
+        public string idUser { get; set; }
     }
 }

@@ -67,24 +67,6 @@
     </div>
 </div>
 <hr />
-@*@*Tìm kiếm lịch xem phòng theo ngày (mặc định today)
-<div>
-    <form asp-action="CreateTinDangPT" method="post" enctype="multipart/form-data">
-        <div class="form-group">
-            <div class="row mt-3 mb-5">
-                <div class="col-3">
-                    <label class="form-label">Chọn ngày:</label>
-                    <input class="form-control text-box single-line col-md-12" @*asp-for="" data-val="true" data-val-date="The field NgayXem must be a date." type="datetime-local" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:00")" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:00")" required>
-                </div>
-                <div class="col-2">
-                    <label class="form-label"></label>
-                    <input id="" type="submit" value="Tìm kiếm" class="btn btn-outline-primary form-control" />
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-*@
 <div class="row">
     <div class="col-sm-12 table-responsive">
         <table id="example" class="table table-striped" style="width:100%">

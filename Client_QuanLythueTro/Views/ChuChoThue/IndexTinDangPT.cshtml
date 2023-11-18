@@ -12,9 +12,11 @@
 @{
     var userJson = Context.Session.GetString("user");
     Users user = null;
+    string avt = null;
     if (userJson != null)
     {
         user = JsonConvert.DeserializeObject<Users>(userJson);
+        avt = user.hinhAnh;
     }
 }
 <link href="~/css/search-pop.css" rel="stylesheet" />
@@ -184,7 +186,7 @@
                                                 <p class="card-text"><small class="text-muted">Lượt xem: @Html.DisplayFor(modelItem => item.luotTruyCap)</small></p>
                                                 <p class="card-footer">
                                                     <span class="name-author">
-                                                        <img src="@user.hinhAnh" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
+                                                        <img src="@avt" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
                                                         @Html.DisplayFor(modelItem => item.nguoiLienHe)
                                                     </span>
                                                     <span class="btn-info-author">

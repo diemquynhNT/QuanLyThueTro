@@ -40,9 +40,10 @@ namespace Client_QuanLythueTro.Controllers
             return View(tinDang);
         }
 
-        public IActionResult QLTinDangPT()
+        [HttpGet]
+        public IActionResult QLTinDangPT(string id)
         {
-            IEnumerable<TinDang> tinDangs = callTinDangPT.ListTinDangPhongTro();
+            IEnumerable<TinDang> tinDangs = callTinDangPT.ListTinDangPTByUser(id);
             return View(tinDangs);
         }
 

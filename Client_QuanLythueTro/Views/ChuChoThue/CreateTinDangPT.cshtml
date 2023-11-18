@@ -153,6 +153,7 @@
                     <div class="col">
                         <label class="form-label">Số điện thoại:</label>
                         <input asp-for="sdtNguoiLienHe" class="form-control" readonly value="@user.sdtUsers"/>
+                        <input asp-for="idUser" class="d-none" readonly value="@user.idUser"/>
                         <span asp-validation-for="sdtNguoiLienHe" class="text-danger"></span>
                     </div>
                 </div>

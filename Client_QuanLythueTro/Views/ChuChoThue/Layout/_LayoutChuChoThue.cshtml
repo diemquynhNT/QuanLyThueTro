@@ -55,7 +55,7 @@
                                 <a class="nav-link text-muted" onclick="alert('Vui lòng đăng nhập để xem được nội dung này!');" href="#"><i class='bx bx-heart'></i> Yêu thích</a>
                             </li>
                             <li class="nav-item">
-                                <a type="button" class="btn btn-danger" onclick="alert('Vui lòng đăng nhập để tạo tin đăng!');" href=""><i class='bx bx-plus'></i> Đăng tin mới</a>
+                                <a type="button" class="btn btn-danger" onclick="alert('Vui lòng đăng nhập để tạo tin đăng!');" href="#"><i class='bx bx-plus'></i> Đăng tin mới</a>
                             </li>
                         }
                         else
@@ -75,7 +75,7 @@
                                         <b style="">Xin chào, @user.hoTen</b>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink" style="z-index: 1030;">
-                                        <li><a class="dropdown-item" href="#">Quản lý tài khoản</a></li>
+                                        <li><a class="dropdown-item" href="~/ChuChoThue/QLTinDangPT/@user.idUser">Quản lý tài khoản</a></li>
                                         <li><a class="dropdown-item" href="#">Another action</a></li>
                                         <li><a class="dropdown-item" href="@Url.Action("Logout", "ChuChoThue")">Đăng xuất</a></li>
                                     </ul>

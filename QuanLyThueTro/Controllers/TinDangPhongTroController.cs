@@ -59,7 +59,8 @@ namespace QuanLyThueTro.Controllers
                               tienDien: phongTro.tienDien,
                               tienNuoc: phongTro.tienNuoc,
                               tienDichVu: phongTro.tienDichVu,
-                              item.luotTruyCap);
+                              item.luotTruyCap,
+                              item.idUser);
                 mergeList.Add(dto);
             }
             await _context.DisposeAsync();
@@ -99,8 +100,52 @@ namespace QuanLyThueTro.Controllers
                           tienDien: phongTro.tienDien,
                           tienNuoc: phongTro.tienNuoc,
                           tienDichVu: phongTro.tienDichVu,
-                          tinDang.luotTruyCap);
+                          tinDang.luotTruyCap,
+                          tinDang.idUser);
             return dto;
+        }
+
+        // GET: api/TinDangPhongTro/5
+        //Images
+        [HttpGet("GetByIdUser/{userId}")]
+        public async Task<ActionResult<IEnumerable<TinDangPhongTroVM>>> GetTinDangPTByIdUser(string userId)
+        {
+            if (_context.tinDangs == null)
+            {
+                return NotFound();
+            }
+            var tinDang = _context.tinDangs.Where(t => t.idUser == userId).ToList();
+
+            if (tinDang == null)
+            {
+                return NotFound();
+            }
+            List<TinDangPhongTroVM> listTinDangPT = new List<TinDangPhongTroVM>();
+            foreach ( var t in tinDang )
+            {
+                var phongTro = _context.phongTros.Where(s => s.idTinDang == t.idTinDang).FirstOrDefault();
+                TinDangPhongTroVM dto = new TinDangPhongTroVM(t.idTinDang,
+                              t.tieuDe,
+                              t.loaiTin,
+                              t.ngayBatDau,
+                              t.ngayKetThuc,
+                              t.sdtNguoiLienHe,
+                              t.nguoiLienHe,
+                              t.doiTuongChoThue,
+                              t.soLuongPhong,
+                              diaChi: phongTro.diaChi,
+                              giaPhong: phongTro.giaPhong,
+                              dienTich: phongTro.dienTich,
+                              moTa: phongTro.moTa,
+                              tienDien: phongTro.tienDien,
+                              tienNuoc: phongTro.tienNuoc,
+                              tienDichVu: phongTro.tienDichVu,
+                              t.luotTruyCap,
+                              t.idUser);
+                listTinDangPT.Add(dto);
+            }
+            
+            return listTinDangPT;
         }
 
         // PUT: api/TinDangPhongTro/5
