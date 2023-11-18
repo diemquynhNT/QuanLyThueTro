@@ -1,5 +1,10 @@
-﻿<!DOCTYPE html>
-
+﻿@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
+@{
+    var userJson = Context.Session.GetString("user");
+    Users users = null;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -13,13 +18,9 @@
     <!-- icon boxicons  -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-
-    <!-- custom css file link  -->
-    <link href="~/css/lauoutcct.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="~/css/layoutct.css" rel="stylesheet" />
 </head>
 <body>
     @*navigation*@
@@ -28,57 +29,78 @@
         <div class="container d-flex justify-content-around">
             <div class="p-2">
                 <a class="navbar-brand" href="">
-                    <img src="~/img/logoproject.jpg" height="75px" width="130px" />
-                    <span class="d-block text-sm-center">Bạn của mọi nhà</span>
+                    <img src="/img/HOME180.png" height="40px" width="90px" />
+
                 </a>
             </div>
+            @if(userJson!=null)
+                users= JsonConvert.DeserializeObject<Users>(userJson);
             <div class="p-2 navbar navbar-expand-sm bg-light justify-content-center">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link text-primary" href="#"><i class='bx bx-user'></i> Đăng nhập</a>
+                        <a class="nav-link" href="/Login/LoginCustomer">
+                            <i class='bx bx-user'></i> Đăng nhập
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-info" href="#"><i class='bx bxs-user-plus'></i> Đăng ký</a>
+                        <a class="nav-link" href="/Login/Register"><i class='bx bxs-user-plus'></i> Đăng ký</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-muted" href="#"><i class='bx bx-heart'></i> Yêu thích</a>
-                    </li>
-                    <li class="nav-item">
-                        <a type="button" class="btn btn-danger" href="/ChuChoThue/CreateTinDangPT"><i class='bx bx-plus'></i> Đăng tin mới</a>
-                    </li>
+                    @if(users!=null)
+                    {
+                        <input id="idUsers" value="@users.idUser" style="display:none" />
+                        <li class="nav-item">
+                            <a class="nav-link" href=""><i class=' bx bx-heart'></i> Yêu thích</a>
+                        </li>
+                        <li class="nav-item">
+                            <a type="button" class="btn btn-danger" href="/ChuChoThue/CreateTinDangPT">
+                                <i class='bx bx-plus'></i> Đăng tin mới
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="">
+                                <img id="image" alt="User Image" width="28px" height="28px" />
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("LogoutCustomer", "Login")">
+                                <i class='icon bx bx-log-out '></i>Đăng xuất
+                            </a>
+                        </li>
+                    }
+                    
                 </ul>
                 
             </div>
         </div>
     </header>
-    <nav class="navbar navbar-expand-lg navbar-light sticky-top justify-content-center" style="background: #cbecf7">
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top justify-content-center" style="background: #0E566A">
         <div class="container">
-            <a class="navbar-brand font-weight-bold" href="#">Menu</a>
+            <a class="navbar-brand font-weight-bold" href="#" style="visibility:hidden">Menu</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active @ViewBag.tc" aria-current="page" href="~/ChuChoThue/IndexTinDangPT">Trang chủ</a>
+                        <a class="menutab active" aria-current="page" href="~/ChuChoThue/IndexTinDangPT">Trang chủ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Cho thuê phòng trọ</a>
+                        <a class="menutab" href="#">Cho thuê phòng trọ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Nhà cho thuê</a>
+                        <a class="menutab" href="#">Nhà cho thuê</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Cho thuê căn hộ</a>
+                        <a class="menutab" href="#">Cho thuê căn hộ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Tìm người ở ghép</a>
+                        <a class="menutab" href="#">Tìm người ở ghép</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Tin tức</a>
+                        <a class="menutab" href="#">Tin tức</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Bảng giá dịch vụ</a>
+                        <a class="menutab" href="#">Bảng giá dịch vụ</a>
                     </li>
                 </ul>
             </div>
@@ -88,13 +110,130 @@
     <div class="container">
         @RenderBody()
     </div>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - Client_QuanLythueTro - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+     <footer class="border-top footer text-muted">
+       
+        <section class="pr-company">
+                <div class="section-pr">
+                    <div class="row">
+                        <div class="pr-left col-sm-3">
+                            <h4><strong>VÌ SAO CHỌN</strong></h4>
+                            <h2><STRONG>HOME180 ?!</STRONG></h2>
+                        </div>
+                        <div class="pr-right col-sm-8">
+                            <div class="row">
+                                <div class="col-pr">
+                                    <div class="col-text">
+                                        <h5>
+                                            1. Một trong những website nổi bật
+                                        </H5>
+                                        <p>
+                                            HOME180 tự hào là trang web đứng top google về các từ khóa cho dịch vụ thuê trọ.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-pr">
+                                    <div class="col-text">
+                                        <h5>
+                                            2. Chi phí thấp, hiệu quả tối đa
+                                        </h5>
+                                        <p>
+                                            Các tin đăng trên website sẽ tiếp cận được với nhiều khách hàng hơn, do đó giao dịch nhanh hơn, tiết kiệm chi phí hơn
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-pr">
+                                    <div class="col-text">
+                                        <h5>
+                                            3. Tiện lợi nhanh chóng
+                                        </h5>
+                                        <p>
+                                            Website giúp cho việc thuê - tìm trọ trở nên tiện lợi nhanh chóng
+                                        </p>
+                                    </div>
+                                </div>
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="container">
+                    <div class="footer-row clearfix">
+                        <div class="footer-col first">
+                            <img class="footer-logo" src="/img/HOME180.png" />
+                            <p style="line-height: 1.3;padding-top: 10px;"><b>HOME180</b> tự hào có lượng dữ liệu bài đăng lớn nhất trong lĩnh vực cho thuê phòng trọ.</p>
+                        </div>
+                        <div class="footer-col">
+                            <span class="footer-col-title">Về HOME180</span>
+                            <ul class="footer-menu">
+                                <li>
+                                    <a rel="nofollow" href="/gioi-thieu" previewlistener="true">Giới thiệu</a>
+                                </li>
+                                <li><a rel="nofollow" href="/blog.html" previewlistener="true">Blog</a>
+                                </li>
+                                <li><a rel="nofollow" href="/quy-dinh-su-dung" previewlistener="true">Quy định sử dụng</a>
+                                </li>
+                                <li>
+                                    <a rel="nofollow" href="/chinh-sach-bao-mat" previewlistener="true">Chính sách bảo mật</a>
+                                </li>
+                                <li>
+                                    <a rel="nofollow" href="/lien-he" previewlistener="true">Liên hệ</a>
+                                </li>
+                            </ul>
+                        </div><div class="footer-col">
+                            <span class="footer-col-title">Hỗ trợ khách hàng</span>
+                            <ul class="footer-menu">
+                                <li>
+                                    <a rel="nofollow" href="/huong-dan-su-dung" previewlistener="true">Hướng dẫn đăng tin</a>
+                                </li>
+                                <li><a rel="nofollow" href="/bang-gia-dich-vu" previewlistener="true">Bảng giá dịch vụ</a>
+                                </li>
+                                <li><a rel="nofollow" href="/quy-dinh-dang-tin" previewlistener="true">Quy định đăng tin</a>
+                                </li>
+                                <li>
+                                    <a rel="nofollow" href="/chinh-sach-giai-quyet-khieu-nai" previewlistener="true">Giải quyết khiếu nại</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="footer-col">
+                            <span class="footer-col-title">Liên hệ với chúng tôi</span>
+                              <ul class="footer-menu">
+                                <li>
+                                    <b>Tổng đài CSKH: </b>09176861101
+                                </li>
+                                <li><b>Email: </b>cskh.home180@gmail.com
+                                </li>
+                                <li><b>Địa chỉ: </b>Số 247 Mai Chí Thọ, Phường An Phú, Quận 2, Tp. Hồ Chí Minh
+                                </li>
+                            </ul>
+                 
+                </div>
+            </div>
         </div>
+            </div>
     </footer>
 
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        function get_image() {
+            var id = document.getElementById("idUsers").value;
+            url = "https://localhost:7034/api/Users/GetImage?id=" + id;
+            fetch(url)
+                .then(function (response) {
+                    return response.blob();
+                })
+                .then(function (data) {
+                    console.log(data);
+                    var img = document.getElementById("image");
+                    img.src = URL.createObjectURL(data);
+                })
+                .catch(function (error) {
+                    console.log("Error: " + error);
+                });
+        }
+
+        get_image();
+    </script>
 </body>
 </html>
