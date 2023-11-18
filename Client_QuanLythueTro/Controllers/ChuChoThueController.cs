@@ -2,6 +2,7 @@
 using Client_QuanLythueTro.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Client_QuanLythueTro.Controllers
 {
@@ -14,6 +15,13 @@ namespace Client_QuanLythueTro.Controllers
         {
             this.callTinDangPT = callTinDangPT;
             _callLichXemPhong = callLichXemPhong;
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("IndexTinDangPT", new RouteValueDictionary(
+                                   new { controller = "ChuChoThue", action = "IndexTinDangPT", Id = "" }));
         }
 
         public IActionResult IndexTinDangPT()
@@ -30,6 +38,12 @@ namespace Client_QuanLythueTro.Controllers
             imgList = callTinDangPT.ListImages(id);
             ViewBag.listImg = imgList.ToList();
             return View(tinDang);
+        }
+
+        public IActionResult QLTinDangPT()
+        {
+            IEnumerable<TinDang> tinDangs = callTinDangPT.ListTinDangPhongTro();
+            return View(tinDangs);
         }
 
         //create tin đăng + phòng trọ
