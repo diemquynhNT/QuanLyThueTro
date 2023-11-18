@@ -84,9 +84,13 @@ namespace Client_QuanLythueTro.Controllers
 
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("access_token");
-
+            HttpContext.Session.Clear();
             return RedirectToAction("Login");
+        }
+        public IActionResult LogoutCustomer()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("LoginCustomer");
         }
 
         public IActionResult LoginCustomer()
@@ -125,7 +129,7 @@ namespace Client_QuanLythueTro.Controllers
                     return RedirectToAction("IndexTinDangPT", "ChuChoThue");
                 }
                 else if (role == "NT")
-                    return RedirectToAction("IndexTinDangPT", "ChuChoThue");
+                    return RedirectToAction("IndexTinDangPT", "");
 
                 return View();
 
