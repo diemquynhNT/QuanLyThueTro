@@ -1,0 +1,79 @@
+﻿@model Client_QuanLythueTro.Models.Users
+
+@{
+    ViewData["Title"] = "DetailGuest";
+    Layout = "~/Views/Admin/LayoutAdmin.cshtml";
+    ViewBag.guest = "active";
+    ViewBag.Name = "Thông tin khách hàng";
+}
+<div class="tile container-sm">
+    <div class="tile-body" id="tile-body">
+        <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+            <h3 style="text-align: center; color: rgb(0, 28, 64);">
+                THÔNG TIN KHÁCH HÀNG
+            </h3>
+            <div class="row">
+                <div class="col-md-4" sty>
+                    <img id="imgEmloyee" class="rounded-circle" alt="Cinque Terre" width="250" height="250" style=" text-align: center;">
+                </div>
+                <div class="col-md-8">
+                    <p>
+                        <span>
+                            <strong>Mã : </strong> @Html.DisplayFor(modelItem => Model.idUser)
+                        </span>
+                        -
+                        <span>
+                            @Html.DisplayFor(modelItem => Model.idChucVu)
+                        </span>
+                    </p>
+                    <p>
+                        <b>Họ và tên: </b>@Html.DisplayFor(modelItem => Model.hoTen)
+                    </p>
+
+                    <p>
+                        <strong>Giới tính:</strong> @Html.DisplayFor(modelItem => Model.gioiTinh)
+                    </p>
+                    <p>
+                        <strong>Tên đăng nhập:</strong> @Html.DisplayFor(modelItem => Model.userName)
+                    </p>
+                    <p>
+                        <span>
+                            <strong>Số điện thoại:</strong> @Html.DisplayFor(modelItem => Model.sdtUsers)
+                        </span>
+                    </p>
+                    <p>
+
+                        <span>
+                            <strong>Email: </strong> @Html.DisplayFor(modelItem => Model.emailUser)
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input id="idEmployee" value="@Model.idUser" style="visibility:hidden" />
+<script>
+
+
+    function GetImgeEmployee() {
+        var idEmployee = document.getElementById("idEmployee").value;
+        urlImg = "https://localhost:7034/api/Users/GetImage?id=" + idEmployee;
+        console.log(urlImg + "id" + idEmployee)
+        fetch(urlImg)
+            .then(function (response) {
+                return response.blob();
+            })
+            .then(function (data) {
+                console.log(data);
+                var hinh = document.getElementById("imgEmloyee");
+                hinh.src = URL.createObjectURL(data);
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+            });
+    }
+    GetImgeEmployee();
+
+</script>
+

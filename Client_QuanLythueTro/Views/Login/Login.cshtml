@@ -2,8 +2,7 @@
 @{
     Layout = null;
 }
-@{
-}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,15 +19,25 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
     <link href="~/css/login.css" rel="stylesheet" />
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 <body>
+    @{
+        var ktr = TempData["error"];
+        if (ktr == "loginfailed")
+        {
+            <script>
+                swal("Lỗi !!!", "Vui lòng nhập lại thông tin!", "error");
+            </script>
+        }
+    }
     <div class="limiter">
         <div class="container-login100">
             <div class="wrap-login100">
                 <div class="login100-pic js-tilt" data-tilt>
                     <img src="@Url.Content("~/img/logo.png")" alt="IMG">
                 </div>
-                    <form class="login100-form validate-form" method="post" action="/Login/Login">
+                <form class="login100-form validate-form" method="post" action="/Login/Login">
                     <span class="login100-form-title">
                         Member Login
                     </span>
@@ -71,19 +80,6 @@
             </div>
         </div>
     </div>
-    @{
-        var ktr = TempData["error"];
-        if (ktr == "err")
-        {
-            <script>
-                swal({
-                    title: "Login ",
-                    text: "Invalid Username / Password!",
-                    icon: "error",
-                    button: "OK",
-                });
-            </script>
-        }
-    }
+
 </body>
 </html>

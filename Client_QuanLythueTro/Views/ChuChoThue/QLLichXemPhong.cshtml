@@ -1,0 +1,158 @@
+﻿@model IEnumerable<Client_QuanLythueTro.Models.LichXemPhong>
+@{
+    ViewData["Title"] = "QLLichXemPhong";
+    Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
+}
+
+@{
+    // alert includ icons: question, info, success, error, warning
+    //footer: '<a href="">Why do I have this issue?</a>'
+    var checkMessage = TempData["AlertMessage"];
+    if (checkMessage == "successful")
+    {
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công',
+                text: 'Xóa lịch xem thành công!'
+            })
+        </script>
+
+    }
+    if (checkMessage == "failed")
+    {
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Đã có lỗi xảy ra',
+                text: 'Chỉ được xóa lịch xem trước 24h tính từ ngày xem!'
+            })
+        </script>
+
+    }
+}
+
+<script>
+
+    function onDeleteLichXem(id) {
+        var confirmation = confirm("Bạn có chắc chắn muốn xóa không?");
+        if (confirmation) {
+            var formData = new FormData();
+            formData.append('id', id);
+
+            $.ajax({
+                url: '/ChuChoThue/DeleteLichXem',
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: formData,
+                async: false,
+                success: function(msg){
+                    alert('Xóa thành công lịch xem');
+                },
+                error: function (err) {
+                    alert('Chỉ được xóa lịch xem trước 24h tính từ ngày xem!');
+                }
+            });
+        }
+    }
+</script>
+
+<div class="row">
+    <div class="col-sm-5">
+        <h3>Lịch xem phòng</h3>
+    </div>
+    <div class="col-sm-2">
+        <a type="button" class="btn btn-primary" href="/ChuChoThue/CreateLichXem"><i class='bx bx-plus'></i> Tạo lịch xem mới</a>
+    </div>
+</div>
+<hr />
+@*@*Tìm kiếm lịch xem phòng theo ngày (mặc định today)
+<div>
+    <form asp-action="CreateTinDangPT" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <div class="row mt-3 mb-5">
+                <div class="col-3">
+                    <label class="form-label">Chọn ngày:</label>
+                    <input class="form-control text-box single-line col-md-12" @*asp-for="" data-val="true" data-val-date="The field NgayXem must be a date." type="datetime-local" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:00")" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:00")" required>
+                </div>
+                <div class="col-2">
+                    <label class="form-label"></label>
+                    <input id="" type="submit" value="Tìm kiếm" class="btn btn-outline-primary form-control" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+*@
+<div class="row">
+    <div class="col-sm-12 table-responsive">
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã Lịch xem</th>
+                    <th>Mã tin đăng</th>
+                    <th>Người xem</th>
+                    <th>SĐT</th>
+                    <th>Ngày xem</th>
+                    <th>Trạng thái</th>
+                    <th>Chức năng</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int stt = 0;
+                }
+                @foreach (var item in Model)
+                {
+                    stt = stt + 1;
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => stt)</td>
+                        <td>@Html.DisplayFor(modelItem => item.idLichXem)</td>
+                        <td>@Html.DisplayFor(modelItem => item.idTinDang)</td>
+                        <td>@Html.DisplayFor(modelItem => item.nguoiXem)</td>
+                        <td>@Html.DisplayFor(modelItem => item.sdtNguoiXem)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ngayXem)</td>
+                        <td>
+                            @if (item.trangThai)
+                            {
+                                <span class="badge bg-success">Đã duyệt</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Chưa duyệt</span>
+                            }
+                        </td>
+                        <td style="text-align:center">
+                            <a href="/ChuChoThue/EditLichXem/@item.idLichXem" class="btn btn-primary" ata-toggle="tooltip" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="" onclick="onDeleteLichXem('@item.idLichXem')" class="btn btn-outline-danger btn-sm" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã Lịch xem</th>
+                    <th>Mã tin đăng</th>
+                    <th>Người xem</th>
+                    <th>SĐT</th>
+                    <th>Ngày xem</th>
+                    <th>Trạng thái</th>
+                    <th>Chức năng</th>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+</div>
+
+<script>
+    new DataTable('#example');
+    
+</script>

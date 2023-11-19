@@ -17,7 +17,6 @@ namespace QuanLyThueTro.Dto
         public string sdtNguoiLienHe { get; set; }
         [MaxLength(100)]
         public string nguoiLienHe { get; set; }
-
         [Required]
         [MaxLength(100)]
         public string doiTuongChoThue { get; set; }
@@ -34,10 +33,12 @@ namespace QuanLyThueTro.Dto
         [Required]
         public double dienTich { get; set; }
         public string? moTa { get; set; }
-        public float tienNha { get; set; }
         public float tienDien { get; set; }
         public float tienNuoc { get; set; }
         public float tienDichVu { get; set; }
+        public string? idUser { get; set; }
+        //public List<IFormFile> listimg { get; set; }
+
 
     }
 }

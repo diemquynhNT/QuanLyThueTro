@@ -3,10 +3,13 @@
 @{
     ViewData["Title"] = "CreateTK";
     Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
+    ViewBag.services = "active";
+    ViewBag.Name = "Thêm mới";
 }
 
 <div class="container">
     <div class="row">
+        <div class="col-md-3"></div>
         <div class="col-md-6">
             <div class="tile" id="printMe">
                 <div class="element-button">
@@ -33,15 +36,12 @@
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Create" class="btn btn-primary" />
+                        <a class="btn btn-warning" href="~/NVKD/QuanLyDichVu"> Trở lại</a>
                     </div>
                 </form>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
     </div>
-</div>
-    </div>
-</div>
-
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 

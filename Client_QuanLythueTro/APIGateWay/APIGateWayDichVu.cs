@@ -11,6 +11,7 @@ namespace Client_QuanLythueTro.APIGateWay
         private string urlTaiKhoan = "https://localhost:7034/api/LoaiTaiKhoans";
         private HttpClient httpClient = new HttpClient();
 
+        //goi tin
         public List<DichVuDangTin> ListGoiTin()
         {
             List<DichVuDangTin> listTin = new List<DichVuDangTin>();
@@ -104,7 +105,7 @@ namespace Client_QuanLythueTro.APIGateWay
             }
             catch (Exception ex)
             {
-                throw new Exception("loi" + ex.Message);
+                throw new Exception("Lỗi: " + ex.Message);
             }
             finally { }
             return tin;
@@ -119,7 +120,6 @@ namespace Client_QuanLythueTro.APIGateWay
             string id = tin.idDichVu;
             urlGoiTin = urlGoiTin + "/" + id;
             string json = JsonConvert.SerializeObject(tin);
-
             try
             {
                 HttpResponseMessage response = httpClient.PutAsync(urlGoiTin, new StringContent(json, Encoding.UTF8, "application/json")).Result;
@@ -133,7 +133,7 @@ namespace Client_QuanLythueTro.APIGateWay
             }
             catch (Exception ex)
             {
-                throw new Exception("loi" + ex.Message);
+                throw new Exception("Lỗi: " + ex.Message);
             }
             finally { }
             return tin;
@@ -193,7 +193,7 @@ namespace Client_QuanLythueTro.APIGateWay
             }
             catch (Exception ex)
             {
-                throw new Exception("loi" + ex.Message);
+                throw new Exception("Lỗi: " + ex.Message);
             }
             finally { }
             return listtk;
@@ -234,25 +234,22 @@ namespace Client_QuanLythueTro.APIGateWay
 
             return tk;
         }
-
-
-
-        public LoaiTaiKhoan GetTK(string id)
+        public LoaiTaiKhoan GetTaiKhoan(string id)
         {
-            LoaiTaiKhoan tk = new LoaiTaiKhoan();
-            urlTaiKhoan = urlTaiKhoan + "/" + id;
-            if (urlTaiKhoan.Trim().Substring(0, 5).ToLower() == "https")
+            LoaiTaiKhoan tin = new LoaiTaiKhoan();
+            string url = "https://localhost:7034/api/LoaiTaiKhoans/" + id;
+            if (url.Trim().Substring(0, 5).ToLower() == "https")
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             try
             {
-                HttpResponseMessage response = httpClient.GetAsync(urlTaiKhoan).Result;
+                HttpResponseMessage response = httpClient.GetAsync(url).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     string result = response.Content.ReadAsStringAsync().Result;
                     var datacol = JsonConvert.DeserializeObject<LoaiTaiKhoan>(result);
 
                     if (datacol != null)
-                        tk = datacol;
+                        tin = datacol;
                 }
                 else
                 {
@@ -262,11 +259,14 @@ namespace Client_QuanLythueTro.APIGateWay
             }
             catch (Exception ex)
             {
-                throw new Exception("loi" + ex.Message);
+                throw new Exception("Lỗi: " + ex.Message);
             }
             finally { }
-            return tk;
+            return tin;
         }
+
+
+
 
         // update
         public LoaiTaiKhoan UpdateTK(LoaiTaiKhoan tk)
@@ -291,7 +291,7 @@ namespace Client_QuanLythueTro.APIGateWay
             }
             catch (Exception ex)
             {
-                throw new Exception("loi" + ex.Message);
+                throw new Exception("Lỗi: " + ex.Message);
             }
             finally { }
             return tk;

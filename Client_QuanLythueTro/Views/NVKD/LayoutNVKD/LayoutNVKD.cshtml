@@ -1,7 +1,9 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
 @{
+    var userJson = Context.Session.GetString("user");
+    Users users = JsonConvert.DeserializeObject<Users>(userJson);
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -15,35 +17,34 @@
     <!-- Font-icon css-->
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-
-
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-
     <link href="~/css/mainlayout.css" rel="stylesheet" />
+
+
 </head>
 <body onload="time()" class="app sidebar-mini rtl">
     <header class="app-header">
         <div class="app-nav">
             <div class="user-wrapper">
-                @if (!string.IsNullOrEmpty(ViewBag.UserImageUrl))
+                @if (!string.IsNullOrEmpty(users.hinhAnh))
                 {
-                    <img src="@Url.Content("~/img/" + @ViewBag.UserImageUrl)" alt="User Image" width="30px" height="30px" />
+                    <img id="imgUser" alt="User Image" width="30px" height="30px" />
 
                 }
                 else
                 {
                     <img src="@Url.Content("~/img/user.png")" width="30px" height="30px">
                 }
-
+                <b style="margin-left: 10px;">@users.hoTen</b>
                 <a class="logout_item" href="@Url.Action("Logout", "Login")">
                 <i class='app-menu__icon bx bx-log-out '></i>
                 </a>
             </div>
+           
             
         </div>
     </header>
@@ -71,12 +72,17 @@
                     <i class='app-menu__icon bx bx-notepad'></i><span class="app-menu__label">Quản lý tin</span>
                 </a>
             </li>
-            <li>
+           <li>
                 <a class="app-menu__item @ViewBag.services" href="/NVKD/QuanLyDichVu">
                     <i class='app-menu__icon bx bx-purchase-tag'></i><span class="app-menu__label">Quản lý dịch vụ</span>
                 </a>
             </li>
-            <li>
+           <li>
+                <a class="app-menu__item @ViewBag.kv" href="">
+                    <i class='app-menu__icon bx bx-clipboard'></i><span class="app-menu__label">Khu vực hoạt động</span>
+                </a>
+            </li>
+           @* <li>
                 <a class="app-menu__item @ViewBag.money" href="">
                     <i class='app-menu__icon bx bx-clipboard'></i><span class="app-menu__label">Giao Dịch</span>
                 </a>
@@ -85,7 +91,7 @@
                 <a class="app-menu__item @ViewBag.thongke" href="">
                     <i class='app-menu__icon bx bx-clipboard'></i><span class="app-menu__label">Thống kê</span>
                 </a>
-            </li>
+            </li>*@
         </ul>
     </aside>
     <main class="app-content ">
@@ -103,14 +109,37 @@
             @RenderBody()
             @RenderSection("scripts", false)
         </div>
-
+        <input value="@users.idUser" id="idUsers" style="visibility:hidden"/>
     </main>
-    <!--dialog_message -->
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="~/Scripts/plugin/jquery.dataTables.min.js"></script>
-    <script src="~/Scripts/plugin/dataTables.bootstrap.min.js"></script>
+
+    <script src="~/lib/jquery.dataTables.min.js"></script>
+    <script src="~/lib/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript">$('#sampleTable').DataTable();</script>
+    <script type="text/javascript">$('#sampleTable1').DataTable();</script>
+
     <script type="text/javascript">
+        function GetImgeUser() {
+            var id = document.getElementById("idUsers").value;
+            url = "https://localhost:7034/api/Users/GetImage?id=" + id;
+            console.log(url);
+            fetch(url)
+                .then(function (response) {
+                    return response.blob();
+                })
+                .then(function (data) {
+                    console.log(data);
+                    var img = document.getElementById("imgUser");
+                    img.src = URL.createObjectURL(data);
+                })
+                .catch(function (error) {
+                    console.log("Error: " + error);
+                });
+        }
+        GetImgeUser();
+
+
         $('#sampleTable').DataTable(); //TimKiem
+
         //Thời Gian
         function time() {
             var today = new Date();
@@ -180,6 +209,9 @@
         };
         var ctxb = $("#barChartDemo").get(0).getContext("2d");
         var barChart = new Chart(ctxb).Bar(data);
+
+       
+
     </script>
 
 

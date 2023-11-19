@@ -3,7 +3,137 @@
     ViewData["Title"] = "TrangChuAdmin";
     Layout = "~/Views/Admin/LayoutAdmin.cshtml";
     ViewBag.home = "active";
+    ViewBag.Name = "Trang chủ admin";
 }
 
-<h1>TrangChuAdmin</h1>
+<div class="main-content">
+    @{
+        var ktr = TempData["error"];
+        if (ktr == "thanhcong")
+        {
+            <script>
+                swal("Đăng nhập thành công!", "Xin chào", "success");
+            </script>
+        }
+    }
+    <div class="tongquan">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <a href="">
+                        <div class="stat-card">
+                            <div class="stat-card__content">
+                                <p class="text-uppercase mb-1 text-muted">KHÁCH HÀNG</p>
+                                <h4>Tổng</h4>
+                                <div style="font-size:16px">
+                                    <span class="text-success font-weight-bold "> </span>
+                                    <span class="text-muted">tin trong ngày</span>
+                                </div>
+                            </div>
+                            <div class="stat-card__icon stat-card__icon--success">
+                                <div class="stat-card__icon-circle" style=" background: rgba(0, 123, 255, 0.2);">
+                                    <i class="fa fa-clipboard-check" style="color: rgb(0, 28, 64);"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-4">
+                    <a href="#idcho">
+                        <div class="stat-card">
+                            <div class="stat-card__content">
+                                <p class="text-uppercase mb-1 text-muted">TIN CHỜ DUYỆT</p>
+                                <h4> 76 Tin</h4>
+                                <div style="font-size:16px">
+                                    <span class="text-success font-weight-bold ">+</span>
+                                    <span class="text-muted">tin mới</span>
+                                </div>
+                            </div>
+                            <div class="stat-card__icon stat-card__icon--success">
+                                <div class="stat-card__icon-circle" style=" background: rgba(0, 123, 255, 0.2);">
+                                    <i class="fa fa-dolly" style="color: rgb(0, 28, 64);"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-4">
+                    <a href="">
+                        <div class="stat-card">
+                            <div class="stat-card__content">
+                                <p class="text-uppercase mb-1 text-muted">GIAO DỊCH</p>
+                                <h4> 432 giao dịch</h4>
+                                <div style="font-size:16px">
+                                    <span class="text-success font-weight-bold ">+</span>
+                                    <span class="text-muted"> giao dịch mới</span>
+                                </div>
+                            </div>
+                            <div class="stat-card__icon stat-card__icon--success">
+                                <div class="stat-card__icon-circle" style=" background: rgba(0, 123, 255, 0.2);">
+                                    <i class="fa fa-truck" style="color: rgb(0, 28, 64);"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
 
+                </div>
+                @*<div class="col-sm-4">
+                    <a href="#tinhtrangdl">
+                        <div class="stat-card">
+                            <div class="stat-card__content">
+                                <p class="text-uppercase mb-1 text-muted">GÓI TIN</p>
+                                <h4>10 gói</h4>
+                                <div style="font-size:16px">
+                                    <span class="text-muted">34 Sắp hết hạn</span>
+                                </div>
+                            </div>
+                            <div class="stat-card__icon stat-card__icon--success">
+                                <div class="stat-card__icon-circle" style="background: rgba(0, 123, 255, 0.2); ">
+                                    <i class="fa fa-user-alt" style="color: #007bff;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>*@
+                @*<div class="col-sm-4">
+                    <a href="#congno">
+                        <div class="stat-card">
+                            <div class="stat-card__content">
+                                <p class="text-uppercase mb-1 text-muted">GÓI TÀI KHOẢN</p>
+                                <h4>
+                                    2 Gói /h4>
+                                    <div style="font-size:16px">
+                                        <span class="text-muted">2 Loại</span>
+                                    </div>
+                            </div>
+                            <div class="stat-card__icon stat-card__icon--success">
+                                <div class="stat-card__icon-circle" style="background: #CBFAD5; ">
+                                    <i class="fa fa-money-bill" style="color: green;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>*@
+
+               @* <div class="col-sm-4">
+                    <a href="">
+                        <div class="stat-card">
+                            <div class="stat-card__content">
+                                <p class="text-uppercase mb-1 text-muted">DOANH THU</p>
+                                <h4>doanh thu</h4>
+                                <div style="font-size:16px">
+                                    <span class="text-muted">Doanh thu tính theo tháng</span>
+                                </div>
+                            </div>
+                            <div class="stat-card__icon stat-card__icon--success">
+                                <div class="stat-card__icon-circle" style="background: rgba(0, 123, 255, 0.2); ">
+                                    <i class="fa fa-money-check-alt" style="color: #007bff;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+*@
+                </div>
+            </div>
+        </div>
+    </div>

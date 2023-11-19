@@ -13,6 +13,8 @@ namespace QuanLyThueTro.Model
         public float giaCa { get; set; }
         [Required]
         public int hanDung { get; set; }
+        public bool trangThaiSuDung { get; set; }
+        public int viTriHienThi { get; set; }
 
         public virtual ICollection<TinDang> TinDangs { get; set; }
 

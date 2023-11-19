@@ -13,7 +13,12 @@ namespace QuanLyThueTro.Services
         public Task<TinDang> UpdateTinDang(TinDang tin,PhongTro phong);
         public Task<bool> DeleteTinDang(string idTinDang);
         public bool IsValidTinDang(string idTinDang);
-        public void DuyetTin(TinDang tin, bool status);
+        public void DuyetTin(TinDang tin);
+        public List<TinDang> Filter(int thang, bool trangThai);
+        public Task AddHinhanh(string tinId, IFormFile file);
+        public Task<Images> GetImage(string idTin);
+        public void HuyDuyetTin(TinDang tin);
+
 
 
 

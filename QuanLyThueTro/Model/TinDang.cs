@@ -24,7 +24,8 @@ namespace QuanLyThueTro.Model
         public bool trangThaiTinDang { get; set; }
         [Required]
         [StringLength(10, MinimumLength = 8)]
-        public string sdtNguoiLienHe { get; set; } [MaxLength(100)]
+        public string sdtNguoiLienHe { get; set; } 
+        [MaxLength(100)]
         public string nguoiLienHe { get; set; }
       
         [Required]
@@ -38,10 +39,13 @@ namespace QuanLyThueTro.Model
         public string? idKhuVuc { get; set; }
         [ForeignKey("idKhuVuc")]
         public KhuVuc khuVucs { get; set; }
-
+        public int luotTruyCap { get; set; }
         public string? idDichVu { get; set; }
         [ForeignKey("idDichVu")]
         public GoiTinDichVu dichVuDangTin { get; set; }
+        public string? idUser { get; set; }
+        [ForeignKey("idUser")]
+        public Users users { get; set; }
 
         public virtual ICollection<LichXemPhong> lichXemPhongs { get; set; }
         public virtual ICollection<TinYeuThich> tinYeuThiches { get; set; }

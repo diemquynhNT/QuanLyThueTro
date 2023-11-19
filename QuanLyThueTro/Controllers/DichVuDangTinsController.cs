@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using QuanLyThueTro.Data;
 using QuanLyThueTro.Dto;
 using QuanLyThueTro.Model;
@@ -108,6 +109,7 @@ namespace QuanLyThueTro.Controllers
                 return BadRequest("Loại dịch vụ đã tồn tại!");
 
             dichVuDangTin.idDichVu = "DV" + random.GenerateId(5);
+            dichVuDangTin.trangThaiSuDung = true;
             _context.dichVuDangTins.Add(dichVuDangTin);
             try
             {
@@ -151,6 +153,19 @@ namespace QuanLyThueTro.Controllers
         private bool DichVuDangTinExists(string id)
         {
             return (_context.dichVuDangTins?.Any(e => e.idDichVu == id)).GetValueOrDefault();
+        }
+
+        [HttpGet("ValidateDichVu")]
+        public async Task<IActionResult> ValidateDichVu(string name)
+        {
+            if (_context.dichVuDangTins == null)
+            {
+                return NotFound();
+            }
+            var dichVuDangTin = await _context.dichVuDangTins.FindAsync(name);
+            if (dichVuDangTin == null)
+                return Ok(true);
+            return Ok(false); ;
         }
     }
 }

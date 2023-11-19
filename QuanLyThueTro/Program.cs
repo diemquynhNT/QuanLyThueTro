@@ -16,8 +16,18 @@ builder.Services.AddDbContext<MyDBContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DBThueTro"));
 });
 
+//fetch
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("https://localhost:7144") 
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 
-
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var secretKey = builder.Configuration["AppSettings:SecretKey"];
 //mã hóa secretkey
@@ -43,10 +53,14 @@ builder.Services.AddAuthentication
     }
     );
 
+//add cors
+builder.Services.AddCors();
+
 
 //automapper
 builder.Services.AddAutoMapper(typeof(Program));
 // Đăng ký interface và thực hiện các chức năng của nó trong file
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<IExtensionService, ExtensionService>();
 builder.Services.AddScoped<IUsers, UserService>();
 builder.Services.AddScoped<ITinDang, TinDangService>();
@@ -64,12 +78,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors();
 app.UseAuthentication();    
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
-
+//cors
+app.UseCors(options =>
+     options.WithOrigins("http://localhost:7144")
+            .AllowAnyHeader()
+            .AllowAnyMethod());
 app.Run();

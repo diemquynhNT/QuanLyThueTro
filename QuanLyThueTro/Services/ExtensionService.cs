@@ -17,21 +17,38 @@ namespace QuanLyThueTro.Services
         {
             Random rnd = new Random();
             string num = rnd.Next(1000, 10000000).ToString();
-            chucVu.idChucVu = "#RO" + num;
+            chucVu.idChucVu = "RO" + num;
+        }
+
+        public string AutoPK_Common()
+        {
+            Random rnd = new Random();
+            string stRnd = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            string pK = new string(Enumerable.Repeat(stRnd, 12).Select(s => s[rnd.Next(s.Length)]).ToArray());
+            return pK;
+        }
+
+        public int AutoPK_IntCommon()
+        {
+            Random rnd = new Random();
+            string stRnd = "0123456789";
+            string pK = new string(Enumerable.Repeat(stRnd, 6).Select(s => s[rnd.Next(s.Length)]).ToArray());
+            int pkN = (int)(uint)long.Parse(pK);
+            return pkN;
         }
 
         public void AutoPK_DichVu(GoiTinDichVu dichVu)
         {
             Random rnd = new Random();
             string num = rnd.Next(1000, 10000000).ToString();
-            dichVu.idDichVu = "#DV" + num;
+            dichVu.idDichVu = "DV" + num;
         }
 
         public void AutoPK_LoaiTK(LoaiTaiKhoan loaiTaiKhoan)
         {
             Random rnd = new Random();
             string num = rnd.Next(1000, 10000000).ToString();
-            loaiTaiKhoan.idLoaiTK = "#TAC" + num;
+            loaiTaiKhoan.idLoaiTK = "TAC" + num;
         }
 
 
@@ -84,6 +101,21 @@ namespace QuanLyThueTro.Services
             }
             _dbContext.loaiTaiKhoans.Remove(existing);
             return true;
+        }
+
+        public void GoUpLuotTruyCap(TinDang tinDang)
+        {
+            tinDang.luotTruyCap+=1;
+            _dbContext.Entry(tinDang).State = EntityState.Modified;
+            try
+            {
+                _dbContext.SaveChangesAsync();
+                
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
         }
     }
 }

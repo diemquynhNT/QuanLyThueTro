@@ -1,0 +1,79 @@
+﻿@model Client_QuanLythueTro.Models.images
+
+@{
+    ViewData["Title"] = "AddImgToTinDang";
+    Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
+    ViewBag.post = "active";
+    ViewBag.Name = "Đăng tin";
+}
+<link href="~/css/uploadimg.css" rel="stylesheet" />
+                <div class="container">
+                    <div class="tile">
+                        <div class="form-group col-sm-12">
+                            <h3>Chọn hình</h3>
+                            <div id="imageUploadForm">
+                                <div class="input-div">
+                                    <input type="file" class="listimg" id="listimg" name="listimg" multiple accept="image/png, image/jpeg, image/jpg">
+                                </div>
+                                <div id="saved-form">
+                                    <div class="saved-div"></div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" onclick="ClickUpdateImage()" value="Cập nhật" class="btn btn-success btn-sm" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <a asp-action="QuanLyTinDang" class="btn btn-warning btn-sm">Bỏ qua</a>
+                <div>
+        </div>
+        <input value="@ViewBag.id" id="idTin" style="visibility:hidden" />
+    </div>
+<script src="~/js/uploadmultiimg.js"></script>
+<script>
+    async function ClickUpdateImage() {
+        var id = document.getElementById("idTin").value;
+        const formData = new FormData();
+        const imageFiles = document.getElementById("listimg").files;
+        for (let i = 0; i < imageFiles.length; i++) {
+            formData.append("list", imageFiles[i]);
+        }
+        formData.append("id", id);
+
+        var url = "https://localhost:7034/api/TinDang/AddImageToTinDang?id=" + id;
+        const response = await fetch(url, {
+            method: "POST",
+            body: formData
+        });
+
+        if (response.ok) {
+            console.log("oke");
+            alert("thanh cong")
+            BackToList()
+        } else {
+            console.error("Lỗi:", response.status);
+        }
+    }
+
+    
+    function BackToList()
+    {
+        window.location.href = "https://localhost:7144/NVKD/QuanLyTinDang";
+    }
+
+</script>
+<script>
+    var ktr = '@(TempData["mess"] as string)';
+    if (ktr) {
+        Swal.fire({
+            icon: "success",
+            title: "Thành công",
+            text: "Thêm thành công!"
+        });
+    }
+</script>
+
+
+
+
