@@ -60,7 +60,8 @@ namespace QuanLyThueTro.Controllers
                               tienNuoc: phongTro.tienNuoc,
                               tienDichVu: phongTro.tienDichVu,
                               item.luotTruyCap,
-                              item.idUser);
+                              item.idUser,
+                              item.trangThaiTinDang);
                 mergeList.Add(dto);
             }
             await _context.DisposeAsync();
@@ -101,7 +102,8 @@ namespace QuanLyThueTro.Controllers
                           tienNuoc: phongTro.tienNuoc,
                           tienDichVu: phongTro.tienDichVu,
                           tinDang.luotTruyCap,
-                          tinDang.idUser);
+                          tinDang.idUser,
+                          tinDang.trangThaiTinDang);
             return dto;
         }
 
@@ -141,7 +143,8 @@ namespace QuanLyThueTro.Controllers
                               tienNuoc: phongTro.tienNuoc,
                               tienDichVu: phongTro.tienDichVu,
                               t.luotTruyCap,
-                              t.idUser);
+                              t.idUser,
+                              t.trangThaiTinDang);
                 listTinDangPT.Add(dto);
             }
             
@@ -239,6 +242,7 @@ namespace QuanLyThueTro.Controllers
             }
             var tinDang = await _context.tinDangs.FindAsync(id);
             var phongTro = await _context.phongTros.FindAsync(id);
+            var imagePT = _context.ImagesPhongTro.Where(img => img.idTinDang == id).ToList();
             if (tinDang == null || phongTro == null)
             {
                 return NotFound();
@@ -246,6 +250,10 @@ namespace QuanLyThueTro.Controllers
 
             _context.tinDangs.Remove(tinDang);
             _context.phongTros.Remove(phongTro);
+            foreach(var image in imagePT)
+            {
+                await _photoService.DeleteImageAsync(image.publicId);
+            }
             await _context.SaveChangesAsync();
 
             return Ok("Đã xóa tin đăng");

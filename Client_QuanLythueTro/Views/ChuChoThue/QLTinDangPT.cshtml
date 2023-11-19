@@ -1,10 +1,37 @@
 ﻿@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
+@using Client_QuanLythueTro.APIGateWay;
 @{
     ViewData["Title"] = "QLTinDangPT";
     Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
+    TinDang_PhongTro_GateWay callTinDangPT = new TinDang_PhongTro_GateWay();
 }
 
 
+<script>
+
+    function onDeleteLichXem(id) {
+        var confirmation = confirm("Bạn có chắc chắn muốn xóa không?");
+        if (confirmation) {
+            var formData = new FormData();
+            formData.append('id', id);
+
+            $.ajax({
+                url: '/ChuChoThue/DeleteTinDang',
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: formData,
+                async: false,
+                success: function (msg) {
+                    alert('Xóa thành công tin đăng');
+                },
+                error: function (err) {
+                    alert('Chỉ được xóa lịch xem trước 24h tính từ ngày xem!');
+                }
+            });
+        }
+    }
+</script>
 
 <div class="row">
     <div class="col-sm-5">
@@ -21,7 +48,6 @@
             <thead>
                 <tr>
                     <th>STT</th>
-                    <th>Mã tin</th>
                     <th>Hình ảnh</th>
                     <th>Tiêu đề</th>
                     <th>Ngày bắt đầu</th>
@@ -36,11 +62,13 @@
                 }
                 @foreach (var item in Model)
                 {
+                    List<string> imgList = callTinDangPT.ListImages(item.idTinDang);
                     stt = stt + 1;
                     <tr>
                         <td>@Html.DisplayFor(modelItem => stt)</td>
-                        <td>@Html.DisplayFor(modelItem => item.idTinDang)</td>
-                        <td> .img</td>
+                        <td style="width: 200px">
+                            <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">
+                        </td>
                         <td>@Html.DisplayFor(modelItem => item.tieuDe)</td>
                         <td>@Html.DisplayFor(modelItem => item.ngayBatDau)</td>
                         <td>@Html.DisplayFor(modelItem => item.ngayKetThuc)</td>
@@ -58,16 +86,17 @@
                             
                             @if (item.trangThaiTinDang)
                             {
-                                <a href="" onclick="alert('Tin đăng đã duyệt thì không được xóa');" class="btn btn-outline-danger btn-sm" title="Delete">
+                                @*<a href="" onclick="alert('Tin đăng đã duyệt thì không được xóa');" class="btn btn-outline-danger btn-sm" title="Delete">
                                     <i class="fas fa-trash"></i>
-                                </a>
+                                </a>*@
+                                <span class="badge bg-success">Đã hiển thị trên bảng tin</span>
                             }
                             else
                             {
-                                <a href="#" class="btn btn-primary" ata-toggle="tooltip" title="Edit">
+                                <a href="~/ChuChoThue/EditTinDang/@item.idTinDang" class="btn btn-primary" ata-toggle="tooltip" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <a href="" onclick="alert('Được xóa');" class="btn btn-outline-danger btn-sm" title="Delete">
+                                <a href="" onclick="onDeleteLichXem('@item.idTinDang')" class="btn btn-outline-danger btn-sm" title="Delete">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             }
@@ -79,7 +108,6 @@
             <tfoot>
                 <tr>
                     <th>STT</th>
-                    <th>Mã tin</th>
                     <th>Hình ảnh</th>
                     <th>Tiêu đề</th>
                     <th>Ngày bắt đầu</th>

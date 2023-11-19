@@ -3,6 +3,10 @@ using Client_QuanLythueTro.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Net.NetworkInformation;
+using System.Reflection;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace Client_QuanLythueTro.Controllers
 {
@@ -16,6 +20,14 @@ namespace Client_QuanLythueTro.Controllers
             this.callTinDangPT = callTinDangPT;
             _callLichXemPhong = callLichXemPhong;
         }
+
+        public Users GetUser()
+        {
+            var userJson = HttpContext.Session.GetString("user");
+            Users user = JsonConvert.DeserializeObject<Users>(userJson);
+            return user;
+        }
+
 
         public IActionResult Logout()
         {
@@ -78,6 +90,32 @@ namespace Client_QuanLythueTro.Controllers
             return files;
         }
 
+        [HttpGet]
+        public IActionResult EditTinDang(string id)
+        {
+            TinDang tinDang = callTinDangPT.GetTinDang(id);
+            return View(tinDang);
+        }
+
+        [HttpPost]
+        public IActionResult EditTinDang(TinDang tinDang)
+        {
+            callTinDangPT.EditTinDang(tinDang.idTinDang, tinDang);
+            TempData["AlertMessage"] = "successful";
+            var user = GetUser();
+            return RedirectToAction("QLTinDangPT", new RouteValueDictionary(
+                                   new { controller = "ChuChoThue", action = "QLTinDangPT", Id = user.idUser }));
+        }
+
+
+        [HttpPost]
+        public IActionResult DeleteTinDang(string id)
+        {
+            callTinDangPT.DeleteTinDang(id);
+            var user = GetUser();
+            return RedirectToAction("QLTinDangPT", new RouteValueDictionary(
+                                  new { controller = "ChuChoThue", action = "QLTinDangPT", Id = user.idUser }));
+        }
 
         //Lich xem phong
         public IActionResult QLLichXemPhong()

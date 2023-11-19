@@ -1,7 +1,9 @@
 ﻿@model IEnumerable<Client_QuanLythueTro.Models.LichXemPhong>
+@using Client_QuanLythueTro.APIGateWay
 @{
     ViewData["Title"] = "QLLichXemPhong";
     Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
+    TinDang_PhongTro_GateWay _callapi = new TinDang_PhongTro_GateWay();
 }
 
 @{
@@ -73,8 +75,7 @@
             <thead>
                 <tr>
                     <th>STT</th>
-                    <th>Mã Lịch xem</th>
-                    <th>Mã tin đăng</th>
+                    <th>Tin đăng</th>
                     <th>Người xem</th>
                     <th>SĐT</th>
                     <th>Ngày xem</th>
@@ -91,8 +92,20 @@
                     stt = stt + 1;
                     <tr>
                         <td>@Html.DisplayFor(modelItem => stt)</td>
-                        <td>@Html.DisplayFor(modelItem => item.idLichXem)</td>
-                        <td>@Html.DisplayFor(modelItem => item.idTinDang)</td>
+                        
+                        <td>
+                            @{
+                                if (item.idTinDang != null)
+                                {
+                                    var tinDang = _callapi.GetTinDang(item.idTinDang);
+                                    <span>@tinDang.tieuDe</span>
+                                }
+                                else
+                                {
+                                    <span>Lịch xem không có tiêu đề</span>
+                                }
+                            }
+                        </td>
                         <td>@Html.DisplayFor(modelItem => item.nguoiXem)</td>
                         <td>@Html.DisplayFor(modelItem => item.sdtNguoiXem)</td>
                         <td>@Html.DisplayFor(modelItem => item.ngayXem)</td>
@@ -120,8 +133,7 @@
             <tfoot>
                 <tr>
                     <th>STT</th>
-                    <th>Mã Lịch xem</th>
-                    <th>Mã tin đăng</th>
+                    <th>Tin đăng</th>
                     <th>Người xem</th>
                     <th>SĐT</th>
                     <th>Ngày xem</th>
