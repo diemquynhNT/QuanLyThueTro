@@ -39,6 +39,15 @@ namespace QuanLyThueTro.Controllers
           }
             return await _context.lichXemPhongs.ToListAsync();
         }
+        [HttpGet("GetLichXemByIdTin")]
+        public async Task<ActionResult<IEnumerable<LichXemPhong>>> GetLichXemByIdTin(string id)
+        {
+            if (_context.lichXemPhongs == null)
+            {
+                return NotFound();
+            }
+            return await _context.lichXemPhongs.Where(t=>t.idTinDang==id).ToListAsync();
+        }
 
         // GET: api/LichXemPhongs/5
         [HttpGet("{id}")]

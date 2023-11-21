@@ -29,6 +29,11 @@ namespace QuanLyThueTro.Controllers
         {
             return _context.GetAll();
         }
+        [HttpGet("GetTinDangByIdUser")]
+        public List<TinDang> GetTinDangByIdUser(string id)
+        {
+            return _context.GetTinDangByIdUser(id);
+        }
         [HttpGet("Filter")]
         public List<TinDang> Filter(int thang, bool status)
         {
@@ -65,10 +70,6 @@ namespace QuanLyThueTro.Controllers
                 var phong = _mapper.Map<PhongTro>(tin);
                 await _context.AddTinDang(tinDang, phong);
                 var u = _context.GetTinDangById(tinDang.idTinDang);
-                //foreach (var f in tin.listimg)
-                //{
-                //    _context.AddHinhanh(u.idTinDang, f);
-                //}
                 return Ok(u);
             }
             catch (Exception ex)
@@ -76,7 +77,7 @@ namespace QuanLyThueTro.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+       
         [HttpPost("AddImageToTinDang")]
         public async Task<ActionResult> AddImageToTinDang(List<IFormFile> list,string id )
         {

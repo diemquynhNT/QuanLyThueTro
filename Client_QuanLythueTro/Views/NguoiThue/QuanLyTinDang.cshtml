@@ -1,0 +1,124 @@
+﻿@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
+
+@{
+    ViewData["Title"] = "QuanLyTinDang";
+    Layout = "~/Views/NguoiThue/LayoutMain/LayoutMainNguoiThue.cshtml";
+    ViewBag.title="Quản lý cá nhân";
+    ViewBag.qltd="active";
+    string idUser =(string)TempData["idUser"];
+    string trangThai = "Chưa duyệt";
+
+}
+ <div class="row">
+    <div class="col-sm-3">
+     <h3>Quản lý tin đăng</h3>
+    </div>
+    <div class="col-sm-8">
+       <div class="row">
+          <div class="col-sm-3">
+          </div>
+           <div class="col-sm-3">
+           </div>
+           <div class="col-sm-3">
+           </div>
+                <div class="col-sm-3">
+                     <a class="btn btn-danger btn-sm d-none d-md-block" href="/NguoiThue/CreateTinDang" previewlistener="true">Đăng tin mới</a>
+                     <div class="d-lg-none" style="width: 100%;">
+                         <a class="btn btn-danger btn-block mt-3" href="" previewlistener="true">Đăng tin mới</a>
+                     </div>
+                 </div>
+       </div>
+    </div>
+</div>
+
+<div class="d-none d-md-block">
+    <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+        <div class="row" id="printMe">
+            <div class="col-sm-12  table-responsive">
+                <table class="table table-hover table-bordered js-copytextarea dataTable no-footer" cellpadding="0" cellspacing="0" border="0" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+          <thead style="background-color:aqua">
+              <tr>
+              <th>Mã tin</th>
+              <th>Tiêu đề</th>
+              <th>Địa chỉ</th>
+              <th>SĐT</th>
+              <th>Liên hệ</th>
+              <th>Ngày bắt đầu</th>
+              <th>Ngày hết hạn</th>
+              <th>Trạng thái</th>
+              <th></th>
+              </tr>
+          </thead>
+          <tbody>
+          @if(Model.Count()<1)
+          {
+             <tr>
+                        <td colspan="7">Bạn chưa có tin đăng nào. Bấm <a href="/NguoiThue/CreateTinDang" previewlistener="true">vào đây</a> để bắt đầu đăng tin</td>
+              </tr>
+          }else{
+          foreach (var item in Model)
+          {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.idTinDang)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.tieuDe)
+                    </td>
+                    <td>
+                        @item.diaChi
+                    </td>
+                    @if (item.trangThaiTinDang)
+                        trangThai = "Đã duyệt";
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ngayBatDau)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ngayKetThuc)
+                    </td>
+                    <td>
+                        @trangThai
+                    </td>
+                    <td style="color:black">
+                        <a href="/NguoiThue/EditTinDang/@item.idTinDang" class="btn btn-outline-dark btn-sm" ata-toggle="tooltip" title="">
+                       <i class="fas fa-edit"></i>
+                        </a>
+                        <a class="btn btn-outline-dark btn-sm" asp-controller="NguoiThue" asp-action="QuanLyLichXemPhong" asp-route-idTin="@item.idTinDang">
+                        <i class='bx bx-calendar'></i>
+                        </a>
+
+                         <a class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@item.idTinDang" data-bs-toggle="tooltip" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                                <div class="modal fade" id="modal-@item.idTinDang" tabindex="-1" aria-labelledby="modal-@item.idTinDang" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Xác nhận</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form asp-controller="NguoiThue" asp-action="DeleteTin" asp-route-id="@item.idTinDang" method="post">
+                                                <div class="modal-body">
+                                                    Xác nhận xóa tin đăng @item.idTinDang
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-danger">Xóa</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+
+                    </td>
+                </tr>
+                }
+           }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</div>

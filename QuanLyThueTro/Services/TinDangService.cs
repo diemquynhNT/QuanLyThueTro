@@ -29,7 +29,7 @@ namespace QuanLyThueTro.Services
                 tin.trangThaiTinDang = false;
                 tin.ngayTaoTin = DateTime.Now;
                 tin.ngayBatDau = null;
-                tin.idDichVu = "BT";
+                tin.idDichVu = "NODV";
                 phong.idTinDang = tin.idTinDang;
                 _context.tinDangs.Add(tin);
                 _context.phongTros.Add(phong);
@@ -154,6 +154,11 @@ namespace QuanLyThueTro.Services
             // }    
             return null;
             
+        }
+
+        public List<TinDang> GetTinDangByIdUser(string id)
+        {
+            return _context.tinDangs.Where(t=>t.idUser== id).ToList();
         }
     }
 }

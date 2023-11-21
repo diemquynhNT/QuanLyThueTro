@@ -6,6 +6,7 @@ namespace QuanLyThueTro.Services
     public interface ITinDang
     {
         public List<TinDang> GetAll();
+        public List<TinDang> GetTinDangByIdUser(string id);
         public List<PhongTro> GetAllPhong();
         public TinDang GetTinDangById(string idTin);
         public PhongTro GetPhongById(string idTin);

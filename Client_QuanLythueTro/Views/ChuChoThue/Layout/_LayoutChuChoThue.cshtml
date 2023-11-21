@@ -8,8 +8,6 @@
         user = JsonConvert.DeserializeObject<Users>(userJson);
     }
 }
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,6 +58,7 @@
                         }
                         else
                         {
+                            <input value="@user.idUser" id="idUser" style="visibility:hidden" />
                             <li class=" nav-item">
                                 <div class="dropdown">
                                     <a class="nav-link dropdown-toggle user-wrapper" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -70,13 +69,23 @@
                                         }
                                         else
                                         {
-                                            <img src="@Url.Content("~/img/Hanoi.jpg")" width="37px" height="37px">
+                                            <img id="image" width="37px" height="37px">
+
                                         }
                                         <b style="">Xin chào, @user.hoTen</b>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink" style="z-index: 1030;">
-                                        <li><a class="dropdown-item" href="#">Quản lý tài khoản</a></li>
-                                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                                    @if(user.idChucVu=="CT")
+                                        {
+                                            <li><a class="dropdown-item" href="/ChuTro/">Quản lý tài khoản</a></li>
+                                        }
+                                        else
+                                        {
+                                         <li>
+                                         <a class="dropdown-item" asp-controller="NguoiThue" asp-action="QuanLyTinDang" asp-route-idUser="@user.idUser">Xem tin đăng của tôi</a>
+                                         </li>
+                                        }
+                                       <li><a class="dropdown-item" href="#">Another action</a></li>
                                         <li><a class="dropdown-item" href="@Url.Action("Logout", "ChuChoThue")">Đăng xuất</a></li>
                                     </ul>
                                 </div>
@@ -242,6 +251,7 @@
     <script>
         function get_image() {
             var id = document.getElementById("idUsers").value;
+            console.log(id)
             url = "https://localhost:7034/api/Users/GetImage?id=" + id;
             fetch(url)
                 .then(function (response) {

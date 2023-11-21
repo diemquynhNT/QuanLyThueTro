@@ -45,10 +45,40 @@ namespace Client_QuanLythueTro.APIGateWay
             finally { }
             return listTin;
         }
+        public List<TinDang> ListTinDangByIdUser(string id)
+        {
+            url = url + "/GetTinDangByIdUser?id=" + id;
+            List<TinDang> listTin = new List<TinDang>();
+            if (url.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var datacol = JsonConvert.DeserializeObject<List<TinDang>>(result);
+
+                    if (datacol != null)
+                        listTin = datacol;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return listTin;
+        }
         public List<Khuvucs> ListKhuVuc()
         {
             List<Khuvucs> listTin = new List<Khuvucs>();
-            url= "https://localhost:7034/api/KhuVucs";
+            url = "https://localhost:7034/api/KhuVucs";
             if (url.Trim().Substring(0, 5).ToLower() == "https")
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             try
@@ -77,7 +107,7 @@ namespace Client_QuanLythueTro.APIGateWay
         }
 
 
-        public List<TinDang> FilterTin(int thang,bool status)
+        public List<TinDang> FilterTin(int thang, bool status)
         {
             List<TinDang> listTin = new List<TinDang>();
             url = url + "/Filter";
@@ -157,46 +187,69 @@ namespace Client_QuanLythueTro.APIGateWay
         //        throw new Exception("Lỗi: " + ex.Message);
         //    }
         //}
-
-        public async Task<TinDang> CreateTin(TinDang tin)
+        public TinDang CreateTinDang(TinDang tinDang)
         {
-            TinDang newtin = new TinDang();
-            if (url.Trim().Substring(0, 5).ToLower() == "https")
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                if (url.Trim().Substring(0, 5).ToLower() == "https")
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
+                try
+                {
+                    string json = JsonConvert.SerializeObject(tinDang);
+
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    HttpResponseMessage response = httpClient.PostAsync(url, content).Result;
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string result = response.Content.ReadAsStringAsync().Result;
+                        var data = JsonConvert.DeserializeObject<TinDang>(result);
+
+                        if (data != null)
+                            tinDang = data;
+                    }
+                    else
+                    {
+                        string result = response.Content.ReadAsStringAsync().Result;
+                        throw new Exception(result);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                return tinDang;
+            
+         } 
+
+        public async Task AddImagesAsync(string idTinDang, List<IFormFile> files)
+        {
             try
             {
-                var options = new JsonSerializerOptions
+                url = url + "/AddImageToTinDang";
+                using (var httpClient = new HttpClient())
                 {
-                    ReferenceHandler = ReferenceHandler.Preserve
-                };
+                    using (var form = new MultipartFormDataContent())
+                    {
+                        foreach (var file in files)
+                        {
+                            form.Add(new StreamContent(file.OpenReadStream()), "files", file.FileName);
 
-                string tinJson = System.Text.Json.JsonSerializer.Serialize(tin, options);
-                var content = new StringContent(tinJson, Encoding.UTF8, "application/json");
+                        }
 
-                HttpResponseMessage response = await httpClient.PostAsync(url, content);
+                        var response = await httpClient.PostAsync(url, form);
+                        response.EnsureSuccessStatusCode();
+                    }
+                }
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    string result = await response.Content.ReadAsStringAsync();
-                    throw new Exception(result);
-                }else
-                {
-                    string result = response.Content.ReadAsStringAsync().Result;
-                    var data = JsonConvert.DeserializeObject<TinDang>(result);
-
-                    if (data != null)
-                        newtin = data;
-                }    
             }
             catch (Exception ex)
             {
-                throw new Exception("Lỗi: " + ex.Message);
+                throw new Exception(ex.Message);
             }
-            return newtin;
-
+            //return tinDang;
         }
-       
+
+
         public TinDang GetTin(string id)
         {
             TinDang tin = new TinDang();

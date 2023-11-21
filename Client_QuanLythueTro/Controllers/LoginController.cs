@@ -121,17 +121,10 @@ namespace Client_QuanLythueTro.Controllers
                 Users u = apiGateWay.GetUser(id);
                 var userJson = JsonConvert.SerializeObject(u);
                 HttpContext.Session.SetString("user", userJson);
+                return RedirectToAction("IndexTinDangPT", "ChuChoThue");
 
-                var role = payloadObject["roles"]?.Value<string>();
-                TempData["error"] = "thanhcong";
-                if (role == "CT")
-                {
-                    return RedirectToAction("IndexTinDangPT", "ChuChoThue");
-                }
-                else if (role == "NT")
-                    return RedirectToAction("IndexTinDangPT", "");
 
-                return View();
+                //    return View();
 
             }
             else
