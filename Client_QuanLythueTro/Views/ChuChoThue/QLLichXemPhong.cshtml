@@ -6,6 +6,8 @@
     TinDang_PhongTro_GateWay _callapi = new TinDang_PhongTro_GateWay();
 }
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.all.min.js"></script>
+
 @{
     // alert includ icons: question, info, success, error, warning
     //footer: '<a href="">Why do I have this issue?</a>'
@@ -21,13 +23,13 @@
         </script>
 
     }
-    if (checkMessage == "failed")
+    if (checkMessage == "editsuccessful")
     {
         <script>
             Swal.fire({
-                icon: 'error',
-                title: 'Đã có lỗi xảy ra',
-                text: 'Chỉ được xóa lịch xem trước 24h tính từ ngày xem!'
+                icon: 'success',
+                title: 'Thành công',
+                text: 'Lịch xem phòng đã lưu thành công!'
             })
         </script>
 

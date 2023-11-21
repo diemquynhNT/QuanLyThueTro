@@ -7,6 +7,7 @@ using System.Net.NetworkInformation;
 using System.Reflection;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+using Client_QuanLythueTro.Services;
 
 namespace Client_QuanLythueTro.Controllers
 {
@@ -14,11 +15,15 @@ namespace Client_QuanLythueTro.Controllers
     {
         private readonly TinDang_PhongTro_GateWay callTinDangPT;
         private readonly LichXemPhong_GateWay _callLichXemPhong;
+        private readonly APIGateWayDichVu _callDichVu;
+        private readonly IPaymentService _paymentService;
 
-        public ChuChoThueController(TinDang_PhongTro_GateWay callTinDangPT, LichXemPhong_GateWay callLichXemPhong)
+        public ChuChoThueController(TinDang_PhongTro_GateWay callTinDangPT, LichXemPhong_GateWay callLichXemPhong, IPaymentService paymentService, APIGateWayDichVu callDichVu)
         {
             this.callTinDangPT = callTinDangPT;
             _callLichXemPhong = callLichXemPhong;
+            _paymentService = paymentService;
+            _callDichVu = callDichVu;
         }
 
         public Users GetUser()
@@ -101,7 +106,7 @@ namespace Client_QuanLythueTro.Controllers
         public IActionResult EditTinDang(TinDang tinDang)
         {
             callTinDangPT.EditTinDang(tinDang.idTinDang, tinDang);
-            TempData["AlertMessage"] = "successful";
+            TempData["AlertMessage"] = "editsuccessful";
             var user = GetUser();
             return RedirectToAction("QLTinDangPT", new RouteValueDictionary(
                                    new { controller = "ChuChoThue", action = "QLTinDangPT", Id = user.idUser }));
@@ -159,7 +164,7 @@ namespace Client_QuanLythueTro.Controllers
         public IActionResult EditLichXem(LichXemPhong lichXemPhong)
         {
             _callLichXemPhong.EditLichXem(lichXemPhong.idLichXem, lichXemPhong);
-            TempData["AlertMessage"] = "successful";
+            TempData["AlertMessage"] = "editsuccessful";
             return RedirectToAction("QLLichXemPhong");
         }
 
@@ -176,5 +181,33 @@ namespace Client_QuanLythueTro.Controllers
             _callLichXemPhong.DeleteLichXem(id);
             return RedirectToAction("QLLichXemPhong");
         }
+
+        //Mua dich vụ
+        [HttpGet]
+        public IActionResult DangKyDichVu()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult DangKyDichVu(VNPayInformationModel model, string madv)
+        {
+            var dichvu = _callDichVu.GetGoiTin(madv);
+            model.OrderType = madv;
+            model.OrderDescription = "Thanh toán cho loại dịch vụ " + dichvu.loaiDichVu + ", có hạn dùng " + dichvu.hanDung + " ngày.";
+            model.Amount = dichvu.giaCa;
+            model.Name = GetUser().hoTen;
+            var url = _paymentService.CreateVNPaymentUrl(model, HttpContext);
+
+            return Redirect(url);
+        }
+
+        public IActionResult PaymentCallback()
+        {
+            var response = _paymentService.VNPaymentExecute(Request.Query);
+
+            return Json(response);
+        }
+
     }
 }
