@@ -49,6 +49,7 @@ public class VnPayLibrary
             InfoDichVu = detailInfo[1],
             Amount = detailInfo[2],
             OrderId = orderId.ToString(),
+            OrderDescription = detailInfo[1],
             PaymentId = vnPayTranId.ToString(),
             TransactionId = vnPayTranId.ToString(),
             Token = vnpSecureHash,

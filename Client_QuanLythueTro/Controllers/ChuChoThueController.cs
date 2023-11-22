@@ -8,6 +8,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using Client_QuanLythueTro.Services;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Client_QuanLythueTro.Controllers
 {
@@ -16,14 +17,16 @@ namespace Client_QuanLythueTro.Controllers
         private readonly TinDang_PhongTro_GateWay callTinDangPT;
         private readonly LichXemPhong_GateWay _callLichXemPhong;
         private readonly APIGateWayDichVu _callDichVu;
+        private readonly GiaoDich_Gateway _callGiaoDich;
         private readonly IPaymentService _paymentService;
 
-        public ChuChoThueController(TinDang_PhongTro_GateWay callTinDangPT, LichXemPhong_GateWay callLichXemPhong, IPaymentService paymentService, APIGateWayDichVu callDichVu)
+        public ChuChoThueController(TinDang_PhongTro_GateWay callTinDangPT, LichXemPhong_GateWay callLichXemPhong, IPaymentService paymentService, APIGateWayDichVu callDichVu, GiaoDich_Gateway callGiaoDich)
         {
             this.callTinDangPT = callTinDangPT;
             _callLichXemPhong = callLichXemPhong;
             _paymentService = paymentService;
             _callDichVu = callDichVu;
+            _callGiaoDich = callGiaoDich;
         }
 
         public Users GetUser()
@@ -211,8 +214,26 @@ namespace Client_QuanLythueTro.Controllers
         public IActionResult PaymentCallback()
         {
             var response = _paymentService.VNPaymentExecute(Request.Query);
-
-            return View(response);
+            if(response.VnPayResponseCode == "00")
+            {
+                GiaoDich giaoDich = new GiaoDich();
+                giaoDich.idGiaoDich = response.PaymentId;
+                giaoDich.loaiDichVu = response.OrderDescription;
+                giaoDich.tongTien = float.Parse(response.Amount);
+                giaoDich.ngayGiaoDich = DateTime.UtcNow;
+                giaoDich.note = response.Username + " " + response.InfoDichVu + " Với số tiền " + response.Amount + " VNĐ";
+                var cut = response.Username.Split("#");
+                giaoDich.idUser = cut[1];
+                try
+                {
+                    _callGiaoDich.CreateGiaoDich(giaoDich);
+                }catch(Exception ex)
+                {
+                    return Redirect(ex.Message);
+                }
+                return View(response);
+            }
+            return RedirectToAction("DangKyDichVu");
         }
 
     }
