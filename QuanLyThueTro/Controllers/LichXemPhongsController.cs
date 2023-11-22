@@ -161,6 +161,7 @@ namespace QuanLyThueTro.Controllers
             return CreatedAtAction("GetLichXemPhong", new { id = lichXemPhong.idLichXem }, lichXemPhong);
         }
 
+
         // DELETE: api/LichXemPhongs/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLichXemPhong(string id)

@@ -17,6 +17,7 @@
         user = JsonConvert.DeserializeObject<Users>(userJson);
     }
 }
+
 <link href="~/css/search-pop.css" rel="stylesheet" />
 <div class="text-center bg-light">
 @*    SEARCH*@
@@ -31,10 +32,13 @@
                         </span>
                     </div>
                     <div class="filter-item" onclick="showPopup('city')">
-                        <span id="diadiem"> <i class="fas fa-map"></i>Địa điểm</span>
+                        <span id="diadiem">
+                            <i class="fas fa-map"></i> Chọn địa điểm
+                            <input id="diadiemDaChon" style="border: 0; width:0" />
+                        </span>
                     </div>
                     <div class="filter-item " onclick="showPopup('price')">
-                        <span id="giachon"> <i class='bx bx-purchase-tag-alt'></i></i>Chọn giá</span>
+                        <span id="giachon"> <i class='bx bx-purchase-tag-alt'></i>Chọn giá</span>
                     </div>
                     <div class="filter-item " onclick="showPopup('dientich')">
                         <span id="dientichchon"><i class='bx bx-area'></i>Chọn diện tích</span>
@@ -43,7 +47,8 @@
                         <span>Tìm kiếm</span>
                     </div>
                 </div>
-
+                <input id="giadaChon" style="visibility:hidden" />
+                <input id="dientichdaChon" style="visibility:hidden" />
                 <!-- POP CITY -->
                 <div class="filter-popup js-filter-popup js-filter-popup-city" data-popup-type="city">
                     <div class="filter-popup-header">
@@ -301,7 +306,5 @@
             </section>
         </div>
     </div>
-
 </div>
 <script src="~/js/search.js"></script>
-

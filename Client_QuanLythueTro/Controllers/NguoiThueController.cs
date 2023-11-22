@@ -85,7 +85,24 @@ namespace Client_QuanLythueTro.Controllers
             IEnumerable<LichXemPhong> list = apiLichXem.GetListXemPhong(idTin);
             return View(list);
         }
+        [HttpPost]
+        public ActionResult SendLichXem(LichXemPhong lichxem)
+        {
+            try
+            {
+                lichxem.trangThai = false;
+                lichxem.idLichXem = "auto";
+                apiLichXem.CreateLichXemPhong(lichxem);
+                TempData["thongbao"] = "sendLich";
+                return RedirectToAction("DetailTinDangPT", "ChuChoThue", new { id = lichxem.idTinDang });
 
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View();
+            }
+        }
 
     }
 }

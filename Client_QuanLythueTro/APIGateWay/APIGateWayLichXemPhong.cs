@@ -1,6 +1,7 @@
 ﻿using Client_QuanLythueTro.Models;
 using Newtonsoft.Json;
 using System.Net;
+using System.Text;
 
 namespace Client_QuanLythueTro.APIGateWay
 {
@@ -39,6 +40,36 @@ namespace Client_QuanLythueTro.APIGateWay
             }
             finally { }
             return list;
+        }
+        public LichXemPhong CreateLichXemPhong(LichXemPhong lich)
+        {
+            if (url.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            try
+            {
+                string json = JsonConvert.SerializeObject(lich);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = httpClient.PostAsync(url, content).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var data = JsonConvert.DeserializeObject<LichXemPhong>(result);
+                    if (data != null)
+                        lich = data;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return lich;
+
         }
     }
 }

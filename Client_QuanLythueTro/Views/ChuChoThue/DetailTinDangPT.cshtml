@@ -1,12 +1,32 @@
 ﻿@model Client_QuanLythueTro.Models.TinDang
 @using Client_QuanLythueTro.Models
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
+
 @{
     ViewData["Title"] = "DetailTinDangPT";
     Layout = "~/Views/ChuChoThue/Layout/_LayoutChuChoThue.cshtml";
-
+    var tienPhong = string.Format("{0:0,0 vnđ}", Model.giaPhong);
     List<string> listImg = ViewBag.listImg;
+    var userJson = Context.Session.GetString("user");
+    Users user = null;
+    if (userJson != null)
+    {
+        user = JsonConvert.DeserializeObject<Users>(userJson);
+    }
 }
+@{
 
+    var checkMessage = TempData["thongbao"];
+    if (checkMessage == "sendLich")
+    {
+        <script>
+            swal("Yêu cầu thành công", "đÃ!", "success")
+        </script>
+
+    }
+
+}
 
 
 <div class="row g-0">
@@ -127,16 +147,211 @@
         </div>
         
     </div>
-    <div class="col-sm-3 m-2 bg-light">
-        <div class="bg-light rounded text-center justify-content-center">
+    <div class="col-sm-3 m-2">
+        <div class=" rounded text-center justify-content-center connect-home">
             <figure>
-                <img src="~/img/user.png" class="img-fluid rounded-circle m-0" height="90px" width="90px" />
+                <img src="/image/user.png" class="img-fluid rounded-circle m-0" height="90px" width="90px" />
             </figure>
-            <p>Lê Thị Hình</p>
+            <p class="author-name"></p>
             <p>Đang hoạt động</p>
-            <p><a class="btn author-zalo" target="_blank" rel="nofollow" href="https://zalo.me/0815777735"><i></i> Nhắn Zalo</a></p>
-            <p><a class="btn author-zalo" target="_blank" rel="nofollow" href="https://zalo.me/0815777735"><i></i> Nhắn Zalo</a></p>
-            <p><a class="btn author-zalo" target="_blank" rel="nofollow" href="https://zalo.me/0815777735"><i></i> Nhắn Zalo</a></p>
+            <p>
+                <a class="btn lichHen" data-bs-toggle="modal" data-bs-target="#modalDatHen-@Model.idTinDang" data-bs-toggle="tooltip" >
+                    <i></i> Đặt hẹn</a>
+            </p>
+            @if(user!=null)
+            {
+                <p>
+                    <a class="btn tinYeuThich" data-bs-toggle="modal" data-bs-target="#modelThemYeuThich-@Model.idTinDang" data-bs-toggle="tooltip">
+                        <i class='bx bxs-heart-circle' style="padding-right: 10px;color: red; font-size: 15px;"></i>Tin yêu thích
+                    </a>
+                </p>
+                <input value="@user.idUser" id="idNguoiThem" />
+
+            }
+           
+         
+            <!-- <p><a class="btn author-zalo" target="_blank" rel="nofollow" href="https://zalo.me/0815777735"><i></i> Nhắn Zalo</a></p>
+            <p><a class="btn author-zalo" target="_blank" rel="nofollow" href="https://zalo.me/0815777735"><i></i> Nhắn Zalo</a></p> -->
         </div>
     </div>
 </div>
+<div class="modal fade" id="modalDatHen-@Model.idTinDang" tabindex="-1" aria-labelledby="modalDatHen-@Model.idTinDang" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Đặt lịch hẹn</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-controller="NguoiThue" asp-action="SendLichXem" method="post">
+                <div class="modal-body">
+                     <h3 class="text-uppercase">
+                         <b>@Model.tieuDe</b>
+                     </h3>
+                     <hr style="margin: 10px 0">
+                     <div class="field clearfix">
+                        <div class="room-price__wrap">
+                           <div class="is-flex jbetween align-center detail-item-room">
+                                <span class="fl-item-50 text-left">Giá thuê phòng</span>
+                                <span class="fl-item-50 pl--12 bold text-right price__room"><span><b>@tienPhong</b></span>/tháng</span>
+                           </div>
+                           <div class="is-flex jbetween align-center detail-item-room">
+                                 <span class="fl-item-50 text-left">Diện tích</span>
+                                 <span class="fl-item-50 pl--12 bold text-right area__room">@Model.dienTich<sup>2</sup></span>
+                           </div>
+                            </div>
+                            <hr style="margin: 10px 0 ">
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <b>Ngày xem phòng</b>
+                                @{
+                                    DateTime maxDate = DateTime.Now.AddDays(30);
+                                }
+                                <input id="ngayXem" name="ngayXem" class="form-control" required type="datetime-local" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:00")" max="@maxDate.ToString("yyyy-MM-ddTHH:mm:00")" />
+                                <div class="form-group col-sm-12">
+                                    <b>Họ tên người đến xem</b>
+                                    <input id="nguoiXem" name="nguoiXem" class="form-control" required />
+                                </div>
+                                <div class="form-group col-sm-12">
+                                    <b>Số điện thoại </b>
+                                    <input id="sdtNguoiXem" name="sdtNguoiXem" class="form-control" required />
+                                </div>
+                                <input id="idTinDang" name="idTinDang" class="form-control" value="@Model.idTinDang" style="visibility:hidden" />
+                            </div>@*
+                            <div class="textarea-wrap clearboth">
+                                <span class="span-wrap">Ghi chú</span>
+                                <textarea class="type-input" tabindex="4" placeholder="" name="note" id="note"></textarea>
+                            </div>*@
+                        </div>
+                     </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" id="btnSaveLich">Đặt lịch</button>
+                </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modelThemYeuThich-@Model.idTinDang" tabindex="-1" aria-labelledby="modelThemYeuThich-@Model.idTinDang" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm tin yêu thích</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <div class="modal-body">
+                    <h3 class="text-uppercase">
+                        <b>Thêm tin @Model.idTinDang vào danh sách tin yêu thích ?</b>
+                    </h3>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" id="btnThemYeuThich" onclick="checkAndAddFavorite()">Thêm</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+<input value="@Model.idTinDang" id="idTinDang" />
+<script>
+    document.getElementById("sdtNguoiXem").onchange = function () {
+        const phoneNumber = this.value.trim();
+        const isValidPhoneNumber = /^\d{10}$/.test(phoneNumber);
+
+        if (!isValidPhoneNumber) {
+            this.style.borderColor = "red";
+            document.getElementById("btnSaveLich").style.visibility = "hidden";
+        } else {
+            this.style.borderColor = "";  
+            document.getElementById("btnSaveLich").style.visibility = "visible";
+        }
+    };
+
+    async function checkAndAddFavorite() {
+        const idTin = document.getElementById("idTinDang").value;
+        const idUser = document.getElementById("idNguoiThem").value;
+
+        const checkUrl = `https://localhost:7034/api/TinYeuThiches/TinYeuThichExists?id=${idTin}&idUser=${idUser}`;
+
+        try {
+            const response = await fetch(checkUrl);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            if (data ==false) {
+                await addFavorite(idTin, idUser);
+                swal("Success", "Đã thêm vào tin yêu thích !!!", "success");
+            } else {
+                swal("Info", "Tin này đã được thêm!", "info");
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            swal("Error", "Failed to fetch data!", "error");
+        }
+    }
+
+    async function addFavorite(idTin, idUser) {
+        const url = `https://localhost:7034/api/TinYeuThiches?idTin=${idTin}&idUser=${idUser}`;
+
+        try {
+            const response = await fetch(url, { method: "POST" });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            console.log("New item added:", data);
+        } catch (error) {
+            console.error('Error:', error);
+            swal("Error", "Failed to add to favorites!", "error");
+        }
+    }
+
+
+</script>
+
+
+<style>
+    .connect-home {
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px 0 rgba(0,0,0,.1);
+    }
+
+        .connect-home .author-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+    .lichHen {
+        font-weight: 700;
+        font-size: 1rem;
+        width: 90%;
+        background: #4eecb2;
+        border-color: #16c784;
+        background: linear-gradient(to right,#16c784,#16c784);
+    }
+
+        .lichHen:hover {
+            background: #4eecb2;
+        }
+
+    .tinYeuThich {
+        font-weight: 700;
+        font-size: 1rem;
+        width: 90%;
+        border-color: #333;
+        background: linear-gradient(to right,#fff,#fff);
+        color: #333;
+    }
+
+        .tinYeuThich:hover {
+            background: #fcc6cf;
+        }
+
+</style>
+

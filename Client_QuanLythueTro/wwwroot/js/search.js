@@ -1,6 +1,7 @@
 ﻿var popups = document.querySelectorAll('.filter-popup');
 console.log(popups)
 
+console.log("demo" + document.getElementById('diadiemDaChon').value)
 function showPopup(popupType) {
     console.log(popupType)
     popups.forEach(function (popup) {
@@ -21,8 +22,13 @@ function closePopup(type) {
 
 function selectLocation(selectedOption) {
     var diaDiem = document.getElementById('diadiem');
-    diaDiem.innerHTML = selectedOption.textContent.trim();
+    diaDiem.innerHTML = "meme";
+    document.getElementById('diadiemDaChon').value = selectedOption;
+    alert(selectedOption)
     closePopup('city');
+}
+function searchData{
+
 }
 
 function selectDienTich(option) {
@@ -106,5 +112,6 @@ function getDatatoPrice() {
     closePopup('price');
 
 }
+
 
 
