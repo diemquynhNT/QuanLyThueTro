@@ -190,23 +190,29 @@ namespace Client_QuanLythueTro.Controllers
         }
 
         [HttpPost]
-        public IActionResult DangKyDichVu(VNPayInformationModel model, string madv)
+        public IActionResult DangKyDichVu(VNPayInformationModel model, string madv, int httt)
         {
             var dichvu = _callDichVu.GetGoiTin(madv);
             model.OrderType = madv;
-            model.OrderDescription = "Thanh toán cho loại dịch vụ " + dichvu.loaiDichVu + ", có hạn dùng " + dichvu.hanDung + " ngày.";
+            model.OrderDescription = "Đã thanh toán cho loại dịch vụ " + dichvu.loaiDichVu + ", có hạn dùng " + dichvu.hanDung + " ngày.";
             model.Amount = dichvu.giaCa;
-            model.Name = GetUser().hoTen;
-            var url = _paymentService.CreateVNPaymentUrl(model, HttpContext);
+            model.Name = GetUser().hoTen + " - #" + GetUser().idUser;
+            //httt = 1: VNPay, 2: PayPal, 3: Momo
+            if(httt == 1)
+            {
+                var url = _paymentService.CreateVNPaymentUrl(model, HttpContext);
+                return Redirect(url);
+            }
 
-            return Redirect(url);
+            return View();
+            
         }
 
         public IActionResult PaymentCallback()
         {
             var response = _paymentService.VNPaymentExecute(Request.Query);
 
-            return Json(response);
+            return View(response);
         }
 
     }

@@ -4,30 +4,59 @@
     Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
 }
 
-<h1>Chọn loại dịch vụ bạn muốn mua: </h1>
+
 
 <form asp-action="DangKyDichVu" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group">
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="madv" id="madv" value="DV20001">
-            <label class="form-check-label" for="">
-                100K - VIP 1
-            </label>
+    <div class="row">
+        <div class="col-sm-6">
+            <h1>Chọn loại dịch vụ bạn muốn mua: </h1>
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="madv" id="madv" value="DV20001">
+                    <label class="form-check-label" for="">
+                        100K - VIP 1
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="madv" id="madv" checked value="DV29859">
+                    <label class="form-check-label" for="">
+                        155K - VIP 2
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="madv" id="madv" value="DV37196">
+                    <label class="form-check-label" for="">
+                        195K - VIP 3
+                    </label>
+                </div>
+            </div>
         </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="madv" id="madv" checked value="DV29859">
-            <label class="form-check-label" for="">
-                155K - VIP 2
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="madv" id="madv" value="DV37196">
-            <label class="form-check-label" for="">
-                195K - VIP 3
-            </label>
+        <div class="col-sm-6">
+            <h1>Chọn hình thức thanh toán: </h1>
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="httt" id="httt" checked value="1">
+                    <label class="form-check-label" for="">
+                        VNPay
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="httt" id="httt" value="2">
+                    <label class="form-check-label" for="">
+                        PayPal
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="httt" id="httt" value="3">
+                    <label class="form-check-label" for="">
+                        Momo
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
+    
     <div class="form-group">
         <input id="btnPost" type="submit" value="Thanh Toán (check out)" class="btn btn-primary" />
     </div>
