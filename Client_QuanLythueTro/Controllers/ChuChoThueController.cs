@@ -236,5 +236,12 @@ namespace Client_QuanLythueTro.Controllers
             return RedirectToAction("DangKyDichVu");
         }
 
+        public IActionResult LichSuThanhToan()
+        {
+            Users user = GetUser();
+            IEnumerable<GiaoDich> giaoDiches = _callGiaoDich.ListGiaoDich().Where(g=>g.idUser == user.idUser).ToList();
+            return View(giaoDiches);
+        }
+
     }
 }
