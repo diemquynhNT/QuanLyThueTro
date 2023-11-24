@@ -41,6 +41,65 @@ namespace Client_QuanLythueTro.APIGateWay
             finally { }
             return list;
         }
+        public List<LichXemPhong> GetListLichXemPhongUser(string sdt)
+        {
+            List<LichXemPhong> list = new List<LichXemPhong>();
+            url = url + "/GetLichXemByIdUser/" + sdt;
+            if (url.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var datacol = JsonConvert.DeserializeObject<List<LichXemPhong>>(result);
+
+                    if (datacol != null)
+                        list = datacol;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return list;
+        }
+        public int CountLichXem(string idTin)
+        {
+            int count = 0 ;
+            url = url + "/Count/" + idTin;
+            if (url.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var datacol = JsonConvert.DeserializeObject<int>(result);
+                    if (datacol != null)
+                        count = datacol;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return count;
+        }
         public LichXemPhong CreateLichXemPhong(LichXemPhong lich)
         {
             if (url.Trim().Substring(0, 5).ToLower() == "https")

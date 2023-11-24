@@ -41,6 +41,21 @@ namespace QuanLyThueTro.Controllers
         {
             return _context.GetTinDangByIdUser(id);
         }
+        [HttpGet("GetTinDangByStatus")]
+        public List<TinDang> GetTinDangByStatus(string id,bool status)
+        {
+            return _context.GetTinDangByIdUser(id).Where(t=>t.trangThaiTinDang==status).ToList();
+        }
+        [HttpGet("GetTinDangByService")]
+        public List<TinDang> GetTinDangByService(string id, string idGoi)
+        {
+            return _context.GetTinDangByIdUser(id).Where(t => t.idDichVu == idGoi).ToList();
+        }
+        [HttpGet("GetTinDangByServiceAndStatus")]
+        public List<TinDang> GetTinDangByServiceAndStatus(string id, string idGoi, bool status)
+        {
+            return _context.GetTinDangByIdUser(id).Where(t => t.idDichVu == idGoi && t.trangThaiTinDang==status).ToList();
+        }
         [HttpGet("GetTinByIdTP")]
         public List<TinDangVM> GetTinByIdTP(string id)
         {

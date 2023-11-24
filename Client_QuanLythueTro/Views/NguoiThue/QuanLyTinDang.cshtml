@@ -1,12 +1,22 @@
-﻿@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
+﻿@using Client_QuanLythueTro.APIGateWay;
+@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
 
 @{
     ViewData["Title"] = "QuanLyTinDang";
     Layout = "~/Views/NguoiThue/LayoutMain/LayoutMainNguoiThue.cshtml";
-    ViewBag.title="Quản lý cá nhân";
+    ViewBag.title="Quản lý tin cá nhân";
     ViewBag.qltd="active";
     string idUser =(string)TempData["idUser"];
     string trangThai = "Chưa duyệt";
+    APIGateWayLichXemPhong lichxem = new APIGateWayLichXemPhong();
+    var userJson = Context.Session.GetString("user");
+    Users user = null;
+    if (userJson != null)
+    {
+        user = JsonConvert.DeserializeObject<Users>(userJson);
+    }
 
 }
 @{
@@ -25,40 +35,51 @@
         </script>
     }
 }
-
  <div class="row" style="padding:10px">
     <div class="col-sm-3">
      <h4>Quản lý tin đăng</h4>
     </div>
-    <div class="col-sm-8">
-       <div class="row">
-           <form>
-              <div class="col-sm-3">
-@*               @Html.DropDownList("thangs", (IEnumerable<SelectListItem>)TempData["thangs"], htmlAttributes: new { @class = "form-control-sm" })
-*@              </div>
-               <div class="col-sm-4">
-                <select class="form-control" name="trangThai" id="trangThai" required>
-                    <option selected="selected" disabled>All</option>
-                    <option>Chưa duyệt</option>
-                    <option>Đã duyệt</option>
-                </select>
-               </div>
-                <div class="col-sm-3">
-                     <a class="btn btn-danger btn-sm d-none d-md-block" href="/NguoiThue/CreateTinDang" previewlistener="true">Đăng tin mới</a>
-                     <div class="d-lg-none" style="width: 100%;">
-                         <a class="btn btn-danger btn-block mt-3" href="" previewlistener="true">Đăng tin mới</a>
-                     </div>
-                 </div>
-            </form>
-       </div>
+    <div class="col-sm-9">
+        <div class="row">
+            <div class="col-sm-8">
+                @using (Html.BeginForm("QuanLyTinDang", "NguoiThue", FormMethod.Post, new { @class = "" }))
+                {
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <select name="idLoaiGoiDichVu" id="serviceChooseSearch" class="form-control-sm" placeholder="Chọn gói">
+                                <option selected="selected" disabled>------Chọn-------</option>
+                                <option selected="selected">All</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <select class="form-control-sm" name="trangThai" id="trangThai" required>
+                                <option selected="selected" value="All">All</option>
+                                <option value="false">Chưa duyệt</option>
+                                <option value="true">Đã duyệt</option>
+                            </select>
+                        </div>
+                        <input value="@user.idUser" name="idUser" style="visibility:hidden;width:0%">
+                        <div class="col-sm-2">
+                            <input type="submit" class="btn btn-success btn-sm" value="Tìm kiếm">
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-sm-3">
+                <a class="btn btn-danger btn-sm d-none d-md-block" href="/NguoiThue/CreateTinDang" previewlistener="true">Đăng tin mới</a>
+                <div class="d-lg-none" style="width: 100%;">
+                    <a class="btn btn-danger btn-block mt-3" href="" previewlistener="true">Đăng tin mới</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
 <hr />
 <div class="d-none d-md-block">
-    <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
         <div class="row" id="printMe">
             <div class="col-sm-12  table-responsive">
-                <table class="table table-hover table-bordered js-copytextarea dataTable no-footer" cellpadding="0" cellspacing="0" border="0" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+            <table class="table table-hover table-bordered js-copytextarea dataTable no-footer" cellpadding="0" cellspacing="0" border="0" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
                     <thead>
                         <tr>
                             <th >
@@ -72,6 +93,9 @@
                             </th>
                             <th style="width:120px">
                                 Liên hệ
+                            </th>
+                            <th>
+                                Loại tin
                             </th>
                             <th>
                                 Trạng thái
@@ -111,6 +135,9 @@
                                         @Html.DisplayFor(modelItem => item.sdtNguoiLienHe)
                                         @Html.DisplayFor(modelItem => item.nguoiLienHe)
                                     </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.idDichVu)
+                                    </td>
                                     @if (item.trangThaiTinDang)
                                     {
                                         <td>
@@ -147,10 +174,42 @@
                                         <a href="/NguoiThue/EditTinDang/@item.idTinDang" class="btn btn-outline-dark btn-sm" ata-toggle="tooltip" title="">
                                         <i class="fas fa-edit"></i>
                                         </a>
-                                        <a class="btn btn-outline-dark btn-sm" asp-controller="NguoiThue" asp-action="QuanLyLichXemPhong" asp-route-idTin="@item.idTinDang">
-                                        <i class='bx bx-calendar'></i>
+                                        @{
+                                            int count = lichxem.CountLichXem(item.idTinDang);
+                                        }
+                                        <a class="btn btn-outline-dark btn-sm position-relative" asp-controller="NguoiThue" asp-action="QuanLyLichXemPhong" asp-route-idTin="@item.idTinDang">
+                                            <i class='bx bx-calendar'></i>
+                                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                                @count
+                                                <span class="visually-hidden">unread messages</span>
+                                              </span>
                                         </a>
-
+                                        <a class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalMuaGoiTin-@item.idTinDang" data-bs-toggle="tooltip" title="MuaDichVu">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                            <div class="modal fade" id="modalMuaGoiTin-@item.idTinDang" tabindex="-1" aria-labelledby="modalMuaGoiTin-@item.idTinDang" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Mua gói tin dịch vụ</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                        <div class="form-group col-sm-12">
+                                                            <label>Các gói dịch vụ:</label>
+                                                            <select name="" id="serviceChoose" class="form-control" placeholder="Chọn gói">
+                                                                <option selected="selected" disabled>------Chọn-------</option>
+                                                            </select>
+                                                        </div>
+                                                            <input value="@item.idTinDang" id="matd-@item.idTinDang" style="visibility:hidden">
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-danger" onclick="DeleteTinDang('@item.idTinDang')">Xóa</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                          <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@item.idTinDang" data-bs-toggle="tooltip" title="Delete">
                                                     <i class="fas fa-trash"></i>
                                           </a>
@@ -183,6 +242,7 @@
     </div>
     </div>
 </div>
+
 <script>
     function DeleteTinDang(id)
     {
@@ -201,14 +261,48 @@
                     .then((value) => {
                         location.reload();
                     });
-
             })
             .catch(function (error) {
                 console.log("Error: " + error);
                 alert("loi")
             });
-           
     }
+
+    function getLichDichVu() {
+        var url = 'https://localhost:7034/api/DichVuDangTins';
+        console.log(url)
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                var selectElement = document.getElementById('serviceChoose');
+                var selectElementSearch = document.getElementById('serviceChooseSearch');
+                console.log(data)
+                for (var i = 0; i < data.length; i++) {
+                    var option = document.createElement('option');
+                    option.value = data[i].idDichVu;
+                    option.text = data[i].loaiDichVu;
+                    selectElement.add(option);
+                }
+            });
+    }
+    function getLichDichVuSearch() {
+        var url = 'https://localhost:7034/api/DichVuDangTins';
+        console.log(url)
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                var selectElementSearch = document.getElementById('serviceChooseSearch');
+                console.log(data)
+                for (var i = 0; i < data.length; i++) {
+                    var option = document.createElement('option');
+                    option.value = data[i].idDichVu;
+                    option.text = data[i].loaiDichVu;
+                    selectElementSearch.add(option);
+                }
+            });
+    }
+    getLichDichVu();
+    getLichDichVuSearch();
 
 
 

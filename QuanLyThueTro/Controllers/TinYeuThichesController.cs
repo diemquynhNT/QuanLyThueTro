@@ -135,6 +135,7 @@ namespace QuanLyThueTro.Controllers
 
             return Ok(tin);
         }
+       
 
         // DELETE: api/TinYeuThiches/5
         [HttpDelete("DeleteTinYeuThich")]

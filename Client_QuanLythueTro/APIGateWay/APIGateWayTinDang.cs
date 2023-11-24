@@ -46,6 +46,7 @@ namespace Client_QuanLythueTro.APIGateWay
             finally { }
             return listTin;
         }
+
         public List<TinDang> ListTinDangYeuThich(string idUser)
         {
             List<TinDang> listTin = new List<TinDang>();
@@ -210,6 +211,93 @@ namespace Client_QuanLythueTro.APIGateWay
                     string result = response.Content.ReadAsStringAsync().Result;
                     var datacol = JsonConvert.DeserializeObject<List<TinDang>>(result);
 
+                    if (datacol != null)
+                        listTin = datacol;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return listTin;
+        }
+        public List<TinDang> GetTinDangByStatus(string id,bool status)
+        {
+            url = url + "/GetTinDangByStatus?id="+id+"&status=" + status;
+            List<TinDang> listTin = new List<TinDang>();
+            if (url.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var datacol = JsonConvert.DeserializeObject<List<TinDang>>(result);
+                    if (datacol != null)
+                        listTin = datacol;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return listTin;
+        }
+        public List<TinDang> GetTinDangByGoiDichVu(string id, string goiDV)
+        {
+            url = url + "/GetTinDangByService?id=" + id + "&idGoi=" + goiDV;
+            List<TinDang> listTin = new List<TinDang>();
+            if (url.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var datacol = JsonConvert.DeserializeObject<List<TinDang>>(result);
+                    if (datacol != null)
+                        listTin = datacol;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return listTin;
+        }
+        public List<TinDang> GetTinDangByGoiDichVuAndStatus(string id, string goiDV, bool status)
+        {
+            url = url + "/GetTinDangByServiceAndStatus?id=" + id + "&idGoi=" + goiDV + "&status ="+status;
+            List<TinDang> listTin = new List<TinDang>();
+            if (url.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var datacol = JsonConvert.DeserializeObject<List<TinDang>>(result);
                     if (datacol != null)
                         listTin = datacol;
                 }

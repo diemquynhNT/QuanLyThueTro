@@ -17,6 +17,7 @@
 <link href="~/css/uploadimg.css" rel="stylesheet" />
 <div class="container">
     <div class="tile" id="printMe">
+        <h5 style="padding:10px">Địa chỉ cho thuê</h5>
         <div class=" row">
             <div class="col-sm-8">
             <form asp-action="CreateTinDang" enctype="multipart/form-data">
@@ -28,15 +29,26 @@
                     @Html.HiddenFor(model => model.ngayTaoTin)
                     @Html.HiddenFor(model => model.idDichVu)
                     @Html.HiddenFor(model => model.trangThaiTinDang)
-                    <h5 style="padding:10px">Địa chỉ cho thuê</h5>
                     <div class="row" style="padding:10px">
+                        <div class ="form-group col-sm-6">
+                            <label>Chọn tỉnh thành:</label>
+                            <select name="" id="citychoose" class="form-control" placeholder="Chọn tỉnh thành">
+                                <option selected="selected" disabled>------Chọn-------</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Chọn quận/huyện:</label>
+                            <select name="" id="districtchoose" asp-for="idKhuVuc" class="form-control" placeholder="Chọn quận/huyện">
+                                <option selected="selected" disabled>------Chọn-------</option>
+                            </select>
+                        </div>@*
                         <div class="form-group col-sm-12">
                             <b>Khu vực</b>
                             <select class="form-control" asp-for="idKhuVuc" id="idKhuVuc" required>
                                 <option selected="selected" disabled>------Chọn-------</option>
                             </select>
                             <span asp-validation-for="idKhuVuc" class="text-danger"></span>
-                        </div>
+                        </div>*@
                         <div class="form-group col-sm-12">
                             <b>Địa chỉ cụ thể</b>
                             <input asp-for="diaChi" id="diaChi" class="form-control" required />
@@ -67,36 +79,35 @@
                         </div>
                         <div class="form-group col-sm-6">
                             <b>Số lượng phòng</b>
-                            <input asp-for="soLuongPhong" id="soLuongPhong" class="form-control" required min="1" />
+                            <input asp-for="soLuongPhong" id="soLuongPhong" class="form-control" required min="1" value="1" max="30" />
                             <span asp-validation-for="soLuongPhong" class="text-danger"></span>
                         </div>
                         <div class="form-group col-sm-6">
-                            <b>Diện tích</b>
-                            <input asp-for="dienTich" id="dienTich" class="form-control" required type="number" min="1" />
+                            <b>Diện tích m<sup>2</sup></b>
+                            <input asp-for="dienTich" id="dienTich" class="form-control" required type="number" min="0" value="10" />
                             <span asp-validation-for="dienTich" class="text-danger"></span>
                         </div>
 
                         <div class="form-group col-sm-6">
                             <b>Giá phòng (/tháng)</b>
-                            <input asp-for="giaPhong" id="giaPhong" class="form-control" required type="number" min="1" />
+                            <input asp-for="giaPhong" id="giaPhong" class="form-control" required type="number" min="0" value="1000000" max="15000000" />
                             <span asp-validation-for="giaPhong" class="text-danger"></span>
                         </div>
                         <div class="form-group col-sm-6">
-                            <b>Tiền điện</b>
-                            <input asp-for="tienDien" id="tienDien" class="form-control" required min="0" type="number" min="1" />
+                            <b>Tiền điện (/kWh)</b>
+                            <input asp-for="tienDien" id="tienDien" class="form-control" required min="0" type="number" value="3000" />
                             <span asp-validation-for="tienDien" class="text-danger"></span>
                         </div>
                         <div class="form-group col-sm-6">
-                            <b>Tiền nước</b>
-                            <input asp-for="tienNuoc" id="tienNuoc" class="form-control" required min="0" type="number" min="1" />
+                            <b>Tiền nước (/người)</b>
+                            <input asp-for="tienNuoc" id="tienNuoc" class="form-control" required min="0" type="number"  value="100000"/>
                             <span asp-validation-for="tienNuoc" class="text-danger"></span>
                         </div>
                         <div class="form-group col-sm-6">
                             <b>Tiền dịch vụ</b>
-                            <input asp-for="tienDichVu" id="tienDichVu" class="form-control" required min="0" type="number" min="1" />
+                            <input asp-for="tienDichVu" id="tienDichVu" class="form-control" required min="0" type="number" value="100000" />
                             <span asp-validation-for="tienDichVu" class="text-danger"></span>
                         </div>
-                        <hr />
                         <h5 style="padding:10px">Thông tin liên hệ</h5>
                         <hr />
                         <div class="form-group col-sm-12">
@@ -133,15 +144,15 @@
             </div>
         </div>
     </div>
-    <div>
-        <a asp-controller="NguoiThue" asp-action="QuanLyTinDang" asp-route-id="@Model.idUser" class="btn btn-warning btn-sm">Back to List</a>
+    <div class="col-sm-6">
+        <a asp-controller="NguoiThue" asp-action="QuanLyTinDang" asp-route-idUser="@user.idUser" class="btn btn-warning btn-sm">Back to List</a>
     </div>
 </div>
 <script src="~/js/uploadmultiimg.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="~/js/map/mapapi.js"></script>
-
+<script src="~/js/selectmap.js"></script>
+@*
 <script>
     function getListKhuVuc() {
         var url = 'https://localhost:7034/api/KhuVucs';
@@ -163,6 +174,5 @@
 
    
 
-</script>
-
+</script>*@
 

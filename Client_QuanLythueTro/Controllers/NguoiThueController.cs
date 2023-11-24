@@ -22,7 +22,30 @@ namespace Client_QuanLythueTro.Controllers
             TempData["idUser"] = idUser;
             return View(tinDangs);
         }
-   
+        [HttpPost]
+        public IActionResult QuanLyTinDang(string idLoaiGoiDichVu,string trangThai,string idUser)
+        {
+            List<TinDang> listTin = new List<TinDang>();
+            bool status;
+            if (idLoaiGoiDichVu == "All" && trangThai == "All")
+                listTin = context.ListTinDangByIdUser(idUser);
+            else if(idLoaiGoiDichVu=="All" && trangThai!="All")
+            {
+                status = Boolean.Parse(trangThai);
+                listTin = context.GetTinDangByStatus(idUser,status);
+            }
+            else if (idLoaiGoiDichVu != "All" && trangThai == "All")
+            {
+                listTin = context.GetTinDangByGoiDichVu(idUser, idLoaiGoiDichVu);
+            }
+            else
+            {
+                status = Boolean.Parse(trangThai);
+                listTin = context.GetTinDangByGoiDichVuAndStatus(idUser,idLoaiGoiDichVu, status);
+            }
+                return View(listTin);
+        }
+
         public ActionResult CreateTinDang()
         {
             TinDang tin = new TinDang();
@@ -110,6 +133,11 @@ namespace Client_QuanLythueTro.Controllers
         public IActionResult QuanLyTinYeuThichCaNhan(string idUser)
         {
             IEnumerable<TinDang> list = context.ListTinDangYeuThich(idUser);
+            return View(list);
+        }
+        public IActionResult QuanLyLichXemCaNhan(string sdt)
+        {
+            IEnumerable<LichXemPhong> list = apiLichXem.GetListLichXemPhongUser(sdt);
             return View(list);
         }
 

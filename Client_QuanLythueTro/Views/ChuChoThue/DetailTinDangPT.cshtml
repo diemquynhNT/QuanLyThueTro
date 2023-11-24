@@ -208,14 +208,27 @@
                                     DateTime maxDate = DateTime.Now.AddDays(30);
                                 }
                                 <input id="ngayXem" name="ngayXem" class="form-control" required type="datetime-local" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:00")" max="@maxDate.ToString("yyyy-MM-ddTHH:mm:00")" />
-                                <div class="form-group col-sm-12">
-                                    <b>Họ tên người đến xem</b>
-                                    <input id="nguoiXem" name="nguoiXem" class="form-control" required />
-                                </div>
-                                <div class="form-group col-sm-12">
-                                    <b>Số điện thoại </b>
-                                    <input id="sdtNguoiXem" name="sdtNguoiXem" class="form-control" required />
-                                </div>
+                                @if(user==null)
+                                {
+                                    <div class="form-group col-sm-12">
+                                        <b>Họ tên người đến xem</b>
+                                        <input id="nguoiXem" name="nguoiXem" class="form-control" required />
+                                    </div>
+                                    <div class="form-group col-sm-12">
+                                        <b>Số điện thoại </b>
+                                        <input id="sdtNguoiXem" name="sdtNguoiXem" class="form-control" required />
+                                    </div>
+                                }else
+                                {
+                                    <div class="form-group col-sm-12">
+                                        <b>Họ tên người đến xem</b>
+                                        <input id="nguoiXem" name="nguoiXem" class="form-control" required />
+                                    </div>
+                                    <div class="form-group col-sm-12">
+                                        <b>Số điện thoại </b>
+                                        <input id="sdtNguoiXem" name="sdtNguoiXem" value="@user.sdtUsers" class="form-control" readonly />
+                                    </div>
+                                }
                                 <input id="idTinDang" name="idTinDang" class="form-control" value="@Model.idTinDang" style="visibility:hidden" />
                             </div>@*
                             <div class="textarea-wrap clearboth">
