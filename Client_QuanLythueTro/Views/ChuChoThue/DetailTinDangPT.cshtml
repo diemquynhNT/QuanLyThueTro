@@ -165,7 +165,8 @@
                         <i class='bx bxs-heart-circle' style="padding-right: 10px;color: red; font-size: 15px;"></i>Tin yêu thích
                     </a>
                 </p>
-                <input value="@user.idUser" id="idNguoiThem" />
+                <input value="@user.idUser" id="idNguoiThem" style="visibility:hidden" />
+                <input value="@Model.idTinDang" id="idTinDangChoose" style="visibility:hidden" />
 
             }
            
@@ -241,9 +242,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
                 <div class="modal-body">
-                    <h3 class="text-uppercase">
-                        <b>Thêm tin @Model.idTinDang vào danh sách tin yêu thích ?</b>
-                    </h3>
+                    <h5>
+                    <span>Thêm tin <b>@Model.idTinDang </b>vào danh sách tin yêu thích ?</span>
+                    </h5>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-success" id="btnThemYeuThich" onclick="checkAndAddFavorite()">Thêm</button>
@@ -252,7 +253,7 @@
         </div>
     </div>
 </div>
-<input value="@Model.idTinDang" id="idTinDang" />
+
 <script>
     document.getElementById("sdtNguoiXem").onchange = function () {
         const phoneNumber = this.value.trim();
@@ -268,7 +269,7 @@
     };
 
     async function checkAndAddFavorite() {
-        const idTin = document.getElementById("idTinDang").value;
+        const idTin = document.getElementById("idTinDangChoose").value;
         const idUser = document.getElementById("idNguoiThem").value;
 
         const checkUrl = `https://localhost:7034/api/TinYeuThiches/TinYeuThichExists?id=${idTin}&idUser=${idUser}`;

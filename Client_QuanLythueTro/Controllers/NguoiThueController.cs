@@ -1,6 +1,7 @@
 ﻿using Client_QuanLythueTro.APIGateWay;
 using Client_QuanLythueTro.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Client_QuanLythueTro.Controllers
 {
@@ -21,6 +22,7 @@ namespace Client_QuanLythueTro.Controllers
             TempData["idUser"] = idUser;
             return View(tinDangs);
         }
+   
         public ActionResult CreateTinDang()
         {
             TinDang tin = new TinDang();
@@ -39,6 +41,7 @@ namespace Client_QuanLythueTro.Controllers
             }
             catch (Exception ex)
             {
+                TempData["mess"] = "loi";
                 return Content("Error: " + ex.Message);
 
             }
@@ -65,20 +68,20 @@ namespace Client_QuanLythueTro.Controllers
             }
         }
 
-        [HttpPost]
-        public ActionResult DeleteTin(string id,string idUser)
-        {
-            try
-            {
-                context.DeleteTin(id);
-                return RedirectToAction("QuanLyTinDang", new { idUser = idUser });
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-                return View();
-            }
-        }
+        //[HttpPost]
+        //public ActionResult DeleteTin(string id,string idUser)
+        //{
+        //    try
+        //    {
+        //        context.DeleteTin(id);
+        //        return RedirectToAction("QuanLyTinDang", new { idUser = idUser });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ModelState.AddModelError("", ex.Message);
+        //        return View();
+        //    }
+        //}
 
         public IActionResult QuanLyLichXemPhong(string idTin)
         {
@@ -102,6 +105,12 @@ namespace Client_QuanLythueTro.Controllers
                 ModelState.AddModelError("", ex.Message);
                 return View();
             }
+        }
+
+        public IActionResult QuanLyTinYeuThichCaNhan(string idUser)
+        {
+            IEnumerable<TinDang> list = context.ListTinDangYeuThich(idUser);
+            return View(list);
         }
 
     }

@@ -21,14 +21,61 @@ namespace QuanLyThueTro.Services
             getId = new GenerateAlphanumericId();
             _webHostEnvironment = webHostEnvironment;
         }
+        public List<TinDangVM> BinarySearchByPrice(List<TinDangVM> listPhong, double minGia, double maxGia)
+        {
+            List<TinDangVM> result = new List<TinDangVM>();
+            int left = 0;
+            int right = listPhong.Count - 1;
+            while (left <= right)
+            {
+                int mid = left + (right - left) / 2;
+                if (listPhong[mid].giaPhong >= minGia && listPhong[mid].giaPhong <= maxGia)
+                {
+                    result.Add(listPhong[mid]);
+                }
+                if (listPhong[mid].giaPhong < minGia)
+                {
+                    left = mid + 1;
+                }
+                else
+                {
+                    right = mid - 1;
+                }
+            }
+            return result;
+        }
+        public List<TinDangVM> BinarySearchByDienTich(List<TinDangVM> listPhong, double minDT, double maxDT)
+        {
+            List<TinDangVM> result = new List<TinDangVM>();
+            int left = 0;
+            int right = listPhong.Count - 1;
+            while (left <= right)
+            {
+                int mid = left + (right - left) / 2;
+                if (listPhong[mid].dienTich >= minDT && listPhong[mid].dienTich <= maxDT)
+                {
+                    result.Add(listPhong[mid]);
+                }
+                if (listPhong[mid].giaPhong < minDT)
+                {
+                    left = mid + 1;
+                }
+                else
+                {
+                    right = mid - 1;
+                }
+            }
+            return result;
+        }
         public async Task<TinDang> AddTinDang(TinDang tin,PhongTro phong)
         {
             try
             {
-                tin.idTinDang ="T"+ getId.GenerateId(6);
+                tin.idTinDang ="TD"+ getId.GenerateId(6);
                 tin.trangThaiTinDang = false;
                 tin.ngayTaoTin = DateTime.Now;
-                tin.ngayBatDau = null;
+                tin.ngayBatDau = DateTime.Today;
+                tin.ngayKetThuc = DateTime.Today.AddDays(30);
                 tin.idDichVu = "NODV";
                 phong.idTinDang = tin.idTinDang;
                 _context.tinDangs.Add(tin);
@@ -41,12 +88,17 @@ namespace QuanLyThueTro.Services
                 throw;
             }
         }
+        public async Task ThemHinh(Images hinh)
+        {
+            _context.ImagesPhongTro.Add(hinh);
+            _context.SaveChanges();
+        }
         public async Task AddHinhanh(string tinId, IFormFile file)
         {
             Images hinh = new Images();
             if (file.Length > 0)
             {
-                
+
                 hinh.idTinDang = tinId;
                 string path = _webHostEnvironment.WebRootPath + "\\img\\";
                 if (!Directory.Exists(path))
@@ -66,7 +118,6 @@ namespace QuanLyThueTro.Services
             _context.SaveChanges();
         }
 
-
         public async Task<bool> DeleteTinDang(string idTinDang)
         {
             var tin = _context.tinDangs.SingleOrDefault(t => t.idTinDang == idTinDang);
@@ -75,10 +126,14 @@ namespace QuanLyThueTro.Services
                 return false;
             _context.Remove(phong);
             _context.Remove(tin);
+            
             _context.SaveChanges();
             return true;
         }
-
+        public List<Images> GetAllImagesById(string idTin)
+        {
+            return _context.ImagesPhongTro.Where(t=>t.idTinDang==idTin).ToList();
+        }
         public PhongTro GetPhongById(string idTin)
         {
             return _context.phongTros.Where(t => t.idTinDang == idTin).FirstOrDefault();
@@ -88,6 +143,21 @@ namespace QuanLyThueTro.Services
         {
             return _context.tinDangs.ToList();
         }
+
+        public List<TinDang> GetAllByIdKhuVuc(string idKhuVuc)
+        {
+            return _context.tinDangs.Where(t=>t.idKhuVuc==idKhuVuc).ToList();
+        }
+        public List<TinDang> GetAllByIdThanhPho(string idTP)
+        {
+            var listTin = new List<TinDang>();
+
+            var kvIds = _context.khuVucs .Where(t => t.idThanhPho == idTP) .Select(k => k.idKhuVuc);
+            listTin = _context.tinDangs .Where(td => kvIds.Contains(td.idKhuVuc)) .ToList();
+
+            return listTin;
+        }
+
 
         public List<PhongTro> GetAllPhong()
         {
@@ -101,7 +171,7 @@ namespace QuanLyThueTro.Services
 
         public bool IsValidTinDang(string idTinDang)
         {
-            throw new NotImplementedException();
+            return (_context.tinDangs?.Any(e => e.idTinDang == idTinDang)).GetValueOrDefault();
         }
 
         public async Task<TinDang> UpdateTinDang(TinDang tin,PhongTro phong)
@@ -117,8 +187,6 @@ namespace QuanLyThueTro.Services
         public void DuyetTin(TinDang tin)
         {
             tin.trangThaiTinDang = true;
-            tin.ngayBatDau = DateTime.Today;
-            tin.ngayKetThuc = DateTime.Today.AddDays(30);
             _context.SaveChanges();
         }
         public void HuyDuyetTin(TinDang tin)

@@ -1,7 +1,6 @@
 ﻿var popups = document.querySelectorAll('.filter-popup');
 console.log(popups)
 
-console.log("demo" + document.getElementById('diadiemDaChon').value)
 function showPopup(popupType) {
     console.log(popupType)
     popups.forEach(function (popup) {
@@ -20,15 +19,13 @@ function closePopup(type) {
     popupToClose.style.display = 'none';
 }
 
-function selectLocation(selectedOption) {
+function selectLocation(selectedOption, cityName, districtCode) {
     var diaDiem = document.getElementById('diadiem');
-    diaDiem.innerHTML = "meme";
-    document.getElementById('diadiemDaChon').value = selectedOption;
-    alert(selectedOption)
-    closePopup('city');
-}
-function searchData{
-
+    var inputDD = document.getElementById('inputDiaDiemDaChon');
+    inputDD.value = districtCode;
+    console.log("inputDD: " + inputDD.value)
+    diaDiem.innerHTML = cityName + " - " + selectedOption.textContent.trim();
+    closePopup('khuvuc');
 }
 
 function selectDienTich(option) {
@@ -46,6 +43,12 @@ function selectDienTich(option) {
     }
 
     dientichChon.innerHTML = `Từ ${min}m - ${max}m`;
+    var intputMin = document.getElementById('inputGiaMin');
+    var intputMax = document.getElementById('inputGiaMax');
+    intputMin.value = min;
+    intputMax.value = max;
+    console.log("inputDienTic" + intputMin.value + " " + intputMax.value)
+
     closePopup('dientich');
 }
 
@@ -106,12 +109,17 @@ function getDatatoPrice() {
     var minInput = document.getElementById("range-min").value;
     var maxInput = document.getElementById("range-max").value;
     console.log(minInput, maxInput)
-
     var giachon = document.getElementById('giachon');
     giachon.innerHTML = minInput + " - " + maxInput
+
+    var intputMin = document.getElementById('inputDienTichMin');
+    var intputMax = document.getElementById('inputDienTichMax');
+    intputMin.value = minInput;
+    intputMax.value = maxInput;
+    console.log("Gia" + intputMin.value + " " + intputMax.value)
+
     closePopup('price');
 
 }
-
 
 

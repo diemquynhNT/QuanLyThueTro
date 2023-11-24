@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using QuanLyThueTro.Data;
 using QuanLyThueTro.Dto;
 using QuanLyThueTro.Model;
@@ -17,12 +18,18 @@ namespace QuanLyThueTro.Controllers
 
         private readonly ITinDang _context;
         private readonly IMapper _mapper;
+        private readonly IPhotoService _photoService;
 
-        public TinDangController(ITinDang context, IMapper mapper)
+
+
+        public TinDangController(ITinDang context, IMapper mapper, IPhotoService photoService)
         {
             _context = context;
             _mapper = mapper;
+            _photoService = photoService;
+
         }
+   
 
         [HttpGet]
         public List<TinDang> GetAll()
@@ -34,6 +41,102 @@ namespace QuanLyThueTro.Controllers
         {
             return _context.GetTinDangByIdUser(id);
         }
+        [HttpGet("GetTinByIdTP")]
+        public List<TinDangVM> GetTinByIdTP(string id)
+        {
+            List<TinDang> tinDang = _context.GetAllByIdThanhPho(id);
+            List<TinDangVM> listTinVM = new List<TinDangVM>();
+            foreach (var item in tinDang)
+            {
+                TinDangVM tinvm = new TinDangVM();
+                var tin = _context.GetTinDangById(item.idTinDang);
+                var phong = _context.GetPhongById(item.idTinDang);
+                _mapper.Map(tin, tinvm);
+                _mapper.Map(phong, tinvm);
+                listTinVM.Add(tinvm);
+            }
+            return listTinVM;
+        }
+
+        [HttpGet("GetTinDangById")]
+        public List<TinDangVM> SearchTin(string idKhuvuc)
+        {
+            List<TinDang> tinDang= _context.GetAllByIdKhuVuc(idKhuvuc);
+            List<TinDangVM> listTinVM = new List<TinDangVM>();
+            foreach (var item in tinDang)
+            {
+                TinDangVM tinvm = new TinDangVM();
+                var tin = _context.GetTinDangById(item.idTinDang);
+                var phong = _context.GetPhongById(item.idTinDang);
+                _mapper.Map(tin, tinvm);
+                _mapper.Map(phong, tinvm);
+                listTinVM.Add(tinvm);
+            }
+            return listTinVM;
+        }
+
+
+        [HttpGet("GetTinDangVMByPrice")]
+        public List<TinDangVM> GetTinDangVMByPrice(string idKhuVuc, float giaMin, float giaMax)
+        {
+            List<TinDang> tinDang = _context.GetAllByIdKhuVuc(idKhuVuc);
+            List<TinDangVM> listTinVM = new List<TinDangVM>();
+            foreach (var item in tinDang)
+            {
+                TinDangVM tinvm = new TinDangVM();
+                var tin = _context.GetTinDangById(item.idTinDang);
+                var phong = _context.GetPhongById(item.idTinDang);
+                _mapper.Map(tin, tinvm);
+                _mapper.Map(phong, tinvm);
+                listTinVM.Add(tinvm);
+            }
+            return _context.BinarySearchByPrice(listTinVM, giaMin,giaMax);
+        }
+        [HttpGet("GetTinDangVMByDienTich")]
+        public List<TinDangVM> GetTinDangVMByDienTich(string idKhuVuc,double minDienTich, double maxDienTich)
+        {
+            List<TinDang> tinDang = _context.GetAllByIdKhuVuc(idKhuVuc);
+            List<TinDangVM> listTinVM = new List<TinDangVM>();
+            foreach (var item in tinDang)
+            {
+                TinDangVM tinvm = new TinDangVM();
+                var tin = _context.GetTinDangById(item.idTinDang);
+                var phong = _context.GetPhongById(item.idTinDang);
+                _mapper.Map(tin, tinvm);
+                _mapper.Map(phong, tinvm);
+                listTinVM.Add(tinvm);
+            }
+            return _context.BinarySearchByDienTich(listTinVM, minDienTich, maxDienTich);
+        }
+
+        //[HttpGet("SearchTinAll")]
+        //public List<TinDangVM> SearchTinAll([FromBody] SearchData data)
+        //{
+        //    List<TinDang> listTin = _context.GetAll();
+        //    List<TinDangVM> listTinVM = new List<TinDangVM>();
+        //    List<TinDangVM> result = new List<TinDangVM>();
+        //    foreach (var item in listTin)
+        //    {
+        //        TinDangVM tinvm = new TinDangVM();
+        //        var tin = _context.GetTinDangById(item.idTinDang);
+        //        var phong = _context.GetPhongById(item.idTinDang);
+        //        _mapper.Map(tin, tinvm);
+        //        _mapper.Map(phong, tinvm);
+        //        listTinVM.Add(tinvm);
+        //    }
+        //    if (data.giaMin == null && data.giaMax == null)
+        //        return _context.BinarySearchByPrice(listTinVM, data.giaMin, data.giaMax);
+        //    else if (data.minDienTich == null && data.maxDienTich == null)
+        //        return _context.BinarySearchByDienTich(listTinVM, data.minDienTich, data.maxDienTich);
+        //    else
+        //    {
+        //        List<TinDangVM> resultPrice = _context.BinarySearchByPrice(listTinVM, data.giaMin, data.giaMax);
+        //        result = _context.BinarySearchByDienTich(resultPrice, data.minDienTich, data.maxDienTich);
+        //    }
+        //    return result;
+
+        //}
+       
         [HttpGet("Filter")]
         public List<TinDang> Filter(int thang, bool status)
         {
@@ -78,6 +181,46 @@ namespace QuanLyThueTro.Controllers
             }
         }
        
+        [HttpPost("AddImages/{tinDangId}")]
+        public async Task<ActionResult> AddImageAsync(string tinDangId, List<IFormFile>  files)
+        {
+            try
+            {
+                bool tinDang = _context.IsValidTinDang(tinDangId);
+
+                if (!tinDang)
+                    return NotFound("Không tìm thấy tin đăng có mã này");
+                if (files == null)
+                    return BadRequest("Hình null");
+                if (files.Count == 0)
+                    return BadRequest();
+
+                var images = new Images();
+                foreach (var file in files)
+                {
+                    var result = await _photoService.AddImageAsync(file);
+                    if (result.Error != null)
+                    {
+                        return BadRequest("Không lưu lên cloud được: " + result.Error.Message);
+                    }
+                    images = new Images
+                    {
+                        nameImage = result.SecureUrl.AbsoluteUri,
+                        idTinDang = tinDangId,
+                        publicId = result.PublicId
+                    };
+                    _context.ThemHinh(images);
+                }
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+           
+        }
+
         [HttpPost("AddImageToTinDang")]
         public async Task<ActionResult> AddImageToTinDang(List<IFormFile> list,string id )
         {
@@ -119,22 +262,27 @@ namespace QuanLyThueTro.Controllers
            
         }
 
-        // DELETE api/<TinDangController>/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteTin(string id)
-        {
-            try
-            {
-                bool tin = await _context.DeleteTinDang(id);
-                if (tin == true)
-                    return Ok("xoa thanh cong");
-                return BadRequest("loi");
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        //// DELETE api/<TinDangController>/5
+        //[HttpDelete("{id}")]
+        //public async Task<ActionResult> DeleteTin(string id)
+        //{
+        //    try
+        //    {
+        //        bool tin = await _context.DeleteTinDang(id);
+        //        List<Images> list=_context.GetAllImagesById(id);
+        //        foreach (var image in list)
+        //        {
+        //            await _photoService.DeleteImageAsync(image.publicId);
+        //        }
+        //        if (tin == true)
+        //            return Ok("xoa thanh cong");
+        //        return BadRequest("loi");
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
         [HttpPut("DuyetTin")]
         public async Task<ActionResult> DuyetTin(string id)
         {

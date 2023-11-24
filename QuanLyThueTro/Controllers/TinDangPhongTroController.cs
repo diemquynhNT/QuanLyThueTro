@@ -65,6 +65,7 @@ namespace QuanLyThueTro.Controllers
             await _context.DisposeAsync();
             return mergeList.ToList();
         }
+      
 
         // GET: api/TinDangPhongTro/5
         [HttpGet("{id}")]

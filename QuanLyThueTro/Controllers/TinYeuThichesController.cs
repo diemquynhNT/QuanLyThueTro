@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging.Signing;
 using QuanLyThueTro.Data;
+using QuanLyThueTro.Dto;
 using QuanLyThueTro.Model;
 
 namespace QuanLyThueTro.Controllers
@@ -15,10 +18,11 @@ namespace QuanLyThueTro.Controllers
     public class TinYeuThichesController : ControllerBase
     {
         private readonly MyDBContext _context;
-
-        public TinYeuThichesController(MyDBContext context)
+        private readonly IMapper _mapper;
+        public TinYeuThichesController(MyDBContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -30,7 +34,26 @@ namespace QuanLyThueTro.Controllers
           }
             return await _context.tinYeuThiches.ToListAsync();
         }
-
+        [HttpGet("GettinYeuThichesByIdUser")]
+        public async Task<ActionResult<IEnumerable<TinDangVM>>> GettinYeuThichesByIdUser(string iduser)
+        {
+            if (_context.tinYeuThiches == null)
+            {
+                return NotFound();
+            }
+            List<TinYeuThich> tinYeuThich= await _context.tinYeuThiches.Where(t=>t.idUser==iduser).ToListAsync();
+            List<TinDangVM> listTin = new List<TinDangVM>();
+            foreach (var item in tinYeuThich)
+            {
+                TinDangVM tinvm = new TinDangVM();
+                var tin = _context.tinDangs.Where(t => t.idTinDang == item.idTinDang).FirstOrDefault();
+                var phong = _context.phongTros.Where(t => t.idTinDang == item.idTinDang).FirstOrDefault();
+                _mapper.Map(tin, tinvm);
+                _mapper.Map(phong, tinvm);
+                listTin.Add(tinvm);
+            }
+            return listTin;
+        }
         // GET: api/TinYeuThiches/5
         [HttpGet("GetTin")]
         public async Task<ActionResult<TinYeuThich>> GetTinYeuThich(string id,string idUser)
@@ -114,14 +137,14 @@ namespace QuanLyThueTro.Controllers
         }
 
         // DELETE: api/TinYeuThiches/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTinYeuThich(string id)
+        [HttpDelete("DeleteTinYeuThich")]
+        public async Task<IActionResult> DeleteTinYeuThich(string idTin,string idUser)
         {
             if (_context.tinYeuThiches == null)
             {
                 return NotFound();
             }
-            var tinYeuThich = await _context.tinYeuThiches.FindAsync(id);
+            var tinYeuThich =  _context.tinYeuThiches.Where(t=>t.idTinDang==idTin&&idUser==t.idUser).FirstOrDefault();
             if (tinYeuThich == null)
             {
                 return NotFound();

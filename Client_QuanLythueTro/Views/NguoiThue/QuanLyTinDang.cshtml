@@ -9,116 +9,207 @@
     string trangThai = "Chưa duyệt";
 
 }
- <div class="row">
+@{
+    var checkMessage = TempData["mess"];
+    if (checkMessage == "thanhcong")
+    {
+        <script>
+            swal("Đã thêm tin đăng mới !!!", "Nhân viên sẽ duyệt tin trong thời gian sớm nhất!!! ", "success")
+        </script>
+
+    }
+    else if (checkMessage == "loi")
+    {
+        <script>
+            swal("Lỗi !!!", "Lỗi xử lý !!! ", "error")
+        </script>
+    }
+}
+
+ <div class="row" style="padding:10px">
     <div class="col-sm-3">
-     <h3>Quản lý tin đăng</h3>
+     <h4>Quản lý tin đăng</h4>
     </div>
     <div class="col-sm-8">
        <div class="row">
-          <div class="col-sm-3">
-          </div>
-           <div class="col-sm-3">
-           </div>
-           <div class="col-sm-3">
-           </div>
+           <form>
+              <div class="col-sm-3">
+@*               @Html.DropDownList("thangs", (IEnumerable<SelectListItem>)TempData["thangs"], htmlAttributes: new { @class = "form-control-sm" })
+*@              </div>
+               <div class="col-sm-4">
+                <select class="form-control" name="trangThai" id="trangThai" required>
+                    <option selected="selected" disabled>All</option>
+                    <option>Chưa duyệt</option>
+                    <option>Đã duyệt</option>
+                </select>
+               </div>
                 <div class="col-sm-3">
                      <a class="btn btn-danger btn-sm d-none d-md-block" href="/NguoiThue/CreateTinDang" previewlistener="true">Đăng tin mới</a>
                      <div class="d-lg-none" style="width: 100%;">
                          <a class="btn btn-danger btn-block mt-3" href="" previewlistener="true">Đăng tin mới</a>
                      </div>
                  </div>
+            </form>
        </div>
     </div>
 </div>
-
+<hr />
 <div class="d-none d-md-block">
     <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
         <div class="row" id="printMe">
             <div class="col-sm-12  table-responsive">
                 <table class="table table-hover table-bordered js-copytextarea dataTable no-footer" cellpadding="0" cellspacing="0" border="0" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
-          <thead style="background-color:aqua">
-              <tr>
-              <th>Mã tin</th>
-              <th>Tiêu đề</th>
-              <th>Địa chỉ</th>
-              <th>SĐT</th>
-              <th>Liên hệ</th>
-              <th>Ngày bắt đầu</th>
-              <th>Ngày hết hạn</th>
-              <th>Trạng thái</th>
-              <th></th>
-              </tr>
-          </thead>
-          <tbody>
-          @if(Model.Count()<1)
-          {
-             <tr>
-                        <td colspan="7">Bạn chưa có tin đăng nào. Bấm <a href="/NguoiThue/CreateTinDang" previewlistener="true">vào đây</a> để bắt đầu đăng tin</td>
-              </tr>
-          }else{
-          foreach (var item in Model)
-          {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.idTinDang)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.tieuDe)
-                    </td>
-                    <td>
-                        @item.diaChi
-                    </td>
-                    @if (item.trangThaiTinDang)
-                        trangThai = "Đã duyệt";
+                    <thead>
+                        <tr>
+                            <th >
+                                Mã tin
+                            </th>
+                            <th style="width:200px">
+                                Tiêu Đề
+                            </th>
+                            <th style="width:120px">
+                                Thời gian
+                            </th>
+                            <th style="width:120px">
+                                Liên hệ
+                            </th>
+                            <th>
+                                Trạng thái
+                            </th>
+                            <th>
+                                Hạn
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                          @if(Model.Count()<1)
+                          {
+                             <tr>
+                                        <td colspan="7">Bạn chưa có tin đăng nào. Bấm <a href="/NguoiThue/CreateTinDang" previewlistener="true">vào đây</a> để bắt đầu đăng tin</td>
+                              </tr>
+                          }else{
+                          foreach (var item in Model)
+                          {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.idTinDang)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tieuDe)
+                                    </td>
+                                    @{
+                                        var ngaybd = String.Format("{0:d/M/yyyy}", item.ngayBatDau);
+                                        var ngaykt = String.Format("{0:d/M/yyyy}", item.ngayKetThuc);
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ngayBatDau)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ngayKetThuc)
-                    </td>
-                    <td>
-                        @trangThai
-                    </td>
-                    <td style="color:black">
-                        <a href="/NguoiThue/EditTinDang/@item.idTinDang" class="btn btn-outline-dark btn-sm" ata-toggle="tooltip" title="">
-                       <i class="fas fa-edit"></i>
-                        </a>
-                        <a class="btn btn-outline-dark btn-sm" asp-controller="NguoiThue" asp-action="QuanLyLichXemPhong" asp-route-idTin="@item.idTinDang">
-                        <i class='bx bx-calendar'></i>
-                        </a>
+                                    }
+                                    <td>
+                                        @ngaybd @ngaykt
+                                    </td>
+                                  
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.sdtNguoiLienHe)
+                                        @Html.DisplayFor(modelItem => item.nguoiLienHe)
+                                    </td>
+                                    @if (item.trangThaiTinDang)
+                                    {
+                                        <td>
+                                            <span class="badge rounded-pill bg-success">Đã duyệt</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <span class="badge rounded-pill bg-danger">Chưa duyệt</span>
+                                        </td>
+                                    }
+                                    <td>
+                                    @{
+                                        DateTime hant = (DateTime)item.ngayKetThuc;
+                                        TimeSpan interval = hant.Subtract(DateTime.Now);
 
-                         <a class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@item.idTinDang" data-bs-toggle="tooltip" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                                <div class="modal fade" id="modal-@item.idTinDang" tabindex="-1" aria-labelledby="modal-@item.idTinDang" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Xác nhận</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        if (interval.Days < 0)
+                                        {
+                                            <span class="badge rounded-pill bg-danger">Hết hạn</span>
+                                        }
+                                        else if (interval.Days >= 0 && interval.Days <= 3)
+                                        {
+                                            <span class="badge rounded-pill bg-warning">Sắp đến hạn</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge rounded-pill bg-success">Còn hạn</span>
+                                        }
+
+                                    }
+                                    </td>
+                                    <td>
+                                        <a href="/NguoiThue/EditTinDang/@item.idTinDang" class="btn btn-outline-dark btn-sm" ata-toggle="tooltip" title="">
+                                        <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-outline-dark btn-sm" asp-controller="NguoiThue" asp-action="QuanLyLichXemPhong" asp-route-idTin="@item.idTinDang">
+                                        <i class='bx bx-calendar'></i>
+                                        </a>
+
+                                         <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@item.idTinDang" data-bs-toggle="tooltip" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                          </a>
+                                        <div class="modal fade" id="modal-@item.idTinDang" tabindex="-1" aria-labelledby="modal-@item.idTinDang" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Xác nhận</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                        <div class="modal-body">
+                                                            Xác nhận xóa tin đăng @item.idTinDang
+                                                            <input value="@item.idTinDang" id="matd-@item.idTinDang" style="visibility:hidden">
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-danger" onclick="DeleteTinDang('@item.idTinDang')">Xóa</button>
+                                                        </div>
+                                                </div>
                                             </div>
-                                            <form asp-controller="NguoiThue" asp-action="DeleteTin" asp-route-id="@item.idTinDang" method="post">
-                                                <div class="modal-body">
-                                                    Xác nhận xóa tin đăng @item.idTinDang
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-danger">Xóa</button>
-                                                </div>
-                                            </form>
                                         </div>
-                                    </div>
-                                </div>
-                               
 
-                    </td>
-                </tr>
-                }
-           }
+                                    </td>
+                                </tr>
+                                }
+                           }
                 </tbody>
             </table>
         </div>
     </div>
     </div>
 </div>
+<script>
+    function DeleteTinDang(id)
+    {
+        var idchoose="matd-"+id;
+        var idTinDang = document.getElementById(idchoose).value;
+        console.log(idchoose)
+        var url = "https://localhost:7034/api/TinDangPhongTro/" + idTinDang;
+        fetch(url, {
+            method: "DELETE"
+        })
+            .then(function (response) {
+                return response.blob();
+            })
+            .then(function (data) {
+                swal("Yêu cầu thành công", "Đã xóa tin thành công !!! ", "success")
+                    .then((value) => {
+                        location.reload();
+                    });
+
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+                alert("loi")
+            });
+           
+    }
+
+
+
+</script>
