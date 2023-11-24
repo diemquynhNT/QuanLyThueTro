@@ -44,10 +44,10 @@
                         @{
                             DateTime timeEnd = item.ngayGiaoDich.AddDays(30);
                             TimeSpan timeLeft = timeEnd - DateTime.UtcNow;
-                            int day = Int32.Parse(timeLeft.TotalDays.ToString());
+                            //int day = Int32.Parse(timeLeft.TotalDays.ToString());
                         }
                         <td>@Html.DisplayFor(modelItem => timeEnd)</td>
-                        <td>@Html.DisplayFor(modelItem => day)</td>
+                        <td>@Html.DisplayFor(modelItem => timeLeft.TotalDays)</td>
                     </tr>
                 }
             </tbody>

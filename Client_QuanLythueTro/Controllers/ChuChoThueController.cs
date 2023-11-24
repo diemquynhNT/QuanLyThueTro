@@ -189,7 +189,9 @@ namespace Client_QuanLythueTro.Controllers
         [HttpGet]
         public IActionResult DangKyDichVu()
         {
-            return View();
+            List<DichVuDangTin> listGoiTin = _callDichVu.ListGoiTin();
+            ViewBag.listTK = _callDichVu.ListTK();
+            return View(listGoiTin);
         }
 
         [HttpPost]
