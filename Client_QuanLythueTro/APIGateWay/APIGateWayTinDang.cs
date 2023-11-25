@@ -16,6 +16,7 @@ namespace Client_QuanLythueTro.APIGateWay
     {
         private string url = "https://localhost:7034/api/TinDang";
         private HttpClient httpClient = new HttpClient();
+        Uri baseAddress = new Uri("https://localhost:7034/api/TinDangPhongTro");
 
         public List<TinDang> ListTinDang()
         {
@@ -464,7 +465,7 @@ namespace Client_QuanLythueTro.APIGateWay
         {
             try
             {
-                url = url + "/AddImages/"+idTinDang;
+                url = url + "/AddImageAsync/" + idTinDang;
                 using (var httpClient = new HttpClient())
                 {
                     using (var form = new MultipartFormDataContent())
@@ -485,7 +486,35 @@ namespace Client_QuanLythueTro.APIGateWay
                 throw new Exception(ex.Message);
             }
         }
+        public void CreateImage(string idTinDang, List<IFormFile> files)
+        {
+            try
+            {
+                httpClient = new HttpClient();
+                httpClient.BaseAddress = new Uri(baseAddress + "/AddImages/" + idTinDang);
+              
+                var formData = new MultipartFormDataContent();
+                foreach (var file in files)
+                {
+                    formData.Add(new StreamContent(file.OpenReadStream()), "files", file.FileName);
 
+                }
+                HttpResponseMessage response = httpClient.PostAsync(httpClient.BaseAddress, formData).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+                //string data = JsonConvert.SerializeObject(idTinDang, file);
+                //StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            //return tinDang;
+        }
 
         public TinDang GetTin(string id)
         {

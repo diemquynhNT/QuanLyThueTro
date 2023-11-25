@@ -1,10 +1,13 @@
-﻿@model Client_QuanLythueTro.Models.TinDang
+﻿@using Client_QuanLythueTro.APIGateWay;
+@model Client_QuanLythueTro.Models.TinDang
 
 @{
     ViewData["Title"] = "EditTinDang";
     Layout = "~/Views/NguoiThue/LayoutMain/LayoutMainNguoiThue.cshtml";
     ViewBag.title = "Cập nhật tin";
     ViewBag.qltd = "active";
+    TinDang_PhongTro_GateWay callTinDangPT = new TinDang_PhongTro_GateWay();
+    List<string> imgList = callTinDangPT.ListImages(Model.idTinDang);
 }
 
 <link href="~/css/uploadimg.css" rel="stylesheet" />
@@ -22,6 +25,7 @@
 
     }
 }
+<link href="~/css/uploadimg.css" rel="stylesheet" />
 <div class="container">
     <div class="tile" id="printMe">
         <h4>THÔNG TIN TIN ĐĂNG</h4>
@@ -39,7 +43,7 @@
                     <div class=" row">
                     <div class="form-group col-sm-6">
                         <b>Mã tin :</b>
-                        <input asp-for="idTinDang" class="form-control" readonly />
+                            <input asp-for="idTinDang" id="idTinDang" class="form-control" readonly />
                         <span asp-validation-for="idTinDang" class="text-danger"></span>
                     </div>
                     <div class="form-group col-sm-6">
@@ -118,18 +122,7 @@
                             <b>SĐT liên hệ</b>
                             <input asp-for="sdtNguoiLienHe" id="sdtNguoiLienHe" class="form-control" required min="10" max="10" />
                             <span asp-validation-for="sdtNguoiLienHe" class="text-danger"></span>
-                        </div>@*
-                        <div class="form-group col-sm-12">
-                            <h3>Chọn hình</h3>
-                            <div id="imageUploadForm">
-                                <div class="input-div">
-                                    <input type="file" class="listimg" id="listimg" name="listimg" multiple accept="image/png, image/jpeg, image/jpg">
-                                </div>
-                                <div id="saved-form">
-                                    <div class="saved-div"></div>
-                                </div>
-                            </div>
-                        </div>*@
+                        </div>
                         <input asp-for="idUser" id="idUser" class="form-control" value="@Model.idUser" style="visibility:hidden"/>
                         <div class="form-group">
                             <input type="submit" value="Thêm" class="btn btn-success btn-sm" />
@@ -141,17 +134,85 @@
             <div class="col-sm-4">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.521571286021!2d106.68087777451706!3d10.771307259289186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f23cbaeb32d%3A0x3d32b187a53c6cf8!2zMzk5IE5ndXnhu4VuIMSQw6xuaCBDaGnhu4N1LCBQaMaw4budbmcgNSwgUXXhuq1uIDMsIFRow6BuaCBwaOG7kSBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1698851672393!5m2!1svi!2s" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
+
+            <hr />
+
+            <div class="form-group col-sm-12">
+                <h3 style="padding:10px 0">Hình ảnh phòng</h3>
+                <a class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#MoreImage" data-bs-toggle="tooltip" title="Delete">
+                    Thêm hình
+                </a>
+                <div class="modal fade" id="MoreImage" tabindex="-1" aria-labelledby="MoreImage" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Xác nhận</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group col-sm-12">
+                                    <h3>Chọn hình</h3>
+                                    <div id="imageUploadForm">
+                                        <div class="input-div">
+                                            <input type="file" class="listimg" id="listimg" name="listimg" multiple accept="image/png, image/jpeg, image/jpg">
+                                        </div>
+                                        <div id="saved-form">
+                                            <div class="saved-div"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success" onclick="ClickUpdateImage(`@Model.idTinDang`)">Thêm mới</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="demo" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        @for (int i = 0; i < imgList.Count; i++)
+                        {
+                            string act = "";
+                            if (i == 0) act = "active";
+                            <button type="button" data-bs-target="#demo" data-bs-slide-to="@i" class="@act"></button>
+                        }
+                        <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+                    </div>
+
+                    <div class="carousel-inner" style="height:350px; width:100%;">
+                        @for (int i = 0; i < imgList.Count; i++)
+                        {
+                            string act = "";
+                            if (i == 0) act = "active";
+                            <div class="carousel-item @act" style="width:100%; height:100%; text-align:center; background-color:black;">
+                                <img src="@imgList[i]" alt="Los Angeles" class="d-block" style="height:100%; object-fit: cover; margin:auto;" onclick="">
+
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
+               
+            </div>
+            <hr />
             <div class="col-sm-6">
                 <a asp-controller="NguoiThue" asp-action="QuanLyTinDang" asp-route-idUser="@Model.idUser" class="btn btn-warning btn-sm">Back to List</a>
             </div>
         </div>
     </div>
-   
+
 </div>
-<script src="~/js/uploadmultiimg.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="~/js/map/mapapi.js"></script>
+<script src="~/js/uploadmultiimg.js"></script>
+
 <script>
     function getListKhuVuc() {
         var url = 'https://localhost:7034/api/KhuVucs';
@@ -170,6 +231,37 @@
             });
     }
     getListKhuVuc();
+
+    async function ClickUpdateImage(id) {
+        const formData = new FormData();
+        const imageFiles = document.getElementById("listimg").files;
+        for (let i = 0; i < imageFiles.length; i++) {
+            formData.append("files", imageFiles[i]);
+        }
+        var url = "https://localhost:7034/api/TinDangPhongTro/AddImages/" + id;
+
+        swal({
+            title: "Đang xử lý yêu cầu",
+            text: "Vui lòng đợi trong khi chúng tôi xử lý yêu cầu của bạn...",
+            button: false
+        });
+
+        const response = await fetch(url, {
+            method: "POST",
+            body: formData
+        });
+
+        if (response.ok) {
+            console.log("oke");
+            swal("Yêu cầu thành công", "Đã thêm tin thành công !!! ", "success")
+                .then((value) => {
+                    location.reload();
+                });
+        } else {
+            console.error("Lỗi:", response.status);
+        }
+    }
+
 
 
 

@@ -58,7 +58,7 @@ namespace Client_QuanLythueTro.Controllers
             try
             {
                 TinDang newTin = context.CreateTinDang(tin);
-                context.AddImagesAsync(newTin.idTinDang, listimg);
+                context.CreateImage(newTin.idTinDang, listimg);
                 TempData["mess"] = "thanhcong";
                 return RedirectToAction("QuanLyTinDang", new { idUser = tin.idUser });
             }

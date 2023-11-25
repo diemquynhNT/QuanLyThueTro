@@ -181,7 +181,7 @@ namespace QuanLyThueTro.Controllers
             return CreatedAtAction("GetLichXemPhong", new { id = lichXemPhong.idLichXem }, lichXemPhong);
         }
         [HttpPost("DuyetLich/{id}")]
-        public async Task<ActionResult<LichXemPhong>> DuyetLich(string id,string lydo)
+        public async Task<ActionResult<LichXemPhong>> DuyetLich(string id)
         {
             if (_context.lichXemPhongs == null)
             {
@@ -190,16 +190,7 @@ namespace QuanLyThueTro.Controllers
             LichXemPhong lich = _context.lichXemPhongs.Find(id);
             if (lich == null)
                 return NotFound();
-            if(!lich.trangThai)
-            {
-                lich.trangThai = true;
-                lich.LyDo = "";
-            }    
-            else
-            {
-                lich.LyDo = lydo;
-                lich.trangThai = false;
-            }
+            lich.trangThai = true;
             try
             {
                 await _context.SaveChangesAsync();
@@ -218,7 +209,37 @@ namespace QuanLyThueTro.Controllers
 
             return CreatedAtAction("GetLichXemPhong", new { id = lich.idLichXem }, lich);
         }
-      
+        [HttpPost("HuyLich/{id}")]
+        public async Task<ActionResult<LichXemPhong>> HuyLich(string id, string lydo)
+        {
+            if (_context.lichXemPhongs == null)
+            {
+                return Problem("Entity set 'MyDBContext.lichXemPhongs'  is null.");
+            }
+            LichXemPhong lich = _context.lichXemPhongs.Find(id);
+            if (lich == null)
+                return NotFound();
+            lich.LyDo = lydo;
+            lich.trangThai = false;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (LichXemPhongExists(lich.idLichXem))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetLichXemPhong", new { id = lich.idLichXem }, lich);
+        }
+
 
 
         // DELETE: api/LichXemPhongs/5

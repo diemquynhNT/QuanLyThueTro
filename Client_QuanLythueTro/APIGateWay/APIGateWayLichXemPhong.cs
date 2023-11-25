@@ -84,7 +84,7 @@ namespace Client_QuanLythueTro.APIGateWay
                 {
                     string result = response.Content.ReadAsStringAsync().Result;
                     var datacol = JsonConvert.DeserializeObject<int>(result);
-                    if (datacol != null)
+                    if (datacol != null || datacol!=0)
                         count = datacol;
                 }
                 else

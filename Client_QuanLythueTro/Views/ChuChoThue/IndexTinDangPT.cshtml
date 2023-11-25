@@ -245,8 +245,7 @@
                                 <div class="card text-black" style="max-width: 100%;">
                                     <div class="row g-0">
                                         <div class="col-md-4 scale-img">
-                                          @*  <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">*@
-                                            <!-- @*<img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">*@ -->
+                                            <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">
                                             <span class="images-number">@imgList.Count ảnh</span>
                                             <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
                                         </div>
@@ -273,11 +272,11 @@
                                                     <span class="name-author">
                                                         @*<img src="@user.hinhAnh" class="img-fluid rounded-circle m-0" height="30px" width="30px" />*@
                                                         @Html.DisplayFor(modelItem => item.nguoiLienHe)
-                                                    </span>
+                                                    </span>@*
                                                     <span class="btn-info-author">
                                                         <button type="button" class="btn btn-info">@Html.DisplayFor(modelItem => item.sdtNguoiLienHe)</button>
                                                         <button type="button" class="btn btn-outline-primary">Zalo</button>
-                                                    </span>
+                                                    </span>*@
                                                 </p>
                                             </div>
                                         </div>

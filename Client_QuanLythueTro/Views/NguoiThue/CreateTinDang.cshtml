@@ -30,31 +30,45 @@
                     @Html.HiddenFor(model => model.idDichVu)
                     @Html.HiddenFor(model => model.trangThaiTinDang)
                     <div class="row" style="padding:10px">
-                        <div class ="form-group col-sm-6">
-                            <label>Chọn tỉnh thành:</label>
-                            <select name="" id="citychoose" class="form-control" placeholder="Chọn tỉnh thành">
-                                <option selected="selected" disabled>------Chọn-------</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label>Chọn quận/huyện:</label>
-                            <select name="" id="districtchoose" asp-for="idKhuVuc" class="form-control" placeholder="Chọn quận/huyện">
-                                <option selected="selected" disabled>------Chọn-------</option>
-                            </select>
-                        </div>@*
-                        <div class="form-group col-sm-12">
-                            <b>Khu vực</b>
-                            <select class="form-control" asp-for="idKhuVuc" id="idKhuVuc" required>
-                                <option selected="selected" disabled>------Chọn-------</option>
-                            </select>
-                            <span asp-validation-for="idKhuVuc" class="text-danger"></span>
-                        </div>*@
-                        <div class="form-group col-sm-12">
-                            <b>Địa chỉ cụ thể</b>
-                            <input asp-for="diaChi" id="diaChi" class="form-control" required />
-                            <span asp-validation-for="diaChi" class="text-danger"></span>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Chọn tỉnh thành:</label>
+                                    <select name="" id="province" class="form-control" placeholder="Chọn tỉnh thành"></select>
+                                </div>
+                                <div class="col">
+                                    <label>Chọn quận/huyện:</label>
+                                    <select name="" id="district" class="form-control" placeholder="Chọn quận/huyện">
+                                        <option value="">chọn quận</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label>Chọn phường/xã:</label>
+                                    <select name="" id="ward" class="form-select" placeholder="Chọn phường/xã">
+                                        <option value="">chọn phường</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-3 mb-5">
+                                <div class="col-3">
+                                    <label>Nhập tên đường:</label>
+                                    <input type="text" class="form-control" placeholder="Nhập tên đường" name="tenDuong" id="street" required>
+                                </div>
+                                <div class="col-2">
+                                    <label>Số nhà:</label>
+                                    <input type="text" class="form-control" placeholder="Nhập số nhà" name="soNha" id="number" required>
+                                </div>
+                                <div class="col-7">
+                                    <label>Địa chỉ chính xác:</label>
+                                    <select class="form-select" asp-for="diaChi" required>
+                                        <option id="result" selected></option>
+                                    </select>
+                                    <span asp-validation-for="diaChi" class="text-danger"></span>
+                                </div>
+                            </div>
                         </div>
                         <h5 style="padding:10px">Thông tin cụ thể</h5>
+                        <hr />
                         <div class="form-group col-sm-12">
                             <b>Loại tin</b>
                             <select class="form-control" asp-for="loaiTin" id="loaiTin" readonly>
@@ -124,7 +138,7 @@
                         <h3>Chọn hình</h3>
                             <div id="imageUploadForm">
                                 <div class="input-div">
-                                     <input type="file" class="listimg" id="listimg" name="listimg" multiple accept="image/png, image/jpeg, image/jpg">
+                                    <input type="file" class="listimg" id="listimg" name="listimg" onchange="countImage()" multiple accept="image/png, image/jpeg, image/jpg">
                                 </div>
                                 <div id="saved-form">
                                     <div class="saved-div"></div>
@@ -133,7 +147,7 @@
                         </div>
                         <input asp-for="idUser" id="idUser" class="form-control" value="@user.idUser" style="visibility:hidden" />
                         <div class="form-group">
-                        <input type="submit" value="Thêm" class="btn btn-success btn-sm" />
+                            <input type="submit" value="Thêm" class="btn btn-success btn-sm" />
                         </div>
 
                     </div>
@@ -148,31 +162,26 @@
         <a asp-controller="NguoiThue" asp-action="QuanLyTinDang" asp-route-idUser="@user.idUser" class="btn btn-warning btn-sm">Back to List</a>
     </div>
 </div>
+
 <script src="~/js/uploadmultiimg.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="~/js/selectmap.js"></script>
-@*
+<script src="~/js/map/mapapi.js"></script>
+
+
+
 <script>
-    function getListKhuVuc() {
-        var url = 'https://localhost:7034/api/KhuVucs';
-        console.log(url)
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                var selectElement = document.getElementById('idKhuVuc');
-                console.log(data)
-                for (var i = 0; i < data.length; i++) {
-                    var option = document.createElement('option');
-                    option.value = data[i].idKhuVuc; 
-                    option.text = data[i].tenKhuVuc; 
-                    selectElement.add(option);
-                }
-            });
+    var input = document.querySelector(".input-div input");
+    function countImage() {
+        const files = input.files;
+        console.log("count" + files.length)
+        if (files.length < 2) {
+            alert("Khong du hinh");
+        }
     }
-    getListKhuVuc();
+    console.log("demo")
 
    
 
-</script>*@
+</script>
 

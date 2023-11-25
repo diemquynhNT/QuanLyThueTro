@@ -174,15 +174,15 @@
                                         <a href="/NguoiThue/EditTinDang/@item.idTinDang" class="btn btn-outline-dark btn-sm" ata-toggle="tooltip" title="">
                                         <i class="fas fa-edit"></i>
                                         </a>
-                                        @{
+                                       @* @{
                                             int count = lichxem.CountLichXem(item.idTinDang);
-                                        }
+                                        }*@
                                         <a class="btn btn-outline-dark btn-sm position-relative" asp-controller="NguoiThue" asp-action="QuanLyLichXemPhong" asp-route-idTin="@item.idTinDang">
                                             <i class='bx bx-calendar'></i>
-                                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                           @*  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                                 @count
                                                 <span class="visually-hidden">unread messages</span>
-                                              </span>
+                                              </span>*@
                                         </a>
                                         <a class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalMuaGoiTin-@item.idTinDang" data-bs-toggle="tooltip" title="MuaDichVu">
                                             <i class="fas fa-trash"></i>

@@ -196,7 +196,7 @@ namespace QuanLyThueTro.Controllers
             }
         }
        
-        [HttpPost("AddImages/{tinDangId}")]
+        [HttpPost("AddImageAsync/{tinDangId}")]
         public async Task<ActionResult> AddImageAsync(string tinDangId, List<IFormFile>  files)
         {
             try
