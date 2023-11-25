@@ -33,21 +33,21 @@ namespace QuanLyThueTro.Controllers
         }
 
         // GET: api/GiaoDiches/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<GiaoDich>> GetGiaoDich(string id)
+        [HttpGet("{idUser}")]
+        public async Task<ActionResult<IEnumerable<GiaoDich>>> GetGiaoDich(string idUser)
         {
           if (_context.giaoDiches == null)
           {
               return NotFound();
           }
-            var giaoDich = await _context.giaoDiches.FindAsync(id);
+            var giaoDich = _context.giaoDiches.Where(g=> g.idUser == idUser).OrderBy(g=>g.ngayGiaoDich).ToListAsync();
 
             if (giaoDich == null)
             {
                 return NotFound();
             }
 
-            return giaoDich;
+            return await giaoDich;
         }
 
         // POST: api/GiaoDiches
@@ -76,7 +76,7 @@ namespace QuanLyThueTro.Controllers
                 }
             }
 
-            return CreatedAtAction("GetGiaoDich", new { id = giaoDich.idGiaoDich }, giaoDich);
+            return giaoDich;
         }
 
         private bool GiaoDichExists(string id)

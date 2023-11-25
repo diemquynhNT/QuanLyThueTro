@@ -16,7 +16,7 @@ public class VnPayLibrary
     public VNPayResponseModel GetFullResponseData(IQueryCollection collection, string hashSecret)
     {
         var vnPay = new VnPayLibrary();
-
+        
         foreach (var (key, value) in collection)
         {
             if (!string.IsNullOrEmpty(key) && key.StartsWith("vnp_"))
@@ -31,6 +31,7 @@ public class VnPayLibrary
         var vnpSecureHash =
             collection.FirstOrDefault(k => k.Key == "vnp_SecureHash").Value; //hash của dữ liệu trả về
         var orderInfo = vnPay.GetResponseData("vnp_OrderInfo");
+        //var idDichVu = vnPay.GetResponseData("vnp_OrderType");
         var detailInfo = orderInfo.Split("/");
         var checkSignature =
             vnPay.ValidateSignature(vnpSecureHash, hashSecret); //check Signature
@@ -46,14 +47,15 @@ public class VnPayLibrary
             Success = true,
             PaymentMethod = "VnPay",
             Username = detailInfo[0],
-            InfoDichVu = detailInfo[1],
-            Amount = detailInfo[2],
+            InfoDichVu = detailInfo[2],
+            Amount = detailInfo[3],
             OrderId = orderId.ToString(),
-            OrderDescription = detailInfo[1],
+            OrderDescription = detailInfo[2],
             PaymentId = vnPayTranId.ToString(),
             TransactionId = vnPayTranId.ToString(),
             Token = vnpSecureHash,
-            VnPayResponseCode = vnpResponseCode
+            VnPayResponseCode = vnpResponseCode,
+            IdDichVu = detailInfo[1]
         };
     }
     public string GetIpAddress(HttpContext context)

@@ -1,10 +1,9 @@
 ﻿@model IEnumerable<Client_QuanLythueTro.Models.DichVuDangTin>
 @{
-    ViewData["Title"] = "DangKyDichVu";
-    Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
+    ViewData["Title"] = "BangGiaDichVu";
+    Layout = "~/Views/ChuChoThue/Layout/_LayoutChuChoThue.cshtml";
     ViewBag.services = "active";
     ViewBag.Name = "Bảng giá dịch vụ";
-    List<LoaiTaiKhoan> listTK = ViewBag.listTK;
 }
 
 <style>
@@ -169,8 +168,6 @@
     }
 
     img {
-        display: block;
-        max-width: 100%;
         max-height: 100%;
         border-radius: 3px;
     }
@@ -213,63 +210,6 @@
             border-radius: 3px;
         }
 </style>
-
-<form asp-action="DangKyDichVu" method="post" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="row">
-        <div class="col-sm-6">
-            <h1>Chọn loại dịch vụ bạn muốn mua: </h1>
-            <div class="form-group">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="madv" id="madv" value="DV20001">
-                    <label class="form-check-label" for="">
-                        100K - VIP 1
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="madv" id="madv" checked value="DV29859">
-                    <label class="form-check-label" for="">
-                        155K - VIP 2
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="madv" id="madv" value="DV37196">
-                    <label class="form-check-label" for="">
-                        195K - VIP 3
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <h1>Chọn hình thức thanh toán: </h1>
-            <div class="form-group">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="httt" id="httt" checked value="1">
-                    <label class="form-check-label" for="">
-                        VNPay
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="httt" id="httt" value="2">
-                    <label class="form-check-label" for="">
-                        PayPal
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="httt" id="httt" value="3">
-                    <label class="form-check-label" for="">
-                        Momo
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="form-group">
-        <input id="btnPost" type="submit" value="Thanh Toán (check out)" class="btn btn-primary" />
-    </div>
-</form>
-
 
 <h1 class="page-h1" style="float: none; margin-top: 50px; margin-bottom: 30px; text-align: center;">Giới thiệu HOME180 </h1>
 
@@ -391,9 +331,9 @@
                     {
                         foreach (var item in Model)
                         {
-                    <td style="text-align:center">
-                        <span class="price-month">@Html.DisplayFor(modelItem => item.giaCa)</span>
-                    </td>
+                            <td style="text-align:center">
+                                <span class="price-month">@Html.DisplayFor(modelItem => item.giaCa)</span>
+                            </td>
                         }
                     }
             </tr>
@@ -498,16 +438,16 @@
             <img src="~/img/vip1.png" />
         </div>
         @*<div class="vip-demo clearfix" id="demo-vip-3" bis_skin_checked="1">
-            <div class="vip-demo-left" bis_skin_checked="1">
-                <div class="section-title" bis_skin_checked="1">
-                    Tin thường
-                    <span class="star star-2"></span>
-                </div>
-                <p>
-                    <span style="color:#007BFF; font-weight: bold;">TIÊU ĐỀ IN HOA MÀU XANH</span>, gắn biểu tượng 2 ngôi sao màu vàng ở tiêu đề tin đăng. Hiển thị sau tin VIP nổi bật, Tin VIP 1, Tin VIP 2, Tin VIP 3 và trên các tin khác.
-                </p>
-            </div>
-            <img src="/images/demo-vip3.jpg">
+        <div class="vip-demo-left" bis_skin_checked="1">
+        <div class="section-title" bis_skin_checked="1">
+        Tin thường
+        <span class="star star-2"></span>
+        </div>
+        <p>
+        <span style="color:#007BFF; font-weight: bold;">TIÊU ĐỀ IN HOA MÀU XANH</span>, gắn biểu tượng 2 ngôi sao màu vàng ở tiêu đề tin đăng. Hiển thị sau tin VIP nổi bật, Tin VIP 1, Tin VIP 2, Tin VIP 3 và trên các tin khác.
+        </p>
+        </div>
+        <img src="/images/demo-vip3.jpg">
         </div>*@
         <div class="vip-demo clearfix" id="demo-tinthuong" bis_skin_checked="1">
             <div class="vip-demo-left" bis_skin_checked="1">
@@ -570,3 +510,4 @@
         <p>Hotline: 0123456789</p><p>Email: cskh.home180@gmail.com</p>
     </div>
 </section>
+

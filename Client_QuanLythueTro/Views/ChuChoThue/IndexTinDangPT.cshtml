@@ -21,7 +21,7 @@
 }
 <link href="~/css/search-pop.css" rel="stylesheet" />
 <div class="text-center bg-light">
-@*    SEARCH*@
+    @*    SEARCH*@
     <div class="search-content">
         <section id="filter-top-inner">
             <section id="filter-top">
@@ -147,15 +147,15 @@
         <div class="col-sm-8 m-2 rounded" style="border: 1px solid #dedede;">
             <div class="content-news">
                 <div class="header-news">
-                    <h5>Tin nổi bật</h5>
+                    <h5>Tin VIP nổi bật</h5>
                     <h6>6/190 bài đăng được hiển thị</h6>
                 </div>
-            <ul class="list-group list-unstyled">
-                @foreach (var item in Model)
-                {
-                    if (!item.trangThaiTinDang)
+                <ul class="list-group list-unstyled">
+                    @foreach (var item in Model)
                     {
-                        List<string> imgList = callTinDangPT.ListImages(item.idTinDang);
+                        if (item.trangThaiTinDang && item.idDichVu == "DV37196")
+                        {
+                            List<string> imgList = callTinDangPT.ListImages(item.idTinDang);
                             <li class="post-item" onclick="window.location.assign('/ChuChoThue/DetailTinDangPT/@item.idTinDang')" style="padding-bottom:10px">
                                 <div class="card text-black" style="max-width: 100%;">
                                     <div class="row g-0">
@@ -166,7 +166,7 @@
                                         </div>
                                         <div class="col-md-8">
                                             <div class="post-info">
-                                                <h5 class="post-title" style="color: red;">
+                                                <h5 class="post-title" style="color: #E13427;">
                                                     @Html.DisplayFor(modelItem => item.tieuDe)
                                                 </h5>
                                                 @{
@@ -198,10 +198,188 @@
                                     </div>
                                 </div>
                             </li>
+                        }
                     }
-                }
-            </ul>
-        </div>
+                </ul>
+            </div>
+
+            @*//*@
+            <div class="content-news">
+                <div class="header-news">
+                    <h5>Tin Vip 2</h5>
+                    <h6>6/190 bài đăng được hiển thị</h6>
+                </div>
+                <ul class="list-group list-unstyled">
+                    @foreach (var item in Model)
+                    {
+                        if (item.trangThaiTinDang && item.idDichVu == "DV29859" && item.soLuongPhong > 0)
+                        {
+                            List<string> imgList = callTinDangPT.ListImages(item.idTinDang);
+                            <li class="post-item" onclick="window.location.assign('/ChuChoThue/DetailTinDangPT/@item.idTinDang')" style="padding-bottom:10px">
+                                <div class="card text-black" style="max-width: 100%;">
+                                    <div class="row g-0">
+                                        <div class="col-md-4 scale-img">
+                                            <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">
+                                            <span class="images-number">@imgList.Count ảnh</span>
+                                            <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="post-info">
+                                                <h5 class="post-title" style="color: #ea2e9d;">
+                                                    @Html.DisplayFor(modelItem => item.tieuDe)
+                                                </h5>
+                                                @{
+                                                    var tienPhong = string.Format("{0:0,0 vnđ}", item.giaPhong);
+                                                }
+                                                <div class="price-home clearfix">
+                                                    <span class="post-price"> @tienPhong/tháng</span>
+                                                    <span class="post-acreage">@Html.DisplayFor(modelItem => item.dienTich)m²</span>
+                                                    <span class="post-location">
+                                                        @Html.DisplayFor(modelItem => item.diaChi)
+                                                    </span>
+                                                </div>
+                                                <p class="post-summary">
+                                                    @Html.DisplayFor(modelItem => item.moTa)
+                                                </p>
+                                                <p class="card-text"><small class="text-muted">Lượt xem: @Html.DisplayFor(modelItem => item.luotTruyCap)</small></p>
+                                                <p class="card-footer">
+                                                    <span class="name-author">
+                                                        <img src="@avt" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
+                                                        @Html.DisplayFor(modelItem => item.nguoiLienHe)
+                                                    </span>
+                                                    <span class="btn-info-author">
+                                                        <button type="button" class="btn btn-info">@Html.DisplayFor(modelItem => item.sdtNguoiLienHe)</button>
+                                                        <button type="button" class="btn btn-outline-primary">Zalo</button>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+
+            @*//*@
+            <div class="content-news">
+                <div class="header-news">
+                    <h5>Tin Vip 1</h5>
+                    <h6>6/190 bài đăng được hiển thị</h6>
+                </div>
+                <ul class="list-group list-unstyled">
+                    @foreach (var item in Model)
+                    {
+                        if (item.trangThaiTinDang && item.idDichVu == "DV20001" && item.soLuongPhong > 0)
+                        {
+                            List<string> imgList = callTinDangPT.ListImages(item.idTinDang);
+                            <li class="post-item" onclick="window.location.assign('/ChuChoThue/DetailTinDangPT/@item.idTinDang')" style="padding-bottom:10px">
+                                <div class="card text-black" style="max-width: 100%;">
+                                    <div class="row g-0">
+                                        <div class="col-md-4 scale-img">
+                                            <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">
+                                            <span class="images-number">@imgList.Count ảnh</span>
+                                            <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="post-info">
+                                                <h5 class="post-title" style="color: #FF6600;">
+                                                    @Html.DisplayFor(modelItem => item.tieuDe)
+                                                </h5>
+                                                @{
+                                                    var tienPhong = string.Format("{0:0,0 vnđ}", item.giaPhong);
+                                                }
+                                                <div class="price-home clearfix">
+                                                    <span class="post-price"> @tienPhong/tháng</span>
+                                                    <span class="post-acreage">@Html.DisplayFor(modelItem => item.dienTich)m²</span>
+                                                    <span class="post-location">
+                                                        @Html.DisplayFor(modelItem => item.diaChi)
+                                                    </span>
+                                                </div>
+                                                <p class="post-summary">
+                                                    @Html.DisplayFor(modelItem => item.moTa)
+                                                </p>
+                                                <p class="card-text"><small class="text-muted">Lượt xem: @Html.DisplayFor(modelItem => item.luotTruyCap)</small></p>
+                                                <p class="card-footer">
+                                                    <span class="name-author">
+                                                        <img src="@avt" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
+                                                        @Html.DisplayFor(modelItem => item.nguoiLienHe)
+                                                    </span>
+                                                    <span class="btn-info-author">
+                                                        <button type="button" class="btn btn-info">@Html.DisplayFor(modelItem => item.sdtNguoiLienHe)</button>
+                                                        <button type="button" class="btn btn-outline-primary">Zalo</button>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+
+
+            @*//*@
+            <div class="content-news">
+                <div class="header-news">
+                    <h5>Tin thường</h5>
+                    <h6>6/190 bài đăng được hiển thị</h6>
+                </div>
+                <ul class="list-group list-unstyled">
+                    @foreach (var item in Model)
+                    {
+                        if (item.trangThaiTinDang && item.idDichVu == "NODV" && item.soLuongPhong > 0)
+                        {
+                            List<string> imgList = callTinDangPT.ListImages(item.idTinDang);
+                            <li class="post-item" onclick="window.location.assign('/ChuChoThue/DetailTinDangPT/@item.idTinDang')" style="padding-bottom:10px">
+                                <div class="card text-black" style="max-width: 100%;">
+                                    <div class="row g-0">
+                                        <div class="col-md-4 scale-img">
+                                            <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">
+                                            <span class="images-number">@imgList.Count ảnh</span>
+                                            <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="post-info">
+                                                <h5 class="post-title" style="color: #055699;">
+                                                    @Html.DisplayFor(modelItem => item.tieuDe)
+                                                </h5>
+                                                @{
+                                                    var tienPhong = string.Format("{0:0,0 vnđ}", item.giaPhong);
+                                                }
+                                                <div class="price-home clearfix">
+                                                    <span class="post-price"> @tienPhong/tháng</span>
+                                                    <span class="post-acreage">@Html.DisplayFor(modelItem => item.dienTich)m²</span>
+                                                    <span class="post-location">
+                                                        @Html.DisplayFor(modelItem => item.diaChi)
+                                                    </span>
+                                                </div>
+                                                <p class="post-summary">
+                                                    @Html.DisplayFor(modelItem => item.moTa)
+                                                </p>
+                                                <p class="card-text"><small class="text-muted">Lượt xem: @Html.DisplayFor(modelItem => item.luotTruyCap)</small></p>
+                                                <p class="card-footer">
+                                                    <span class="name-author">
+                                                        <img src="@avt" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
+                                                        @Html.DisplayFor(modelItem => item.nguoiLienHe)
+                                                    </span>
+                                                    <span class="btn-info-author">
+                                                        <button type="button" class="btn btn-info">@Html.DisplayFor(modelItem => item.sdtNguoiLienHe)</button>
+                                                        <button type="button" class="btn btn-outline-primary">Zalo</button>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
         </div>
         <div class="col-sm-3 m-2 rounded">
             <section class="section">

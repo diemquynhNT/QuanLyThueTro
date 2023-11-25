@@ -29,18 +29,18 @@ namespace Client_QuanLythueTro.APIGateWay
             return gdList;
         }
 
-        public GiaoDich GetGiaoDich(string id)
+        public List<GiaoDich> GetGiaoDich(string id)
         {
-            GiaoDich gd = new GiaoDich();
+            List<GiaoDich> gdList = new List<GiaoDich>();
             _httpClient.BaseAddress = new Uri(baseAddress + "/" + id);
             HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress).Result;
 
             if (response.IsSuccessStatusCode)
             {
                 string data = response.Content.ReadAsStringAsync().Result;
-                gd = JsonConvert.DeserializeObject<GiaoDich>(data);
+                gdList = JsonConvert.DeserializeObject<List<GiaoDich>>(data);
             }
-            return gd;
+            return gdList;
         }
 
         public GiaoDich CreateGiaoDich(GiaoDich giaodich)

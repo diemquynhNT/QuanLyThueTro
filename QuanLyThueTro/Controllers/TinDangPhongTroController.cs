@@ -61,7 +61,8 @@ namespace QuanLyThueTro.Controllers
                               tienDichVu: phongTro.tienDichVu,
                               item.luotTruyCap,
                               item.idUser,
-                              item.trangThaiTinDang);
+                              item.trangThaiTinDang,
+                              item.idDichVu);
                 mergeList.Add(dto);
             }
             await _context.DisposeAsync();
@@ -103,7 +104,8 @@ namespace QuanLyThueTro.Controllers
                           tienDichVu: phongTro.tienDichVu,
                           tinDang.luotTruyCap,
                           tinDang.idUser,
-                          tinDang.trangThaiTinDang);
+                          tinDang.trangThaiTinDang,
+                          tinDang.idDichVu);
             return dto;
         }
 
@@ -144,7 +146,8 @@ namespace QuanLyThueTro.Controllers
                               tienDichVu: phongTro.tienDichVu,
                               t.luotTruyCap,
                               t.idUser,
-                              t.trangThaiTinDang);
+                              t.trangThaiTinDang,
+                              t.idDichVu);
                 listTinDangPT.Add(dto);
             }
             

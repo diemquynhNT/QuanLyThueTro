@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using Client_QuanLythueTro.Services;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace Client_QuanLythueTro.Controllers
 {
@@ -57,6 +58,8 @@ namespace Client_QuanLythueTro.Controllers
             List<string> imgList = new List<string>();
             imgList = callTinDangPT.ListImages(id);
             ViewBag.listImg = imgList.ToList();
+            var divu = _callDichVu.GetGoiTin(tinDang.idDichVu);
+            ViewBag.dichVu = divu.loaiDichVu;
             return View(tinDang);
         }
 
@@ -78,9 +81,19 @@ namespace Client_QuanLythueTro.Controllers
         {
             try
             {
+                var idDV = _callGiaoDich.GetGiaoDich(GetUser().idUser);
+                if (idDV.Count != 0)
+                {
+                    var gd = idDV[idDV.Count() - 1];
+                    tinDang.idDichVu = gd.loaiDichVu.ToString();
+                }
+                else
+                    tinDang.idDichVu = "NODV";
+
                 tinDang = callTinDangPT.CreateTinDang(tinDang);
                 var files = CreateImage();
                 callTinDangPT.CreateImage(tinDang.idTinDang, files);
+                
                 TempData["AlertMessage"] = "successful";
                 return View();
             }
@@ -95,11 +108,20 @@ namespace Client_QuanLythueTro.Controllers
         public IFormFileCollection CreateImage()
         {
             IFormFileCollection files = Request.Form.Files;
+            if (files.Count == 0)
+                return (IFormFileCollection)BadRequest(error: "null");
             return files;
         }
 
         [HttpGet]
         public IActionResult EditTinDang(string id)
+        {
+            TinDang tinDang = callTinDangPT.GetTinDang(id);
+            return View(tinDang);
+        }
+
+        [HttpGet]
+        public IActionResult EditTinDangDaDuyet(string id)
         {
             TinDang tinDang = callTinDangPT.GetTinDang(id);
             return View(tinDang);
@@ -128,21 +150,32 @@ namespace Client_QuanLythueTro.Controllers
         //Lich xem phong
         public IActionResult QLLichXemPhong()
         {
-            List<LichXemPhong> lichXemList = _callLichXemPhong.ListLichXemPhong();
+            IEnumerable<TinDang> tinDangs = callTinDangPT.ListTinDangPTByUser(GetUser().idUser);
+            List<LichXemPhong> lichXemList = new List<LichXemPhong>();
+            foreach (var item in tinDangs)
+            {
+                var list = _callLichXemPhong.GetLichXemByIdTinDang(item.idTinDang);
+                foreach(var ls in list)
+                {
+                    lichXemList.Add(ls);
+                }
+            }
+
             return View(lichXemList);
         }
 
         [HttpGet]
-        public IActionResult CreateLichXem()
-        {
-            var list = callTinDangPT.ListTinDangPhongTro().ToList();
-            ViewBag.ListIdTD = list
-                .Select(x => new SelectListItem
-                {
-                    Value = x.idTinDang,
-                    Text = x.idTinDang
-                })
-                .ToList();
+        public IActionResult CreateLichXem(string id)
+        { 
+            //var list = callTinDangPT.ListTinDangPTByUser(GetUser().idUser);
+            //ViewBag.ListIdTD = list
+            //    .Select(x => new SelectListItem
+            //    {
+            //        Value = x.idTinDang,
+            //        Text = x.idTinDang
+            //    })
+            //    .ToList();
+            ViewBag.ListIdTD = id;
             return View();
         }
 
@@ -152,7 +185,7 @@ namespace Client_QuanLythueTro.Controllers
             lichXemPhong.idLichXem = "auto";
             _callLichXemPhong.CreateLichXem(lichXemPhong);
             TempData["AlertMessage"] = "successful";
-            return View();
+            return RedirectToAction("QLLichXemPhong");
         }
 
 
@@ -189,7 +222,15 @@ namespace Client_QuanLythueTro.Controllers
         [HttpGet]
         public IActionResult DangKyDichVu()
         {
-            List<DichVuDangTin> listGoiTin = _callDichVu.ListGoiTin();
+            List<DichVuDangTin> listGoiTin = _callDichVu.ListGoiTin().OrderByDescending(g=>g.giaCa).ToList();
+            ViewBag.listTK = _callDichVu.ListTK();
+            return View(listGoiTin);
+        }
+
+        [HttpGet]
+        public IActionResult BangGiaDichVu()
+        {
+            List<DichVuDangTin> listGoiTin = _callDichVu.ListGoiTin().OrderByDescending(g => g.giaCa).ToList();
             ViewBag.listTK = _callDichVu.ListTK();
             return View(listGoiTin);
         }
@@ -220,15 +261,17 @@ namespace Client_QuanLythueTro.Controllers
             {
                 GiaoDich giaoDich = new GiaoDich();
                 giaoDich.idGiaoDich = response.PaymentId;
-                giaoDich.loaiDichVu = response.OrderDescription;
+                giaoDich.loaiDichVu = response.IdDichVu;
                 giaoDich.tongTien = float.Parse(response.Amount);
                 giaoDich.ngayGiaoDich = DateTime.UtcNow;
                 giaoDich.note = response.Username + " " + response.InfoDichVu + " Với số tiền " + response.Amount + " VNĐ";
                 var cut = response.Username.Split("#");
                 giaoDich.idUser = cut[1];
+                
                 try
                 {
                     _callGiaoDich.CreateGiaoDich(giaoDich);
+
                 }catch(Exception ex)
                 {
                     return Redirect(ex.Message);
@@ -241,7 +284,7 @@ namespace Client_QuanLythueTro.Controllers
         public IActionResult LichSuThanhToan()
         {
             Users user = GetUser();
-            IEnumerable<GiaoDich> giaoDiches = _callGiaoDich.ListGiaoDich().Where(g=>g.idUser == user.idUser).ToList();
+            IEnumerable<GiaoDich> giaoDiches = _callGiaoDich.GetGiaoDich(user.idUser);
             return View(giaoDiches);
         }
 

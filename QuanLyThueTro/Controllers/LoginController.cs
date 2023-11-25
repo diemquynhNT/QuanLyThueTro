@@ -73,7 +73,7 @@ namespace QuanLyThueTro.Controllers
             new Claim("idUser", u.idUser.ToString())
             }),
 
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddMinutes(10),
 
                 // Thêm các roles vào token
                 Claims = new Dictionary<string, object>

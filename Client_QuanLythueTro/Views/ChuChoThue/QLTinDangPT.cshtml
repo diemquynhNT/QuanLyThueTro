@@ -89,7 +89,12 @@
                                 @*<a href="" onclick="alert('Tin đăng đã duyệt thì không được xóa');" class="btn btn-outline-danger btn-sm" title="Delete">
                                     <i class="fas fa-trash"></i>
                                 </a>*@
-                                <span class="badge bg-success">Đã hiển thị trên bảng tin</span>
+                                <a href="~/ChuChoThue/EditTinDangDaDuyet/@item.idTinDang" class="btn btn-primary" ata-toggle="tooltip" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="~/ChuChoThue/CreateLichXem/@item.idTinDang" class="btn btn-danger" ata-toggle="tooltip" title="Tạo lịch xem phòng">
+                                    <i class="fas fa-plus"></i>
+                                </a>
                             }
                             else
                             {

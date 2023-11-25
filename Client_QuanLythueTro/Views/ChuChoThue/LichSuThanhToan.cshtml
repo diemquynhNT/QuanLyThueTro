@@ -7,7 +7,7 @@
 
 <div class="row">
     <div class="col-sm-5">
-        <h3>Lịch xem phòng</h3>
+        <h3>Lịch sử thanh toán thành công</h3>
     </div>
     <div class="col-sm-2">
         <a type="button" class="btn btn-primary" href="/ChuChoThue/LichSuThanhToan"><i class='bx bx-refesh'></i> Làm mới danh sách</a>
@@ -38,16 +38,17 @@
                     <tr>
                         <td>@Html.DisplayFor(modelItem => stt)</td>
                         <td>@Html.DisplayFor(modelItem => item.idGiaoDich)</td>
-                        <td>@Html.DisplayFor(modelItem => item.loaiDichVu)</td>
+                        <td>@Html.DisplayFor(modelItem => item.note)</td>
                         <td>@Html.DisplayFor(modelItem => item.tongTien) VNĐ</td>
                         <td>@Html.DisplayFor(modelItem => item.ngayGiaoDich)</td>
                         @{
                             DateTime timeEnd = item.ngayGiaoDich.AddDays(30);
                             TimeSpan timeLeft = timeEnd - DateTime.UtcNow;
+                            int daysLeft = (int)Math.Ceiling(timeLeft.TotalDays);
                             //int day = Int32.Parse(timeLeft.TotalDays.ToString());
                         }
                         <td>@Html.DisplayFor(modelItem => timeEnd)</td>
-                        <td>@Html.DisplayFor(modelItem => timeLeft.TotalDays)</td>
+                        <td>Còn @Html.DisplayFor(modelItem => daysLeft) ngày</td>
                     </tr>
                 }
             </tbody>
