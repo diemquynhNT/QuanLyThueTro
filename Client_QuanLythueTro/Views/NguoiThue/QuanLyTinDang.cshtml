@@ -19,7 +19,7 @@
     }
 
 }
-@{
+@if (TempData["mess"]!=null){
     var checkMessage = TempData["mess"];
     if (checkMessage == "thanhcong")
     {
@@ -35,13 +35,11 @@
         </script>
     }
 }
- <div class="row" style="padding:10px">
-    <div class="col-sm-3">
-     <h4>Quản lý tin đăng</h4>
-    </div>
-    <div class="col-sm-9">
-        <div class="row">
-            <div class="col-sm-8">
+<div class="col-sm-3">
+    <h4>Quản lý tin đăng</h4>
+</div>
+        <div class="row" style="padding:10px">
+            <div class="col-sm-5">
                 @using (Html.BeginForm("QuanLyTinDang", "NguoiThue", FormMethod.Post, new { @class = "" }))
                 {
                     <div class="row">
@@ -65,15 +63,14 @@
                     </div>
                 }
             </div>
-            <div class="col-sm-3">
-                <a class="btn btn-danger btn-sm d-none d-md-block" href="/NguoiThue/CreateTinDang" previewlistener="true">Đăng tin mới</a>
-                <div class="d-lg-none" style="width: 100%;">
-                    <a class="btn btn-danger btn-block mt-3" href="" previewlistener="true">Đăng tin mới</a>
-                </div>
+            <div class="col-sm-2">
+                <a class="btn btn-danger btn-sm" href="/NguoiThue/CreateTinDang" previewlistener="true">Đăng tin mới</a>
+            </div>
+            <div class="col-sm-2">
+                <a class="btn btn-success btn-sm" asp-action="CreateLichXem" asp-controller="NguoiThue" asp-route-id="@user.idUser" previewlistener="true">
+                    Thêm lịch hẹn mới</a>
             </div>
         </div>
-    </div>
-</div>
 
 <hr />
 <div class="d-none d-md-block">
@@ -174,16 +171,29 @@
                                         <a href="/NguoiThue/EditTinDang/@item.idTinDang" class="btn btn-outline-dark btn-sm" ata-toggle="tooltip" title="">
                                         <i class="fas fa-edit"></i>
                                         </a>
-                                       @* @{
-                                            int count = lichxem.CountLichXem(item.idTinDang);
-                                        }*@
-                                        <a class="btn btn-outline-dark btn-sm position-relative" asp-controller="NguoiThue" asp-action="QuanLyLichXemPhong" asp-route-idTin="@item.idTinDang">
-                                            <i class='bx bx-calendar'></i>
-                                           @*  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                                @count
-                                                <span class="visually-hidden">unread messages</span>
-                                              </span>*@
-                                        </a>
+                                    <a class="btn btn-outline-dark btn-sm position-relative" asp-controller="NguoiThue" asp-action="QuanLyLichXemPhong" asp-route-idTin="@item.idTinDang">
+                                        <i class='bx bx-calendar'></i>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="countCell-@item.idTinDang">
+                                            <span class="visually-hidden">unread messages</span>
+                                        </span>
+                                    </a>
+                                    <script>
+                                        $(document).ready(function () {
+                                            $.ajax({
+                                                url: 'https://localhost:7034/api/LichXemPhongs/Count/' + '@item.idTinDang',
+                                                type: 'GET',
+                                                success: function (data) {
+                                                    $('#countCell-@item.idTinDang').text(data);
+                                                },
+                                                error: function () {
+                                                    $('#countCell-@item.idTinDang').text('Error');
+                                                }
+                                            });
+                                        });
+                                    </script>
+
+
+
                                         <a class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalMuaGoiTin-@item.idTinDang" data-bs-toggle="tooltip" title="MuaDichVu">
                                             <i class="fas fa-trash"></i>
                                         </a>
@@ -242,6 +252,7 @@
     </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
     function DeleteTinDang(id)
@@ -249,7 +260,12 @@
         var idchoose="matd-"+id;
         var idTinDang = document.getElementById(idchoose).value;
         console.log(idchoose)
-        var url = "https://localhost:7034/api/TinDangPhongTro/" + idTinDang;
+        var url = "https://localhost:7034/api/TinDang/" + idTinDang;
+        swal({
+            title: "Đang xử lý yêu cầu",
+            text: "Vui lòng đợi trong khi chúng tôi xử lý yêu cầu của bạn...",
+            button: false
+        });
         fetch(url, {
             method: "DELETE"
         })

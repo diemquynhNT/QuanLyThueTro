@@ -15,7 +15,7 @@ namespace QuanLyThueTro.Services
         public PhongTro GetPhongById(string idTin);
         public Task<TinDang> AddTinDang(TinDang tin,PhongTro phong);
         public Task<TinDang> UpdateTinDang(TinDang tin,PhongTro phong);
-        public Task<bool> DeleteTinDang(string idTinDang);
+        public void DeleteTinDang(string idTinDang);
         public bool IsValidTinDang(string idTinDang);
         public void DuyetTin(TinDang tin);
         public List<TinDang> Filter(int thang, bool trangThai);

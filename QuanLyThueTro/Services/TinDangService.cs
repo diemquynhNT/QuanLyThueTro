@@ -118,17 +118,19 @@ namespace QuanLyThueTro.Services
             _context.SaveChanges();
         }
 
-        public async Task<bool> DeleteTinDang(string idTinDang)
+        public void DeleteTinDang(string idTinDang)
         {
             var tin = _context.tinDangs.SingleOrDefault(t => t.idTinDang == idTinDang);
             var phong = _context.phongTros.SingleOrDefault(t => t.idTinDang == idTinDang);
-            if (tin == null)
-                return false;
+            List<LichXemPhong> list = _context.lichXemPhongs.Where(t => t.idTinDang == idTinDang).ToList();
+            foreach (var lich in list)
+            {
+                _context.Remove(lich);
+            }
             _context.Remove(phong);
             _context.Remove(tin);
             
             _context.SaveChanges();
-            return true;
         }
         public List<Images> GetAllImagesById(string idTin)
         {

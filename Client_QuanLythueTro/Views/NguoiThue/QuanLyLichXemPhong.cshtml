@@ -1,12 +1,21 @@
 ﻿@model IEnumerable<Client_QuanLythueTro.Models.LichXemPhong>
-
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
 @{
     ViewData["Title"] = "QuanLyLichXemPhong";
     Layout = "~/Views/NguoiThue/LayoutMain/LayoutMainNguoiThue.cshtml";
     ViewBag.title = "Quản lý cá nhân";
     ViewBag.qltd = "active";
+    var userJson = Context.Session.GetString("user");
+    Users user = null;
+    if (userJson != null)
+    {
+        user = JsonConvert.DeserializeObject<Users>(userJson);
+    }
 }
-<h3>Quản lý lịch xem phòng <b></b></h3>
+<div class="col-sm-6">
+    <h3>Quản lý lịch xem phòng tin @TempData["IdTin"]<b></b></h3>
+</div>
 <hr />
 <div class="d-none d-md-block">
         <div class="row" id="printMe">
@@ -54,61 +63,10 @@
                                     </td>
                                 }
                                 <td>
-                                @if(item.trangThai)
-                                {
-                                    <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalHuy-@item.idLichXem" data-bs-toggle="tooltip" title="Duyệt tin">
-                                       Hủy
-                                    </a>
-                                    <div class="modal fade" id="modalHuy-@item.idLichXem" tabindex="-1" aria-labelledby="modalHuy-@item.idLichXem" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">XÁC NHẬN LỊCH XEM TIN </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                        <span>Xác nhận hủy lịch xem của khách <b>@item.nguoiXem </b>-<b>@item.sdtNguoiXem</b>! ?</span>
-                                                        <hr />
-                                                        <div class="form-group col-sm-12">
-                                                            <b>Lý do :</b>
-                                                            <textarea id="lydoHuyLich" class="form-control" rows="9" cols="70"></textarea>
-                                                        </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-success" onclick="HuyLich('@item.idLichXem')">Xác nhận</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <a class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalDuyetTin-@item.idLichXem" data-bs-toggle="tooltip" title="Xác nhận">
-                                        Xác nhận
-                                    </a>
-                                 
-                                }
-
-                                <div class="modal fade" id="modalDuyetTin-@item.idLichXem" tabindex="-1" aria-labelledby="modalDuyetTin-@item.idLichXem" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">XÁC NHẬN LỊCH XEM TIN </h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                    <span>Xác nhận lịch xem của khách <b>@item.nguoiXem </b>-<b>@item.sdtNguoiXem</b>! ?</span>
-                                                    <input id="nullLyDo" value="khongco" style="visibility:hidden">
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-success" onclick="DuyeLich('@item.idLichXem')">Xác nhận</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
+                                <a class="btn btn-success btn-sm" asp-action="DetailLichXem" asp-controller="NguoiThue" asp-route-idLichXem="@item.idLichXem">
+                                        Thông tin
+                                </a>
+                                </td>
                             </tr>
                     }
                         </tbody>
@@ -116,51 +74,7 @@
                     </div>
         </div>
     </div>
+    <div class="col-sm-6">
+        <a asp-controller="NguoiThue" asp-action="QuanLyTinDang" asp-route-idUser="@user.idUser" class="btn btn-warning btn-sm">Back to List</a>
+    </div>
 </div>
-<script>
-    function DuyeLich(id) {
-        console.log(id);
-        var res = document.getElementById('nullLyDo').value;
-        console.log(res);
-        var url = `https://localhost:7034/api/LichXemPhongs/DuyetLich/${id}?lydo=${res}`;
-        fetch(url, {
-            method: "POST"
-        })
-            .then(function (response) {
-                return response.blob();
-            })
-            .then(function (data) {
-                swal("Yêu cầu thành công", "Đã xác nhận lịch xem phòng !!! ", "success")
-                    .then((value) => {
-                        location.reload();
-                    });
-            })
-            .catch(function (error) {
-                console.log("Error: " + error);
-                alert("loi")
-            });
-    }
-
-    function HuyLich(id) {
-        console.log(id);
-        var lydoHuy = document.getElementById('lydoHuyLich').value;
-        console.log(lydoHuy);
-        var url = `https://localhost:7034/api/LichXemPhongs/DuyetLich/${id}?lydo=${lydoHuy}`;
-        fetch(url, {
-            method: "POST"
-        })
-            .then(function (response) {
-                return response.blob();
-            })
-            .then(function (data) {
-                swal("Yêu cầu thành công", "Đã xác nhận lịch xem phòng !!! ", "success")
-                    .then((value) => {
-                        location.reload();
-                    });
-            })
-            .catch(function (error) {
-                console.log("Error: " + error);
-                alert("loi")
-            });
-    }
-</script>

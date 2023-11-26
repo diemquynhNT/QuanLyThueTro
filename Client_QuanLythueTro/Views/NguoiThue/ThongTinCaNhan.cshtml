@@ -1,0 +1,104 @@
+﻿@model Client_QuanLythueTro.Models.Users
+
+@{
+    ViewData["Title"] = "ThongTinCaNhan";
+    Layout = "~/Views/NguoiThue/LayoutMain/LayoutMainNguoiThue.cshtml";
+    ViewBag.tincanhan="active";
+    ViewBag.title = "Thông tin cá nhân";
+
+}
+<h4>THÔNG TIN KHÁCH HÀNG</h4>
+@{
+    var checkMessage = TempData["thongbao"];
+    if (checkMessage == "thanhcong")
+    {
+        <script>
+            swal("Yêu cầu thành công", "Đã cập nhật thành công !!! ", "success")
+        </script>
+
+    }
+}
+<div class="container" style="margin:10px;30px">
+<form asp-action="ThongTinCaNhan" >
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @Html.HiddenFor(model => model.idUser)
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <b>Mã </b>
+                            <input asp-for="idUser" class="form-control" readonly />
+                            <span asp-validation-for="hoTen" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Loại sử dụng </b>
+                            <input asp-for="idChucVu" class="form-control" readonly />
+                            <span asp-validation-for="hoTen" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <b>Họ tên </b>
+                            <input asp-for="hoTen" class="form-control" required />
+                            <span asp-validation-for="hoTen" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Giới tính</b>
+                            <select class="form-control" asp-for="gioiTinh">
+                                <option>@Model.gioiTinh</option>
+                                <option>Nam</option>
+                                <option>Nữ</option>
+                            </select>
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        <b>Ngày tham gia</b>
+                            @{
+                                DateTime day = (DateTime)Model.ngayThamGia;
+                                string a = day.ToString("yyyy-MM-dd");
+                            }
+                        <input class="form-control text-box single-line col-md-12" asp-for="ngayThamGia" readonly data-val="true" data-val-date="The field NgayNhap must be a date." id="NgaySinh" value="@a" name="NgaySinh" type="date" required>
+                            <span asp-validation-for="ngayThamGia" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group" style="text-align:center">
+                    <b>Hình ảnh</b>
+                    <div class="col-md-10">
+                       <img src="/img/user.png" width="80" height="80" />
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <b>Loại tài khoản</b>
+                <input asp-for="idLoaiTK" class="form-control" readonly />
+                    <span asp-validation-for="idLoaiTK" class="text-danger"></span>
+            </div>
+            <div class="form-group col-sm-6">
+                <b>Email</b>
+                <input asp-for="emailUser" class="form-control" required />
+                    <span asp-validation-for="emailUser" class="text-danger"></span>
+            </div>
+            <div class="form-group col-sm-6">
+                <b>SDT</b>
+                <input asp-for="sdtUsers" class="form-control" required />
+                    <span asp-validation-for="sdtUsers" class="text-danger"></span>
+            </div>
+            <div class="form-group col-sm-6">
+                <b>Username</b>
+                <input asp-for="userName" class="form-control" required />
+                    <span asp-validation-for="userName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-sm-2">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Cập nhật" class="btn btn-success btn-sm" id="btn-submit" />
+                </div>
+            </div>
+        </div>
+</form>
+</div>
+

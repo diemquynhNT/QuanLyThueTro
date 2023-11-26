@@ -19,14 +19,16 @@ namespace QuanLyThueTro.Controllers
         private readonly ITinDang _context;
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
+        private readonly MyDBContext myDBContext;
 
 
 
-        public TinDangController(ITinDang context, IMapper mapper, IPhotoService photoService)
+        public TinDangController(ITinDang context, IMapper mapper, IPhotoService photoService,MyDBContext _myDBContext)
         {
             _context = context;
             _mapper = mapper;
             _photoService = photoService;
+            myDBContext= _myDBContext;
 
         }
    
@@ -124,34 +126,7 @@ namespace QuanLyThueTro.Controllers
             return _context.BinarySearchByDienTich(listTinVM, minDienTich, maxDienTich);
         }
 
-        //[HttpGet("SearchTinAll")]
-        //public List<TinDangVM> SearchTinAll([FromBody] SearchData data)
-        //{
-        //    List<TinDang> listTin = _context.GetAll();
-        //    List<TinDangVM> listTinVM = new List<TinDangVM>();
-        //    List<TinDangVM> result = new List<TinDangVM>();
-        //    foreach (var item in listTin)
-        //    {
-        //        TinDangVM tinvm = new TinDangVM();
-        //        var tin = _context.GetTinDangById(item.idTinDang);
-        //        var phong = _context.GetPhongById(item.idTinDang);
-        //        _mapper.Map(tin, tinvm);
-        //        _mapper.Map(phong, tinvm);
-        //        listTinVM.Add(tinvm);
-        //    }
-        //    if (data.giaMin == null && data.giaMax == null)
-        //        return _context.BinarySearchByPrice(listTinVM, data.giaMin, data.giaMax);
-        //    else if (data.minDienTich == null && data.maxDienTich == null)
-        //        return _context.BinarySearchByDienTich(listTinVM, data.minDienTich, data.maxDienTich);
-        //    else
-        //    {
-        //        List<TinDangVM> resultPrice = _context.BinarySearchByPrice(listTinVM, data.giaMin, data.giaMax);
-        //        result = _context.BinarySearchByDienTich(resultPrice, data.minDienTich, data.maxDienTich);
-        //    }
-        //    return result;
-
-        //}
-       
+      
         [HttpGet("Filter")]
         public List<TinDang> Filter(int thang, bool status)
         {
@@ -276,28 +251,6 @@ namespace QuanLyThueTro.Controllers
             }
            
         }
-
-        //// DELETE api/<TinDangController>/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult> DeleteTin(string id)
-        //{
-        //    try
-        //    {
-        //        bool tin = await _context.DeleteTinDang(id);
-        //        List<Images> list=_context.GetAllImagesById(id);
-        //        foreach (var image in list)
-        //        {
-        //            await _photoService.DeleteImageAsync(image.publicId);
-        //        }
-        //        if (tin == true)
-        //            return Ok("xoa thanh cong");
-        //        return BadRequest("loi");
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
         [HttpPut("DuyetTin")]
         public async Task<ActionResult> DuyetTin(string id)
         {
@@ -342,6 +295,24 @@ namespace QuanLyThueTro.Controllers
             
 
             return Ok("thanh cong");
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTinDang(string id)
+        {
+            TinDang tinDang =  _context.GetTinDangById(id);
+            if (tinDang == null)
+                return BadRequest();
+            foreach (var image in myDBContext.ImagesPhongTro)
+            {
+                if (image.idTinDang == id)
+                {
+                    await _photoService.DeleteImageAsync(image.publicId);
+                }
+            }
+            _context.DeleteTinDang(id);
+
+            return Ok();
         }
 
     }

@@ -180,7 +180,7 @@ namespace QuanLyThueTro.Controllers
 
             return CreatedAtAction("GetLichXemPhong", new { id = lichXemPhong.idLichXem }, lichXemPhong);
         }
-        [HttpPost("DuyetLich/{id}")]
+        [HttpPut("DuyetLich/{id}")]
         public async Task<ActionResult<LichXemPhong>> DuyetLich(string id)
         {
             if (_context.lichXemPhongs == null)
@@ -209,8 +209,8 @@ namespace QuanLyThueTro.Controllers
 
             return CreatedAtAction("GetLichXemPhong", new { id = lich.idLichXem }, lich);
         }
-        [HttpPost("HuyLich/{id}")]
-        public async Task<ActionResult<LichXemPhong>> HuyLich(string id, string lydo)
+        [HttpPut("HuyLich/{id}")]
+        public async Task<ActionResult<LichXemPhong>> HuyLich([FromForm] string lydo, string id)
         {
             if (_context.lichXemPhongs == null)
             {
@@ -218,7 +218,7 @@ namespace QuanLyThueTro.Controllers
             }
             LichXemPhong lich = _context.lichXemPhongs.Find(id);
             if (lich == null)
-                return NotFound();
+                return BadRequest();
             lich.LyDo = lydo;
             lich.trangThai = false;
             try

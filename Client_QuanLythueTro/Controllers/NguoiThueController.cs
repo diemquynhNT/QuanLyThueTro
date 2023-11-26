@@ -9,11 +9,16 @@ namespace Client_QuanLythueTro.Controllers
     {
         private readonly APIGateWayTinDang context;
         private readonly APIGateWayLichXemPhong apiLichXem;
+        private readonly APIGateWayUsers aPIGateWayUsers;
+        private readonly LichXemPhong_GateWay _callLichXemPhong;
 
-        public NguoiThueController(APIGateWayTinDang _context, APIGateWayLichXemPhong callLichXemPhong)
+
+        public NguoiThueController(APIGateWayTinDang _context, APIGateWayLichXemPhong callLichXemPhong,LichXemPhong_GateWay callLichXem, APIGateWayUsers aPIGateWayUsers)
         {
             context = _context;
             apiLichXem = callLichXemPhong;
+            _callLichXemPhong = callLichXem;
+            this.aPIGateWayUsers = aPIGateWayUsers;
         }
 
         public IActionResult QuanLyTinDang(string idUser)
@@ -109,7 +114,36 @@ namespace Client_QuanLythueTro.Controllers
         public IActionResult QuanLyLichXemPhong(string idTin)
         {
             IEnumerable<LichXemPhong> list = apiLichXem.GetListXemPhong(idTin);
+            TempData["IdTin"] = idTin;
             return View(list);
+        }
+        [HttpGet]
+        public IActionResult CreateLichXem(string id)
+        {
+            var list = context.ListTinDangByIdUser(id).ToList();
+            ViewBag.ListIdTD = list
+                .Select(x => new SelectListItem
+                {
+                    Value = x.idTinDang,
+                    Text = x.idTinDang
+                })
+                .ToList();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateLichXem(LichXemPhong lichXemPhong)
+        {
+            lichXemPhong.idLichXem = "auto";
+            _callLichXemPhong.CreateLichXem(lichXemPhong);
+            TempData["AlertMessage"] = "successful";
+            return View();
+        }
+
+        public IActionResult DetailLichXem(string idLichXem)
+        {
+            LichXemPhong lich = apiLichXem.GetLichXem(idLichXem);
+           return View(lich);
         }
         [HttpPost]
         public ActionResult SendLichXem(LichXemPhong lichxem)
@@ -139,6 +173,25 @@ namespace Client_QuanLythueTro.Controllers
         {
             IEnumerable<LichXemPhong> list = apiLichXem.GetListLichXemPhongUser(sdt);
             return View(list);
+        }
+        public IActionResult ThongTinCaNhan(string idUser)
+        {
+           Users u=aPIGateWayUsers.GetUser(idUser);
+            return View(u);
+        }
+        [HttpPost]
+        public IActionResult ThongTinCaNhan(Users u)
+        {
+            try
+            {
+                aPIGateWayUsers.UpdateUsers(u);
+                TempData["thongbao"] = "thanhcong";
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
         }
 
     }

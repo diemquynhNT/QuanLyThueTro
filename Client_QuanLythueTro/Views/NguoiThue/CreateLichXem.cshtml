@@ -1,0 +1,76 @@
+﻿@model Client_QuanLythueTro.Models.LichXemPhong
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "CreateLichXem";
+    Layout = "~/Views/NguoiThue/LayoutMain/LayoutMainNguoiThue.cshtml";
+    ViewBag.title = "Thêm mới lịch xem";
+    ViewBag.qltd = "active";
+    var userJson = Context.Session.GetString("user");
+    Users user = null;
+    if (userJson != null)
+    {
+        user = JsonConvert.DeserializeObject<Users>(userJson);
+    }
+}
+
+@{
+    var checkMessage = TempData["AlertMessage"];
+    if (checkMessage == "successful")
+    {
+        <script>
+            swal("Yêu cầu thành công", "Đã thêm tin thành công !!! ", "success")
+        </script>
+
+    }
+}
+<div class="row">
+    <h4>Tạo lịch xem phòng mới</h4> <hr />
+    <form asp-action="CreateLichXem" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @Html.HiddenFor(model => model.idLichXem)
+        <div class="form-group">
+            <div class="row mt-3 mb-5">
+                <h5>Thông tin lịch xem</h5>
+                <div class="col-sm-4">
+                    <label class="form-label">Chọn ngày xem:</label>
+                    <input class="form-control text-box single-line col-md-12" asp-for="ngayXem" data-val="true" data-val-date="The field NgayXem must be a date." type="datetime-local" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:00")" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:00")" required>
+                    <span asp-validation-for="ngayXem" class="text-danger"></span>
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label">Chọn tin đăng:</label>
+                    <select class="form-select" asp-for="idTinDang" asp-items="@ViewBag.ListIdTD">
+                        <option value="">Chọn tin đăng</option>
+                    </select>
+                    <span asp-validation-for="idTinDang" class="text-danger"></span>
+                </div>
+                <div class="col-sm-4">
+                    <label class="form-label">Trạng thái lịch xem:</label>
+                    <select class="form-select" asp-for="trangThai" required>
+                        <option value="true">Đã xác nhận</option>
+                        <option value="false">Chưa xác nhận</option>
+                    </select>
+                    <span asp-validation-for="trangThai" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mt-3 mb-5">
+                <h5>Thông tin người đến xem</h5>
+                <div class="col-6">
+                    <label>Họ và tên:</label>
+                    <input type="text" class="form-control" asp-for="nguoiXem" placeholder="Nguyễn Thị A" required>
+                    <span asp-validation-for="nguoiXem" class="text-danger"></span>
+                </div>
+                <div class="col-6">
+                    <label>Số điện thoại liên lạc:</label>
+                    <input type="text" class="form-control" asp-for="sdtNguoiXem" placeholder="09452132xx" required>
+                    <span asp-validation-for="sdtNguoiXem" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <input id="btnPost" type="submit" value="Create" class="btn btn-primary" />
+            <a class="btn btn-warning" asp-controller="NguoiThue" asp-action="QuanLyTinDang" asp-route-idUser="@user.idUser"> Trở lại</a>
+        </div>
+    </form>
+</div>
+
