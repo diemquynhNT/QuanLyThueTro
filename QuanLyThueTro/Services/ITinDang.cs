@@ -10,7 +10,6 @@ namespace QuanLyThueTro.Services
         public List<TinDang> GetAllByIdThanhPho(string idTP);
         public List<PhongTro> GetAllPhong();
         public List<Images> GetAllImagesById(string idTin);
-        public List<TinDang> GetAllByIdKhuVuc(string idKhuVuc);
         public TinDang GetTinDangById(string idTin);
         public PhongTro GetPhongById(string idTin);
         public Task<TinDang> AddTinDang(TinDang tin,PhongTro phong);

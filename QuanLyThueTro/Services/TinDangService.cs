@@ -146,10 +146,7 @@ namespace QuanLyThueTro.Services
             return _context.tinDangs.ToList();
         }
 
-        public List<TinDang> GetAllByIdKhuVuc(string idKhuVuc)
-        {
-            return _context.tinDangs.Where(t=>t.idKhuVuc==idKhuVuc).ToList();
-        }
+       
         public List<TinDang> GetAllByIdThanhPho(string idTP)
         {
             var listTin = new List<TinDang>();

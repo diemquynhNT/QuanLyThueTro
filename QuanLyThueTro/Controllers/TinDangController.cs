@@ -6,6 +6,7 @@ using QuanLyThueTro.Dto;
 using QuanLyThueTro.Model;
 using QuanLyThueTro.Services;
 using System.Collections.Generic;
+using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -59,9 +60,13 @@ namespace QuanLyThueTro.Controllers
             return _context.GetTinDangByIdUser(id).Where(t => t.idDichVu == idGoi && t.trangThaiTinDang==status).ToList();
         }
         [HttpGet("GetTinByIdTP")]
-        public List<TinDangVM> GetTinByIdTP(string id)
+        public List<TinDangVM> GetTinByIdTP(string thanhpho)
         {
-            List<TinDang> tinDang = _context.GetAllByIdThanhPho(id);
+            List<PhongTro> listPhong = myDBContext.phongTros.Where(t => t.diaChi.Contains(thanhpho)).ToList();
+
+            List<string> listIdTinDang = listPhong.Select(p => p.idTinDang).ToList();
+            List<TinDang> tinDang = myDBContext.tinDangs.Where(t => listIdTinDang.Contains(t.idTinDang)).ToList();
+
             List<TinDangVM> listTinVM = new List<TinDangVM>();
             foreach (var item in tinDang)
             {
@@ -75,10 +80,16 @@ namespace QuanLyThueTro.Controllers
             return listTinVM;
         }
 
-        [HttpGet("GetTinDangById")]
-        public List<TinDangVM> SearchTin(string idKhuvuc)
+        [HttpGet("GetTinDangByDiaDiem")]
+        public List<TinDangVM> GetTinDangByDiaDiem(string diadiem)
         {
-            List<TinDang> tinDang= _context.GetAllByIdKhuVuc(idKhuvuc);
+            List<TinDangVM> listTinVM = getListTinDangVMDiaDiem(diadiem);
+            return listTinVM;
+        }
+
+        private List<TinDangVM> getListTinDangVMDiaDiem(string diadiem)
+        {
+            List<TinDang> tinDang = _context.GetAll();
             List<TinDangVM> listTinVM = new List<TinDangVM>();
             foreach (var item in tinDang)
             {
@@ -87,16 +98,31 @@ namespace QuanLyThueTro.Controllers
                 var phong = _context.GetPhongById(item.idTinDang);
                 _mapper.Map(tin, tinvm);
                 _mapper.Map(phong, tinvm);
-                listTinVM.Add(tinvm);
+                if (tinvm.diaChi.Contains(diadiem))
+                {
+                    listTinVM.Add(tinvm);
+                }
             }
             return listTinVM;
         }
-
 
         [HttpGet("GetTinDangVMByPrice")]
-        public List<TinDangVM> GetTinDangVMByPrice(string idKhuVuc, float giaMin, float giaMax)
+        public List<TinDangVM> GetTinDangVMByPrice(string diadiem, float giaMin, float giaMax)
         {
-            List<TinDang> tinDang = _context.GetAllByIdKhuVuc(idKhuVuc);
+            List<PhongTro> listPhong = new List<PhongTro>();
+            if (diadiem != "khong")
+            {
+                listPhong = myDBContext.phongTros.Where(t => t.giaPhong >= giaMin && t.giaPhong <= giaMax && t.diaChi.Contains(diadiem)).ToList();
+
+            }
+            else
+            {
+                listPhong = myDBContext.phongTros.Where(t => t.giaPhong >= giaMin && t.giaPhong <= giaMax).ToList();
+
+            }
+            List<string> listIdTinDang = listPhong.Select(p => p.idTinDang).ToList();
+            List<TinDang> tinDang = myDBContext.tinDangs.Where(t => listIdTinDang.Contains(t.idTinDang)).ToList();
+
             List<TinDangVM> listTinVM = new List<TinDangVM>();
             foreach (var item in tinDang)
             {
@@ -107,12 +133,25 @@ namespace QuanLyThueTro.Controllers
                 _mapper.Map(phong, tinvm);
                 listTinVM.Add(tinvm);
             }
-            return _context.BinarySearchByPrice(listTinVM, giaMin,giaMax);
+            return listTinVM;
         }
         [HttpGet("GetTinDangVMByDienTich")]
-        public List<TinDangVM> GetTinDangVMByDienTich(string idKhuVuc,double minDienTich, double maxDienTich)
+        public List<TinDangVM> GetTinDangVMByDienTich(string diadiem, double minDienTich, double maxDienTich)
         {
-            List<TinDang> tinDang = _context.GetAllByIdKhuVuc(idKhuVuc);
+            List<PhongTro> listPhong = new List<PhongTro>();
+            if(diadiem!="khong")
+            {
+                listPhong = myDBContext.phongTros.Where(t => t.dienTich >= minDienTich && t.dienTich <= maxDienTich && t.diaChi.Contains(diadiem)).ToList();
+
+            }
+            else
+            {
+                listPhong = myDBContext.phongTros.Where(t => t.dienTich >= minDienTich && t.dienTich <= maxDienTich).ToList();
+
+            }
+            List<string> listIdTinDang = listPhong.Select(p => p.idTinDang).ToList();      
+            List<TinDang> tinDang = myDBContext.tinDangs.Where(t => listIdTinDang.Contains(t.idTinDang)).ToList();
+
             List<TinDangVM> listTinVM = new List<TinDangVM>();
             foreach (var item in tinDang)
             {
@@ -123,10 +162,39 @@ namespace QuanLyThueTro.Controllers
                 _mapper.Map(phong, tinvm);
                 listTinVM.Add(tinvm);
             }
-            return _context.BinarySearchByDienTich(listTinVM, minDienTich, maxDienTich);
+            return listTinVM;
         }
 
-      
+        [HttpGet("GetTinDangVMByPriceDienTich")]
+        public List<TinDangVM> GetTinDangVMByPriceDienTich(string diadiem, float giaMin, float giaMax, double minDienTich, double maxDienTich)
+        {
+            List<PhongTro> listPhong = new List<PhongTro>();
+            if (diadiem != "khong")
+            {
+                listPhong = myDBContext.phongTros.Where(t => t.giaPhong >= giaMin && t.giaPhong <= giaMax && t.dienTich >= minDienTich && t.dienTich <= maxDienTich
+
+                && t.diaChi.Contains(diadiem)).ToList();
+            }
+            else
+            {
+                listPhong = myDBContext.phongTros.Where(t => t.giaPhong >= giaMin && t.giaPhong <= giaMax && t.dienTich >= minDienTich && t.dienTich <= maxDienTich).ToList();
+            }
+            List<string> listIdTinDang = listPhong.Select(p => p.idTinDang).ToList();
+            List<TinDang> tinDang = myDBContext.tinDangs.Where(t => listIdTinDang.Contains(t.idTinDang)).ToList();
+
+            List<TinDangVM> listTinVM = new List<TinDangVM>();
+            foreach (var item in tinDang)
+            {
+                TinDangVM tinvm = new TinDangVM();
+                var tin = _context.GetTinDangById(item.idTinDang);
+                var phong = _context.GetPhongById(item.idTinDang);
+                _mapper.Map(tin, tinvm);
+                _mapper.Map(phong, tinvm);
+                listTinVM.Add(tinvm);
+            }
+            return listTinVM;
+        }
+
         [HttpGet("Filter")]
         public List<TinDang> Filter(int thang, bool status)
         {

@@ -9,6 +9,7 @@ using System.Text.Json;
 using static System.Net.WebRequestMethods;
 using System.Net.Http;
 using NuGet.Versioning;
+using System.Web;
 
 namespace Client_QuanLythueTro.APIGateWay
 {
@@ -78,40 +79,46 @@ namespace Client_QuanLythueTro.APIGateWay
             finally { }
             return listTin;
         }
-        public List<TinDang> ListTinDangByIdKhuVuc(string idKhuVuc)
+        public List<TinDang> ListTinDangByIdKhuVuc(string huyen,string tinh)
         {
             List<TinDang> listTin = new List<TinDang>();
-            url = url + "/GetTinDangById?idKhuvuc=" + idKhuVuc;
-            if (url.Trim().Substring(0, 5).ToLower() == "https")
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            HttpClient httpClient = new HttpClient();
             try
             {
-                HttpResponseMessage response = httpClient.GetAsync(url).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    string result = response.Content.ReadAsStringAsync().Result;
-                    var datacol = JsonConvert.DeserializeObject<List<TinDang>>(result);
+                string diadiemchon = huyen + ", " + tinh;
+                string url = "https://localhost:7034/api/TinDang/GetTinDangByDiaDiem?diadiem=" + diadiemchon;
 
-                    if (datacol != null)
-                        listTin = datacol;
-                }
-                else
-                {
-                    string result = response.Content.ReadAsStringAsync().Result;
-                    throw new Exception(result);
-                }
+                if (url.Trim().Substring(0, 5).ToLower() == "https")
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                response.EnsureSuccessStatusCode();
+
+                string result = response.Content.ReadAsStringAsync().Result;
+                var datacol = JsonConvert.DeserializeObject<List<TinDang>>(result);
+
+                if (datacol != null)
+                    listTin = datacol;
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception("HTTP request error: " + ex.Message);
             }
             catch (Exception ex)
             {
-                throw new Exception("loi" + ex.Message);
+                throw new Exception("Error: " + ex.Message);
             }
-            finally { }
+            finally
+            {
+                httpClient.Dispose();
+            }
+
             return listTin;
         }
         public List<TinDang> ListTinDangByIdThanhPho(string idThanhPho)
         {
             List<TinDang> listTin = new List<TinDang>();
-            url = url + "/GetTinByIdTP?id=" + idThanhPho;
+            url = url + "/GetTinByIdTP?thanhpho=" + idThanhPho;
             if (url.Trim().Substring(0, 5).ToLower() == "https")
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             try
@@ -138,10 +145,11 @@ namespace Client_QuanLythueTro.APIGateWay
             finally { }
             return listTin;
         }
-        public List<TinDang> ListTinDangByPrice(string idKhuVuc,float min,float max)
+        public List<TinDang> ListTinDangByPrice(string huyen, string tinh, float min,float max)
         {
             List<TinDang> listTin = new List<TinDang>();
-            url = url + "/GetTinDangVMByPrice?idKhuVuc="+idKhuVuc+"&giaMin="+min+"&giaMax=" + max;
+            string diadiemchon = huyen + ", " + tinh;
+            url = url + "/GetTinDangVMByPrice?diadiem=" + diadiemchon+"&giaMin="+min+"&giaMax=" + max;
             if (url.Trim().Substring(0, 5).ToLower() == "https")
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             try
@@ -168,10 +176,47 @@ namespace Client_QuanLythueTro.APIGateWay
             finally { }
             return listTin;
         }
-        public List<TinDang> ListTinDangByDienTich(string idKhuVuc, float min, float max)
+        public List<TinDang> ListTinDangByDienTich(string huyen, string tinh, float min, float max)
         {
             List<TinDang> listTin = new List<TinDang>();
-            url = url + "/GetTinDangVMByDienTich?idKhuVuc=" + idKhuVuc + "&minDienTich=" + min + "&maxDienTich=" + max;
+            string diadiemchon = "khong";
+            if(huyen!=null)
+                diadiemchon = huyen + ", " + tinh;
+            url = url + "/GetTinDangVMByDienTich?diadiem=" + diadiemchon + "&minDienTich=" + min + "&maxDienTich=" + max;
+            if (url.Trim().Substring(0, 5).ToLower() == "https")
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    var datacol = JsonConvert.DeserializeObject<List<TinDang>>(result);
+
+                    if (datacol != null)
+                        listTin = datacol;
+                }
+                else
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("loi" + ex.Message);
+            }
+            finally { }
+            return listTin;
+        }
+        public List<TinDang> ListTinDangByDienTichPrice(string huyen, string tinh, float mindt, float maxdt, float mingia, float maxgia)
+        {
+            List<TinDang> listTin = new List<TinDang>();
+            string diadiemchon = "khong";
+            if (huyen != null)
+                diadiemchon = huyen + ", " + tinh;
+            url = url + "/GetTinDangVMByPriceDienTich?diadiem=" + diadiemchon + "&giaMin=" + mingia +
+                "&giaMax=" + maxgia+ "&minDienTich="+mindt+"&maxDienTich="+maxdt;
             if (url.Trim().Substring(0, 5).ToLower() == "https")
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             try

@@ -24,7 +24,8 @@
     <div class="search-content">
         <section id="filter-top-inner">
             <section id="filter-top">
-                <form asp-action="TrangChuTinDang" asp-controller="ChuChoThue">
+                @using (Html.BeginForm("IndexTinDangPT", "ChuChoThue", FormMethod.Post, new { @class = "" }))
+                            {
                     <div class="filter-body">
                         <div class="filter-item ">
                             <span>
@@ -37,7 +38,9 @@
                             <span id="diadiem">
                                 <i class="fas fa-map"></i> Chọn địa điểm
                             </span>
-                            <input id="inputDiaDiemDaChon" name="inputDiaDiemDaChon" type="text" style="border: 0;width:0%" />
+                            <input id="inputTinh" name="inputTinh" type="text" style="border: 0;width:0%" />
+                            <input id="inputHuyen" name="inputHuyen" type="text" style="border: 0;width:0%" />
+
                         </div>
                         <div class="filter-item " onclick="showPopup('price')">
                             <span id="giachon">
@@ -58,13 +61,13 @@
                         </div>
                         <div class="filter-item submit">
                             <span>
-                                <button type="submit">Tìm kiếm</button>
+                                <button type="submit" style="border: none;background-color: transparent; color:white">Tìm kiếm</button>
                             </span>
                         </div>
 
                     </div>
-                </form>
-                <!-- POP CITY -->
+                    }              
+<!-- POP CITY -->
                 <div class="filter-popup js-filter-popup js-filter-popup-city" data-popup-type="city">
                     <div class="filter-popup-header">
                         <span class="header-label">Địa điểm tìm kiếm</span>
@@ -73,12 +76,6 @@
                     <div class="filter-popup-content">
                         <div id="filter-popup-city-option" class="filter-list-option">
                             <ul id="city-list">
-                                <li class="selected" onclick="selectLocation(this)">Toàn quốc</li>
-                                <!-- <li class="" onclick="selectLocation(this)">Hồ Chí Minh</li>
-                                <li class="" onclick="selectLocation(this)">Hà Nội</li>
-                                <li class="" onclick="selectLocation(this)">Đà Nẵng</li>
-                                <li class="" onclick="selectLocation(this)">Hà Nội</li>
-                                <li class="" onclick="selectLocation(this)">Đồng Nai</li> -->
                             </ul>
                         </div>
                     </div>
@@ -119,27 +116,26 @@
                         });
 
                     function GetKhuVucData(cityCode, cityName) {
-                        var url = `https://localhost:7034/api/KhuVucs/GetKhuVucsByIdTP?id=${cityCode}`;
-                        console.log(url);
-                        fetch(url)
+                        fetch('https://provinces.open-api.vn/api/?depth=2')
                             .then(response => response.json())
                             .then(data => {
-                                console.log(data);
+                                const cityChoose = data.find(city => city.code === cityCode);
+                                const districts = cityChoose.districts;
                                 const khuvucList = document.getElementById('khuvuc-list');
                                 khuvucList.innerHTML = '';
-                                data.forEach(district => {
+                                districts.forEach(district => {
                                     const listItem = document.createElement('li');
-                                    listItem.textContent = district.tenKhuVuc;
+                                    listItem.textContent = district.name;
                                     listItem.onclick = function () {
-                                        selectLocation(this, cityName, district.idKhuVuc);
+                                        selectLocation(this, cityName, cityCode,);
                                     };
                                     khuvucList.appendChild(listItem);
                                 });
                             })
                             .catch(error => {
-                                console.error(error);
+                                console.error('Lỗi khi gọi API danh sách quận/huyện: ', error);
                             });
-                    }
+                    };
                 </script>
                 <div class="filter-popup has-footer js-filter-popup js-filter-popup-price" data-popup-type="price">
                     <div class="filter-popup-header">
@@ -153,20 +149,20 @@
                                 <div class="price-input">
                                     <div class="field">
                                         <span>Min</span>
-                                        <input value="0" type="number" class="input-min">
+                                        <input value="500000" type="number" class="input-min">
                                     </div>
                                     <div class="separator">-</div>
                                     <div class="field">
                                         <span>Max</span>
-                                        <input value="15000" type="number" class="input-max">
+                                        <input value="1000000" type="number" class="input-max">
                                     </div>
                                 </div>
                                 <div class="slider">
                                     <div class="progress" id="progress"></div>
                                 </div>
                                 <div class="range-input">
-                                    <input type="range" class="range-min" id="range-min" min="0" max="15000" value="0">
-                                    <input type="range" class="range-max" id="range-max" min="0" max="15000" value="15000">
+                                    <input type="range" class="range-min" id="range-min" min="500000" max="15000000" value="0">
+                                    <input type="range" class="range-max" id="range-max" min="500000" max="15000000" value="1000000">
 
                                 </div>
                             </header>
@@ -187,6 +183,10 @@
                                 <li class="" onclick="selectDienTich(this)">Từ 20m - 30m</li>
                                 <li class="" onclick="selectDienTich(this)">Từ 30m - 70m</li>
                                 <li class="" onclick="selectDienTich(this)">Từ 70m - 90m</li>
+                                <li class="" onclick="selectDienTich(this)">Từ 90m - 150m</li>
+                                <li class="" onclick="selectDienTich(this)">Từ 150m - 250m</li>
+
+
                             </ul>
                         </div>
                     </div>
@@ -202,7 +202,7 @@
     </div>
     <div class="d-flex justify-content-center mb-3">
         <div class="card m-2" style="width:230px">
-            <a asp-action="TinTheoTinhThanh" asp-controller="ChuChoThue" asp-route-idThanhPho="79">
+            <a asp-action="TinTheoTinhThanh" asp-controller="ChuChoThue" asp-route-thanhpho="Thành phố Hồ Chí Minh">
                 <img class="card-img-top" src="~/img/TPHCM.jpg" alt="Card image" style="width:100%; height: 120px">
                 <div class="card-body">
                     <h6 class="card-title">Thành phố Hồ Chí Minh</h6>
@@ -211,7 +211,7 @@
         
         </div>
         <div class="card m-2" style="width:230px">
-             <a asp-action="TinTheoTinhThanh" asp-controller="ChuChoThue" asp-route-idThanhPho="1">
+            <a asp-action="TinTheoTinhThanh" asp-controller="ChuChoThue" asp-route-thanhpho="Thành phố Hà Nội">
             <img class="card-img-top" src="~/img/hanoi.jpg" alt="Card image" style="width:100%; height: 120px">
             <div class="card-body">
                 <h6 class="card-title">Thành phố Hà Nội</h6>
@@ -219,7 +219,7 @@
             </a>
         </div>
         <div class="card m-2" style="width:230px">
-             <a asp-action="TinTheoTinhThanh" asp-controller="ChuChoThue" asp-route-idThanhPho="">
+            <a asp-action="TinTheoTinhThanh" asp-controller="ChuChoThue" asp-route-thanhpho="Thành phố Đà Nẵng">
             <img class="card-img-top" src="~/img/dn.jpg" alt="Card image" style="width:100%; height: 120px">
             <div class="card-body">
                 <h6 class="card-title">Thành phố Đà Nẵng</h6>
@@ -412,10 +412,11 @@
 
     function selectLocation(selectedOption, cityName, districtCode) {
         var diaDiem = document.getElementById('diadiem');
-        var inputDD = document.getElementById('inputDiaDiemDaChon');
-        inputDD.value = districtCode;
-        console.log("inputDD: " + inputDD.value)
-        diaDiem.innerHTML = cityName + " - " + selectedOption.textContent.trim();
+        var inputTinh = document.getElementById('inputTinh');
+        var inputHuyen = document.getElementById('inputHuyen');
+        inputTinh.value =cityName;
+        inputHuyen.value = selectedOption.textContent.trim();
+        diaDiem.innerHTML = selectedOption.textContent.trim() + ", " + cityName;
         closePopup('khuvuc');
     }
 
@@ -434,8 +435,8 @@
         }
 
         dientichChon.innerHTML = `Từ ${min}m - ${max}m`;
-        var intputMin = document.getElementById('inputGiaMin');
-        var intputMax = document.getElementById('inputGiaMax');
+        var intputMin = document.getElementById('inputDienTichMin');
+        var intputMax = document.getElementById('inputDienTichMax');
         intputMin.value = min;
         intputMax.value = max;
         console.log("inputDienTic" + intputMin.value + " " + intputMax.value)
@@ -450,7 +451,7 @@
     //console.log(rangeInput)
     console.log(progress)
 
-    let priceGap = 1000;
+    let priceGap = 500000;
 
     rangeInput.forEach(input => {
         input.addEventListener("input", e => {
@@ -480,7 +481,7 @@
             let minVal = parseInt(priceInput[0].value),
                 maxVal = parseInt(priceInput[1].value);
 
-            if ((maxVal - minVal >= priceGap) && maxVal <= 15000) {
+            if ((maxVal - minVal >= priceGap) && maxVal <= 15000000) {
                 console.log(e.target.className + "check")
                 if (e.target.className === "input-min") {
                     rangeInput[0].value = minVal;
@@ -503,8 +504,8 @@
         var giachon = document.getElementById('giachon');
         giachon.innerHTML = minInput + " - " + maxInput
 
-        var intputMin = document.getElementById('inputDienTichMin');
-        var intputMax = document.getElementById('inputDienTichMax');
+        var intputMin = document.getElementById('inputGiaMin');
+        var intputMax = document.getElementById('inputGiaMax');
         intputMin.value = minInput;
         intputMax.value = maxInput;
         console.log("Gia" + intputMin.value + " " + intputMax.value)
