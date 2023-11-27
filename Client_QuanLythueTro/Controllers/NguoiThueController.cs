@@ -86,7 +86,7 @@ namespace Client_QuanLythueTro.Controllers
             try
             {
                 context.UpdateTin(tin);
-                TempData["AlertMessage"] = "successful";
+                TempData["AlertMessage"] = "thanhcong";
                 return RedirectToAction("EditTinDang", new { idTinDang = tin.idTinDang });
             }
             catch (Exception ex)
@@ -137,7 +137,7 @@ namespace Client_QuanLythueTro.Controllers
             lichXemPhong.idLichXem = "auto";
             _callLichXemPhong.CreateLichXem(lichXemPhong);
             TempData["AlertMessage"] = "successful";
-            return View();
+            return RedirectToAction("QuanLyLichXemPhong", new { idTin = lichXemPhong.idTinDang });
         }
 
         public IActionResult DetailLichXem(string idLichXem)

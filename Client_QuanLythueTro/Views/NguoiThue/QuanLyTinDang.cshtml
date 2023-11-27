@@ -183,6 +183,7 @@
                                                 url: 'https://localhost:7034/api/LichXemPhongs/Count/' + '@item.idTinDang',
                                                 type: 'GET',
                                                 success: function (data) {
+
                                                     $('#countCell-@item.idTinDang').text(data);
                                                 },
                                                 error: function () {

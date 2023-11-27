@@ -13,14 +13,10 @@
 <link href="~/css/uploadimg.css" rel="stylesheet" />
 @{
     var checkMessage = TempData["AlertMessage"];
-    if (checkMessage == "successful")
+    if (checkMessage == "thanhcong")
     {
         <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Thành công',
-                text: 'Xóa lịch xem thành công!'
-            })
+            swal("Yêu cầu thành công", "Đã cập nhật thành công !!! ", "success")
         </script>
 
     }
@@ -164,8 +160,8 @@
                             if (i == 0) act = "active";
                             <button type="button" data-bs-target="#demo" data-bs-slide-to="@i" class="@act"></button>
                         }
-                        <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
-                    </div>
+@*                        <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+*@                    </div>
 
                     <div class="carousel-inner" style="height:350px; width:100%;">
                         @for (int i = 0; i < imgList.Count; i++)
