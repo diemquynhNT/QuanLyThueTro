@@ -1,0 +1,251 @@
+﻿@using Client_QuanLythueTro.APIGateWay;
+@model Client_QuanLythueTro.Models.TinDang
+
+@{
+    ViewData["Title"] = "EditTinDang";
+    Layout = "~/Views/NguoiThue/LayoutMain/LayoutMainNguoiThue.cshtml";
+    ViewBag.title = "Cập nhật tin";
+    ViewBag.qltd = "active";
+    TinDang_PhongTro_GateWay callTinDangPT = new TinDang_PhongTro_GateWay();
+    List<string> imgList = callTinDangPT.ListImages(Model.idTinDang);
+}
+
+<link href="~/css/uploadimg.css" rel="stylesheet" />
+@{
+    var checkMessage = TempData["AlertMessage"];
+    if (checkMessage == "thanhcong")
+    {
+        <script>
+            swal("Yêu cầu thành công", "Đã cập nhật thành công !!! ", "success")
+        </script>
+
+    }
+}
+<link href="~/css/uploadimg.css" rel="stylesheet" />
+<div class="container">
+    <div class="tile" id="printMe">
+        <h4>THÔNG TIN TIN ĐĂNG</h4>
+                <form asp-action="EditTinDang" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.idTinDang)
+                    @Html.HiddenFor(model => model.ngayBatDau)
+                    @Html.HiddenFor(model => model.ngayKetThuc)
+                    @Html.HiddenFor(model => model.ngayTaoTin)
+                    @Html.HiddenFor(model => model.idDichVu)
+                    @Html.HiddenFor(model => model.trangThaiTinDang)
+                    <div class=" row">
+                    <div class="form-group col-sm-6">
+                        <b>Mã tin :</b>
+                            <input asp-for="idTinDang" id="idTinDang" class="form-control" readonly />
+                        <span asp-validation-for="idTinDang" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Loại tin</b>
+                        <input asp-for="loaiTin" class="form-control" readonly />
+                        <span asp-validation-for="loaiTin" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <b>Tiêu đề</b>
+                        <input asp-for="tieuDe" id="tieuDe" class="form-control" required />
+                        <span asp-validation-for="tieuDe" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <b>Mô tả</b>
+                        <textarea asp-for="moTa" id="moTa" class="form-control" rows="9" cols="70"></textarea>
+                        <span asp-validation-for="moTa" class="text-danger"></span>
+                    </div>
+                    <h5 style="padding:10px">Địa chỉ cho thuê</h5>
+                    <div class="row" style="padding:10px">
+                        <div class="form-group col-sm-12">
+                            <b>Địa chỉ cụ thể</b>
+                            <input asp-for="diaChi" id="diaChi" class="form-control" required />
+                            <span asp-validation-for="diaChi" class="text-danger"></span>
+                        </div>
+                        <h5 style="padding:10px">Thông tin cụ thể</h5>
+                        <div class="form-group col-sm-12">
+                            <b>Đối tượng cho thuê</b>
+                            <input asp-for="doiTuongChoThue" id="doiTuongChoThue" class="form-control" required />
+                            <span asp-validation-for="doiTuongChoThue" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>Số lượng phòng</b>
+                            <input asp-for="soLuongPhong" id="soLuongPhong" class="form-control" required min="1" />
+                            <span asp-validation-for="soLuongPhong" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>Diện tích (m2)</b>
+                            <input asp-for="dienTich" id="dienTich" class="form-control" required type="number" min="1" />
+                            <span asp-validation-for="dienTich" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <b>Giá phòng (/tháng)</b>
+                            <input asp-for="giaPhong" id="giaPhong" class="form-control" required type="number" min="100000" />
+                            <span asp-validation-for="giaPhong" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>Tiền điện/Kw</b>
+                            <input asp-for="tienDien" id="tienDien" class="form-control" required type="number" min="1000" />
+                            <span asp-validation-for="tienDien" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>Tiền nước/người</b>
+                            <input asp-for="tienNuoc" id="tienNuoc" class="form-control" required type="number" min="100000" />
+                            <span asp-validation-for="tienNuoc" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>Tiền dịch vụ</b>
+                            <input asp-for="tienDichVu" id="tienDichVu" class="form-control" required type="number" min="0" />
+                            <span asp-validation-for="tienDichVu" class="text-danger"></span>
+                        </div>
+                        <h5 style="padding:10px">Thông tin liên hệ</h5>
+                        <div class="form-group col-sm-12">
+                            <b>Người liên hệ</b>
+                            <input asp-for="nguoiLienHe" id="nguoiLienHe" class="form-control" required />
+                            <span asp-validation-for="nguoiLienHe" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <b>SĐT liên hệ</b>
+                            <input asp-for="sdtNguoiLienHe" id="sdtNguoiLienHe" class="form-control" required min="10" max="10" />
+                            <span asp-validation-for="sdtNguoiLienHe" class="text-danger"></span>
+                        </div>
+                        <input asp-for="idUser" id="idUser" class="form-control" value="@Model.idUser" style="visibility:hidden"/>
+                        <div class="form-group">
+                            <input type="submit" value="Cập nhật thông tin" class="btn btn-success btn-sm" />
+                        </div>
+                    </div>
+                    </div>
+                </form>
+
+            <hr />
+
+            <div class="form-group col-sm-12">
+                <h3 style="padding:10px 0">Hình ảnh phòng</h3>
+            <a class="btn btn-outline-dark btn-sm" style="margin:10px 0" data-bs-toggle="modal" data-bs-target="#MoreImage" data-bs-toggle="tooltip" title="Delete">
+                    Thêm hình
+                </a>
+                <div class="modal fade" id="MoreImage" tabindex="-1" aria-labelledby="MoreImage" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Xác nhận</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group col-sm-12">
+                                    <h3>Chọn hình</h3>
+                                    <div id="imageUploadForm">
+                                        <div class="input-div">
+                                            <input type="file" class="listimg" id="listimg" name="listimg" multiple accept="image/png, image/jpeg, image/jpg">
+                                        </div>
+                                        <div id="saved-form">
+                                            <div class="saved-div"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success" onclick="ClickUpdateImage(`@Model.idTinDang`)">Thêm mới</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="demo" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        @for (int i = 0; i < imgList.Count; i++)
+                        {
+                            string act = "";
+                            if (i == 0) act = "active";
+                            <button type="button" data-bs-target="#demo" data-bs-slide-to="@i" class="@act"></button>
+                        }
+@*                        <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+*@                    </div>
+
+                    <div class="carousel-inner" style="height:350px; width:100%;">
+                        @for (int i = 0; i < imgList.Count; i++)
+                        {
+                            string act = "";
+                            if (i == 0) act = "active";
+                            <div class="carousel-item @act" style="width:100%; height:100%; text-align:center; background-color:black;">
+                                <img src="@imgList[i]" alt="Los Angeles" class="d-block" style="height:100%; object-fit: cover; margin:auto;" onclick="">
+
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
+               
+            </div>
+            <hr />
+            <div class="col-sm-6">
+                <a asp-controller="NguoiThue" asp-action="QuanLyTinDang" asp-route-idUser="@Model.idUser" class="btn btn-warning btn-sm">Back to List</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="~/js/map/mapapi.js"></script>
+<script src="~/js/uploadmultiimg.js"></script>
+
+<script>
+    function getListKhuVuc() {
+        var url = 'https://localhost:7034/api/KhuVucs';
+        console.log(url)
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                var selectElement = document.getElementById('idKhuVuc');
+                console.log(data)
+                for (var i = 0; i < data.length; i++) {
+                    var option = document.createElement('option');
+                    option.value = data[i].idKhuVuc;
+                    option.text = data[i].tenKhuVuc;
+                    selectElement.add(option);
+                }
+            });
+    }
+    getListKhuVuc();
+
+    async function ClickUpdateImage(id) {
+        const formData = new FormData();
+        const imageFiles = document.getElementById("listimg").files;
+        for (let i = 0; i < imageFiles.length; i++) {
+            formData.append("files", imageFiles[i]);
+        }
+        var url = "https://localhost:7034/api/TinDangPhongTro/AddImages/" + id;
+
+        swal({
+            title: "Đang xử lý yêu cầu",
+            text: "Vui lòng đợi trong khi chúng tôi xử lý yêu cầu của bạn...",
+            button: false
+        });
+
+        const response = await fetch(url, {
+            method: "POST",
+            body: formData
+        });
+
+        if (response.ok) {
+            console.log("oke");
+            swal("Yêu cầu thành công", "Đã thêm tin thành công !!! ", "success")
+                .then((value) => {
+                    location.reload();
+                });
+        } else {
+            console.error("Lỗi:", response.status);
+        }
+    }
+
+
+
+
+</script>

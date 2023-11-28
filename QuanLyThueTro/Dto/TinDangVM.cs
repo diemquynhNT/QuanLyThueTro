@@ -52,9 +52,6 @@ namespace QuanLyThueTro.Dto
         public float tienNuoc { get; set; }
         public float tienDichVu { get; set; }
         public string? idUser { get; set; }
-        public static implicit operator TinDangVM(ActionResult v)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuanLyThueTro", "QuanLyThueTro\QuanLyThueTro.csproj", "{2D9E2100-55D9-44E9-AEB7-85E7CBABC72E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client_QuanLythueTro", "Client_QuanLythueTro\Client_QuanLythueTro.csproj", "{4ABAD44A-3FA0-4284-8B08-D3F3A57C64E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client_QuanLythueTro", "Client_QuanLythueTro\Client_QuanLythueTro.csproj", "{4ABAD44A-3FA0-4284-8B08-D3F3A57C64E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

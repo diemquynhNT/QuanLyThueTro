@@ -101,7 +101,7 @@ namespace Client_QuanLythueTro.Controllers
         {
             try
             {
-                TinDang newTin=await apiGateWay.CreateTin(tin);
+                TinDang newTin= apiGateWay.CreateTinDang(tin);
                 TempData["mess"] = "thanhcong";
                 return RedirectToAction("AddImgToTinDang", new { idTinDang = newTin.idTinDang });
             }

@@ -16,7 +16,7 @@ namespace QuanLyThueTro.Model
         public string sdtNguoiXem { get; set; }
         [Required]
         public bool trangThai { get; set; }
-
+        public string? LyDo { get;set; }
         public string? idTinDang { get; set; }
         [ForeignKey("idTinDang")]
         public TinDang tinDangs { get; set; }

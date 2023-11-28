@@ -1,0 +1,326 @@
+﻿@using Client_QuanLythueTro.APIGateWay;
+@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "QuanLyTinDang";
+    Layout = "~/Views/NguoiThue/LayoutMain/LayoutMainNguoiThue.cshtml";
+    ViewBag.title="Quản lý tin cá nhân";
+    ViewBag.qltd="active";
+    string idUser =(string)TempData["idUser"];
+    string trangThai = "Chưa duyệt";
+    APIGateWayLichXemPhong lichxem = new APIGateWayLichXemPhong();
+    var userJson = Context.Session.GetString("user");
+    Users user = null;
+    if (userJson != null)
+    {
+        user = JsonConvert.DeserializeObject<Users>(userJson);
+    }
+
+}
+@if (TempData["mess"]!=null){
+    var checkMessage = TempData["mess"];
+    if (checkMessage == "thanhcong")
+    {
+        <script>
+            swal("Đã thêm tin đăng mới !!!", "Nhân viên sẽ duyệt tin trong thời gian sớm nhất!!! ", "success")
+        </script>
+
+    }
+    else if (checkMessage == "loi")
+    {
+        <script>
+            swal("Lỗi !!!", "Lỗi xử lý !!! ", "error")
+        </script>
+    }
+}
+<div class="col-sm-3">
+    <h4>Quản lý tin đăng</h4>
+</div>
+        <div class="row" style="padding:10px">
+            <div class="col-sm-5">
+                @using (Html.BeginForm("QuanLyTinDang", "NguoiThue", FormMethod.Post, new { @class = "" }))
+                {
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <select name="idLoaiGoiDichVu" id="serviceChooseSearch" class="form-control-sm" placeholder="Chọn gói">
+                                <option selected="selected" disabled>------Chọn-------</option>
+                                <option selected="selected">All</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <select class="form-control-sm" name="trangThai" id="trangThai" required>
+                                <option selected="selected" value="All">All</option>
+                                <option value="false">Chưa duyệt</option>
+                                <option value="true">Đã duyệt</option>
+                            </select>
+                        </div>
+                        <input value="@user.idUser" name="idUser" style="visibility:hidden;width:0%">
+                        <div class="col-sm-2">
+                            <input type="submit" class="btn btn-success btn-sm" value="Tìm kiếm">
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-sm-2">
+                <a class="btn btn-danger btn-sm" href="/NguoiThue/CreateTinDang" previewlistener="true">Đăng tin mới</a>
+            </div>
+            <div class="col-sm-2">
+                <a class="btn btn-success btn-sm" asp-action="CreateLichXem" asp-controller="NguoiThue" asp-route-id="@user.idUser" previewlistener="true">
+                    Thêm lịch hẹn mới</a>
+            </div>
+        </div>
+
+<hr />
+<div class="d-none d-md-block">
+        <div class="row" id="printMe">
+            <div class="col-sm-12  table-responsive">
+            <table class="table table-hover table-bordered js-copytextarea dataTable no-footer" cellpadding="0" cellspacing="0" border="0" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+                    <thead>
+                        <tr>
+                            <th >
+                                Mã tin
+                            </th>
+                            <th style="width:200px">
+                                Tiêu Đề
+                            </th>
+                            <th style="width:120px">
+                                Thời gian
+                            </th>
+                            <th style="width:120px">
+                                Liên hệ
+                            </th>
+                            <th>
+                                Loại tin
+                            </th>
+                            <th>
+                                Trạng thái
+                            </th>
+                            <th>
+                                Hạn
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                          @if(Model.Count()<1)
+                          {
+                             <tr>
+                                        <td colspan="7">Bạn chưa có tin đăng nào. Bấm <a href="/NguoiThue/CreateTinDang" previewlistener="true">vào đây</a> để bắt đầu đăng tin</td>
+                              </tr>
+                          }else{
+                          foreach (var item in Model)
+                          {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.idTinDang)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.tieuDe)
+                                    </td>
+                                    @{
+                                        var ngaybd = String.Format("{0:d/M/yyyy}", item.ngayBatDau);
+                                        var ngaykt = String.Format("{0:d/M/yyyy}", item.ngayKetThuc);
+
+                                    }
+                                    <td>
+                                        @ngaybd @ngaykt
+                                    </td>
+                                  
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.sdtNguoiLienHe)
+                                        @Html.DisplayFor(modelItem => item.nguoiLienHe)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.idDichVu)
+                                    </td>
+                                    @if (item.trangThaiTinDang)
+                                    {
+                                        <td>
+                                            <span class="badge rounded-pill bg-success">Đã duyệt</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <span class="badge rounded-pill bg-danger">Chưa duyệt</span>
+                                        </td>
+                                    }
+                                    <td>
+                                    @{
+                                        DateTime hant = (DateTime)item.ngayKetThuc;
+                                        TimeSpan interval = hant.Subtract(DateTime.Now);
+
+                                        if (interval.Days < 0)
+                                        {
+                                            <span class="badge rounded-pill bg-danger">Hết hạn</span>
+                                        }
+                                        else if (interval.Days >= 0 && interval.Days <= 3)
+                                        {
+                                            <span class="badge rounded-pill bg-warning">Sắp đến hạn</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge rounded-pill bg-success">Còn hạn</span>
+                                        }
+
+                                    }
+                                    </td>
+                                    <td>
+                                        <a href="/NguoiThue/EditTinDang/@item.idTinDang" class="btn btn-outline-dark btn-sm" ata-toggle="tooltip" title="">
+                                        <i class="fas fa-edit"></i>
+                                        </a>
+                                    <a class="btn btn-outline-dark btn-sm position-relative" asp-controller="NguoiThue" asp-action="QuanLyLichXemPhong" asp-route-idTin="@item.idTinDang">
+                                        <i class='bx bx-calendar'></i>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="countCell-@item.idTinDang">
+                                            <span class="visually-hidden">unread messages</span>
+                                        </span>
+                                    </a>
+                                    <script>
+                                        $(document).ready(function () {
+                                            $.ajax({
+                                                url: 'https://localhost:7034/api/LichXemPhongs/Count/' + '@item.idTinDang',
+                                                type: 'GET',
+                                                success: function (data) {
+
+                                                    $('#countCell-@item.idTinDang').text(data);
+                                                },
+                                                error: function () {
+                                                    $('#countCell-@item.idTinDang').text('Error');
+                                                }
+                                            });
+                                        });
+                                    </script>
+
+
+
+                                        <a class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalMuaGoiTin-@item.idTinDang" data-bs-toggle="tooltip" title="MuaDichVu">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                            <div class="modal fade" id="modalMuaGoiTin-@item.idTinDang" tabindex="-1" aria-labelledby="modalMuaGoiTin-@item.idTinDang" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Mua gói tin dịch vụ</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                        <div class="form-group col-sm-12">
+                                                            <label>Các gói dịch vụ:</label>
+                                                            <select name="" id="serviceChoose" class="form-control" placeholder="Chọn gói">
+                                                                <option selected="selected" disabled>------Chọn-------</option>
+                                                            </select>
+                                                        </div>
+                                                            <input value="@item.idTinDang" id="matd-@item.idTinDang" style="visibility:hidden">
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-danger" onclick="DeleteTinDang('@item.idTinDang')">Xóa</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                         <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@item.idTinDang" data-bs-toggle="tooltip" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                          </a>
+                                        <div class="modal fade" id="modal-@item.idTinDang" tabindex="-1" aria-labelledby="modal-@item.idTinDang" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Xác nhận</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                        <div class="modal-body">
+                                                            Xác nhận xóa tin đăng @item.idTinDang
+                                                            <input value="@item.idTinDang" id="matd-@item.idTinDang" style="visibility:hidden">
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-danger" onclick="DeleteTinDang('@item.idTinDang')">Xóa</button>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                }
+                           }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    function DeleteTinDang(id)
+    {
+        var idchoose="matd-"+id;
+        var idTinDang = document.getElementById(idchoose).value;
+        console.log(idchoose)
+        var url = "https://localhost:7034/api/TinDang/" + idTinDang;
+        swal({
+            title: "Đang xử lý yêu cầu",
+            text: "Vui lòng đợi trong khi chúng tôi xử lý yêu cầu của bạn...",
+            button: false
+        });
+        fetch(url, {
+            method: "DELETE"
+        })
+            .then(function (response) {
+                return response.blob();
+            })
+            .then(function (data) {
+                swal("Yêu cầu thành công", "Đã xóa tin thành công !!! ", "success")
+                    .then((value) => {
+                        location.reload();
+                    });
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+                alert("loi")
+            });
+    }
+
+    function getLichDichVu() {
+        var url = 'https://localhost:7034/api/DichVuDangTins';
+        console.log(url)
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                var selectElement = document.getElementById('serviceChoose');
+                var selectElementSearch = document.getElementById('serviceChooseSearch');
+                console.log(data)
+                for (var i = 0; i < data.length; i++) {
+                    var option = document.createElement('option');
+                    option.value = data[i].idDichVu;
+                    option.text = data[i].loaiDichVu;
+                    selectElement.add(option);
+                }
+            });
+    }
+    function getLichDichVuSearch() {
+        var url = 'https://localhost:7034/api/DichVuDangTins';
+        console.log(url)
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                var selectElementSearch = document.getElementById('serviceChooseSearch');
+                console.log(data)
+                for (var i = 0; i < data.length; i++) {
+                    var option = document.createElement('option');
+                    option.value = data[i].idDichVu;
+                    option.text = data[i].loaiDichVu;
+                    selectElementSearch.add(option);
+                }
+            });
+    }
+    getLichDichVu();
+    getLichDichVuSearch();
+
+
+
+</script>

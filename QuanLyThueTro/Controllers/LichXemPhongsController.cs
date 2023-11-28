@@ -39,7 +39,25 @@ namespace QuanLyThueTro.Controllers
           }
             return await _context.lichXemPhongs.ToListAsync();
         }
+        [HttpGet("GetLichXemByIdTin")]
+        public async Task<ActionResult<IEnumerable<LichXemPhong>>> GetLichXemByIdTin(string id)
+        {
+            if (_context.lichXemPhongs == null)
+            {
+                return NotFound();
+            }
+            return await _context.lichXemPhongs.Where(t=>t.idTinDang==id).ToListAsync();
+        }
 
+        [HttpGet("GetLichXemByIdUser/{sdt}")]
+        public async Task<ActionResult<IEnumerable<LichXemPhong>>> GetLichXemByIdUser(string sdt)
+        {
+            if (_context.lichXemPhongs == null)
+            {
+                return NotFound();
+            }
+            return await _context.lichXemPhongs.Where(t => t.sdtNguoiXem == sdt).ToListAsync();
+        }
         // GET: api/LichXemPhongs/5
         [HttpGet("{id}")]
         public async Task<ActionResult<LichXemPhong>> GetLichXemPhong(string id)
@@ -56,6 +74,17 @@ namespace QuanLyThueTro.Controllers
             }
 
             return lichXemPhong;
+        }
+        [HttpGet("Count/{idTin}")]
+        public async Task<ActionResult<int>> CountLichXem(string idTin)
+        {
+            if (_context.lichXemPhongs == null)
+            {
+                return NotFound();
+            }
+            List<LichXemPhong> list=_context.lichXemPhongs.Where(t=>t.idTinDang == idTin).ToList();
+
+            return list.Count();
         }
 
         [HttpGet("GetByIdTinDang/{idTinDang}")]
@@ -151,6 +180,67 @@ namespace QuanLyThueTro.Controllers
 
             return CreatedAtAction("GetLichXemPhong", new { id = lichXemPhong.idLichXem }, lichXemPhong);
         }
+        [HttpPut("DuyetLich/{id}")]
+        public async Task<ActionResult<LichXemPhong>> DuyetLich(string id)
+        {
+            if (_context.lichXemPhongs == null)
+            {
+                return Problem("Entity set 'MyDBContext.lichXemPhongs'  is null.");
+            }
+            LichXemPhong lich = _context.lichXemPhongs.Find(id);
+            if (lich == null)
+                return NotFound();
+            lich.trangThai = true;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (LichXemPhongExists(lich.idLichXem))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetLichXemPhong", new { id = lich.idLichXem }, lich);
+        }
+        [HttpPut("HuyLich/{id}")]
+        public async Task<ActionResult<LichXemPhong>> HuyLich([FromForm] string lydo, string id)
+        {
+            if (_context.lichXemPhongs == null)
+            {
+                return Problem("Entity set 'MyDBContext.lichXemPhongs'  is null.");
+            }
+            LichXemPhong lich = _context.lichXemPhongs.Find(id);
+            if (lich == null)
+                return BadRequest();
+            lich.LyDo = lydo;
+            lich.trangThai = false;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (LichXemPhongExists(lich.idLichXem))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetLichXemPhong", new { id = lich.idLichXem }, lich);
+        }
+
+
 
         // DELETE: api/LichXemPhongs/5
         [HttpDelete("{id}")]
