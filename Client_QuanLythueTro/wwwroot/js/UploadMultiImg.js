@@ -49,3 +49,4 @@ function deleteQueuedImage(index) {
     queuedImgArray.splice(index, 1)
     displayQueuedImg();
 }
+

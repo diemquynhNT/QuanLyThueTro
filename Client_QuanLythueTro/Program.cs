@@ -13,6 +13,7 @@ builder.Services.AddScoped<LichXemPhong_GateWay>();
 builder.Services.AddScoped<APIGateWayKhuVuc>();
 builder.Services.AddScoped<GiaoDich_Gateway>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<APIGateWayLichXemPhong>();
 
 
 // Add services to the container.

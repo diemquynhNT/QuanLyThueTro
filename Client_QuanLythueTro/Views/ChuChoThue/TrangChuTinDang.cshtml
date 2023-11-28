@@ -12,23 +12,20 @@
 @{
     var userJson = Context.Session.GetString("user");
     Users user = null;
-    string avt = null;
     if (userJson != null)
     {
         user = JsonConvert.DeserializeObject<Users>(userJson);
-        avt = user.hinhAnh;
     }
 }
 
 <link href="~/css/search-pop.css" rel="stylesheet" />
 <div class="text-center bg-light">
+    @*    SEARCH*@
 
-@*SEARCH*@
     <div class="search-content">
         <section id="filter-top-inner">
             <section id="filter-top">
-                @using (Html.BeginForm("IndexTinDangPT", "ChuChoThue", FormMethod.Post, new { @class = "" }))
-                            {
+                <form asp-action="TrangChuTinDang" asp-controller="ChuChoThue">
                     <div class="filter-body">
                         <div class="filter-item ">
                             <span>
@@ -41,8 +38,8 @@
                             <span id="diadiem">
                                 <i class="fas fa-map"></i> Chọn địa điểm
                             </span>
-                            <input id="inputTinh" name="inputTinh" type="text" style="border: 0;width:0%" />
-                            <input id="inputHuyen" name="inputHuyen" type="text" style="border: 0;width:0%" />
+                            <input id="inputDiaDiemDaChon" name="inputDiaDiemDaChon" type="text" style="border: 0;width:0%" />
+                            <input id="inputCityCode" name="inputCityCode" type="text" style="border: 0;width:0%" />
 
                         </div>
                         <div class="filter-item " onclick="showPopup('price')">
@@ -64,13 +61,13 @@
                         </div>
                         <div class="filter-item submit">
                             <span>
-                                <button type="submit" style="border: none;background-color: transparent; color:white">Tìm kiếm</button>
+                                <button type="submit">Tìm kiếm</button>
                             </span>
                         </div>
 
                     </div>
-                    }              
-<!-- POP CITY -->
+                </form>
+                <!-- POP CITY -->
                 <div class="filter-popup js-filter-popup js-filter-popup-city" data-popup-type="city">
                     <div class="filter-popup-header">
                         <span class="header-label">Địa điểm tìm kiếm</span>
@@ -79,6 +76,12 @@
                     <div class="filter-popup-content">
                         <div id="filter-popup-city-option" class="filter-list-option">
                             <ul id="city-list">
+                                <li class="selected" onclick="selectLocation(this)">Toàn quốc</li>
+                                <!-- <li class="" onclick="selectLocation(this)">Hồ Chí Minh</li>
+                                <li class="" onclick="selectLocation(this)">Hà Nội</li>
+                                <li class="" onclick="selectLocation(this)">Đà Nẵng</li>
+                                <li class="" onclick="selectLocation(this)">Hà Nội</li>
+                                <li class="" onclick="selectLocation(this)">Đồng Nai</li> -->
                             </ul>
                         </div>
                     </div>
@@ -119,26 +122,27 @@
                         });
 
                     function GetKhuVucData(cityCode, cityName) {
-                        fetch('https://provinces.open-api.vn/api/?depth=2')
+                        var url = `https://localhost:7034/api/KhuVucs/GetKhuVucsByIdTP?id=${cityCode}`;
+                        console.log(url);
+                        fetch(url)
                             .then(response => response.json())
                             .then(data => {
-                                const cityChoose = data.find(city => city.code === cityCode);
-                                const districts = cityChoose.districts;
+                                console.log(data);
                                 const khuvucList = document.getElementById('khuvuc-list');
                                 khuvucList.innerHTML = '';
-                                districts.forEach(district => {
+                                data.forEach(district => {
                                     const listItem = document.createElement('li');
-                                    listItem.textContent = district.name;
+                                    listItem.textContent = district.tenKhuVuc;
                                     listItem.onclick = function () {
-                                        selectLocation(this, cityName, cityCode,);
+                                        selectLocation(this, cityName, district.idKhuVuc);
                                     };
                                     khuvucList.appendChild(listItem);
                                 });
                             })
                             .catch(error => {
-                                console.error('Lỗi khi gọi API danh sách quận/huyện: ', error);
+                                console.error(error);
                             });
-                    };
+                    }
                 </script>
                 <div class="filter-popup has-footer js-filter-popup js-filter-popup-price" data-popup-type="price">
                     <div class="filter-popup-header">
@@ -152,20 +156,20 @@
                                 <div class="price-input">
                                     <div class="field">
                                         <span>Min</span>
-                                        <input value="500000" type="number" class="input-min">
+                                        <input value="0" type="number" class="input-min">
                                     </div>
                                     <div class="separator">-</div>
                                     <div class="field">
                                         <span>Max</span>
-                                        <input value="1000000" type="number" class="input-max">
+                                        <input value="15000" type="number" class="input-max">
                                     </div>
                                 </div>
                                 <div class="slider">
                                     <div class="progress" id="progress"></div>
                                 </div>
                                 <div class="range-input">
-                                    <input type="range" class="range-min" id="range-min" min="500000" max="15000000" value="0">
-                                    <input type="range" class="range-max" id="range-max" min="500000" max="15000000" value="1000000">
+                                    <input type="range" class="range-min" id="range-min" min="0" max="15000" value="0">
+                                    <input type="range" class="range-max" id="range-max" min="0" max="15000" value="15000">
 
                                 </div>
                             </header>
@@ -186,10 +190,6 @@
                                 <li class="" onclick="selectDienTich(this)">Từ 20m - 30m</li>
                                 <li class="" onclick="selectDienTich(this)">Từ 30m - 70m</li>
                                 <li class="" onclick="selectDienTich(this)">Từ 70m - 90m</li>
-                                <li class="" onclick="selectDienTich(this)">Từ 90m - 150m</li>
-                                <li class="" onclick="selectDienTich(this)">Từ 150m - 250m</li>
-
-
                             </ul>
                         </div>
                     </div>
@@ -197,64 +197,57 @@
 
 
     </div>
-
     @*BODY*@
     <div class="title-header">
         <h2>Welcome to Home 180</h2>
         <p>Kênh thông tin cung cấp dịch vụ phòng trọ hàng đầu tại Việt nam</p>
     </div>
-    <div class="d-flex justify-content-center mb-3">
+   @* <div class="d-flex justify-content-center mb-3">
         <div class="card m-2" style="width:230px">
-            <a asp-action="TinTheoTinhThanh" asp-controller="ChuChoThue" asp-route-thanhpho="Thành phố Hồ Chí Minh">
-                <img class="card-img-top" src="~/img/TPHCM.jpg" alt="Card image" style="width:100%; height: 120px">
-                <div class="card-body">
-                    <h6 class="card-title">Thành phố Hồ Chí Minh</h6>
-                </div>
-            </a>
-        
+            <img class="card-img-top" src="~/img/TPHCM.jpg" alt="Card image" style="width:100%; height: 120px">
+            <div class="card-body">
+                <h6 class="card-title">Thành phố Hồ Chí Minh</h6>
+            </div>
         </div>
         <div class="card m-2" style="width:230px">
-            <a asp-action="TinTheoTinhThanh" asp-controller="ChuChoThue" asp-route-thanhpho="Thành phố Hà Nội">
             <img class="card-img-top" src="~/img/hanoi.jpg" alt="Card image" style="width:100%; height: 120px">
             <div class="card-body">
                 <h6 class="card-title">Thành phố Hà Nội</h6>
             </div>
-            </a>
         </div>
         <div class="card m-2" style="width:230px">
-            <a asp-action="TinTheoTinhThanh" asp-controller="ChuChoThue" asp-route-thanhpho="Thành phố Đà Nẵng">
             <img class="card-img-top" src="~/img/dn.jpg" alt="Card image" style="width:100%; height: 120px">
             <div class="card-body">
                 <h6 class="card-title">Thành phố Đà Nẵng</h6>
             </div>
-            </a>
         </div>
-    </div>
+    </div>*@
 
     <div class="row g-0">
         <div class="col-sm-8 m-2 rounded" style="border: 1px solid #dedede;">
             <div class="content-news">
                 <div class="header-news">
-                    <h5>Tin VIP nổi bật</h5>
+                    <h5>Tin nổi bật</h5>
                     <h6>6/190 bài đăng được hiển thị</h6>
                 </div>
                 <ul class="list-group list-unstyled">
                     @foreach (var item in Model)
                     {
-                        if (item.trangThaiTinDang && item.idDichVu == "DV37196")
+                        if (!item.trangThaiTinDang)
                         {
                             List<string> imgList = callTinDangPT.ListImages(item.idTinDang);
                             <li class="post-item" onclick="window.location.assign('/ChuChoThue/DetailTinDangPT/@item.idTinDang')" style="padding-bottom:10px">
                                 <div class="card text-black" style="max-width: 100%;">
                                     <div class="row g-0">
                                         <div class="col-md-4 scale-img">
-                                            <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">
+                                            @*  <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">*@
+                                            <!-- @*<img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">*@ -->
                                             <span class="images-number">@imgList.Count ảnh</span>
                                             <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
                                         </div>
                                         <div class="col-md-8">
                                             <div class="post-info">
-                                                <h5 class="post-title" style="color: #E13427;">
+                                                <h5 class="post-title" style="color: red;">
                                                     @Html.DisplayFor(modelItem => item.tieuDe)
                                                 </h5>
                                                 @{
@@ -273,186 +266,7 @@
                                                 <p class="card-text"><small class="text-muted">Lượt xem: @Html.DisplayFor(modelItem => item.luotTruyCap)</small></p>
                                                 <p class="card-footer">
                                                     <span class="name-author">
-                                                        <img src="@avt" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
                                                         @*<img src="@user.hinhAnh" class="img-fluid rounded-circle m-0" height="30px" width="30px" />*@
-                                                        @Html.DisplayFor(modelItem => item.nguoiLienHe)
-                                                    </span>@*
-                                                    <span class="btn-info-author">
-                                                        <button type="button" class="btn btn-info">@Html.DisplayFor(modelItem => item.sdtNguoiLienHe)</button>
-                                                        <button type="button" class="btn btn-outline-primary">Zalo</button>
-                                                    </span>*@
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        }
-                    }
-                </ul>
-            </div>
-
-            @*//*@
-            <div class="content-news">
-                <div class="header-news">
-                    <h5>Tin Vip 2</h5>
-                    <h6>6/190 bài đăng được hiển thị</h6>
-                </div>
-                <ul class="list-group list-unstyled">
-                    @foreach (var item in Model)
-                    {
-                        if (item.trangThaiTinDang && item.idDichVu == "DV29859" && item.soLuongPhong > 0)
-                        {
-                            List<string> imgList = callTinDangPT.ListImages(item.idTinDang);
-                            <li class="post-item" onclick="window.location.assign('/ChuChoThue/DetailTinDangPT/@item.idTinDang')" style="padding-bottom:10px">
-                                <div class="card text-black" style="max-width: 100%;">
-                                    <div class="row g-0">
-                                        <div class="col-md-4 scale-img">
-                                            <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">
-                                            <span class="images-number">@imgList.Count ảnh</span>
-                                            <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="post-info">
-                                                <h5 class="post-title" style="color: #ea2e9d;">
-                                                    @Html.DisplayFor(modelItem => item.tieuDe)
-                                                </h5>
-                                                @{
-                                                    var tienPhong = string.Format("{0:0,0 vnđ}", item.giaPhong);
-                                                }
-                                                <div class="price-home clearfix">
-                                                    <span class="post-price"> @tienPhong/tháng</span>
-                                                    <span class="post-acreage">@Html.DisplayFor(modelItem => item.dienTich)m²</span>
-                                                    <span class="post-location">
-                                                        @Html.DisplayFor(modelItem => item.diaChi)
-                                                    </span>
-                                                </div>
-                                                <p class="post-summary">
-                                                    @Html.DisplayFor(modelItem => item.moTa)
-                                                </p>
-                                                <p class="card-text"><small class="text-muted">Lượt xem: @Html.DisplayFor(modelItem => item.luotTruyCap)</small></p>
-                                                <p class="card-footer">
-                                                    <span class="name-author">
-                                                        <img src="@avt" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
-                                                        @Html.DisplayFor(modelItem => item.nguoiLienHe)
-                                                    </span>
-                                                    <span class="btn-info-author">
-                                                        <button type="button" class="btn btn-info">@Html.DisplayFor(modelItem => item.sdtNguoiLienHe)</button>
-                                                        <button type="button" class="btn btn-outline-primary">Zalo</button>
-                                                    </span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        }
-                    }
-                </ul>
-            </div>
-
-            @*//*@
-            <div class="content-news">
-                <div class="header-news">
-                    <h5>Tin Vip 1</h5>
-                    <h6>6/190 bài đăng được hiển thị</h6>
-                </div>
-                <ul class="list-group list-unstyled">
-                    @foreach (var item in Model)
-                    {
-                        if (item.trangThaiTinDang && item.idDichVu == "DV20001" && item.soLuongPhong > 0)
-                        {
-                            List<string> imgList = callTinDangPT.ListImages(item.idTinDang);
-                            <li class="post-item" onclick="window.location.assign('/ChuChoThue/DetailTinDangPT/@item.idTinDang')" style="padding-bottom:10px">
-                                <div class="card text-black" style="max-width: 100%;">
-                                    <div class="row g-0">
-                                        <div class="col-md-4 scale-img">
-                                            <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">
-                                            <span class="images-number">@imgList.Count ảnh</span>
-                                            <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="post-info">
-                                                <h5 class="post-title" style="color: #FF6600;">
-                                                    @Html.DisplayFor(modelItem => item.tieuDe)
-                                                </h5>
-                                                @{
-                                                    var tienPhong = string.Format("{0:0,0 vnđ}", item.giaPhong);
-                                                }
-                                                <div class="price-home clearfix">
-                                                    <span class="post-price"> @tienPhong/tháng</span>
-                                                    <span class="post-acreage">@Html.DisplayFor(modelItem => item.dienTich)m²</span>
-                                                    <span class="post-location">
-                                                        @Html.DisplayFor(modelItem => item.diaChi)
-                                                    </span>
-                                                </div>
-                                                <p class="post-summary">
-                                                    @Html.DisplayFor(modelItem => item.moTa)
-                                                </p>
-                                                <p class="card-text"><small class="text-muted">Lượt xem: @Html.DisplayFor(modelItem => item.luotTruyCap)</small></p>
-                                                <p class="card-footer">
-                                                    <span class="name-author">
-                                                        <img src="@avt" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
-                                                        @Html.DisplayFor(modelItem => item.nguoiLienHe)
-                                                    </span>
-                                                    <span class="btn-info-author">
-                                                        <button type="button" class="btn btn-info">@Html.DisplayFor(modelItem => item.sdtNguoiLienHe)</button>
-                                                        <button type="button" class="btn btn-outline-primary">Zalo</button>
-                                                    </span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        }
-                    }
-                </ul>
-            </div>
-
-
-            @*//*@
-            <div class="content-news">
-                <div class="header-news">
-                    <h5>Tin thường</h5>
-                    <h6>6/190 bài đăng được hiển thị</h6>
-                </div>
-                <ul class="list-group list-unstyled">
-                    @foreach (var item in Model)
-                    {
-                        if (item.trangThaiTinDang && item.idDichVu == "NODV" && item.soLuongPhong > 0)
-                        {
-                            List<string> imgList = callTinDangPT.ListImages(item.idTinDang);
-                            <li class="post-item" onclick="window.location.assign('/ChuChoThue/DetailTinDangPT/@item.idTinDang')" style="padding-bottom:10px">
-                                <div class="card text-black" style="max-width: 100%;">
-                                    <div class="row g-0">
-                                        <div class="col-md-4 scale-img">
-                                            <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">
-                                            <span class="images-number">@imgList.Count ảnh</span>
-                                            <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="post-info">
-                                                <h5 class="post-title" style="color: #055699;">
-                                                    @Html.DisplayFor(modelItem => item.tieuDe)
-                                                </h5>
-                                                @{
-                                                    var tienPhong = string.Format("{0:0,0 vnđ}", item.giaPhong);
-                                                }
-                                                <div class="price-home clearfix">
-                                                    <span class="post-price"> @tienPhong/tháng</span>
-                                                    <span class="post-acreage">@Html.DisplayFor(modelItem => item.dienTich)m²</span>
-                                                    <span class="post-location">
-                                                        @Html.DisplayFor(modelItem => item.diaChi)
-                                                    </span>
-                                                </div>
-                                                <p class="post-summary">
-                                                    @Html.DisplayFor(modelItem => item.moTa)
-                                                </p>
-                                                <p class="card-text"><small class="text-muted">Lượt xem: @Html.DisplayFor(modelItem => item.luotTruyCap)</small></p>
-                                                <p class="card-footer">
-                                                    <span class="name-author">
-                                                        <img src="@avt" class="img-fluid rounded-circle m-0" height="30px" width="30px" />
                                                         @Html.DisplayFor(modelItem => item.nguoiLienHe)
                                                     </span>
                                                     <span class="btn-info-author">
@@ -594,11 +408,10 @@
 
     function selectLocation(selectedOption, cityName, districtCode) {
         var diaDiem = document.getElementById('diadiem');
-        var inputTinh = document.getElementById('inputTinh');
-        var inputHuyen = document.getElementById('inputHuyen');
-        inputTinh.value =cityName;
-        inputHuyen.value = selectedOption.textContent.trim();
-        diaDiem.innerHTML = selectedOption.textContent.trim() + ", " + cityName;
+        var inputDD = document.getElementById('inputDiaDiemDaChon');
+        inputDD.value = districtCode;
+        console.log("inputDD: " + inputDD.value)
+        diaDiem.innerHTML = cityName + " - " + selectedOption.textContent.trim();
         closePopup('khuvuc');
     }
 
@@ -617,8 +430,8 @@
         }
 
         dientichChon.innerHTML = `Từ ${min}m - ${max}m`;
-        var intputMin = document.getElementById('inputDienTichMin');
-        var intputMax = document.getElementById('inputDienTichMax');
+        var intputMin = document.getElementById('inputGiaMin');
+        var intputMax = document.getElementById('inputGiaMax');
         intputMin.value = min;
         intputMax.value = max;
         console.log("inputDienTic" + intputMin.value + " " + intputMax.value)
@@ -633,7 +446,7 @@
     //console.log(rangeInput)
     console.log(progress)
 
-    let priceGap = 500000;
+    let priceGap = 1000;
 
     rangeInput.forEach(input => {
         input.addEventListener("input", e => {
@@ -663,7 +476,7 @@
             let minVal = parseInt(priceInput[0].value),
                 maxVal = parseInt(priceInput[1].value);
 
-            if ((maxVal - minVal >= priceGap) && maxVal <= 15000000) {
+            if ((maxVal - minVal >= priceGap) && maxVal <= 15000) {
                 console.log(e.target.className + "check")
                 if (e.target.className === "input-min") {
                     rangeInput[0].value = minVal;
@@ -686,8 +499,8 @@
         var giachon = document.getElementById('giachon');
         giachon.innerHTML = minInput + " - " + maxInput
 
-        var intputMin = document.getElementById('inputGiaMin');
-        var intputMax = document.getElementById('inputGiaMax');
+        var intputMin = document.getElementById('inputDienTichMin');
+        var intputMax = document.getElementById('inputDienTichMax');
         intputMin.value = minInput;
         intputMax.value = maxInput;
         console.log("Gia" + intputMin.value + " " + intputMax.value)

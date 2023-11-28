@@ -1,0 +1,187 @@
+﻿@model Client_QuanLythueTro.Models.TinDang
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "CreateTinDang";
+    Layout = "~/Views/NguoiThue/LayoutMain/LayoutMainNguoiThue.cshtml";
+    ViewBag.title = "Thêm tin";
+    ViewBag.qltd = "active";
+    var userJson = Context.Session.GetString("user");
+    Users user = null;
+    if (userJson != null)
+    {
+        user = JsonConvert.DeserializeObject<Users>(userJson);
+        
+    }
+}
+<link href="~/css/uploadimg.css" rel="stylesheet" />
+<div class="container">
+    <div class="tile" id="printMe">
+        <h5 style="padding:10px">Địa chỉ cho thuê</h5>
+        <div class=" row">
+            <div class="col-sm-8">
+            <form asp-action="CreateTinDang" enctype="multipart/form-data">
+                   @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.idTinDang)
+                    @Html.HiddenFor(model => model.ngayBatDau)
+                    @Html.HiddenFor(model => model.ngayKetThuc)
+                    @Html.HiddenFor(model => model.ngayTaoTin)
+                    @Html.HiddenFor(model => model.idDichVu)
+                    @Html.HiddenFor(model => model.trangThaiTinDang)
+                    <div class="row" style="padding:10px">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Chọn tỉnh thành:</label>
+                                    <select name="" id="province" class="form-control" placeholder="Chọn tỉnh thành"></select>
+                                </div>
+                                <div class="col">
+                                    <label>Chọn quận/huyện:</label>
+                                    <select name="" id="district" class="form-control" placeholder="Chọn quận/huyện">
+                                        <option value="">chọn quận</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label>Chọn phường/xã:</label>
+                                    <select name="" id="ward" class="form-select" placeholder="Chọn phường/xã">
+                                        <option value="">chọn phường</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-3 mb-5">
+                                <div class="col-3">
+                                    <label>Nhập tên đường:</label>
+                                    <input type="text" class="form-control" placeholder="Nhập tên đường" name="tenDuong" id="street" required>
+                                </div>
+                                <div class="col-2">
+                                    <label>Số nhà:</label>
+                                    <input type="text" class="form-control" placeholder="Nhập số nhà" name="soNha" id="number" required>
+                                </div>
+                                <div class="col-7">
+                                    <label>Địa chỉ chính xác:</label>
+                                    <select class="form-select" asp-for="diaChi" required>
+                                        <option id="result" selected></option>
+                                    </select>
+                                    <span asp-validation-for="diaChi" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <h5 style="padding:10px">Thông tin cụ thể</h5>
+                        <hr />
+                        <div class="form-group col-sm-12">
+                            <b>Loại tin</b>
+                            <select class="form-control" asp-for="loaiTin" id="loaiTin" readonly>
+                                <option selected="selected">Tìm người ở ghép</option>
+                            </select>
+                            <span asp-validation-for="loaiTin" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <b>Đối tượng cho thuê</b>
+                            <input asp-for="doiTuongChoThue" id="doiTuongChoThue" class="form-control" required />
+                            <span asp-validation-for="doiTuongChoThue" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <b>Tiêu đề</b>
+                            <input asp-for="tieuDe" id="tieuDe" class="form-control" required />
+                            <span asp-validation-for="tieuDe" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <b>Mô tả</b>
+                            <textarea asp-for="moTa" id="moTa" class="form-control" rows="9" cols="70"></textarea>
+                            <span asp-validation-for="moTa" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>Số lượng phòng</b>
+                            <input asp-for="soLuongPhong" id="soLuongPhong" class="form-control" required min="1" value="1" max="30" />
+                            <span asp-validation-for="soLuongPhong" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>Diện tích m<sup>2</sup></b>
+                            <input asp-for="dienTich" id="dienTich" class="form-control" required type="number" min="0" value="10" />
+                            <span asp-validation-for="dienTich" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <b>Giá phòng (/tháng)</b>
+                            <input asp-for="giaPhong" id="giaPhong" class="form-control" required type="number" min="0" value="1000000" max="15000000" />
+                            <span asp-validation-for="giaPhong" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>Tiền điện (/kWh)</b>
+                            <input asp-for="tienDien" id="tienDien" class="form-control" required min="0" type="number" value="3000" />
+                            <span asp-validation-for="tienDien" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>Tiền nước (/người)</b>
+                            <input asp-for="tienNuoc" id="tienNuoc" class="form-control" required min="0" type="number"  value="100000"/>
+                            <span asp-validation-for="tienNuoc" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <b>Tiền dịch vụ</b>
+                            <input asp-for="tienDichVu" id="tienDichVu" class="form-control" required min="0" type="number" value="100000" />
+                            <span asp-validation-for="tienDichVu" class="text-danger"></span>
+                        </div>
+                        <h5 style="padding:10px">Thông tin liên hệ</h5>
+                        <hr />
+                        <div class="form-group col-sm-12">
+                            <b>Người liên hệ</b>
+                            <input asp-for="nguoiLienHe" id="nguoiLienHe" class="form-control" required />
+                            <span asp-validation-for="nguoiLienHe" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <b>SĐT liên hệ</b>
+                            <input asp-for="sdtNguoiLienHe" id="sdtNguoiLienHe" class="form-control" required min="10" max="10" />
+                            <span asp-validation-for="sdtNguoiLienHe" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-12">
+                        <h3>Chọn hình</h3>
+                            <div id="imageUploadForm">
+                                <div class="input-div">
+                                    <input type="file" class="listimg" id="listimg" name="listimg" onchange="countImage()" multiple accept="image/png, image/jpeg, image/jpg">
+                                </div>
+                                <div id="saved-form">
+                                    <div class="saved-div"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <input asp-for="idUser" id="idUser" class="form-control" value="@user.idUser" style="visibility:hidden" />
+                        <div class="form-group">
+                            <input type="submit" value="Thêm" class="btn btn-success btn-sm" />
+                        </div>
+
+                    </div>
+                    </form>
+            </div>
+            <div class="col-sm-4">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.521571286021!2d106.68087777451706!3d10.771307259289186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f23cbaeb32d%3A0x3d32b187a53c6cf8!2zMzk5IE5ndXnhu4VuIMSQw6xuaCBDaGnhu4N1LCBQaMaw4budbmcgNSwgUXXhuq1uIDMsIFRow6BuaCBwaOG7kSBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1698851672393!5m2!1svi!2s" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <a asp-controller="NguoiThue" asp-action="QuanLyTinDang" asp-route-idUser="@user.idUser" class="btn btn-warning btn-sm">Back to List</a>
+    </div>
+</div>
+
+<script src="~/js/uploadmultiimg.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="~/js/map/mapapi.js"></script>
+
+
+
+<script>
+    var input = document.querySelector(".input-div input");
+    function countImage() {
+        const files = input.files;
+        console.log("count" + files.length)
+        if (files.length < 2) {
+            alert("Khong du hinh");
+        }
+    }
+    console.log("demo")
+
+   
+
+</script>
+

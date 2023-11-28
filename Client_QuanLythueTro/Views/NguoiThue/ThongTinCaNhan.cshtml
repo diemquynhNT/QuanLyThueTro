@@ -1,0 +1,204 @@
+﻿@model Client_QuanLythueTro.Models.Users
+
+@{
+    ViewData["Title"] = "ThongTinCaNhan";
+    Layout = "~/Views/NguoiThue/LayoutMain/LayoutMainNguoiThue.cshtml";
+    ViewBag.tincanhan="active";
+    ViewBag.title = "Thông tin cá nhân";
+
+}
+<h4>THÔNG TIN KHÁCH HÀNG</h4>
+@{
+    var checkMessage = TempData["thongbao"];
+    if (checkMessage == "thanhcong")
+    {
+        <script>
+            swal("Yêu cầu thành công", "Đã cập nhật thành công !!! ", "success")
+        </script>
+
+    }
+}
+<div class="container" style="margin:10px;30px">
+        <div class="row">
+            <div class="col-sm-8">
+                <form asp-action="ThongTinCaNhan" >
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        @Html.HiddenFor(model => model.idUser)
+                        @Html.HiddenFor(model => model.ngayThamGia)
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <b>Mã </b>
+                        <input asp-for="idUser" class="form-control" readonly id="idUser" />
+                            <span asp-validation-for="hoTen" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Loại sử dụng </b>
+                            <input asp-for="idChucVu" class="form-control" readonly />
+                            <span asp-validation-for="hoTen" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <b>Họ tên </b>
+                            <input asp-for="hoTen" class="form-control" required />
+                            <span asp-validation-for="hoTen" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Giới tính</b>
+                        <select class="form-control" asp-for="gioiTinh">
+                            
+                            <option>Nam</option>
+                            <option>Nữ</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        <b>Loại tài khoản</b>
+                        <input asp-for="idLoaiTK" class="form-control" readonly />
+                        <span asp-validation-for="idLoaiTK" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Email</b>
+                        <input asp-for="emailUser" class="form-control" required />
+                        <span asp-validation-for="emailUser" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>SDT</b>
+                        <input asp-for="sdtUsers" class="form-control" required />
+                        <span asp-validation-for="sdtUsers" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <b>Username</b>
+                        <input asp-for="userName" class="form-control" required />
+                        <span asp-validation-for="userName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row col-sm-12" style="margin:10px">
+                    <div class="form-group col-sm-3">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Cập nhật thông tin" class="btn btn-success btn-sm" id="btn-submit" />
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-warning btn-sm" title="Đổi mật khẩu" data-bs-toggle="modal" data-bs-target="#ChangePassModal" data-bs-toggle="tooltip">
+                            Đổi mật khẩu
+                        </a>
+                    </div>
+                </div>
+            </form>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group" style="text-align:center">
+                    <b>Hình ảnh</b>
+                    <div class="col-md-10">
+                       <img src="/img/user.png" width="80" height="80" />
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    <div class="modal fade" id="ChangePassModal" tabindex="-1" aria-labelledby="ChangePassModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Đổi mật khẩu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group password-container">
+                        <b>Nhập mật khẩu mới</b>
+                        <input id="newPass" name="newPass" class="form-control" type="password" required />
+                        <span class="show-btn"><i class="fas fa-eye" onclick="togglePassword('newPass')"></i></span>
+                    </div>
+                    <div class="form-group password-container">
+                        <b>Xác nhận mật khẩu</b>
+                        <input name="repass" id="repass" class="form-control" type="password" />
+                        <span class="show-btn"><i class="fas fa-eye" onclick="togglePassword('repass')"></i></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-sucess" onclick="ValidatePass()" id="btnSave">Cập nhật</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .password-container {
+            position: relative;
+        }
+
+        .show-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            cursor: pointer;
+        }
+
+    </style>
+
+</div>
+
+<script>
+    function togglePassword(type) {
+        var passField = document.getElementById(type);
+        if (passField.type === "password") {
+            passField.type = "text";
+        } else {
+            passField.type = "password";
+        }
+    }
+    function ValidatePass() {
+        var p1 = document.getElementById('newPass').value;
+        var p2 = document.getElementById('repass').value;
+        console.log("p" + p1 + " " + p2);
+        var url = `https://localhost:7034/api/Users/ValidatePass?pass=${p1}&repass=${p2}`;
+        fetch(url)
+            .then(function (response) {
+                if (response.ok) {
+                    return response.json();
+                }
+            })
+            .then(function (data) {
+                console.log("data", data);
+                if (data === true) {
+                    changePass(p1)
+                } else {
+                    swal("Lỗi !!! ", "Mật khẩu chưa phù hợp  !!! ", "error")
+                }
+            })
+            .catch(function (error) {
+                console.error("Error:", error);
+            });
+    }
+    function changePass(passNew) {
+        var idUser = document.getElementById('idUser').value;
+        console.log(passNew);
+        var url = `https://localhost:7034/api/Users/ChangePass`;
+        console.log(url);
+        const formData = new FormData();
+        formData.append('id', idUser);
+        formData.append('pass', passNew);
+        const options = {
+            method: "PUT",
+            body: formData
+        };
+        try {
+            fetch(url, options)
+                .then(response => {
+                    if (response.ok) {
+                        swal("Yêu cầu thành công", "Đã đổi mật khẩu!", "success").then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        swal("Lỗi !!!", "Không thể đổi mật khẩu!", "error");
+                    }
+                })
+                .catch(error => {
+                    console.error("Lỗi:", error);
+                });
+        } catch (error) {
+            console.error("Lỗi:", error);
+        }
+    }
+</script>

@@ -1,0 +1,195 @@
+﻿@model Client_QuanLythueTro.Models.LichXemPhong
+
+@{
+    ViewData["Title"] = "DetailLichXem";
+    Layout = "~/Views/NguoiThue/LayoutMain/LayoutMainNguoiThue.cshtml";
+    ViewBag.title = "Chi tiết lịch xem";
+    ViewBag.qltd = "active";
+    string trangThai = "Chưa duyệt";
+    if (Model.trangThai)
+        trangThai = "Đã duyệt";
+}
+
+<h3>Thông tin lịch xem phòng</h3>
+<hr />
+<div class="container">
+    <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-sm-6">
+                <b>Mã lịch</b>
+                 <input asp-for="idLichXem" id="idLichXem" class="form-control" readonly />
+                <span asp-validation-for="idLichXem" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <b>Mã tin đăng</b>
+                <input asp-for="idTinDang" class="form-control" readonly />
+                <span asp-validation-for="idTinDang" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <b>Ngày đến xem</b>
+            <input asp-for="ngayXem" class="form-control" id="ngayXem" type="datetime-local" readonly />
+                <span asp-validation-for="ngayXem" class="text-danger"></span>
+            </div>
+            <div class="form-group col-sm-6">
+                <b>Trạng thái</b>
+            <input class="form-control" value="@trangThai" readonly />
+                <span asp-validation-for="ngayXem" class="text-danger"></span>
+            </div>
+            <div class="form-group col-sm-6">
+                <b>Thông tin </b>
+                <input asp-for="nguoiXem" class="form-control" readonly />
+                <span asp-validation-for="nguoiXem" class="text-danger"></span>
+            </div>
+            <div class="form-group col-sm-6">
+                <b>Số điện thoại liên lạc</b>
+                <input asp-for="sdtNguoiXem" class="form-control" readonly />
+                <span asp-validation-for="sdtNguoiXem" class="text-danger"></span>
+            </div>
+            <div class="form-group col-sm-12">
+                <b>Lý do hủy (nếu có)</b>
+                   <textarea asp-for="LyDo" class="form-control" rows="9" cols="70" readonly>@Model.LyDo</textarea>
+                 <span asp-validation-for="LyDo" class="text-danger"></span>
+            </div>
+    </div>
+    <hr />
+    <div class="col-sm-12" style="margin:10px;0">
+        <div class="row">
+            <div class="col-sm-2">
+                @if (!Model.trangThai)
+                {
+                        <a class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalDuyetTin-@Model.idLichXem" data-bs-toggle="tooltip" title="Xác nhận">
+                            Xác nhận
+                        </a>
+                }
+                else
+                {
+                        <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalHuy-@Model.idLichXem" data-bs-toggle="tooltip" title="Hủy">
+                            Hủy lịch
+                        </a>
+                }
+            </div>
+            <div class="col-sm-4">
+                <a asp-action="QuanLyLichXemPhong" asp-controller="NguoiThue" asp-route-idTin="@Model.idTinDang" class="btn btn-warning btn-sm">Back to List</a>
+            </div>
+        </div>
+</div>
+</div>
+<div class="modal fade" id="modalHuy-@Model.idLichXem" tabindex="-1" aria-labelledby="modalHuy-@Model.idLichXem" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">XÁC NHẬN HỦY LỊCH XEM TIN </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <span>Xác nhận hủy lịch xem của khách <b>@Model.nguoiXem </b>-<b>@Model.sdtNguoiXem</b>! ?</span>
+                    <hr />
+                    <div class="form-group col-sm-12">
+                        <b>Lý do :</b>
+                        <textarea id="lydoHuyLich" class="form-control" rows="9" cols="70" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" onclick="huyLichXemPhong()">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="modal fade" id="modalDuyetTin-@Model.idLichXem" tabindex="-1" aria-labelledby="modalDuyetTin-@Model.idLichXem" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">XÁC NHẬN LỊCH XEM TIN </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <span>Xác nhận lịch xem của khách <b>@Model.nguoiXem </b>-<b>@Model.sdtNguoiXem</b>! ?</span>
+                <input id="nullLyDo" value="khongco" style="visibility:hidden">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" onclick="DuyeLich()">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+                      
+
+<script>
+    var idLX = document.getElementById("idLichXem").value;
+    function DuyeLich() {
+        var res = document.getElementById('nullLyDo').value;
+        console.log(res);
+        var url = `https://localhost:7034/api/LichXemPhongs/DuyetLich/`+idLX;
+        fetch(url, {
+            method: "PUT"
+        })
+            .then(function (response) {
+                return response.blob();
+            })
+            .then(function (data) {
+                swal("Yêu cầu thành công", "Đã xác nhận lịch xem phòng !!! ", "success")
+                    .then((value) => {
+                        location.reload();
+                    });
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+                alert("loi")
+            });
+    }
+    function huyLichXemPhong() {
+        let today = new Date();
+        console.log(today);
+        var ngayDat = document.getElementById("ngayXem").value;
+        let dateDate = new Date(ngayDat);
+        var timeDiff = dateDate.getTime() - today.getTime();
+        var soNgayChenhLech = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        console.log(soNgayChenhLech);
+        if (soNgayChenhLech <= 1) {
+            swal("Thông báo", "Không thể hủy lịch vì sát ngày đặt !!! ", "error")
+        }else{
+            CallAPIHuy();
+        }
+    }
+    function CallAPIHuy() {
+        var lydoHuy = document.getElementById('lydoHuyLich').value;
+        var url = "https://localhost:7034/api/LichXemPhongs/HuyLich/" + idLX;
+        var data = new URLSearchParams();
+        data.append('lydo', lydoHuy);
+        data.append('id', idLX);
+
+        fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: data
+        })
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(function (data) {
+                swal("Yêu cầu thành công", "Đã xác nhận hủy lịch xem phòng !!! ", "success")
+                    .then((value) => {
+                        location.reload();
+                    });
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+                alert("Có lỗi xảy ra khi gửi yêu cầu");
+            });
+    }
+
+
+
+   
+
+</script>

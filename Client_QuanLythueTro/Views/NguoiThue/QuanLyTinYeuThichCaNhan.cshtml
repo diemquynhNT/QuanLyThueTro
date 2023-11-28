@@ -1,0 +1,151 @@
+﻿@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "QuanLyTinYeuThichCaNhan";
+    Layout = "~/Views/NguoiThue/LayoutMain/LayoutMainNguoiThue.cshtml";
+    ViewBag.tinyeuthich="active";
+    ViewBag.title = "Quản lsy danh sách tin yêu thích";
+    var userJson = Context.Session.GetString("user");
+    Users user = null;
+    if (userJson != null)
+    {
+        user = JsonConvert.DeserializeObject<Users>(userJson);
+    }
+}
+<h3>Quản lý tin yêu thích cá nhân</h3>
+<hr />
+<div class="d-none d-md-block">
+    <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+        <div class="row" id="printMe">
+            <div class="col-sm-12  table-responsive">
+                <table class="table table_post_listing table-bordered _table-hover" cellpadding="0" cellspacing="0" border="0" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+                    <thead>
+                        <tr>
+                            <th>
+                               Mã tin
+                            </th>
+                            <th style="width:150px">
+                               Tiêu Đề
+                            </th>
+                            <th style="width:100px">
+                               Loại tin
+                            </th>
+                            <th>
+                               Ngày bắt đầu
+                            </th>
+                            <th>
+                               Ngày kết thúc
+                            </th>
+                            <th>
+                                Số điện thoại
+                            </th>
+                            <th>
+                               Người liên hệ
+                            </th>
+                            <th>
+                                Trạng thái
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model) {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.idTinDang)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tieuDe)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.loaiTin)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ngayBatDau)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ngayKetThuc)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.sdtNguoiLienHe)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.nguoiLienHe)
+                                </td>
+                                @if(item.trangThaiTinDang)
+                                {
+                                    <td>
+                                        <span class="badge bg-success">Còn đăng</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <span class="badge rounded-pill bg-danger">Hết hạn</span>
+                                    </td>
+                                }
+                                <td style="color:black">
+                                    @if (item.trangThaiTinDang)
+                                    {
+                                        <a class="btn btn-outline-dark btn-sm" asp-controller="ChuChoThue" asp-action="DetailTinDangPT" asp-route-idTin="@item.idTinDang">
+                                            <i class='bx bx-calendar'></i>
+                                        </a>
+                                    }
+                                    <a class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@item.idTinDang" data-bs-toggle="tooltip" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                    <div class="modal fade" id="modal-@item.idTinDang" tabindex="-1" aria-labelledby="modal-@item.idTinDang" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">XÁC NHẬN XÓA TIN</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                    <div class="modal-body">
+                                                        Xác nhận xóa tin đăng @item.idTinDang khỏi danh sách yêu thích !?
+                                                        <input id="idTin" value="@item.idTinDang" style="visibility:hidden">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-danger" onclick="DeleteTinYeuThich()">Xóa</button>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </tr>
+                    }
+                        </tbody>
+                    </table>
+                    </div>
+        </div>
+    </div>
+</div>
+<input id="idUser" value="@user.idUser" style="visibility:hidden">
+<script>
+    function DeleteTinYeuThich() {
+        var idtin = document.getElementById("idTin").value;
+        var idUsers = document.getElementById("idUser").value;
+        console.log(idtin+" "+idUsers)
+        url = `https://localhost:7034/api/TinYeuThiches/DeleteTinYeuThich?idTin=${idtin}&idUser=${idUsers}`;
+        fetch(url, {
+            method: "DELETE"
+        })
+            .then(function (response) {
+                return response.blob();
+            })
+            .then(function (data) {
+                swal("Yêu cầu thành công", "Đã xóa tin khỏi danh sách yêu thích !!! ", "success")
+                    .then((value) => {
+                        location.reload();
+                    });
+
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+                alert("loi")
+            });
+    }
+
+</script>
+
