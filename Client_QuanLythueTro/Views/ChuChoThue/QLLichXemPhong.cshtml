@@ -1,8 +1,12 @@
 ﻿@model IEnumerable<Client_QuanLythueTro.Models.LichXemPhong>
+@using Client_QuanLythueTro.APIGateWay
 @{
     ViewData["Title"] = "QLLichXemPhong";
     Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
+    TinDang_PhongTro_GateWay _callapi = new TinDang_PhongTro_GateWay();
 }
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.all.min.js"></script>
 
 @{
     // alert includ icons: question, info, success, error, warning
@@ -19,13 +23,13 @@
         </script>
 
     }
-    if (checkMessage == "failed")
+    if (checkMessage == "editsuccessful")
     {
         <script>
             Swal.fire({
-                icon: 'error',
-                title: 'Đã có lỗi xảy ra',
-                text: 'Chỉ được xóa lịch xem trước 24h tính từ ngày xem!'
+                icon: 'success',
+                title: 'Thành công',
+                text: 'Lịch xem phòng đã lưu thành công!'
             })
         </script>
 
@@ -62,37 +66,18 @@
     <div class="col-sm-5">
         <h3>Lịch xem phòng</h3>
     </div>
-    <div class="col-sm-2">
+    @*<div class="col-sm-2">
         <a type="button" class="btn btn-primary" href="/ChuChoThue/CreateLichXem"><i class='bx bx-plus'></i> Tạo lịch xem mới</a>
-    </div>
+    </div>*@
 </div>
 <hr />
-@*@*Tìm kiếm lịch xem phòng theo ngày (mặc định today)
-<div>
-    <form asp-action="CreateTinDangPT" method="post" enctype="multipart/form-data">
-        <div class="form-group">
-            <div class="row mt-3 mb-5">
-                <div class="col-3">
-                    <label class="form-label">Chọn ngày:</label>
-                    <input class="form-control text-box single-line col-md-12" @*asp-for="" data-val="true" data-val-date="The field NgayXem must be a date." type="datetime-local" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:00")" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:00")" required>
-                </div>
-                <div class="col-2">
-                    <label class="form-label"></label>
-                    <input id="" type="submit" value="Tìm kiếm" class="btn btn-outline-primary form-control" />
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-*@
 <div class="row">
     <div class="col-sm-12 table-responsive">
         <table id="example" class="table table-striped" style="width:100%">
             <thead>
                 <tr>
                     <th>STT</th>
-                    <th>Mã Lịch xem</th>
-                    <th>Mã tin đăng</th>
+                    <th>Tin đăng</th>
                     <th>Người xem</th>
                     <th>SĐT</th>
                     <th>Ngày xem</th>
@@ -109,8 +94,20 @@
                     stt = stt + 1;
                     <tr>
                         <td>@Html.DisplayFor(modelItem => stt)</td>
-                        <td>@Html.DisplayFor(modelItem => item.idLichXem)</td>
-                        <td>@Html.DisplayFor(modelItem => item.idTinDang)</td>
+                        
+                        <td>
+                            @{
+                                if (item.idTinDang != null)
+                                {
+                                    var tinDang = _callapi.GetTinDang(item.idTinDang);
+                                    <span>@tinDang.tieuDe</span>
+                                }
+                                else
+                                {
+                                    <span>Lịch xem không có tiêu đề</span>
+                                }
+                            }
+                        </td>
                         <td>@Html.DisplayFor(modelItem => item.nguoiXem)</td>
                         <td>@Html.DisplayFor(modelItem => item.sdtNguoiXem)</td>
                         <td>@Html.DisplayFor(modelItem => item.ngayXem)</td>
@@ -138,8 +135,7 @@
             <tfoot>
                 <tr>
                     <th>STT</th>
-                    <th>Mã Lịch xem</th>
-                    <th>Mã tin đăng</th>
+                    <th>Tin đăng</th>
                     <th>Người xem</th>
                     <th>SĐT</th>
                     <th>Ngày xem</th>

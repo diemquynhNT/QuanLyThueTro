@@ -1,0 +1,513 @@
+﻿@model IEnumerable<Client_QuanLythueTro.Models.DichVuDangTin>
+@{
+    ViewData["Title"] = "BangGiaDichVu";
+    Layout = "~/Views/ChuChoThue/Layout/_LayoutChuChoThue.cshtml";
+    ViewBag.services = "active";
+    ViewBag.Name = "Bảng giá dịch vụ";
+}
+
+<style>
+    .section {
+        margin-bottom: 20px;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #dedede;
+        border-radius: 8px;
+    }
+
+    .page_bang_gia_dich_vu .banner_fixed,
+    .page_bang_gia_dich_vu .section-whyus,
+    .page_bang_gia_dich_vu .section-support {
+        display: none !important;
+    }
+
+    .table-pricing {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+    }
+
+        .table-pricing th,
+        .table-pricing td {
+            padding: 10px 15px;
+            border-left: 10px solid #fff;
+            border-right: 10px solid #fff;
+            border-bottom: 1px solid #eee;
+            background-color: #f9f9f9;
+            text-align: left;
+            width: 12.5%;
+            vertical-align: middle;
+        }
+
+        .table-pricing p {
+            margin: 5px 0;
+        }
+
+        .table-pricing .price-day {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .table-pricing .price-week {
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .table-pricing .price-month {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+    .page_bang_gia_dich_vu {
+        background-color: #fff;
+    }
+
+        .page_bang_gia_dich_vu .vip-demo {
+            margin: 0 auto 70px;
+            font-size: 1.2rem;
+            max-width: 700px;
+        }
+
+            .page_bang_gia_dich_vu .vip-demo .vip-demo-left {
+                padding-top: 10px;
+            }
+
+            .page_bang_gia_dich_vu .vip-demo .vip-demo-right {
+                padding-top: 10px;
+            }
+
+            .page_bang_gia_dich_vu .vip-demo .section-title {
+                margin-bottom: 15px;
+            }
+
+            .page_bang_gia_dich_vu .vip-demo img {
+                display: block;
+                margin: 0 auto;
+                padding: 10px;
+                box-shadow: 0 0 30px 10px rgb(0 0 0 / 3%);
+            }
+
+        .page_bang_gia_dich_vu .star {
+            float: none;
+            display: block;
+            background-size: 18px 18px;
+        }
+
+            .page_bang_gia_dich_vu .star.star-5 {
+                width: 90px;
+                height: 18px;
+            }
+
+            .page_bang_gia_dich_vu .star.star-4 {
+                width: 72px;
+                height: 18px;
+            }
+
+            .page_bang_gia_dich_vu .star.star-3 {
+                width: 54px;
+                height: 18px;
+            }
+
+            .page_bang_gia_dich_vu .star.star-2 {
+                width: 36px;
+                height: 18px;
+            }
+
+            .page_bang_gia_dich_vu .star.star-1 {
+                width: 18px;
+                height: 18px;
+            }
+
+    .col-md-3 {
+        -ms-flex: 0 0 25%;
+        flex: 0 0 25%;
+        max-width: 25%;
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+
+    .addfund_method_list .method_item {
+        box-shadow: 0 0 30px 10px rgb(0 0 0 / 3%);
+        background-color: #fff;
+        border-radius: 7px;
+        padding: 20px;
+    }
+
+    .addfund_method_list .method_item_icon img {
+        max-width: 160px;
+        max-height: 60px;
+    }
+
+    .addfund_method_list .method_item .method_item_name {
+        text-align: center;
+        padding: 10px 0px;
+        border-top: 0;
+        font-weight: bold;
+    }
+
+    .addfund_method_list .method_item > a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+        height: 120px;
+        text-align: center;
+        color: #000;
+        text-decoration: none;
+    }
+
+    .addfund_method_list .method_item .method_item_icon {
+        width: 100%;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 0;
+        padding: 10px;
+    }
+
+    img {
+        max-height: 100%;
+        border-radius: 3px;
+    }
+
+
+    .page_bang_gia_dich_vu .vip-demo .section-title {
+        margin-bottom: 15px;
+    }
+
+    .section .section-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 0;
+        padding: 0;
+    }
+
+    element.style {
+        padding: 50px 0;
+        border: none;
+        background-color: transparent;
+    }
+
+    .page_bang_gia_dich_vu .vip-demo .vip-demo-left {
+        padding-top: 10px;
+    }
+
+    .page_bang_gia_dich_vu .vip-demo {
+        margin: 0 auto 70px;
+        font-size: 1.2rem;
+        max-width: 700px;
+    }
+
+        .page_bang_gia_dich_vu .vip-demo img {
+            display: block;
+            margin: 0 auto;
+            padding: 10px;
+            box-shadow: 0 0 30px 10px rgb(0 0 0 / 3%);
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 3px;
+        }
+</style>
+
+<h1 class="page-h1" style="float: none; margin-top: 50px; margin-bottom: 30px; text-align: center;">Giới thiệu HOME180 </h1>
+
+
+<section class="section" style="padding: 20px; border: 0; box-shadow: 0 0 30px 10px rgb(0 0 0 / 3%);">
+    <div class="section-content" bis_skin_checked="1">
+        <p>ĐỪNG ĐỂ PHÒNG TRỐNG THÊM BẤT CỨ NGÀY NÀO!, đăng tin ngay tại HOME180 và tất cả các vấn đề sẽ được giải quyết một cách nhanh nhất.</p>
+        <p>ƯU ĐIỂM HOME180:</p>
+        <p>
+            <i style="color:green" class='bx bx-check'></i>
+            <strong>Top đầu google</strong> về từ khóa: cho thuê phòng trọ, thuê phòng trọ, phòng trọ hồ chí minh, phòng trọ hà nội, thuê nhà nguyên căn, cho thuê căn hộ, tìm người ở ghép…với lưu lượng truy cập (traffic) cao nhất trong lĩnh vực.
+        </p>
+        <i style="color:green" class='bx bx-check'></i>
+        HOME180 tự hào có lượng dữ liệu bài đăng lớn nhất trong lĩnh vực cho thuê phòng trọ với hơn
+        <strong>103.348</strong> tin trên hệ thống và tiếp tục tăng.</p>
+        <i style="color:green" class='bx bx-check'></i>
+        HOME180 tự hào có số lượng người dùng lớn nhất trong lĩnh vực cho thuê phòng trọ với hơn
+        <strong>300.000</strong> khách truy cập thường xuyên và hơn
+        <strong>2.500.000</strong> lượt pageview mỗi tháng.</p>
+        <i style="color:green" class='bx bx-check'></i>
+        HOME180 tự hào được sự tin tưởng sử dụng của hơn
+        <strong>116.998 khách hàng</strong> là chủ nhà, đại lý, môi giới đăng tin thường xuyên tại website.</p>
+        <i style="color:green" class='bx bx-check'></i>
+        <p>
+            HOME180 tự hào ghi nhận
+            <strong>88.879</strong>
+            giao dịch thành công khi sử dụng dịch vụ tại web, mức độ
+            <strong>hiệu quả đạt xấp xỉ 85% tổng tin đăng</strong>.
+        </p>
+    </div>
+</section>
+
+<section class="section" style="padding: 50px 0; border: none; background-color: transparent;">
+    <div class="section-header" bis_skin_checked="1">
+        <h3 class="section-title big" style="text-align: center; margin-bottom: 0;" bis_skin_checked="1">Bảng giá dịch vụ</h3>
+        <p style="margin-top: 0; margin-bottom: 30px; text-align: center;">Áp dụng từ ngày 19/01/2023</p>
+    </div>
+    <div class="section-content" bis_skin_checked="1">
+        <div style="max-width: 1100px; margin: 0 auto; text-align: center;" bis_skin_checked="1">
+            <p>HOME180 xin quý khách hàng thân thương được phép điều chỉnh giá dịch vụ.</p>
+            <p>VÌ - Giờ đây sau hơn 7 năm chúng tôi mong mỏi hơn sự đồng lòng, thấu hiểu từ phía khách hàng thân thương. Chúng tôi luôn mong muốn đem lại trải nghiệm tốt hơn, hoàn hảo hơn cho quý khách hàng trong suốt thời gian gắn bó. Chúng tôi quyết định điều chỉnh giá, để tồn tại và trên cả là phục vụ hết mình vì quý khách hàng đã, đang và sẽ đồng hành tại website.</p>
+        </div><table class="table table-pricing">
+            <thead>
+                <tr>
+                    <th style="background: #fff; border: 0;"></th>
+                    <th class="package_vip1" style="text-align:center; background-color:#E13427; color: #fff; vertical-align: middle;">
+                        Tin VIP 3
+                        <span class="star star-5"></span>
+                    </th>
+                    <th class="package_vip2" style="text-align:center; background-color:#ea2e9d; color: #fff; vertical-align: middle;">
+                        Tin VIP 2
+                        <span class="star star-4"></span>
+                    </th>
+                    <th class="package_vip3" style="text-align:center; background-color:#FF6600; color: #fff; vertical-align: middle;">
+                        Tin VIP 1
+                        <span class="star star-3"></span>
+                    </th>
+                    <th class="package_tinthuong" style="text-align:center; background-color:#055699; color: #fff; vertical-align: middle;">
+                        Tin thường
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="nowrap" style="vertical-align: top;"><strong>Ưu điểm</strong></td>
+                    <td style="vertical-align: top;">
+                        <p>- Lượt xem nhiều gấp <strong>15 lần</strong> so với tin thường</p>
+                        <p>- Tiếp cận <strong>rất nhiều</strong> khách hàng. </p>
+                        <p>
+                            - Xuất hiện <strong>đầu tiên</strong> ở mục tin nổi bật xuyên suốt khu vực chuyên mục đó.
+                        </p>
+                    </td>
+                    <td style="vertical-align: top;">
+                        <p>- Lượt xem nhiều gấp <strong>10 lần</strong> so với tin thường</p>
+                        <p>- Tiếp cận khách hàng <strong>rất tốt</strong>.</p>
+                        <p>- Xuất hiện <strong>sau VIP 1</strong> và <strong>trước VIP 3, tin thường</strong>.</p>
+                        <p>
+                            - Xuất hiện thêm ở mục tin nổi bật xuyên suốt khu vực chuyên mục đó.
+                        </p>
+                    </td>
+                    <td style="vertical-align: top;">
+                        <p>- Lượt xem nhiều gấp <strong>5 lần</strong> so với tin thường</p>
+                        <p>- Tiếp cận khách hàng <strong>tốt</strong>.</p>
+                        <p>- Xuất hiện <strong>sau VIP 2</strong> và <strong>trước tin thường</strong>.</p>
+                    </td>
+                    <td style="vertical-align: top;">
+                        <p>- Tiếp cận khách hàng <strong>khá tốt</strong>.</p>
+                        <p>- Xuất hiện <strong>sau các loại tin VIP</strong>.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="nowrap" style="vertical-align: top;"><strong>Phù hợp</strong></td>
+                    <td style="vertical-align: top;">
+                        <p>- Phù hợp khách hàng là công ty/cá nhân sở hữu hệ thống lớn có từ 15-20 căn phòng/nhà trở lên hoặc phòng trống quá lâu, thường xuyên đang cần <strong>cho thuê gấp</strong>.</p>
+                    </td>
+                    <td style="vertical-align: top;">
+                        <p>- Phù hợp khách hàng cá nhân/môi giới có 10-15 căn phòng/nhà đang trống thường xuyên, cần <strong>cho thuê nhanh nhất</strong>.</p>
+                    </td>
+                    <td style="vertical-align: top;">
+                        <p>- Phù hợp khách hàng cá nhân/môi giới có lượng căn trống thường xuyên, cần <strong>cho thuê nhanh hơn</strong>.</p>
+                    </td>
+                    <td style="vertical-align: top;">
+                        <p>- Phù hợp tất cả các loại hình tuy nhiên lượng tiếp cận <strong>khách hàng thấp hơn</strong> và <strong>cho thuê chậm hơn so</strong> với tin VIP.</p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="nowrap">
+                        <strong>Giá tháng (30 ngày)</strong>
+                        <span style="display: block; font-size: 0.8rem; color: #4caf50;">Rẻ hơn 10% so với giá ngày</span>
+                    </td>
+                    @if (Model.Count() == 0)
+                    {
+                    <tr>
+                        <td colspan="9" class="text-center"> Không có dữ liệu </td>
+                    </tr>
+                    }
+                    else
+                    {
+                        foreach (var item in Model)
+                        {
+                            <td style="text-align:center">
+                                <span class="price-month">@Html.DisplayFor(modelItem => item.giaCa)</span>
+                            </td>
+                        }
+                    }
+            </tr>
+            <tr>
+                <td class="nowrap" style="vertical-align: middle;">
+                    <strong>Màu sắc tiêu đề</strong>
+                </td>
+                <td style="text-align:center">
+                    <p>
+                        <span style="text-align:center; color:#E13427; font-weight: bold;">TIÊU ĐỀ MÀU ĐỎ, IN HOA</span>
+                    </p>
+                </td>
+                <td style="text-align:center">
+                    <p>
+                        <span style="text-align:center; color:#ea2e9d; font-weight: bold;">TIÊU ĐỀ MÀU HỒNG, IN HOA</span>
+                    </p>
+                </td>
+                <td style="text-align:center">
+                    <p>
+                        <span style="text-align:center; color:#FF6600; font-weight: bold;">TIÊU ĐỀ MÀU CAM, IN HOA</span>
+                    </p>
+                </td>
+                <td style="text-align:center">
+                    <p>
+                        <span style="text-align:center; color:#055699; font-weight: bold;">Tiêu đề màu mặc định, viết thường</span>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td class="nowrap" style="vertical-align: middle;">
+                    <strong>Hiển thị số điện thoại<br> ở trang danh sách</strong>
+                </td>
+                <td><p><i style="display:flex; justify-content:center" class='bx bx-check'></i></p></td>
+                <td><p><i style="display:flex; justify-content:center" class='bx bx-check'></i></p></td>
+                <td><p><i style="display:flex; justify-content:center" class='bx bx-x'></i></p></td>
+                <td><p><i style="display:flex; justify-content:center" class='bx bx-x'></i></p></td>
+            </tr>
+            <tr>
+                <td class="nowrap" style="vertical-align: middle;"><strong>Huy hiệu nổi bật</strong></td>
+                <td><p><i style="display:flex; justify-content:center" class='bx bx-check'></i></p></td>
+                <td><p><i style="display:flex; justify-content:center" class='bx bx-x'></i></p></td>
+                <td><p><i style="display:flex; justify-content:center" class='bx bx-x'></i></p></td>
+                <td><p><i style="display:flex; justify-content:center" class='bx bx-x'></i></p></td>
+            </tr>
+            <tr>
+                <td style="background: #fff; border-bottom: 1px;"></td>
+                <td style="text-align:center; vertical-align:middle; background: #fff; border-bottom: 2px;">
+                    <button class="btn btn-primary btn-block js-jump-to" data-jumpto="demo-vip-1">Xem demo</button>
+                </td>
+                <td style="text-align:center; vertical-align:middle; background: #fff; border-bottom: 0;">
+                    <button class="btn btn-primary btn-block js-jump-to" data-jumpto="demo-vip-2">Xem demo</button>
+                </td>
+                <td style="text-align:center; vertical-align:middle; background: #fff; border-bottom: 0;">
+                    <button class="btn btn-primary btn-block js-jump-to" data-jumpto="demo-vip-3">Xem demo</button>
+                </td>
+                <td style="text-align:center; vertical-align:middle; background: #fff; border-bottom: 0;">
+                    <button class="btn btn-primary btn-block js-jump-to" data-jumpto="demo-tinthuong">Xem demo</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+
+
+<section class="section" style="padding: 50px 0; border: none; background-color: transparent;">
+    <div class="section-header" bis_skin_checked="1">
+        <h2 class="section-title big" style="text-align: center; margin-bottom: 50px;" bis_skin_checked="1">Minh họa tin đăng</h2>
+    </div>
+    <div class="section-content" bis_skin_checked="1">
+        <div class="vip-demo clearfix" id="demo-vip-noibat" bis_skin_checked="1">
+            <div class="vip-demo-left" bis_skin_checked="1">
+                <div class="section-title" bis_skin_checked="1">
+                    Tin VIP 3 (Nổi bật nhất)
+                    <span class="star star-5"></span>
+                </div>
+                <p><span style="color:#E13427; font-weight: bold;">TIÊU ĐỀ IN HOA MÀU ĐỎ</span>, gắn biểu tượng 5 ngôi sao màu vàng và hiển thị to và nhiều hình hơn các tin khác. Nằm trên tất cả các tin khác, được hưởng nhiều ưu tiên và hiệu quả giao dịch cao nhất.</p><p>Đồng thời xuất hiện đầu tiên ở mục tin nổi bật xuyên suốt khu vực chuyên mục đó</p>
+            </div>
+            <img src="~/img/vip3.png" />
+        </div>
+        <div class="vip-demo clearfix" id="demo-vip-1" bis_skin_checked="1">
+            <div class="vip-demo-left" bis_skin_checked="1">
+                <div class="section-title" bis_skin_checked="1">
+                    Tin VIP 2 <span class="star star-4">
+                    </span>
+                </div>
+                <p>
+                    <span style="color:#ea2e9d; font-weight: bold;">TIÊU ĐỀ IN HOA MÀU HỒNG</span>, gắn biểu tượng 4 ngôi sao màu vàng ở tiêu đề tin đăng. Hiển thị sau tin VIP nổi bật, Tin VIP 1 và trên các tin khác.
+                </p>
+            </div>
+            <img src="~/img/vip2.png" />
+        </div>
+        <div class="vip-demo clearfix" id="demo-vip-2" bis_skin_checked="1">
+            <div class="vip-demo-left" bis_skin_checked="1">
+                <div class="section-title" bis_skin_checked="1">
+                    Tin VIP 1
+                    <span class="star star-3"></span>
+                </div>
+                <p><span style="color:#FF6600; font-weight: bold;">TIÊU ĐỀ IN HOA MÀU CAM</span>, gắn biểu tượng 3 ngôi sao màu vàng ở tiêu đề tin đăng. Hiển thị sau tin VIP nổi bật, Tin VIP 1, Tin VIP 2 và trên các tin khác.</p>
+            </div>
+            <img src="~/img/vip1.png" />
+        </div>
+        @*<div class="vip-demo clearfix" id="demo-vip-3" bis_skin_checked="1">
+        <div class="vip-demo-left" bis_skin_checked="1">
+        <div class="section-title" bis_skin_checked="1">
+        Tin thường
+        <span class="star star-2"></span>
+        </div>
+        <p>
+        <span style="color:#007BFF; font-weight: bold;">TIÊU ĐỀ IN HOA MÀU XANH</span>, gắn biểu tượng 2 ngôi sao màu vàng ở tiêu đề tin đăng. Hiển thị sau tin VIP nổi bật, Tin VIP 1, Tin VIP 2, Tin VIP 3 và trên các tin khác.
+        </p>
+        </div>
+        <img src="/images/demo-vip3.jpg">
+        </div>*@
+        <div class="vip-demo clearfix" id="demo-tinthuong" bis_skin_checked="1">
+            <div class="vip-demo-left" bis_skin_checked="1">
+                <div class="section-title" bis_skin_checked="1">Tin thường</div>
+                <p><span style="color:#055699;">Tiêu đề màu mặc định, viết thường</span>. Hiển thị sau các tin VIP.</p>
+            </div>
+            <img src="~/img/tinthuong.png" />
+        </div>
+    </div>
+</section>
+
+
+
+@* Thanh Toan *@
+<section class="section" style="padding: 0; border: 0; margin-bottom: 100px;">
+    <h3 class="section-title big" style="text-align: center; margin-bottom: 20px;" bis_skin_checked="1">Phương thức thanh toán</h3>
+    <div class="section-content" bis_skin_checked="1">
+        <div class="row addfund_method_list clearfix" bis_skin_checked="1">
+            <div class="col-md-3" style="margin-bottom: 25px;" bis_skin_checked="1">
+                <div class="method_item" bis_skin_checked="1">
+                    <div class="method_item_icon" bis_skin_checked="1">
+                        <img src="~/img/vnpay.png" alt="Nạp tiền bằng vnpay" title="Nạp tiền VNPay">
+                    </div>
+                    <div class="method_item_name" bis_skin_checked="1">VNPay</div>
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-bottom: 25px;" bis_skin_checked="1">
+                <div class="method_item" bis_skin_checked="1">
+                    <div class="method_item_icon" bis_skin_checked="1">
+                        <img src="~/img/momo.png" alt="Nạp tiền bằng MOMO" title="Nạp tiền bằng MOMO">
+                    </div>
+                    <div class="method_item_name" bis_skin_checked="1">MOMO</div>
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-bottom: 25px;" bis_skin_checked="1">
+                <div class="method_item" bis_skin_checked="1">
+                    <div class="method_item_icon" bis_skin_checked="1">
+                        <img src="~/img/paypal.png" alt="Nạp tiền bằng PayPal" title="Nạp tiền bằng PayPal">
+                    </div>
+                    <div class="method_item_name" bis_skin_checked="1">PayPal</div>
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-bottom: 25px;" bis_skin_checked="1">
+                <div class="method_item" bis_skin_checked="1">
+                    <div class="method_item_icon" bis_skin_checked="1">
+                        <img src="~/img/tienmat.png" alt="Nạp tiền mặt" title="Nạp tiền mặt">
+                    </div>
+                    <div class="method_item_name" bis_skin_checked="1">Tiền Mặt</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section" style="padding: 50px; border: 0; margin-bottom: 100px; box-shadow: 0 0 30px 10px rgb(0 0 0 / 3%);">
+    <h3 class="section-title big" style="text-align: center; margin-bottom: 20px;" bis_skin_checked="1">Liên hệ với chúng tôi</h3>
+    <div class="section-content" style="text-align: center;" bis_skin_checked="1">
+        <p>Địa chỉ: số 828 Sư Vạn Hạnh, Phường 13, Quận 10, thành phố Hồ Chí Minh</p>
+        <p>Hotline: 0123456789</p><p>Email: cskh.home180@gmail.com</p>
+    </div>
+</section>
+

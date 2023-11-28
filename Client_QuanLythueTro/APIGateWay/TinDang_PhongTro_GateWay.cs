@@ -30,9 +30,25 @@ namespace Client_QuanLythueTro.APIGateWay
             return tinDangPTList;
         }
 
+        public List<TinDang> ListTinDangPTByUser(string iduser)
+        {
+            _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri(baseAddress + "/GetByIdUser/" + iduser);
+            List<TinDang> tinDangPTList = new List<TinDang>();
+            HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                tinDangPTList = JsonConvert.DeserializeObject<List<TinDang>>(data);
+            }
+            return tinDangPTList;
+        }
+
         public TinDang GetTinDang(string id)
         {
             TinDang tinDang = new TinDang();
+            _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri(baseAddress + "/" + id);
             HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress).Result;
 
@@ -67,6 +83,48 @@ namespace Client_QuanLythueTro.APIGateWay
                 throw new Exception(ex.Message);
             }
             return tinDang;
+        }
+
+
+        public TinDang EditTinDang(string id, TinDang tinDang)
+        {
+            try
+            {
+                string data = JsonConvert.SerializeObject(tinDang);
+                StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+                _httpClient.BaseAddress = new Uri(baseAddress + "/" + id);
+                HttpResponseMessage response = _httpClient.PutAsync(_httpClient.BaseAddress, content).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return tinDang;
+        }
+
+        public void DeleteTinDang(string id)
+        {
+            try
+            {
+                _httpClient.BaseAddress = new Uri(baseAddress + "/" + id);
+                HttpResponseMessage response = _httpClient.DeleteAsync(_httpClient.BaseAddress).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    throw new Exception("Error Occured at the API Endpoint, Error Info. " + result);
+                }
+            }
+            catch
+            {
+                throw;
+            }
+            finally { }
+            return;
         }
 
         public void CreateImage(string idTinDang, IFormFileCollection files)

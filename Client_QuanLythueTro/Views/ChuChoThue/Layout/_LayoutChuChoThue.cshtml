@@ -48,13 +48,13 @@
                                 <a class="nav-link text-primary" href="~/Login/LoginCustomer"><i class='bx bx-user'></i> Đăng nhập</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-info" href="#"><i class='bx bxs-user-plus'></i> Đăng ký</a>
+                                <a class="nav-link text-info" href="~/Login/Register"><i class='bx bxs-user-plus'></i> Đăng ký</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-muted" onclick="alert('Vui lòng đăng nhập để xem được nội dung này!');" href="#"><i class='bx bx-heart'></i> Yêu thích</a>
                             </li>
                             <li class="nav-item">
-                                <a type="button" class="btn btn-danger" onclick="alert('Vui lòng đăng nhập để tạo tin đăng!');" href=""><i class='bx bx-plus'></i> Đăng tin mới</a>
+                                <a type="button" class="btn btn-danger" onclick="alert('Vui lòng đăng nhập để tạo tin đăng!');" href="#"><i class='bx bx-plus'></i> Đăng tin mới</a>
                             </li>
                         }
                         else
@@ -78,7 +78,7 @@
                                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink" style="z-index: 1030;">
                                     @if(user.idChucVu=="CT")
                                         {
-                                            <li><a class="dropdown-item" href="/ChuTro/">Quản lý tài khoản</a></li>
+                                            <li><a class="dropdown-item" href="~/ChuChoThue/QLTinDangPT/@user.idUser">Quản lý tài khoản</a></li>
                                         }
                                         else
                                         {
@@ -116,7 +116,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="menutab active" aria-current="page" href="~/ChuChoThue/IndexTinDangPT">Trang chủ</a>
+                        <a class="menutab @ViewBag.tc" aria-current="page" href="~/ChuChoThue/IndexTinDangPT">Trang chủ</a>
                     </li>
                     <li class="nav-item">
                         <a class="menutab" href="#">Cho thuê phòng trọ</a>
@@ -134,7 +134,7 @@
                         <a class="menutab" href="#">Tin tức</a>
                     </li>
                     <li class="nav-item">
-                        <a class="menutab" href="#">Bảng giá dịch vụ</a>
+                        <a class="menutab @ViewBag.services" href="~/ChuChoThue/BangGiaDichVu">Bảng giá dịch vụ</a>
                     </li>
                 </ul>
             </div>

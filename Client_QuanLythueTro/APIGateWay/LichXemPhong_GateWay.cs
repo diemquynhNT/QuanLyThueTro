@@ -45,6 +45,21 @@ namespace Client_QuanLythueTro.APIGateWay
             return lichXem;
         }
 
+        public List<LichXemPhong> GetLichXemByIdTinDang(string id)
+        {
+            _httpClient = new HttpClient();
+            List<LichXemPhong> lichXem = new List<LichXemPhong>();
+            _httpClient.BaseAddress = new Uri(baseAddress + "/GetByIdTinDang/" + id);
+            HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress).Result;
+
+            if (response.IsSuccessStatusCode && response!=null)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                lichXem = JsonConvert.DeserializeObject<List<LichXemPhong>>(data);
+            }
+            return lichXem;
+        }
+
         public LichXemPhong CreateLichXem(LichXemPhong lichXemPhong)
         {
             try

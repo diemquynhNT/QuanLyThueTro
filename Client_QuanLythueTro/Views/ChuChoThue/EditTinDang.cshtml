@@ -1,11 +1,13 @@
 ﻿@model Client_QuanLythueTro.Models.TinDang
 @using Newtonsoft.Json
 @using Microsoft.AspNetCore.Http
+@using Client_QuanLythueTro.APIGateWay;
 @{
-    ViewData["Title"] = "CreateTinDangPT";
+    ViewData["Title"] = "EditTinDang";
     Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
+    TinDang_PhongTro_GateWay callTinDangPT = new TinDang_PhongTro_GateWay();
+    List<string> imgList = callTinDangPT.ListImages(Model.idTinDang);
 }
-
 @{
     var userJson = Context.Session.GetString("user");
     Users user = null;
@@ -14,97 +16,57 @@
         user = JsonConvert.DeserializeObject<Users>(userJson);
     }
 }
-@{
-    // alert includ icons: question, info, success, error, warning
-    //footer: '<a href="">Why do I have this issue?</a>'
-    var checkMessage = TempData["AlertMessage"];
-    if (checkMessage == "successful")
-    {
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Thành công',
-                text: 'Tin đăng đã lưu thành công!'
-            })
-        </script>
-        
-    }
-}
-<style>
-    .preview {
-        border: 2px dashed #000;
-        width: 80%;
-        height: 80%;
-        /* font-size: 10px; */
-        position: relative;
-        border-radius: 6px;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        cursor: pointer;
-    }
-
-        .preview i {
-            font-size: 30px;
-            margin-bottom: 10px;
-        }
-
-    .preview2 {
-        height: 250px;
-        width: 100%;
-        border-radius: 6px;
-    }
-
-    .sroll-row {
-        height: 450px;
-        overflow-y: scroll;
-        border: 2px dashed #000;
-    }
-</style>
-
-<h3>Đăng tin mới</h3>
+<h3>Chỉnh sửa tin đăng</h3>
 <hr />
 <div class="row">
     <div class="col-9">
+        <div id="demo" class="carousel slide" data-bs-ride="carousel">
+
+            <!-- Indicators/dots -->
+            <div class="carousel-indicators">
+                @for (int i = 0; i < imgList.Count; i++)
+                {
+                    string act = "";
+                    if (i == 0) act = "active";
+                    <button type="button" data-bs-target="#demo" data-bs-slide-to="@i" class="@act"></button>
+                }
+            </div>
+
+            <!-- The slideshow/carousel -->
+            <div class="carousel-inner" style="height:350px; width:100%;">
+                @for (int i = 0; i < imgList.Count; i++)
+                {
+                    string act = "";
+                    if (i == 0) act = "active";
+                    <div class="carousel-item @act" style="width:100%; height:100%; text-align:center; background-color:whitesmoke;">
+                        <img src="@imgList[i]" alt="Los Angeles" class="d-block" style="height:100%; object-fit: cover; margin:auto;">
+
+                    </div>
+                }
+            </div>
+
+            <!-- Left and right controls/icons -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
         <h4>Địa chỉ cho thuê</h4>
-        <form asp-action="CreateTinDangPT" method="post" enctype="multipart/form-data">
+        <form asp-action="EditTinDang" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-           @Html.HiddenFor(model => model.idTinDang)
+            @Html.HiddenFor(model => model.idTinDang)
             <div class="form-group">
                 <div class="row">
-                    <div class="col">
-                        <label>Chọn tỉnh thành:</label>
-                        <select name="" id="province" class="form-control" placeholder="Chọn tỉnh thành"></select>
+                    <div class="col-sm-4">
+                        <label class="form-label" asp-for="idTinDang">Mã tin đăng:</label>
+                        <input type="text" class="form-control" asp-for="idTinDang" readonly>
+                        <span asp-validation-for="idTinDang" class="text-danger"></span>
                     </div>
-                    <div class="col">
-                        <label>Chọn quận/huyện:</label>
-                        <select name="" id="district" class="form-control" placeholder="Chọn quận/huyện">
-                            <option value="">chọn quận</option>
-                        </select>
-                    </div>
-                    <div class="col">
-                        <label>Chọn phường/xã:</label>
-                        <select name="" id="ward" class="form-select" placeholder="Chọn phường/xã">
-                            <option value="">chọn phường</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row mt-3 mb-5">
-                    <div class="col-3">
-                        <label>Nhập tên đường:</label>
-                        <input type="text" class="form-control" placeholder="Nhập tên đường" name="tenDuong" id="street" required>
-                    </div>
-                    <div class="col-2">
-                        <label>Nhập số nhà:</label>
-                        <input type="text" class="form-control" placeholder="Nhập số nhà" name="soNha" id="number" required>
-                    </div>
-                    <div class="col-7">
-                        <label>Địa chỉ chính xác:</label>
-                        <select class="form-select" asp-for="diaChi" required>
-                            <option id="result" selected></option>
-                        </select>
+                    <div class="col-sm-8">
+                        <label class="form-label" asp-for="diaChi">Địa chỉ:</label>
+                        <input type="text" class="form-control" asp-for="diaChi">
                         <span asp-validation-for="diaChi" class="text-danger"></span>
                     </div>
                 </div>
@@ -131,7 +93,7 @@
                         <span asp-validation-for="doiTuongChoThue" class="text-danger"></span>
                     </div>
                 </div>
-                
+
             </div>
             <div class="form-group">
                 <label class="form-label">Tiêu đề:</label>
@@ -147,17 +109,17 @@
                 <div class="row">
                     <div class="col">
                         <label class="form-label">Thông tin liên hệ:</label>
-                        <input asp-for="nguoiLienHe" class="form-control" readonly  value="@user.hoTen"/>
+                        <input asp-for="nguoiLienHe" class="form-control" readonly value="@user.hoTen" />
                         <span asp-validation-for="nguoiLienHe" class="text-danger"></span>
                     </div>
                     <div class="col">
                         <label class="form-label">Số điện thoại:</label>
-                        <input asp-for="sdtNguoiLienHe" class="form-control" readonly value="@user.sdtUsers"/>
-                        <input asp-for="idUser" class="d-none" readonly value="@user.idUser"/>
+                        <input asp-for="sdtNguoiLienHe" class="form-control" readonly value="@user.sdtUsers" />
+                        <input asp-for="idUser" class="d-none" readonly value="@user.idUser" />
                         <span asp-validation-for="sdtNguoiLienHe" class="text-danger"></span>
                     </div>
                 </div>
-                
+
             </div>
             <div class="form-group">
                 <div class="row">
@@ -216,78 +178,15 @@
                     </div>
                 </div>
             </div>
-            @*image*@
-            <h4>Thêm hình ảnh</h4>
-            <p>Cập nhật thêm hình ảnh sẽ cho thuê nhanh hơn</p>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-6 d-flex justify-content-center align-items-center">
-                        <label for="input-img" class="preview">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <span>Upload to preview image</span>
-                        </label>
-                        <input type="file" name="files" hidden id="input-img" multiple />
-                    </div>
-                    <div class="col-6 sroll-row">
-                        <div class="preview2">
-                        </div>
-                    </div>
-                </div>
-                
-                
-            </div>
-            
-
-            @*end image*@
-            <div class="form-group m-5">
-                <input id ="btnPost" type="submit" value="Tạo tin đăng mới" class="btn btn-primary" />
+            <div class="form-group m-1">
+                <input type="submit" value="Lưu thay đổi" class="btn btn-primary" />
             </div>
         </form>
     </div>
     <div class="col-3">
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.521571286021!2d106.68087777451706!3d10.771307259289186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f23cbaeb32d%3A0x3d32b187a53c6cf8!2zMzk5IE5ndXnhu4VuIMSQw6xuaCBDaGnhu4N1LCBQaMaw4budbmcgNSwgUXXhuq1uIDMsIFRow6BuaCBwaOG7kSBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1698851672393!5m2!1svi!2s" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
-    
+
 </div>
 
-<script>
-    const inputImg = document.querySelector('#input-img')
-    const formData = new FormData();
-    inputImg.addEventListener('change', (e) => {
-        let files = e.target.files
-        if (!files) return
-        for(let i=0; i< files.length;i++){
-            let file = files[i];
-            formData.append("files", file);
-            let img = document.createElement('img')
-            img.src = URL.createObjectURL(file)
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.style.objectFit = 'cover';
-            img.style.objectPosition = 'center';
-            img.style.borderRadius = '6px';
-            img.style.padding = '3px';
-            document.querySelector('.preview2').appendChild(img);
-        }
-        console.log(formData.values);
-    });
-    $("#btnPost").click(function () {
-        $.ajax({
-            url: '/ChuChoThue/CreateImage',
-            type: "POST",
-            contentType: false, // Not to set any content header
-            processData: false, // Not to process data
-            data: formData,
-            async: false,
-            error: function (err) {
-                alert("Hình ảnh không được null!");
-            }
-        });
-    });
-    
-    
-    
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="~/js/map/mapapi.js"></script>
+

@@ -59,7 +59,10 @@ namespace QuanLyThueTro.Controllers
                               tienDien: phongTro.tienDien,
                               tienNuoc: phongTro.tienNuoc,
                               tienDichVu: phongTro.tienDichVu,
-                              item.luotTruyCap);
+                              item.luotTruyCap,
+                              item.idUser,
+                              item.trangThaiTinDang,
+                              item.idDichVu);
                 mergeList.Add(dto);
             }
             await _context.DisposeAsync();
@@ -100,8 +103,56 @@ namespace QuanLyThueTro.Controllers
                           tienDien: phongTro.tienDien,
                           tienNuoc: phongTro.tienNuoc,
                           tienDichVu: phongTro.tienDichVu,
-                          tinDang.luotTruyCap);
+                          tinDang.luotTruyCap,
+                          tinDang.idUser,
+                          tinDang.trangThaiTinDang,
+                          tinDang.idDichVu);
             return dto;
+        }
+
+        // GET: api/TinDangPhongTro/5
+        //Images
+        [HttpGet("GetByIdUser/{userId}")]
+        public async Task<ActionResult<IEnumerable<TinDangPhongTroVM>>> GetTinDangPTByIdUser(string userId)
+        {
+            if (_context.tinDangs == null)
+            {
+                return NotFound();
+            }
+            var tinDang = _context.tinDangs.Where(t => t.idUser == userId).ToList();
+
+            if (tinDang == null)
+            {
+                return NotFound();
+            }
+            List<TinDangPhongTroVM> listTinDangPT = new List<TinDangPhongTroVM>();
+            foreach ( var t in tinDang )
+            {
+                var phongTro = _context.phongTros.Where(s => s.idTinDang == t.idTinDang).FirstOrDefault();
+                TinDangPhongTroVM dto = new TinDangPhongTroVM(t.idTinDang,
+                              t.tieuDe,
+                              t.loaiTin,
+                              t.ngayBatDau,
+                              t.ngayKetThuc,
+                              t.sdtNguoiLienHe,
+                              t.nguoiLienHe,
+                              t.doiTuongChoThue,
+                              t.soLuongPhong,
+                              diaChi: phongTro.diaChi,
+                              giaPhong: phongTro.giaPhong,
+                              dienTich: phongTro.dienTich,
+                              moTa: phongTro.moTa,
+                              tienDien: phongTro.tienDien,
+                              tienNuoc: phongTro.tienNuoc,
+                              tienDichVu: phongTro.tienDichVu,
+                              t.luotTruyCap,
+                              t.idUser,
+                              t.trangThaiTinDang,
+                              t.idDichVu);
+                listTinDangPT.Add(dto);
+            }
+            
+            return listTinDangPT;
         }
 
         // PUT: api/TinDangPhongTro/5
@@ -195,6 +246,7 @@ namespace QuanLyThueTro.Controllers
             }
             var tinDang = await _context.tinDangs.FindAsync(id);
             var phongTro = await _context.phongTros.FindAsync(id);
+            var imagePT = _context.ImagesPhongTro.Where(img => img.idTinDang == id).ToList();
             if (tinDang == null || phongTro == null)
             {
                 return NotFound();
@@ -202,6 +254,10 @@ namespace QuanLyThueTro.Controllers
 
             _context.tinDangs.Remove(tinDang);
             _context.phongTros.Remove(phongTro);
+            foreach(var image in imagePT)
+            {
+                await _photoService.DeleteImageAsync(image.publicId);
+            }
             await _context.SaveChangesAsync();
 
             return Ok("Đã xóa tin đăng");

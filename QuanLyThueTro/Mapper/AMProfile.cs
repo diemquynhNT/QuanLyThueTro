@@ -23,6 +23,8 @@ namespace QuanLyThueTro.Mapper
               .ForMember(dest => dest.sdtNguoiLienHe, act => act.MapFrom(src => src.sdtNguoiLienHe))
               .ForMember(dest => dest.nguoiLienHe, act => act.MapFrom(src => src.nguoiLienHe))
               .ForMember(dest => dest.doiTuongChoThue, act => act.MapFrom(src => src.doiTuongChoThue))
+              .ForMember(dest => dest.idDichVu, act => act.MapFrom(src => src.idDichVu))
+              .ForMember(dest => dest.idUser, act => act.MapFrom(src => src.idUser))
               .ForMember(dest => dest.soLuongPhong, act => act.MapFrom(src => src.soLuongPhong));
             CreateMap<TinDangPhongTroWithoutId, PhongTro>()
              .ForMember(dest => dest.diaChi, act => act.MapFrom(src => src.diaChi))
