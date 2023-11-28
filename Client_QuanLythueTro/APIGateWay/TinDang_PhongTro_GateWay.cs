@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
-using QuanLyThueTro.Model;
 
 namespace Client_QuanLythueTro.APIGateWay
 {

@@ -2,6 +2,17 @@
     padding: 8px 25px;
     background: white;
 }
+
+.top-logo {
+    width: 240px;
+    height: 70px;
+    background: url('../img/logoproject.jpg') center no-repeat;
+    background-size: contain;
+    text-indent: -9999999px;
+    display: block;
+    float: left;
+    cursor: pointer;
+}
  
 .nav-item {
     margin: 0 8px;
@@ -121,3 +132,5 @@
         margin-top: 10px;
     }
 }
+
+

@@ -122,10 +122,10 @@ namespace Client_QuanLythueTro.Controllers
                 TempData["error"] = "thanhcong";
                 if (role == "CT")
                 {
-                    return RedirectToAction("TrangChu", "NVKD");
+                    return RedirectToAction("IndexTinDangPT", "ChuChoThue");
                 }
                 else if (role == "NT")
-                    return RedirectToAction("TrangChu", "");
+                    return RedirectToAction("IndexTinDangPT", "");
 
                 return View();
 

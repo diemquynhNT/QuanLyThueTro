@@ -105,7 +105,7 @@ namespace QuanLyThueTro.Services
 
         public void GoUpLuotTruyCap(TinDang tinDang)
         {
-            tinDang.luotTruyCap+=1;
+            //tinDang.luotTruyCap+=1;
             _dbContext.Entry(tinDang).State = EntityState.Modified;
             try
             {

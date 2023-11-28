@@ -9,11 +9,13 @@ namespace Client_QuanLythueTro.Controllers
     {
         private readonly TinDang_PhongTro_GateWay callTinDangPT;
         private readonly LichXemPhong_GateWay _callLichXemPhong;
+        private readonly APIGateWayDichVu callBangGiaDichVu;
 
-        public ChuChoThueController(TinDang_PhongTro_GateWay callTinDangPT, LichXemPhong_GateWay callLichXemPhong)
+        public ChuChoThueController(TinDang_PhongTro_GateWay callTinDangPT, LichXemPhong_GateWay callLichXemPhong, APIGateWayDichVu callBangGiaDichVu)
         {
             this.callTinDangPT = callTinDangPT;
             _callLichXemPhong = callLichXemPhong;
+            this.callBangGiaDichVu = callBangGiaDichVu;
         }
 
         public IActionResult IndexTinDangPT()
@@ -122,6 +124,38 @@ namespace Client_QuanLythueTro.Controllers
         {
             _callLichXemPhong.DeleteLichXem(id);
             return RedirectToAction("QLLichXemPhong");
+        }
+
+        //GoiDichVu
+        public ActionResult BangGiaDichVu()
+        {           
+            List<DichVuDangTin> listGoiTin = callBangGiaDichVu.ListGoiTin();
+            ViewBag.listTK = callBangGiaDichVu.ListTK();
+            return View(listGoiTin);
+        }
+
+        //NapTienVNPay
+        public IActionResult NapTienVNPay()
+        {
+            return View();
+        }
+
+        //NapTienMoMo
+        public IActionResult NapTienMoMo()
+        {
+            return View();
+        }
+
+        //NapTienPayPal
+        public IActionResult NapTienPayPal()
+        {
+            return View();
+        }
+
+        //NapTienMat
+        public IActionResult NapTienMat()
+        {
+            return View();
         }
     }
 }

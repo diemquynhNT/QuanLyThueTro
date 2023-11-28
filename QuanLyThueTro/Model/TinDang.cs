@@ -39,7 +39,7 @@ namespace QuanLyThueTro.Model
         public string? idKhuVuc { get; set; }
         [ForeignKey("idKhuVuc")]
         public KhuVuc khuVucs { get; set; }
-        public int luotTruyCap { get; set; }
+        //public int luotTruyCap { get; set; }
         public string? idDichVu { get; set; }
         [ForeignKey("idDichVu")]
         public GoiTinDichVu dichVuDangTin { get; set; }
