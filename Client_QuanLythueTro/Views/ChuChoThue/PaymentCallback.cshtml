@@ -2,6 +2,9 @@
 @{
     ViewData["Title"] = "PaymentCallback";
     Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
+    ViewBag.MainPageLink = "~/ChuChoThue/DangKyDichVu";
+    ViewBag.MainPage = "Bảng giá dịch vụ";
+    ViewBag.CurrentPage = "Thanh toán thành công";
 }
 
 <style>
@@ -136,14 +139,14 @@ p {
                 </div>
             </div>
             <div class="col-12">
-                <div class="btn btn-primary mb-3" href="~/ChuChoThue/DangKyDichVu">
+                <a class="btn btn-primary mb-3" href="~/ChuChoThue/DangKyDichVu">
                     <span class="fas fa-arrow-left"></span>
                     <span class="ps-3">Trở lại</span>
-                </div>
-                <div class="btn btn-danger mb-3" href="~/ChuChoThue/CreateTinDangPT">
+                </a>
+                <a class="btn btn-danger mb-3" href="~/ChuChoThue/CreateTinDangPT">
                     <span class="ps-3">Tạo tin đăng đầu tiên với dịch vụ này</span>
                     <span class="fas fa-arrow-right"></span>
-                </div>
+                </a>
             </div>
         </div>
     </div>

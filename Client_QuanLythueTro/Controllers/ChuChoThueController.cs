@@ -312,7 +312,7 @@ namespace Client_QuanLythueTro.Controllers
                 giaoDich.idGiaoDich = response.PaymentId;
                 giaoDich.loaiDichVu = response.IdDichVu;
                 giaoDich.tongTien = float.Parse(response.Amount);
-                giaoDich.ngayGiaoDich = DateTime.UtcNow;
+                giaoDich.ngayGiaoDich = DateTime.UtcNow.ToLocalTime() ;
                 giaoDich.note = response.Username + " " + response.InfoDichVu + " Với số tiền " + response.Amount + " VNĐ";
                 var cut = response.Username.Split("#");
                 giaoDich.idUser = cut[1];

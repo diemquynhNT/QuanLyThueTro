@@ -5,6 +5,9 @@
 @{
     ViewData["Title"] = "EditTinDang";
     Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
+    ViewBag.MainPageLink = "/ChuChoThue/QLTinDangPT";
+    ViewBag.MainPage = "Quản lý tin đăng";
+    ViewBag.CurrentPage = "Chỉnh sửa tin đăng đã duyệt";
     TinDang_PhongTro_GateWay callTinDangPT = new TinDang_PhongTro_GateWay();
     List<string> imgList = callTinDangPT.ListImages(Model.idTinDang);
 }

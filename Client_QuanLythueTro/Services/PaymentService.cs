@@ -16,7 +16,7 @@ namespace Client_QuanLythueTro.Services
             //var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById(_configuration["2020"]);
             //var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
             var timeNow = DateTime.UtcNow;
-            var tick = DateTime.Now.Ticks.ToString();
+            var tick = DateTime.UtcNow.Ticks.ToString();
             var pay = new VnPayLibrary();
             var urlCallBack = _configuration["PaymentCallBack:ReturnUrl"];
 

@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "LichSuThanhToan";
     Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
+    ViewBag.CurrentPage = "Lịch sử thanh toán";
 }
 
 <div class="row">
@@ -43,7 +44,7 @@
                         <td>@Html.DisplayFor(modelItem => item.ngayGiaoDich)</td>
                         @{
                             DateTime timeEnd = item.ngayGiaoDich.AddDays(30);
-                            TimeSpan timeLeft = timeEnd - DateTime.UtcNow;
+                            TimeSpan timeLeft = timeEnd - DateTime.UtcNow.ToLocalTime();
                             int daysLeft = (int)Math.Ceiling(timeLeft.TotalDays);
                             //int day = Int32.Parse(timeLeft.TotalDays.ToString());
                         }

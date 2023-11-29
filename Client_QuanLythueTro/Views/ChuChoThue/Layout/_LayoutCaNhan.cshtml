@@ -138,10 +138,17 @@
         <div class="col-md-10" style="padding:0px 45px;">
             <div class="bg-light">
                 <ol class="breadcrumb list-unstyled">
-                    <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                    <li class="breadcrumb-item"><a href="#">Trang cấp 1</a></li>
-                    <li class="breadcrumb-item"><a href="#">Trang cấp 2</a></li>
-                    <li class="breadcrumb-item" aria-current="page">Trang hiện tại</li>
+                    <li class="breadcrumb-item"><a href="~/ChuChoThue/IndexTinDangPT">Home180</a></li>
+                    @{
+                        if(ViewBag.MainPage == "")
+                        {
+                            <li class="breadcrumb-item" aria-current="page">@ViewBag.CurrentPage</li>
+                        }
+                        else{
+                            <li class="breadcrumb-item"><a href="@ViewBag.MainPageLink">@ViewBag.MainPage</a></li>
+                            <li class="breadcrumb-item" aria-current="page">@ViewBag.CurrentPage</li>
+                        }
+                    }
                 </ol>
             </div>
             @RenderBody()
