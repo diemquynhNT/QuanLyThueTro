@@ -44,27 +44,7 @@ namespace QuanLyThueTro.Controllers
           }
             return await _context.users.ToListAsync();
         }
-        // GET: api/Users
-        [HttpGet("GetEmployee")]
-        public async Task<ActionResult<IEnumerable<Users>>> GetEmployee()
-        {
-            if (_context.users == null)
-            {
-                return NotFound();
-            }
-            return await _context.users.Where(t=>t.idChucVu=="NVKD" || t.idChucVu=="Admin").ToListAsync();
-        }
-        [HttpGet("GetGuest")]
-        public async Task<ActionResult<IEnumerable<Users>>> GetGuest()
-        {
-            if (_context.users == null)
-            {
-                return NotFound();
-            }
-            return await _context.users.Where(t => t.idChucVu == "CT" || t.idChucVu == "NT").ToListAsync();
-        }
-
-        // GET: api/Users/5
+    
         [HttpGet("{id}")]
         public async Task<ActionResult<Users>> GetUsers(string id)
         {

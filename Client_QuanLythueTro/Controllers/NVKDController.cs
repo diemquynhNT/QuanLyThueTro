@@ -32,8 +32,7 @@ namespace Client_QuanLythueTro.Controllers
         public ActionResult TrangChu()
         {
             List<TinDang> listTin = apiGateWay.ListTinDang();
-            ViewBag.list = listTin;
-            return View();
+            return View(listTin);
         }
         private void BindDropDownList()
         {
@@ -89,7 +88,6 @@ namespace Client_QuanLythueTro.Controllers
 
         public ActionResult CreateTinDang()
         {
-
             TinDang tin = new TinDang();
             return View(tin);
         }
@@ -97,11 +95,12 @@ namespace Client_QuanLythueTro.Controllers
         // POST: NVKDController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateTinDang(TinDang tin)
+        public async Task<ActionResult> CreateTinDang(TinDang tin, List<IFormFile> listimg)
         {
             try
             {
-                TinDang newTin= apiGateWay.CreateTinDang(tin);
+                TinDang newTin = apiGateWay.CreateTinDang(tin);
+                apiGateWay.CreateImage(newTin.idTinDang, listimg);
                 TempData["mess"] = "thanhcong";
                 return RedirectToAction("AddImgToTinDang", new { idTinDang = newTin.idTinDang });
             }
@@ -132,7 +131,8 @@ namespace Client_QuanLythueTro.Controllers
             try
             {
                 apiGateWay.UpdateTin(tin);
-                return RedirectToAction("QuanLyTinDang");
+                TempData["AlertMessage"] = "thanhcong";
+                return RedirectToAction("EditTin", new { idTinDang = tin.idTinDang });
             }
             catch (Exception ex)
             {

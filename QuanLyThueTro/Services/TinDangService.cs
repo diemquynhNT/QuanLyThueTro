@@ -1,4 +1,5 @@
 
+
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 ﻿using Microsoft.AspNetCore.Hosting;
@@ -191,8 +192,6 @@ namespace QuanLyThueTro.Services
         public void HuyDuyetTin(TinDang tin)
         {
             tin.trangThaiTinDang = false;
-            tin.ngayBatDau = null;
-            tin.ngayKetThuc = null;
             _context.SaveChanges();
         }
 

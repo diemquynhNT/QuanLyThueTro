@@ -1,0 +1,93 @@
+﻿@model Client_QuanLythueTro.Models.Users
+
+@{
+    ViewData["Title"] = "CreateGuest";
+    Layout = "~/Views/Admin/LayoutAdmin.cshtml";
+    ViewBag.guest = "active";
+    ViewBag.Name = "Tạo tài khoản khách hàng";
+    ViewBag.title = "Tạo tài khoản khách hàngs";
+}
+}
+
+<h1>CreateGuest</h1>
+
+<h4>Users</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateGuest">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="idUser" class="control-label"></label>
+                <input asp-for="idUser" class="form-control" />
+                <span asp-validation-for="idUser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="hoTen" class="control-label"></label>
+                <input asp-for="hoTen" class="form-control" />
+                <span asp-validation-for="hoTen" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="emailUser" class="control-label"></label>
+                <input asp-for="emailUser" class="form-control" />
+                <span asp-validation-for="emailUser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="sdtUsers" class="control-label"></label>
+                <input asp-for="sdtUsers" class="form-control" />
+                <span asp-validation-for="sdtUsers" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ngayThamGia" class="control-label"></label>
+                <input asp-for="ngayThamGia" class="form-control" />
+                <span asp-validation-for="ngayThamGia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="userName" class="control-label"></label>
+                <input asp-for="userName" class="form-control" />
+                <span asp-validation-for="userName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="passwordUser" class="control-label"></label>
+                <input asp-for="passwordUser" class="form-control" />
+                <span asp-validation-for="passwordUser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="gioiTinh" class="control-label"></label>
+                <input asp-for="gioiTinh" class="form-control" />
+                <span asp-validation-for="gioiTinh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="hinhAnh" class="control-label"></label>
+                <input asp-for="hinhAnh" class="form-control" />
+                <span asp-validation-for="hinhAnh" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="trangThai" /> @Html.DisplayNameFor(model => model.trangThai)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="idChucVu" class="control-label"></label>
+                <input asp-for="idChucVu" class="form-control" />
+                <span asp-validation-for="idChucVu" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="idLoaiTK" class="control-label"></label>
+                <input asp-for="idLoaiTK" class="form-control" />
+                <span asp-validation-for="idLoaiTK" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

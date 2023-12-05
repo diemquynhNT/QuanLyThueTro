@@ -39,69 +39,69 @@ namespace Client_QuanLythueTro.APIGateWay
             finally { }
             return list;
         }
-        public List<Users> ListEmployee()
-        {
-            List<Users> listEmployee = new List<Users>();
-            url = url + "/GetEmployee";
+        //public List<Users> ListEmployee()
+        //{
+        //    List<Users> listEmployee = new List<Users>();
+        //    url = url + "/GetEmployee";
 
-            if (url.Trim().Substring(0, 5).ToLower() == "https")
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            try
-            {
-                HttpResponseMessage response = httpClient.GetAsync(url).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    string result = response.Content.ReadAsStringAsync().Result;
-                    var datacol = JsonConvert.DeserializeObject<List<Users>>(result);
+        //    if (url.Trim().Substring(0, 5).ToLower() == "https")
+        //        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+        //    try
+        //    {
+        //        HttpResponseMessage response = httpClient.GetAsync(url).Result;
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            string result = response.Content.ReadAsStringAsync().Result;
+        //            var datacol = JsonConvert.DeserializeObject<List<Users>>(result);
 
-                    if (datacol != null)
-                        listEmployee = datacol;
-                }
-                else
-                {
-                    string result = response.Content.ReadAsStringAsync().Result;
-                    throw new Exception(result);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("loi" + ex.Message);
-            }
-            finally { }
-            return listEmployee;
-        }
+        //            if (datacol != null)
+        //                listEmployee = datacol;
+        //        }
+        //        else
+        //        {
+        //            string result = response.Content.ReadAsStringAsync().Result;
+        //            throw new Exception(result);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("loi" + ex.Message);
+        //    }
+        //    finally { }
+        //    return listEmployee;
+        //}
 
-        public List<Users> ListGuest()
-        {
-            List<Users> listEmployee = new List<Users>();
-            url = url + "/GetGuest";
+        //public List<Users> ListGuest()
+        //{
+        //    List<Users> listEmployee = new List<Users>();
+        //    url = url + "/GetGuest";
 
-            if (url.Trim().Substring(0, 5).ToLower() == "https")
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            try
-            {
-                HttpResponseMessage response = httpClient.GetAsync(url).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    string result = response.Content.ReadAsStringAsync().Result;
-                    var datacol = JsonConvert.DeserializeObject<List<Users>>(result);
+        //    if (url.Trim().Substring(0, 5).ToLower() == "https")
+        //        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+        //    try
+        //    {
+        //        HttpResponseMessage response = httpClient.GetAsync(url).Result;
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            string result = response.Content.ReadAsStringAsync().Result;
+        //            var datacol = JsonConvert.DeserializeObject<List<Users>>(result);
 
-                    if (datacol != null)
-                        listEmployee = datacol;
-                }
-                else
-                {
-                    string result = response.Content.ReadAsStringAsync().Result;
-                    throw new Exception(result);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("loi" + ex.Message);
-            }
-            finally { }
-            return listEmployee;
-        }
+        //            if (datacol != null)
+        //                listEmployee = datacol;
+        //        }
+        //        else
+        //        {
+        //            string result = response.Content.ReadAsStringAsync().Result;
+        //            throw new Exception(result);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("loi" + ex.Message);
+        //    }
+        //    finally { }
+        //    return listEmployee;
+        //}
 
         //create
         public Users CreateUser(Users u)

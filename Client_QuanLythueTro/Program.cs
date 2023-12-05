@@ -1,4 +1,5 @@
 ﻿using Client_QuanLythueTro.APIGateWay;
+using Client_QuanLythueTro.Models;
 using Client_QuanLythueTro.Services;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using System.Text.Json.Serialization;
@@ -47,6 +48,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=ChuChoThue}/{action=IndexTinDangPT}/{id?}");
+    pattern: "{controller=Login}/{action=Login}/{id?}");
 
 app.Run();

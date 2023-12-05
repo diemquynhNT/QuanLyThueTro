@@ -1,9 +1,11 @@
-﻿
+﻿@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
+
 @{
     ViewData["Title"] = "TrangChu";
     Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
     ViewBag.Name = "Trang chủ";
     ViewBag.home = "active";
+    ViewBag.title = "Trang chủ";
 }
 
 <div class="main-content">
@@ -14,16 +16,16 @@
                     <a href="">
                         <div class="stat-card">
                             <div class="stat-card__content">
-                                <p class="text-uppercase mb-1 text-muted">TIN ĐĂNG</p>
-                                <h4>Tổng</h4>
+                                <p class="text-uppercase mb-1 text-muted">TIN ĐĂNG TRONG THÁNG</p>
+                                <h4>Tổng @Model.Where(t=>t.ngayTaoTin.Month==DateTime.Now.Month).Count()</h4>
                                 <div style="font-size:16px">
-                                    <span class="text-success font-weight-bold ">+ 18 </span>
+                                    <span class="text-success font-weight-bold ">+ @Model.Where(t=>t.ngayTaoTin.Month==DateTime.Now.Month && t.ngayTaoTin.Date==DateTime.Now.Date ).Count() </span>
                                     <span class="text-muted">tin trong ngày</span>
                                 </div>
                             </div>
                             <div class="stat-card__icon stat-card__icon--success">
                                 <div class="stat-card__icon-circle" style=" background: rgba(0, 123, 255, 0.2);">
-                                    <i class="fa fa-clipboard-check" style="color: rgb(0, 28, 64);"></i>
+                                    <i class="bx bx-news" style="color: rgb(0, 28, 64);"></i>
                                 </div>
                             </div>
                         </div>
@@ -34,9 +36,9 @@
                         <div class="stat-card">
                             <div class="stat-card__content">
                                 <p class="text-uppercase mb-1 text-muted">TIN CHỜ DUYỆT</p>
-                                <h4> 76 Tin</h4>
+                                <h4> @Model.Where(t=>t.trangThaiTinDang==false).Count() Tin</h4>
                                 <div style="font-size:16px">
-                                    <span class="text-success font-weight-bold ">+</span>
+                                    <span class="text-success font-weight-bold ">+@Model.Where(t=>t.ngayTaoTin.Month==DateTime.Now.Month && t.ngayTaoTin.Date==DateTime.Now.Date && t.trangThaiTinDang==false ).Count()</span>
                                     <span class="text-muted">tin mới</span>
                                 </div>
                             </div>
@@ -129,7 +131,7 @@
         </div>
     </div>
     @{
-        List<TinDang> list = ViewBag.list;
+        List<TinDang> list = Model.Where(t => t.ngayTaoTin.Month == DateTime.Now.Month && t.ngayTaoTin.Date == DateTime.Now.Date).ToList();
     }
     <div class="col-md-12" id="congno">
         <div class="tile">

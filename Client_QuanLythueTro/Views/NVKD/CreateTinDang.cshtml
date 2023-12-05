@@ -6,6 +6,7 @@
     ViewBag.post = "active";
     ViewBag.Name = "Đăng tin";
 }
+<link href="~/css/uploadimg.css" rel="stylesheet" />
 <div class="container">
     <div class="tile" id="printMe">
         <div class=" row">
@@ -21,19 +22,43 @@
                     @Html.HiddenFor(model => model.trangThaiTinDang)
                     <h5>Địa chỉ cho thuê</h5>
                  <div class="row" style="padding:10px">
-                    <div class="form-group col-sm-12">
-                        <b>Khu vực</b>
-                            <select class="form-control" asp-for="idKhuVuc" id="idKhuVuc" required>
-                            <option selected="selected" disabled>------Chọn-------</option>
-                        </select>
-                        <span asp-validation-for="idKhuVuc" class="text-danger"></span>
-                    </div>
-                    <div class="form-group col-sm-12">
-                        <b>Địa chỉ cụ thể</b>
-                        <input asp-for="diaChi" class="form-control" required />
-                        <span asp-validation-for="diaChi" class="text-danger"></span>
-                    </div>
-                    <hr />
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Chọn tỉnh thành:</label>
+                                    <select name="" id="province" class="form-control" placeholder="Chọn tỉnh thành"></select>
+                                </div>
+                                <div class="col">
+                                    <label>Chọn quận/huyện:</label>
+                                    <select name="" id="district" class="form-control" placeholder="Chọn quận/huyện">
+                                        <option value="">chọn quận</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label>Chọn phường/xã:</label>
+                                    <select name="" id="ward" class="form-select" placeholder="Chọn phường/xã">
+                                        <option value="">chọn phường</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-3 mb-5">
+                                <div class="col-3">
+                                    <label>Nhập tên đường:</label>
+                                    <input type="text" class="form-control" placeholder="Nhập tên đường" name="tenDuong" id="street" required>
+                                </div>
+                                <div class="col-2">
+                                    <label>Số nhà:</label>
+                                    <input type="text" class="form-control" placeholder="Nhập số nhà" name="soNha" id="number" required>
+                                </div>
+                                <div class="col-7">
+                                    <label>Địa chỉ chính xác:</label>
+                                    <select class="form-control" asp-for="diaChi" required>
+                                        <option id="result" selected></option>
+                                    </select>
+                                    <span asp-validation-for="diaChi" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
                     <h5>Thông tin cụ thể</h5>
                     <hr />
                     <div class="form-group col-sm-12">
@@ -41,7 +66,6 @@
                         <select class="form-control" asp-for="loaiTin" required>
                             <option selected="selected">Cho thuê</option>
                             <option selected="selected">Tìm người ở ghép</option>
-
                         </select>
                         <span asp-validation-for="loaiTin" class="text-danger"></span>
                     </div>
@@ -62,36 +86,35 @@
                     </div>
                     <div class="form-group col-sm-6">
                         <b>Số lượng phòng</b>
-                            <input asp-for="soLuongPhong" class="form-control" required min="1" />
+                            <input asp-for="soLuongPhong" class="form-control" required min="1" value="1"/>
                         <span asp-validation-for="soLuongPhong" class="text-danger"></span>
                     </div>
                     <div class="form-group col-sm-6">
-                        <b>Diện tích</b>
-                        <input asp-for="dienTich" class="form-control" required type="number" min="1" />
+                        <b>Diện tích (m2)</b>
+                        <input asp-for="dienTich" class="form-control" required type="number" min="1" value="20"/>
                         <span asp-validation-for="dienTich" class="text-danger"></span>
                     </div>
 
                     <div class="form-group col-sm-6">
                         <b>Giá phòng (/tháng)</b>
-                            <input asp-for="giaPhong" class="form-control" required type="number" min="1" />
+                        <input asp-for="giaPhong" class="form-control" required type="number" min="1" value="1000000" />
                         <span asp-validation-for="giaPhong" class="text-danger"></span>
                     </div>
                     <div class="form-group col-sm-6">
-                        <b>Tiền điện</b>
-                            <input asp-for="tienDien" class="form-control" required min="0" type="number" min="1" />
+                        <b>Tiền điện (/tháng)</b>
+                            <input asp-for="tienDien" class="form-control" required type="number" min="1" value="3000" />
                         <span asp-validation-for="tienDien" class="text-danger"></span>
                     </div>
                     <div class="form-group col-sm-6">
-                        <b>Tiền nước</b>
-                            <input asp-for="tienNuoc" class="form-control" required min="0" type="number" min="1" />
+                        <b>Tiền nước (/tháng)</b>
+                            <input asp-for="tienNuoc" class="form-control" required min="0" type="number" value="100000" />
                         <span asp-validation-for="tienNuoc" class="text-danger"></span>
                     </div>
                     <div class="form-group col-sm-6">
-                        <b>Tiền dịch vụ</b>
-                            <input asp-for="tienDichVu" class="form-control" required min="0" type="number" min="1" />
+                        <b>Tiền dịch vụ (/tháng)</b>
+                            <input asp-for="tienDichVu" class="form-control" required min="0" type="number" value="0" />
                         <span asp-validation-for="tienDichVu" class="text-danger"></span>
                     </div>
-                    <hr />
                     <h5>Thông tin liên hệ</h5>
                     <hr />
                     <div class="form-group col-sm-12">
@@ -104,6 +127,17 @@
                         <input asp-for="sdtNguoiLienHe" class="form-control" required min="10" max="10" />
                         <span asp-validation-for="sdtNguoiLienHe" class="text-danger"></span>
                     </div>
+                        <div class="form-group col-sm-12">
+                            <h3>Chọn hình</h3>
+                            <div id="imageUploadForm">
+                                <div class="input-div">
+                                    <input type="file" class="listimg" id="listimg" name="listimg" onchange="countImage()" multiple accept="image/png, image/jpeg, image/jpg">
+                                </div>
+                                <div id="saved-form">
+                                    <div class="saved-div"></div>
+                                </div>
+                            </div>
+                        </div>
                     <div class="form-group">
                         <input type="submit" value="Thêm" class="btn btn-success btn-sm" />
                     </div>
@@ -120,32 +154,12 @@
         <a asp-action="QuanLyTinDang" class="btn btn-warning btn-sm">Back to List</a>
     </div>
 </div>
+
+<script src="~/js/uploadmultiimg.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="~/js/map/mapapi.js"></script>
 
-<script>
-    function getListKhuVuc() {
-        var url = 'https://localhost:7034/api/KhuVucs';
-        console.log(url)
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                var selectElement = document.getElementById('idKhuVuc');
-                console.log(data)
-                for (var i = 0; i < data.length; i++) {
-                    var option = document.createElement('option');
-                    option.value = data[i].idKhuVuc; // Giá trị của option là idKhuVuc
-                    option.text = data[i].tenKhuVuc; // Văn bản của option là tên khu vực
-                    selectElement.add(option);
-                }
-            });
-    }
-    getListKhuVuc();
-
-
-
-</script>
 
 
 

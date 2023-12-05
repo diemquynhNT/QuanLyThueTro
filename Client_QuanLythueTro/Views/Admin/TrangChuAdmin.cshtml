@@ -1,11 +1,21 @@
-﻿
+﻿@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
 @{
     ViewData["Title"] = "TrangChuAdmin";
     Layout = "~/Views/Admin/LayoutAdmin.cshtml";
     ViewBag.home = "active";
     ViewBag.Name = "Trang chủ admin";
+    List<Users> listKhachHang= (List<Users>)TempData["soKH"];
+    List<Users> listNhanVien = (List<Users>)TempData["sonv"];
+
 }
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    #chartContainer {
+        width: 100%; 
+        height: 500px; 
+    }
+</style>
 <div class="main-content">
     @{
         var ktr = TempData["error"];
@@ -24,15 +34,15 @@
                         <div class="stat-card">
                             <div class="stat-card__content">
                                 <p class="text-uppercase mb-1 text-muted">KHÁCH HÀNG</p>
-                                <h4>Tổng</h4>
+                                <h4>Tổng @listKhachHang.Count() account</h4>
                                 <div style="font-size:16px">
-                                    <span class="text-success font-weight-bold "> </span>
-                                    <span class="text-muted">tin trong ngày</span>
+                                    <span class="text-success font-weight-bold "></span>
+                                    <span class="text-muted">Đang được sử dụng</span>
                                 </div>
                             </div>
                             <div class="stat-card__icon stat-card__icon--success">
-                                <div class="stat-card__icon-circle" style=" background: rgba(0, 123, 255, 0.2);">
-                                    <i class="fa fa-clipboard-check" style="color: rgb(0, 28, 64);"></i>
+                               <div class="stat-card__icon-circle" style=" background: rgba(0, 123, 255, 0.2);">
+                                    <i class="bx bx-user-pin" style="color: rgb(0, 28, 64);"></i>
                                 </div>
                             </div>
                         </div>
@@ -42,11 +52,49 @@
                     <a href="#idcho">
                         <div class="stat-card">
                             <div class="stat-card__content">
-                                <p class="text-uppercase mb-1 text-muted">TIN CHỜ DUYỆT</p>
-                                <h4> 76 Tin</h4>
+                                <p class="text-uppercase mb-1 text-muted">GÓI TÀI KHOẢN</p>
+                                <h4>Tổng @listKhachHang.Where(t=>t.idLoaiTK=="TAC770317").Count() loại kim cương</h4>
                                 <div style="font-size:16px">
-                                    <span class="text-success font-weight-bold ">+</span>
-                                    <span class="text-muted">tin mới</span>
+                                    <span class="text-success font-weight-bold "></span>
+                                    <span class="text-muted"> Được đăng kí</span>
+                                </div>
+                            </div>
+                            <div class="stat-card__icon stat-card__icon--success">
+                                <div class="stat-card__icon-circle" style=" background: rgba(0, 123, 255, 0.2);">
+                                    <i class="fa fa-dolly" style="color: rgb(0, 28, 64);"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-4">
+                    <a href="#idcho">
+                        <div class="stat-card">
+                            <div class="stat-card__content">
+                                <p class="text-uppercase mb-1 text-muted">GÓI TÀI KHOẢN</p>
+                                <h4>Tổng @listKhachHang.Where(t=>t.idLoaiTK=="TAC9237205").Count() loại VIP</h4>
+                                <div style="font-size:16px">
+                                    <span class="text-success font-weight-bold "></span>
+                                    <span class="text-muted"> Đang đăng kí</span>
+                                </div>
+                            </div>
+                            <div class="stat-card__icon stat-card__icon--success">
+                                <div class="stat-card__icon-circle" style=" background: rgba(0, 123, 255, 0.2);">
+                                    <i class="fa fa-dolly" style="color: rgb(0, 28, 64);"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-4">
+                    <a href="#idcho">
+                        <div class="stat-card">
+                            <div class="stat-card__content">
+                                <p class="text-uppercase mb-1 text-muted">NHÂN VIÊN</p>
+                                <h4>Tổng @listNhanVien.Count nhân viên</h4>
+                                <div style="font-size:16px">
+                                    <span class="text-success font-weight-bold "></span>
+                                    <span class="text-muted"> Đang hoạt động</span>
                                 </div>
                             </div>
                             <div class="stat-card__icon stat-card__icon--success">
@@ -61,11 +109,11 @@
                     <a href="">
                         <div class="stat-card">
                             <div class="stat-card__content">
-                                <p class="text-uppercase mb-1 text-muted">GIAO DỊCH</p>
-                                <h4> 432 giao dịch</h4>
+                                <p class="text-uppercase mb-1 text-muted">TIN ĐĂNG</p>
+                                <h4>Tổng @Model.Count() đăng tải</h4>
                                 <div style="font-size:16px">
-                                    <span class="text-success font-weight-bold ">+</span>
-                                    <span class="text-muted"> giao dịch mới</span>
+                                    <span class="text-success font-weight-bold ">+ @Model.Where(t=>t.ngayTaoTin.Month==DateTime.Now.Month && t.ngayTaoTin.Date==DateTime.Now.Date).Count() </span>
+                                    <span class="text-muted"> tin mới trong ngày</span>
                                 </div>
                             </div>
                             <div class="stat-card__icon stat-card__icon--success">
@@ -77,14 +125,14 @@
                     </a>
 
                 </div>
-                @*<div class="col-sm-4">
+                <div class="col-sm-4">
                     <a href="#tinhtrangdl">
                         <div class="stat-card">
                             <div class="stat-card__content">
-                                <p class="text-uppercase mb-1 text-muted">GÓI TIN</p>
-                                <h4>10 gói</h4>
+                                <p class="text-uppercase mb-1 text-muted">DOANH THU</p>
+                                <h4>Tổng @Model.Where(t=>t.ngayTaoTin.Month==DateTime.Now.Month).Count() gói</h4>
                                 <div style="font-size:16px">
-                                    <span class="text-muted">34 Sắp hết hạn</span>
+                                    <span class="text-muted">@Model.Where(t=>t.ngayTaoTin.Month==DateTime.Now.Month && t.trangThaiTinDang==false).Count() Sắp hết hạn</span>
                                 </div>
                             </div>
                             <div class="stat-card__icon stat-card__icon--success">
@@ -94,7 +142,7 @@
                             </div>
                         </div>
                     </a>
-                </div>*@
+                </div>
                 @*<div class="col-sm-4">
                     <a href="#congno">
                         <div class="stat-card">
@@ -136,4 +184,63 @@
                 </div>
             </div>
         </div>
+    <div class="tile container-sm">
+        <div class="tile-body" id="tile-body">
+            <div id="chartContainer">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
+   
+    <script>
+        function getMonthFromDateTime(dateTime) {
+            const date = new Date(dateTime);
+            return date.getMonth() + 1; 
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('myChart');
+            const currentMonth = (new Date()).getMonth() + 1; 
+            console.log("thang hien tai: " + currentMonth)
+
+            fetch('https://localhost:7034/api/TinDang')
+                .then(response => response.json())
+                .then(data => {
+                    const filteredData = {
+                        'Thường': data.filter(item => getMonthFromDateTime(item.ngayKetThuc) === currentMonth && item.idDichVu === 'NODV').length,
+                        'VIP1': data.filter(item => getMonthFromDateTime(item.ngayKetThuc) === currentMonth && item.idDichVu === 'DV20001').length,
+                        'VIP2': data.filter(item => getMonthFromDateTime(item.ngayKetThuc) === currentMonth && item.idDichVu === 'DV29859').length,
+                        'VIP3': data.filter(item => getMonthFromDateTime(item.ngayKetThuc) === currentMonth && item.idDichVu === 'DV37196').length
+                    };
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: Object.keys(filteredData),
+                            datasets: [
+                                {
+                                    label: '#Số lượng gói tin trong tháng',
+                                    data: Object.values(filteredData),
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            indexAxis: 'x',
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        });
+
+
+
+        
+    </script>
     </div>
