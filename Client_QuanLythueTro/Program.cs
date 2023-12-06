@@ -1,4 +1,5 @@
 ﻿using Client_QuanLythueTro.APIGateWay;
+using Client_QuanLythueTro.Models;
 using Client_QuanLythueTro.Services;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using System.Text.Json.Serialization;
@@ -12,6 +13,8 @@ builder.Services.AddScoped<TinDang_PhongTro_GateWay>();
 builder.Services.AddScoped<LichXemPhong_GateWay>();
 builder.Services.AddScoped<APIGateWayKhuVuc>();
 builder.Services.AddScoped<GiaoDich_Gateway>();
+
+builder.Services.Configure<MomoOptionModel>(builder.Configuration.GetSection("MomoAPI"));
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<APIGateWayLichXemPhong>();
 

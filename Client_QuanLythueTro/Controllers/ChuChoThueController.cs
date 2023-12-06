@@ -286,7 +286,7 @@ namespace Client_QuanLythueTro.Controllers
         }
 
         [HttpPost]
-        public IActionResult DangKyDichVu(VNPayInformationModel model, string madv, int httt)
+        public async Task<IActionResult> DangKyDichVu(VNPayInformationModel model, string madv, int httt)
         {
             var dichvu = _callDichVu.GetGoiTin(madv);
             model.OrderType = madv;
@@ -298,13 +298,33 @@ namespace Client_QuanLythueTro.Controllers
             {
                 var url = _paymentService.CreateVNPaymentUrl(model, HttpContext);
                 return Redirect(url);
+            }else if(httt == 3)
+            {
+                MomoInfoModel momoModel = new MomoInfoModel();
+                momoModel.FullName = model.Name;
+                momoModel.Amount = model.Amount;
+                momoModel.OrderId = "123456789";
+                momoModel.OrderInfo = model.OrderDescription;
+                var response = await _paymentService.CreatePaymentAsync(momoModel);
+                return Redirect(response.PayUrl);
             }
 
             return View();
             
         }
 
-        public IActionResult PaymentCallback()
+        [HttpGet]
+        public IActionResult MomoPaymentCallBack()
+        {
+            var response = _paymentService.PaymentExecuteAsync(HttpContext.Request.Query);
+            if(response.ErrorCode != 42)
+            {
+                return View(response);
+            }else
+                return RedirectToAction("DangKyDichVu");
+        }
+
+        public IActionResult VNPayPaymentCallback()
         {
             var response = _paymentService.VNPaymentExecute(Request.Query);
             if(response.VnPayResponseCode == "00")
