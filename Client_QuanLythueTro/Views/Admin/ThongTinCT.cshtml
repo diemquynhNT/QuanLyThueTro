@@ -1,0 +1,58 @@
+﻿@model Client_QuanLythueTro.Models.ThongTinCongTy
+
+@{
+    ViewData["Title"] = "ThongTinCT";
+    Layout = "~/Views/Admin/LayoutAdmin.cshtml";
+    ViewBag.user = "active";
+    ViewBag.Name = "Thông tin công ty";
+
+}
+
+
+    <title>180Home - Giới thiệu công ty</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .company-info {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .company-logo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .company-description {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333333;
+        }
+
+            .company-description strong {
+                color: #007bff;
+            }
+    </style>
+</head>
+<body>
+    <div class="company-info">
+        <img src="https://placekitten.com/150/150" alt="180Home Logo" class="company-logo">
+        <h2>Công Ty Dịch Vụ cho Thuê Phòng Trọ Nhà Trọ 180Home</h2>
+        <p class="company-description">
+            <strong>180Home</strong> là nơi bắt đầu từ những nhu cầu tìm kiếm nhà ở của khách hàng trên cả nước. Giờ đây, bạn không cần phải chạy đôn chạy đáo để tìm kiếm căn nhà hoặc phòng trọ phù hợp nữa, mà đơn giản chỉ cần mở app của chúng tôi và tìm kiếm bất cứ nơi đâu. Luôn hỗ trợ bạn mọi lúc mọi nơi.
+        </p>
+    </div>
+</body>
+</html>

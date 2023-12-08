@@ -165,5 +165,10 @@ namespace Client_QuanLythueTro.Controllers
             Users users = apiGateWay.GetUser(id);
             return View(users);
         }
+
+        public ActionResult ThongTinCT(string id)
+        {
+            return View();
+        }
     }
 }

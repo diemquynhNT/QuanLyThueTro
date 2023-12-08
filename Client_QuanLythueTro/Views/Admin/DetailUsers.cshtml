@@ -7,57 +7,76 @@
     ViewBag.Name = "Thông tin nhân viên";
 
 }
-<div class="tile container-sm">
-        <div class="tile-body" id="tile-body">
-            <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
-                <h3 style="text-align: center; color: rgb(0, 28, 64);">
-                    THÔNG TIN NHÂN VIÊN
-                </h3>
-                <div class="row">
-                    <div class="col-md-4" sty>
-                    <img id="imgEmloyee" class="rounded-circle" alt="Cinque Terre" width="250" height="250" style=" text-align: center;">
-                    </div>
-                    <div class="col-md-8">
-                        <p>
-                            <span>
-                                <strong>Mã nhân viên: </strong> @Html.DisplayFor(modelItem => Model.idUser)
-                            </span>
-                            -
-                            <span>
-                                @Html.DisplayFor(modelItem => Model.idChucVu)
-                            </span>
-                        </p>
-                        <p>
-                            <b>Họ và tên: </b>@Html.DisplayFor(modelItem => Model.hoTen)
-                        </p>
-                   
-                        <p>
-                           <strong>Giới tính:</strong> @Html.DisplayFor(modelItem => Model.gioiTinh)
-                        </p>
-                        <p>
-                           <strong>Tên đăng nhập:</strong> @Html.DisplayFor(modelItem => Model.userName)
-                        </p>
-                        <p>
-                            <span>
-                                <strong>Số điện thoại:</strong> @Html.DisplayFor(modelItem => Model.sdtUsers)
-                            </span>
-                        </p>
-                        <p>
 
-                        <span>
-                            <strong>Email: </strong> @Html.DisplayFor(modelItem => Model.emailUser)
-                        </span>
+
+<style>
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        padding: 20px;
+    }
+
+        .card img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .card .highlight-box {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+</style>
+
+<div class="card">
+    <h3 style="text-align: center; color: rgb(0, 28, 64);">
+        THÔNG TIN NHÂN VIÊN
+    </h3>
+    <div class="row">
+        <div class="col-md-3 text-center">
+            <img id="imgEmloyee" class="rounded-circle" alt="Employee Image">
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="highlight-box">
+                        <p>
+                            <strong>Mã nhân viên:</strong> @Html.DisplayFor(modelItem => Model.idUser) - @Html.DisplayFor(modelItem => Model.idChucVu)
+                        </p>
+                        <p>
+                            <strong>Họ và tên:</strong> @Html.DisplayFor(modelItem => Model.hoTen)
+                        </p>
+                        <p>
+                            <strong>Giới tính:</strong> @Html.DisplayFor(modelItem => Model.gioiTinh)
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="highlight-box">
+                        <p>
+                            <strong>Tên đăng nhập:</strong> @Html.DisplayFor(modelItem => Model.userName)
+                        </p>
+                        <p>
+                            <strong>Số điện thoại:</strong> @Html.DisplayFor(modelItem => Model.sdtUsers)
+                        </p>
+                        <p>
+                            <strong>Email:</strong> @Html.DisplayFor(modelItem => Model.emailUser)
                         </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <input id="idEmployee" value="@Model.idUser" style="visibility:hidden" />
-<script>
-   
+</div>
 
-    function GetImgeEmployee(){
+<input id="idEmployee" value="@Model.idUser" style="visibility:hidden" />
+
+<script>
+    function GetImgeEmployee() {
         var idEmployee = document.getElementById("idEmployee").value;
         urlImg = "https://localhost:7034/api/Users/GetImage?id=" + idEmployee;
         console.log(urlImg + "id" + idEmployee)
@@ -75,6 +94,5 @@
             });
     }
     GetImgeEmployee();
-
 </script>
 
