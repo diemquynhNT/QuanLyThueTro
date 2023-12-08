@@ -1,56 +1,119 @@
-﻿@model IEnumerable<Client_QuanLythueTro.Models.Khuvucs>
-
+﻿
 @{
-    ViewData["Title"] = "QuanLyKhuVuc";
-    Layout = "~/Views/Admin/LayoutAdmin.cshtml";
-    ViewBag.kv="active";
-    ViewBag.name = "Khu vực hoạt động";
+    ViewData["Title"] = "Quản lý khu vực";
+    Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
+    ViewBag.kv = "active";
+    ViewBag.Name = "Quản lý dịch vụ";
 }
+<div class="tab-content
+                          
+    <div class="row">
+    @using (Html.BeginForm("QuanLyTinThanhPho", "NVKD", FormMethod.Post, new { @class = "" }))
+    {
 
-<h1>QuanLyKhuVuc</h1>
+        <div class="col-md-2">
+            <select id="city-list" name="cityname" class="form-control-sm">
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="submit" class="btn btn-success" value="Tìm" />
+        </div>
+    }
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.idKhuVuc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.tenKhuVuc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.moTa)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.idThanhPho)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.idKhuVuc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.tenKhuVuc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.moTa)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.idThanhPho)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+</div>
+
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+<script>
+    let listHCM = [];
+    let listHN = [];
+    let listother = [];
+    const currentMonth = (new Date()).getMonth() + 1;
+    const currentYear = new Date().getFullYear();
+
+    function getMonthItem(dateTime) {
+        const date = new Date(dateTime);
+        return date.getMonth() + 1;
+    }
+
+    function getYearItem(dateTime) {
+        const date = new Date(dateTime);
+        return date.getFullYear();
+    }
+
+    window.onload = function () {
+        fetch('https://localhost:7034/api/TinDangPhongTro')
+            .then(response => response.json())
+            .then(data => {
+             
+
+                data.forEach(item => {
+                    if (item.diaChi && item.diaChi.indexOf('Hồ Chí Minh') !== -1 && getMonthItem(item.ngayKetThuc) === currentMonth && getYearItem(item.ngayKetThuc) === currentYear &&
+                        item.trangThaiTinDang == true) {
+                        listHCM.push(item);
+                    } else if (item.diaChi && item.diaChi.indexOf('Hà Nội') !== -1 && getMonthItem(item.ngayKetThuc) === currentMonth && getYearItem(item.ngayKetThuc) === currentYear &&  item.trangThaiTinDang == true) {
+                        listHN.push(item);
+                    }
+                    else if (getMonthItem(item.ngayKetThuc) === currentMonth && getYearItem(item.ngayKetThuc) === currentYear && item.trangThaiTinDang == true) {
+                        listother.push(item);
+                    }
+                });
+                console.log(listother);
+                var hanoiCount = listHN.length;
+                var hoChiMinhCount = listHCM.length;
+                var otherCount = listother.length;
+
+                var dataPoints = [
+                    { label: "TP Hồ Chí Minh", y: hoChiMinhCount },
+                    { label: "Hà Nội", y: hanoiCount },
+                    { label: "Khu vực khác", y: otherCount }
+                ];
+
+                var chart = new CanvasJS.Chart("chartContainer", {
+                    theme: "light2",
+                    exportEnabled: true,
+                    animationEnabled: true,
+                    title: {
+                        text: "Thống kê tin đăng tải trong tháng",
+                        fontSize: 21
+                    },
+                    data: [{
+                        type: "pie",
+                        startAngle: 160,
+                        toolTipContent: "<b>{label}</b>: {y}%",
+                        indexLabel: "{label} - {y}%",
+                        dataPoints: dataPoints
+                    }]
+                });
+                chart.render();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    };
+
+ function getThanhPho() {
+        var url = 'https://provinces.open-api.vn/api/';
+        console.log(url)
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                var selectElementSearch = document.getElementById('city-list');
+                console.log(data)
+                for (var i = 0; i < data.length; i++) {
+                    var option = document.createElement('option');
+                    option.value = data[i].name;
+                    option.text = data[i].name;
+                    selectElementSearch.add(option);
+                }
+            });
+    }
+    getThanhPho();
+
+
+
+</script>
+
+

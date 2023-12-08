@@ -2,6 +2,9 @@
 using Client_QuanLythueTro.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NuGet.ProjectModel;
+using SmartBreadcrumbs.Attributes;
+using SmartBreadcrumbs.Nodes;
 
 namespace Client_QuanLythueTro.Controllers
 {
@@ -11,7 +14,6 @@ namespace Client_QuanLythueTro.Controllers
         private readonly APIGateWayLichXemPhong apiLichXem;
         private readonly APIGateWayUsers aPIGateWayUsers;
         private readonly LichXemPhong_GateWay _callLichXemPhong;
-
 
         public NguoiThueController(APIGateWayTinDang _context, APIGateWayLichXemPhong callLichXemPhong,LichXemPhong_GateWay callLichXem, APIGateWayUsers aPIGateWayUsers)
         {
@@ -24,6 +26,12 @@ namespace Client_QuanLythueTro.Controllers
         public IActionResult QuanLyTinDang(string idUser)
         {
             IEnumerable<TinDang> tinDangs = context.ListTinDangByIdUser(idUser);
+            List<Breadcrumb> breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb { Label = "Trang Chủ", Url = "/ChuChoThue/IndexTinDangPT" },
+             
+            };
+            ViewBag.Breadcrumbs = breadcrumbs;
             TempData["idUser"] = idUser;
             return View(tinDangs);
         }
@@ -50,9 +58,16 @@ namespace Client_QuanLythueTro.Controllers
             }
                 return View(listTin);
         }
-
-        public ActionResult CreateTinDang()
+        public ActionResult CreateTinDang(string idUser)
         {
+            
+            List<Breadcrumb> breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb { Label = "Trang Chủ", Url = "/ChuChoThue/IndexTinDangPT" },
+               new Breadcrumb { Label = "Quản Lý Tin Cá Nhân", Url = Url.Action("QuanLyTinDang", "NguoiThue", new { idUser = idUser }) }
+
+            };
+            ViewBag.Breadcrumbs = breadcrumbs;
             TinDang tin = new TinDang();
             return View(tin);
         }
@@ -74,8 +89,15 @@ namespace Client_QuanLythueTro.Controllers
 
             }
         }
-        public ActionResult EditTinDang(string id)
+        public ActionResult EditTinDang(string id,string idUser)
         {
+            List<Breadcrumb> breadcrumbs = new List<Breadcrumb>
+            {
+               new Breadcrumb { Label = "Trang Chủ", Url = "/ChuChoThue/IndexTinDangPT" },
+               new Breadcrumb { Label = "Quản Lý Tin Cá Nhân", Url = Url.Action("QuanLyTinDang", "NguoiThue", new { idUser = idUser }) }
+
+            };
+            ViewBag.Breadcrumbs = breadcrumbs;
             TinDang tin = context.GetTin(id);
             return View(tin);
         }
@@ -111,15 +133,29 @@ namespace Client_QuanLythueTro.Controllers
         //    }
         //}
 
-        public IActionResult QuanLyLichXemPhong(string idTin)
+        public IActionResult QuanLyLichXemPhong(string idTin,string idUser)
         {
             IEnumerable<LichXemPhong> list = apiLichXem.GetListXemPhong(idTin);
+            List<Breadcrumb> breadcrumbs = new List<Breadcrumb>
+            {
+               new Breadcrumb { Label = "Trang Chủ", Url = "/ChuChoThue/IndexTinDangPT" },
+               new Breadcrumb { Label = "Quản Lý Tin Cá Nhân", Url = Url.Action("QuanLyTinDang", "NguoiThue", new { idUser = idUser }) }
+
+            };
+            ViewBag.Breadcrumbs = breadcrumbs;
             TempData["IdTin"] = idTin;
             return View(list);
         }
         [HttpGet]
         public IActionResult CreateLichXem(string id)
         {
+            List<Breadcrumb> breadcrumbs = new List<Breadcrumb>
+            {
+               new Breadcrumb { Label = "Trang Chủ", Url = "/ChuChoThue/IndexTinDangPT" },
+               new Breadcrumb { Label = "Quản Lý Tin Cá Nhân", Url = Url.Action("QuanLyTinDang", "NguoiThue", new { idUser = id }) }
+
+            };
+            ViewBag.Breadcrumbs = breadcrumbs;
             var list = context.ListTinDangByIdUser(id).ToList();
             ViewBag.ListIdTD = list
                 .Select(x => new SelectListItem
@@ -140,8 +176,16 @@ namespace Client_QuanLythueTro.Controllers
             return RedirectToAction("QuanLyLichXemPhong", new { idTin = lichXemPhong.idTinDang });
         }
 
-        public IActionResult DetailLichXem(string idLichXem)
+        public IActionResult DetailLichXem(string idLichXem, string idUser,string idTin)
         {
+            List<Breadcrumb> breadcrumbs = new List<Breadcrumb>
+            {
+               new Breadcrumb { Label = "Trang Chủ", Url = "/ChuChoThue/IndexTinDangPT" },
+               new Breadcrumb { Label = "Quản lý Tin Cá Nhân",Url = Url.Action("QuanLyTinDang", "NguoiThue", new { idUser = idUser }) },
+               new Breadcrumb { Label = "Quản Lý Lịch Xem Phòng", Url = Url.Action("QuanLyLichXemPhong", "NguoiThue", new { idUser = idUser,idTin=idTin }) }
+
+            };
+            ViewBag.Breadcrumbs = breadcrumbs;
             LichXemPhong lich = apiLichXem.GetLichXem(idLichXem);
            return View(lich);
         }
@@ -166,17 +210,35 @@ namespace Client_QuanLythueTro.Controllers
 
         public IActionResult QuanLyTinYeuThichCaNhan(string idUser)
         {
+            List<Breadcrumb> breadcrumbs = new List<Breadcrumb>
+            {
+               new Breadcrumb { Label = "Trang Chủ", Url = "/ChuChoThue/IndexTinDangPT" },
+
+            };
+            ViewBag.Breadcrumbs = breadcrumbs;
             IEnumerable<TinDang> list = context.ListTinDangYeuThich(idUser);
             return View(list);
         }
         public IActionResult QuanLyLichXemCaNhan(string sdt)
         {
+            List<Breadcrumb> breadcrumbs = new List<Breadcrumb>
+            {
+               new Breadcrumb { Label = "Trang Chủ", Url = "/ChuChoThue/IndexTinDangPT" },
+
+            };
+            ViewBag.Breadcrumbs = breadcrumbs;
             IEnumerable<LichXemPhong> list = apiLichXem.GetListLichXemPhongUser(sdt);
             return View(list);
         }
         public IActionResult ThongTinCaNhan(string idUser)
         {
-           Users u=aPIGateWayUsers.GetUser(idUser);
+            List<Breadcrumb> breadcrumbs = new List<Breadcrumb>
+            {
+               new Breadcrumb { Label = "Trang Chủ", Url = "/ChuChoThue/IndexTinDangPT" },
+
+            };
+            ViewBag.Breadcrumbs = breadcrumbs;
+            Users u=aPIGateWayUsers.GetUser(idUser);
             return View(u);
         }
         [HttpPost]

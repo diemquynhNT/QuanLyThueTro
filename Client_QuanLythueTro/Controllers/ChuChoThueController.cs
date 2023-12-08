@@ -11,9 +11,11 @@ using Client_QuanLythueTro.Services;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.RegularExpressions;
+using SmartBreadcrumbs.Attributes;
 
 namespace Client_QuanLythueTro.Controllers
 {
+  
     public class ChuChoThueController : Controller
     {
         private readonly TinDang_PhongTro_GateWay callTinDangPT;
@@ -22,6 +24,7 @@ namespace Client_QuanLythueTro.Controllers
         private readonly APIGateWayDichVu _callDichVu;
         private readonly GiaoDich_Gateway _callGiaoDich;
         private readonly IPaymentService _paymentService;
+
 
         public ChuChoThueController(TinDang_PhongTro_GateWay callTinDangPT, LichXemPhong_GateWay callLichXemPhong, IPaymentService paymentService, APIGateWayDichVu callDichVu, GiaoDich_Gateway callGiaoDich, APIGateWayTinDang apiTinDang)
         {
@@ -51,6 +54,7 @@ namespace Client_QuanLythueTro.Controllers
 
         public IActionResult IndexTinDangPT()
         {
+            
             List<TinDang> listTin = callTinDangPT.ListTinDangPhongTro();
             return View(listTin);
         }
@@ -92,6 +96,7 @@ namespace Client_QuanLythueTro.Controllers
             }
         }
 
+    
         public IActionResult TinTheoTinhThanh(string thanhpho)
         {
             List<TinDang> listTin = new List<TinDang>();

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json.Linq;
 using NuGet.Common;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Web;
@@ -102,7 +103,7 @@ namespace Client_QuanLythueTro.Controllers
                 TinDang newTin = apiGateWay.CreateTinDang(tin);
                 apiGateWay.CreateImage(newTin.idTinDang, listimg);
                 TempData["mess"] = "thanhcong";
-                return RedirectToAction("AddImgToTinDang", new { idTinDang = newTin.idTinDang });
+                return RedirectToAction("QuanLyTinDang");
             }
             catch (Exception ex)
             {
@@ -110,11 +111,11 @@ namespace Client_QuanLythueTro.Controllers
 
             }
         }
-        public ActionResult AddImgToTinDang(string idTinDang)
-        {
-            ViewBag.id = idTinDang;
-            return View();
-        }
+        //public ActionResult AddImgToTinDang(string idTinDang)
+        //{
+        //    ViewBag.id = idTinDang;
+        //    return View();
+        //}
 
         // GET: NVKDController/Edit/5
         public ActionResult EditTin(string id)
@@ -311,9 +312,15 @@ namespace Client_QuanLythueTro.Controllers
 
         public ActionResult QuanLyKhuVuc()
         {
-            List<Khuvucs> list=apiGateWayKhuVuc.ListKhuvuc();
-            return View(list);
+            return View();
         }
+        public ActionResult QuanLyTinThanhPho(string cityname)
+        {
+            var listTin = apiGateWay.ListTinDangByIdThanhPho(cityname);
+            ViewBag.Cityname = cityname;
+            return View(listTin);
+        }
+
 
 
     }
