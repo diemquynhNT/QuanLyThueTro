@@ -148,6 +148,9 @@ namespace QuanLyThueTro.Migrations
                     b.Property<string>("idLichXem")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("LyDo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("idTinDang")
                         .HasColumnType("nvarchar(450)");
 
@@ -352,11 +355,13 @@ namespace QuanLyThueTro.Migrations
                     b.HasIndex("idDichVu");
 
                     b.HasIndex("idKhuVuc");
-                    
+
                     b.HasIndex("idUser");
 
-                    b.ToTable("tinDangs");
-
+                    b.ToTable("tinDangs", t =>
+                        {
+                            t.HasTrigger("tr_ThemTinSLPhong");
+                        });
                 });
 
             modelBuilder.Entity("QuanLyThueTro.Model.TinYeuThich", b =>

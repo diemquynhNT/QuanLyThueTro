@@ -1,0 +1,144 @@
+﻿@model IEnumerable<Client_QuanLythueTro.Models.LichXemPhong>
+
+@{
+    ViewData["Title"] = "QuanLyLichXemCaNhan";
+    Layout = "~/Views/NguoiThue/LayoutMain/LayoutMainNguoiThue.cshtml";
+    ViewBag.lichxem="active";
+    ViewBag.title = "Lịch xem cá nhân";
+}
+<div class="col-sm-6">
+    <h3>Quản lý lịch xem phòng cá nhân<b></b></h3>
+</div>
+<hr />
+<div class="d-none d-md-block">
+    <div class="row" id="printMe">
+        <div class="col-sm-12  table-responsive">
+            <table class="table table-hover table-bordered js-copytextarea dataTable no-footer" cellpadding="0" cellspacing="0" border="0" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+                <thead>
+                    <tr>
+                        <th>
+                            Mã tin
+                        </th>
+                        <th>
+                            Ngày xem
+                        </th>
+                        <th>
+                            Thông tin
+                        </th>
+                        <th>
+                            SĐT
+                        </th>
+                        <th>
+                            Trạng Thái
+                        </th>
+                        <th>
+                            Lý do
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.idTinDang)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ngayXem)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.nguoiXem)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.sdtNguoiXem)
+                            </td>
+                            @if (item.trangThai)
+                            {
+                                <td>
+                                    <span class="badge rounded-pill bg-success">Đã duyệt</span>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <span class="badge rounded-pill bg-danger">Chưa duyệt</span>
+                                </td>
+                            }
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LyDo)
+                            </td>
+                            <td>
+                                <a href="/ChuChoThue/DetailTinDangPT/@item.idTinDang" class="btn btn-outline-dark btn-sm" ata-toggle="tooltip" title="">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@item.idLichXem" data-bs-toggle="tooltip" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                                <div class="modal fade" id="modal-@item.idLichXem" tabindex="-1" aria-labelledby="modal-@item.idLichXem" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Xác nhận</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Xác nhận xóa lịch xem phòng @item.ngayXem
+                                                <input value="@item.idLichXem" id="matd-@item.idLichXem" style="visibility:hidden">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-danger" onclick="huyLichXemPhong('@item.idLichXem','@item.ngayXem')">Xóa</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+
+    function huyLichXemPhong(idLich,ngay) {
+        let today = new Date();
+        console.log(today);
+        let dateDate = new Date(ngay);
+        var timeDiff = dateDate.getTime() - today.getTime();
+        var soNgayChenhLech = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        console.log(soNgayChenhLech);
+        if (soNgayChenhLech <= 1) {
+            swal("Thông báo", "Không thể hủy lịch vì sát ngày đặt !!! ", "error")
+        } else {
+            DeleteLichXem(idLich);
+        }
+    }
+
+    function DeleteLichXem(id) {
+        console.log(id)
+        var url = "https://localhost:7034/api/LichXemPhongs/" + id;
+        swal({
+            title: "Đang xử lý yêu cầu",
+            text: "Vui lòng đợi trong khi chúng tôi xử lý yêu cầu của bạn...",
+            button: false
+        });
+        fetch(url, {
+            method: "DELETE"
+        })
+            .then(function (response) {
+                return response.blob();
+            })
+            .then(function (data) {
+                swal("Yêu cầu thành công", "Đã xóa lịch xem phòng thành công !!! ", "success")
+                    .then((value) => {
+                        location.reload();
+                    });
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+            });
+    }
+</script>

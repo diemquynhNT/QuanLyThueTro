@@ -1,4 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
+@{
+    var userJson = Context.Session.GetString("user");
+    Users user = null;
+    if (userJson != null)
+    {
+        user = JsonConvert.DeserializeObject<Users>(userJson);
+    }
+}
+
+
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -28,7 +40,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- sweetalert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.9.0/dist/sweetalert2.min.css" rel="stylesheet">
 
     <style>
@@ -82,9 +93,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Tin tức</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Bảng giá dịch vụ</a>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -95,36 +103,33 @@
                 <ul class="nav navbar-nav">
                     <li class="">
                         <span>
-                            <img src="~/img/user.png" class="img-fluid rounded-circle m-0" height="50px" width="50px" />
+                            <img src="@user.hinhAnh" class="img-fluid rounded-circle m-0" height="50px" width="50px" />
                         </span>
-                        <span>Diễm Khang</span>
+                        <span>@user.hoTen</span>
                         <p class="btn-info-author">
-                        <p>Mã thành viên: #1215120251</p>
-                        <p>Loại TK: Thường</p>
+                        <p>Mã thành viên: #@user.idUser</p>
+                        <p>Loại TK: @user.idLoaiTK</p>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> Quản lý tin đăng </a>
+                        <a class="nav-link active" href="~/ChuChoThue/QLTinDangPT/@user.idUser"> Quản lý tin đăng </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="~/ChuChoThue/QLLichXemPhong"> Quản lý lịch xem phòng </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> Sửa thông tin cá nhân </a>
+                        <a class="nav-link" href="/ChuChoThue/ThongTinCaNhan/@user.idUser"> Sửa thông tin cá nhân </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> Lịch sử giao dịch </a>
+                        <a class="nav-link" href="~/ChuChoThue/LichSuThanhToan"> Lịch sử thanh toán </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> Lịch sử thanh toán </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"> Bảng giá dịch vụ </a>
+                        <a class="nav-link" href="~/ChuChoThue/DangKyDichVu"> Bảng giá dịch vụ </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"> Liên hệ </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> Đăng xuất </a>
+                        <a class="nav-link" href="@Url.Action("Logout", "ChuChoThue")"> Đăng xuất </a>
                     </li>
                 </ul>
             </nav>
@@ -133,10 +138,17 @@
         <div class="col-md-10" style="padding:0px 45px;">
             <div class="bg-light">
                 <ol class="breadcrumb list-unstyled">
-                    <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                    <li class="breadcrumb-item"><a href="#">Trang cấp 1</a></li>
-                    <li class="breadcrumb-item"><a href="#">Trang cấp 2</a></li>
-                    <li class="breadcrumb-item" aria-current="page">Trang hiện tại</li>
+                    <li class="breadcrumb-item"><a href="~/ChuChoThue/IndexTinDangPT">Home180</a></li>
+                    @{
+                        if(ViewBag.MainPage == "")
+                        {
+                            <li class="breadcrumb-item" aria-current="page">@ViewBag.CurrentPage</li>
+                        }
+                        else{
+                            <li class="breadcrumb-item"><a href="@ViewBag.MainPageLink">@ViewBag.MainPage</a></li>
+                            <li class="breadcrumb-item" aria-current="page">@ViewBag.CurrentPage</li>
+                        }
+                    }
                 </ol>
             </div>
             @RenderBody()

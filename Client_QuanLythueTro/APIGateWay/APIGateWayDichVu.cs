@@ -42,7 +42,7 @@ namespace Client_QuanLythueTro.APIGateWay
             return listTin;
         }
 
-        //create
+        //create bỏ
         public DichVuDangTin CreateGoiTin(DichVuDangTin goitin)
         {
 

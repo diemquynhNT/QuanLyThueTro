@@ -59,14 +59,16 @@ namespace QuanLyThueTro.Controllers
                               tienDien: phongTro.tienDien,
                               tienNuoc: phongTro.tienNuoc,
                               tienDichVu: phongTro.tienDichVu,
-                              //item.luotTruyCap,
+                              item.luotTruyCap,
                               item.idUser,
-                              item.trangThaiTinDang);
+                              item.trangThaiTinDang,
+                              item.idDichVu);
                 mergeList.Add(dto);
             }
             await _context.DisposeAsync();
             return mergeList.ToList();
         }
+      
 
         // GET: api/TinDangPhongTro/5
         [HttpGet("{id}")]
@@ -101,9 +103,10 @@ namespace QuanLyThueTro.Controllers
                           tienDien: phongTro.tienDien,
                           tienNuoc: phongTro.tienNuoc,
                           tienDichVu: phongTro.tienDichVu,
-                          //tinDang.luotTruyCap,
+                          tinDang.luotTruyCap,
                           tinDang.idUser,
-                          tinDang.trangThaiTinDang);
+                          tinDang.trangThaiTinDang,
+                          tinDang.idDichVu);
             return dto;
         }
 
@@ -123,7 +126,7 @@ namespace QuanLyThueTro.Controllers
                 return NotFound();
             }
             List<TinDangPhongTroVM> listTinDangPT = new List<TinDangPhongTroVM>();
-            foreach (var t in tinDang)
+            foreach ( var t in tinDang )
             {
                 var phongTro = _context.phongTros.Where(s => s.idTinDang == t.idTinDang).FirstOrDefault();
                 TinDangPhongTroVM dto = new TinDangPhongTroVM(t.idTinDang,
@@ -142,12 +145,13 @@ namespace QuanLyThueTro.Controllers
                               tienDien: phongTro.tienDien,
                               tienNuoc: phongTro.tienNuoc,
                               tienDichVu: phongTro.tienDichVu,
-                              //t.luotTruyCap,
+                              t.luotTruyCap,
                               t.idUser,
-                              t.trangThaiTinDang);
+                              t.trangThaiTinDang,
+                              t.idDichVu);
                 listTinDangPT.Add(dto);
             }
-
+            
             return listTinDangPT;
         }
 
@@ -250,7 +254,7 @@ namespace QuanLyThueTro.Controllers
 
             _context.tinDangs.Remove(tinDang);
             _context.phongTros.Remove(phongTro);
-            foreach (var image in imagePT)
+            foreach(var image in imagePT)
             {
                 await _photoService.DeleteImageAsync(image.publicId);
             }

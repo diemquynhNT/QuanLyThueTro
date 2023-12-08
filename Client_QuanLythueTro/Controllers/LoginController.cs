@@ -69,7 +69,7 @@ namespace Client_QuanLythueTro.Controllers
                 {
                     return RedirectToAction("TrangChu", "NVKD");
                 }    
-                else if (role == "RO4174131")
+                else if (role == "admin")
                     return RedirectToAction("TrangChuAdmin", "Admin");
                
                 return View();
@@ -84,9 +84,13 @@ namespace Client_QuanLythueTro.Controllers
 
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("access_token");
-
+            HttpContext.Session.Clear();
             return RedirectToAction("Login");
+        }
+        public IActionResult LogoutCustomer()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("LoginCustomer");
         }
 
         public IActionResult LoginCustomer()
@@ -117,6 +121,7 @@ namespace Client_QuanLythueTro.Controllers
                 Users u = apiGateWay.GetUser(id);
                 var userJson = JsonConvert.SerializeObject(u);
                 HttpContext.Session.SetString("user", userJson);
+                return RedirectToAction("IndexTinDangPT", "ChuChoThue");
 
                 var role = payloadObject["roles"]?.Value<string>();
                 TempData["error"] = "thanhcong";
@@ -127,7 +132,7 @@ namespace Client_QuanLythueTro.Controllers
                 else if (role == "NT")
                     return RedirectToAction("IndexTinDangPT", "");
 
-                return View();
+                //    return View();
 
             }
             else

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Client_QuanLythueTro.Models
 {
@@ -11,6 +10,7 @@ namespace Client_QuanLythueTro.Models
         public string nameImage { get; set; }
 
         public string idTinDang { get; set; }
+
 
     }
 }

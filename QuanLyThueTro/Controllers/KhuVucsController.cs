@@ -31,6 +31,15 @@ namespace QuanLyThueTro.Controllers
           }
             return await _context.khuVucs.ToListAsync();
         }
+        [HttpGet("GetKhuVucsByIdTP")]
+        public async Task<ActionResult<IEnumerable<KhuVuc>>> GetKhuVucsByIdTP(string id)
+        {
+            if (_context.khuVucs == null)
+            {
+                return NotFound();
+            }
+            return await _context.khuVucs.Where(t=>t.idThanhPho==id).ToListAsync();
+        }
 
         // GET: api/KhuVucs/5
         [HttpGet("{id}")]

@@ -2,6 +2,9 @@
 @{
     ViewData["Title"] = "EditLichXem";
     Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
+    ViewBag.MainPageLink = "/ChuChoThue/QLLichXemPhong";
+    ViewBag.MainPage = "Quản lý lịch xem phòng";
+    ViewBag.CurrentPage = "Chỉnh sửa lịch xem phòng";
 }
 
 <div class="row">
@@ -24,7 +27,7 @@
                 </div>
                 <div class="col-sm-4">
                     <label class="form-label" asp-for="idTinDang">Chọn tin đăng:</label>
-                    <input type="text" class="form-control" asp-for="idTinDang">
+                    <input type="text" class="form-control" asp-for="idTinDang" readonly>
                     <span asp-validation-for="idTinDang" class="text-danger"></span>
                 </div>
                 <div class="col-sm-4">

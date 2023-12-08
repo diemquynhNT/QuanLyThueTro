@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Client_QuanLythueTro.Models.GiaoDich>
+
+@{
+    ViewData["Title"] = "LichSuThanhToan";
+    Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
+    ViewBag.CurrentPage = "Lịch sử thanh toán";
+}
+
+<div class="row">
+    <div class="col-sm-5">
+        <h3>Lịch sử thanh toán thành công</h3>
+    </div>
+    <div class="col-sm-2">
+        <a type="button" class="btn btn-primary" href="/ChuChoThue/LichSuThanhToan"><i class='bx bx-refesh'></i> Làm mới danh sách</a>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-sm-12 table-responsive">
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã giao dịch</th>
+                    <th>Chi tiết dịch vụ</th>
+                    <th>Tổng tiền</th>
+                    <th>Ngày giao dịch</th>
+                    <th>Ngày hết hạn</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int stt = 0;
+                }
+                @foreach (var item in Model)
+                {
+                    stt = stt + 1;
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => stt)</td>
+                        <td>@Html.DisplayFor(modelItem => item.idGiaoDich)</td>
+                        <td>@Html.DisplayFor(modelItem => item.note)</td>
+                        <td>@Html.DisplayFor(modelItem => item.tongTien) VNĐ</td>
+                        <td>@Html.DisplayFor(modelItem => item.ngayGiaoDich)</td>
+                        @{
+                            DateTime timeEnd = item.ngayGiaoDich.AddDays(30);
+                            TimeSpan timeLeft = timeEnd - DateTime.UtcNow.ToLocalTime();
+                            int daysLeft = (int)Math.Ceiling(timeLeft.TotalDays);
+                            //int day = Int32.Parse(timeLeft.TotalDays.ToString());
+                        }
+                        <td>@Html.DisplayFor(modelItem => timeEnd)</td>
+                        <td>Còn @Html.DisplayFor(modelItem => daysLeft) ngày</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã giao dịch</th>
+                    <th>Chi tiết dịch vụ</th>
+                    <th>Tổng tiền</th>
+                    <th>Ngày giao dịch</th>
+                    <th>Ngày hết hạn</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+</div>
+
+<script>
+    new DataTable('#example');
+    
+</script>

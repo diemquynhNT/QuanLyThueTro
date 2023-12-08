@@ -1,0 +1,134 @@
+﻿@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
+@using Client_QuanLythueTro.APIGateWay;
+@{
+    ViewData["Title"] = "QLTinDangPT";
+    Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
+    ViewBag.CurrentPage = "Quản lý tin đăng";
+    TinDang_PhongTro_GateWay callTinDangPT = new TinDang_PhongTro_GateWay();
+}
+
+
+<script>
+
+    function onDeleteLichXem(id) {
+        var confirmation = confirm("Bạn có chắc chắn muốn xóa không?");
+        if (confirmation) {
+            var formData = new FormData();
+            formData.append('id', id);
+
+            $.ajax({
+                url: '/ChuChoThue/DeleteTinDang',
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: formData,
+                async: false,
+                success: function (msg) {
+                    alert('Xóa thành công tin đăng');
+                },
+                error: function (err) {
+                    alert('Chỉ được xóa lịch xem trước 24h tính từ ngày xem!');
+                }
+            });
+        }
+    }
+</script>
+
+<div class="row">
+    <div class="col-sm-5">
+        <h3>Danh sách tin đăng</h3>
+    </div>
+    <div class="col-sm-2">
+        <a type="button" class="btn btn-danger" href="/ChuChoThue/CreateTinDangPT"><i class='bx bx-plus'></i> Tạo tin đăng mới</a>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-sm-12 table-responsive">
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Hình ảnh</th>
+                    <th>Tiêu đề</th>
+                    <th>Ngày bắt đầu</th>
+                    <th>Ngày hết hạn</th>
+                    <th>Trạng thái</th>
+                    <th>Chức năng</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int stt = 0;
+                }
+                @foreach (var item in Model)
+                {
+                    List<string> imgList = callTinDangPT.ListImages(item.idTinDang);
+                    stt = stt + 1;
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => stt)</td>
+                        <td style="width: 200px">
+                            <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.tieuDe)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ngayBatDau)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ngayKetThuc)</td>
+                        <td>
+                            @if (item.trangThaiTinDang)
+                            {
+                                <span class="badge bg-success">Đã duyệt</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Chưa duyệt</span>
+                            }
+                        </td>
+                        <td style="text-align:center">
+                            
+                            @if (item.trangThaiTinDang)
+                            {
+                                @*<a href="" onclick="alert('Tin đăng đã duyệt thì không được xóa');" class="btn btn-outline-danger btn-sm" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>*@
+                                <a href="~/ChuChoThue/EditTinDangDaDuyet/@item.idTinDang" class="btn btn-primary" ata-toggle="tooltip" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="~/ChuChoThue/CreateLichXem/@item.idTinDang" class="btn btn-danger" ata-toggle="tooltip" title="Tạo lịch xem phòng">
+                                    <i class="fas fa-plus"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="~/ChuChoThue/EditTinDang/@item.idTinDang" class="btn btn-primary" ata-toggle="tooltip" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="" onclick="onDeleteLichXem('@item.idTinDang')" class="btn btn-outline-danger btn-sm" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            }
+                            
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>STT</th>
+                    <th>Hình ảnh</th>
+                    <th>Tiêu đề</th>
+                    <th>Ngày bắt đầu</th>
+                    <th>Ngày hết hạn</th>
+                    <th>Trạng thái</th>
+                    <th>Chức năng</th>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+</div>
+
+<script>
+    new DataTable('#example');
+
+</script>
+

@@ -1,0 +1,517 @@
+﻿@using Client_QuanLythueTro.APIGateWay;
+@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Trang chủ";
+    Layout = "~/Views/ChuChoThue/Layout/_LayoutChuChoThue.cshtml";
+    ViewBag.tc = "active";
+    TinDang_PhongTro_GateWay callTinDangPT = new TinDang_PhongTro_GateWay();
+}
+
+@{
+    var userJson = Context.Session.GetString("user");
+    Users user = null;
+    if (userJson != null)
+    {
+        user = JsonConvert.DeserializeObject<Users>(userJson);
+    }
+}
+
+<link href="~/css/search-pop.css" rel="stylesheet" />
+<div class="text-center bg-light">
+    @*    SEARCH*@
+
+    <div class="search-content">
+        <section id="filter-top-inner">
+            <section id="filter-top">
+                <form asp-action="TrangChuTinDang" asp-controller="ChuChoThue">
+                    <div class="filter-body">
+                        <div class="filter-item ">
+                            <span>
+                                <i class="fas fa-home"></i>
+                                <strong>Phòng trọ, nhà trọ</strong>
+                            </span>
+                        </div>
+
+                        <div class="filter-item" onclick="showPopup('city')">
+                            <span id="diadiem">
+                                <i class="fas fa-map"></i> Chọn địa điểm
+                            </span>
+                            <input id="inputDiaDiemDaChon" name="inputDiaDiemDaChon" type="text" style="border: 0;width:0%" />
+                            <input id="inputCityCode" name="inputCityCode" type="text" style="border: 0;width:0%" />
+
+                        </div>
+                        <div class="filter-item " onclick="showPopup('price')">
+                            <span id="giachon">
+                                <i class='bx bx-purchase-tag-alt'></i>Chọn giá
+
+                            </span>
+                            <input id="inputGiaMin" name="inputGiaMin" type="text" style="border: 0;width:0%" />
+                            <input id="inputGiaMax" name="inputGiaMax" type="text" style="border: 0;width:0%" />
+
+                        </div>
+                        <div class="filter-item " onclick="showPopup('dientich')">
+                            <span id="dientichchon">
+                                <i class='bx bx-area'></i>Chọn diện tích
+
+                            </span>
+                            <input id="inputDienTichMin" name="inputDienTichMin" type="text" style="border: 0;width:0%" />
+                            <input id="inputDienTichMax" name="inputDienTichMax" type="text" style="border: 0;width:0%" />
+                        </div>
+                        <div class="filter-item submit">
+                            <span>
+                                <button type="submit">Tìm kiếm</button>
+                            </span>
+                        </div>
+
+                    </div>
+                </form>
+                <!-- POP CITY -->
+                <div class="filter-popup js-filter-popup js-filter-popup-city" data-popup-type="city">
+                    <div class="filter-popup-header">
+                        <span class="header-label">Địa điểm tìm kiếm</span>
+                        <div class="popup-close" onclick="closePopup('city')"><i class="fas fa-times"></i></div>
+                    </div>
+                    <div class="filter-popup-content">
+                        <div id="filter-popup-city-option" class="filter-list-option">
+                            <ul id="city-list">
+                                <li class="selected" onclick="selectLocation(this)">Toàn quốc</li>
+                                <!-- <li class="" onclick="selectLocation(this)">Hồ Chí Minh</li>
+                                <li class="" onclick="selectLocation(this)">Hà Nội</li>
+                                <li class="" onclick="selectLocation(this)">Đà Nẵng</li>
+                                <li class="" onclick="selectLocation(this)">Hà Nội</li>
+                                <li class="" onclick="selectLocation(this)">Đồng Nai</li> -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-popup js-filter-popup js-filter-popup-khuvuc" data-popup-type="khuvuc">
+                    <div class="filter-popup-header">
+                        <div class="popup-close _js-filter-popup-close js-filter-popup-district-close" onclick="showPopup('city')" style="left: 0;">BACK</div>
+                        <span class="header-label">Chọn khu vực</span>
+                        <div class="popup-close" onclick="closePopup('khuvuc')"><i class="fas fa-times"></i></div>
+                        <div class="popup-close" onclick="closePopup('khuvuc')"><i class="fas fa-times"></i></div>
+                    </div>
+                    <div class="filter-popup-content">
+                        <div id="filter-popup-city-option" class="filter-list-option">
+                            <ul id="khuvuc-list">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    fetch('https://provinces.open-api.vn/api/')
+                        .then(response => response.json())
+                        .then(data => {
+                            const cityList = document.getElementById('city-list');
+
+                            data.forEach(city => {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = city.name;
+                                listItem.onclick = function () {
+                                    showPopup('khuvuc');
+                                    GetKhuVucData(city.code, city.name)
+                                };
+                                cityList.appendChild(listItem);
+                            });
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+
+                    function GetKhuVucData(cityCode, cityName) {
+                        var url = `https://localhost:7034/api/KhuVucs/GetKhuVucsByIdTP?id=${cityCode}`;
+                        console.log(url);
+                        fetch(url)
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                                const khuvucList = document.getElementById('khuvuc-list');
+                                khuvucList.innerHTML = '';
+                                data.forEach(district => {
+                                    const listItem = document.createElement('li');
+                                    listItem.textContent = district.tenKhuVuc;
+                                    listItem.onclick = function () {
+                                        selectLocation(this, cityName, district.idKhuVuc);
+                                    };
+                                    khuvucList.appendChild(listItem);
+                                });
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+                    }
+                </script>
+                <div class="filter-popup has-footer js-filter-popup js-filter-popup-price" data-popup-type="price">
+                    <div class="filter-popup-header">
+                        <span class="header-label">Giá lựa chọn</span>
+                        <div class="popup-close" onclick="closePopup('price')"><i class="fas fa-times"></i></div>
+                    </div>
+                    <div class="filter-popup-content-search">
+                        <div class="pop-show-price">
+                            <header>
+                                <h4>Chọn giá phòng</h4>
+                                <div class="price-input">
+                                    <div class="field">
+                                        <span>Min</span>
+                                        <input value="0" type="number" class="input-min">
+                                    </div>
+                                    <div class="separator">-</div>
+                                    <div class="field">
+                                        <span>Max</span>
+                                        <input value="15000" type="number" class="input-max">
+                                    </div>
+                                </div>
+                                <div class="slider">
+                                    <div class="progress" id="progress"></div>
+                                </div>
+                                <div class="range-input">
+                                    <input type="range" class="range-min" id="range-min" min="0" max="15000" value="0">
+                                    <input type="range" class="range-max" id="range-max" min="0" max="15000" value="15000">
+
+                                </div>
+                            </header>
+                            <button class="btnSavePrice btn btn-success" onclick="getDatatoPrice()">Xác nhận</button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="filter-popup js-filter-popup js-filter-popup-dientich" data-popup-type="dientich">
+                    <div class="filter-popup-header">
+                        <span class="header-label">Diện tích</span>
+                        <div class="popup-close" onclick="closePopup('dientich')"><i class="fas fa-times"></i></div>
+                    </div>
+                    <div class="filter-popup-content">
+                        <div id="filter-popup-city-option" class="filter-list-option">
+                            <ul>
+                                <li class="selected" onclick="selectDienTich(this)">Dưới 20</li>
+                                <li class="" onclick="selectDienTich(this)">Từ 20m - 30m</li>
+                                <li class="" onclick="selectDienTich(this)">Từ 30m - 70m</li>
+                                <li class="" onclick="selectDienTich(this)">Từ 70m - 90m</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+    </div>
+    @*BODY*@
+    <div class="title-header">
+        <h2>Welcome to Home 180</h2>
+        <p>Kênh thông tin cung cấp dịch vụ phòng trọ hàng đầu tại Việt nam</p>
+    </div>
+   @* <div class="d-flex justify-content-center mb-3">
+        <div class="card m-2" style="width:230px">
+            <img class="card-img-top" src="~/img/TPHCM.jpg" alt="Card image" style="width:100%; height: 120px">
+            <div class="card-body">
+                <h6 class="card-title">Thành phố Hồ Chí Minh</h6>
+            </div>
+        </div>
+        <div class="card m-2" style="width:230px">
+            <img class="card-img-top" src="~/img/hanoi.jpg" alt="Card image" style="width:100%; height: 120px">
+            <div class="card-body">
+                <h6 class="card-title">Thành phố Hà Nội</h6>
+            </div>
+        </div>
+        <div class="card m-2" style="width:230px">
+            <img class="card-img-top" src="~/img/dn.jpg" alt="Card image" style="width:100%; height: 120px">
+            <div class="card-body">
+                <h6 class="card-title">Thành phố Đà Nẵng</h6>
+            </div>
+        </div>
+    </div>*@
+
+    <div class="row g-0">
+        <div class="col-sm-8 m-2 rounded" style="border: 1px solid #dedede;">
+            <div class="content-news">
+                <div class="header-news">
+                    <h5>Tin nổi bật</h5>
+                    <h6>6/190 bài đăng được hiển thị</h6>
+                </div>
+                <ul class="list-group list-unstyled">
+                    @foreach (var item in Model)
+                    {
+                        if (!item.trangThaiTinDang)
+                        {
+                            List<string> imgList = callTinDangPT.ListImages(item.idTinDang);
+                            <li class="post-item" onclick="window.location.assign('/ChuChoThue/DetailTinDangPT/@item.idTinDang')" style="padding-bottom:10px">
+                                <div class="card text-black" style="max-width: 100%;">
+                                    <div class="row g-0">
+                                        <div class="col-md-4 scale-img">
+                                            @*  <img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">*@
+                                            <!-- @*<img src="@imgList[0]" class="img-fluid rounded-start m-0" alt="...">*@ -->
+                                            <span class="images-number">@imgList.Count ảnh</span>
+                                            <span class="post-save js-btn-save" data-post-id="603145" title="Lưu tin này"><i class='bx bx-heart' style="font-size:30px; color:white"></i></span>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="post-info">
+                                                <h5 class="post-title" style="color: red;">
+                                                    @Html.DisplayFor(modelItem => item.tieuDe)
+                                                </h5>
+                                                @{
+                                                    var tienPhong = string.Format("{0:0,0 vnđ}", item.giaPhong);
+                                                }
+                                                <div class="price-home clearfix">
+                                                    <span class="post-price"> @tienPhong/tháng</span>
+                                                    <span class="post-acreage">@Html.DisplayFor(modelItem => item.dienTich)m²</span>
+                                                    <span class="post-location">
+                                                        @Html.DisplayFor(modelItem => item.diaChi)
+                                                    </span>
+                                                </div>
+                                                <p class="post-summary">
+                                                    @Html.DisplayFor(modelItem => item.moTa)
+                                                </p>
+                                                <p class="card-text"><small class="text-muted">Lượt xem: @Html.DisplayFor(modelItem => item.luotTruyCap)</small></p>
+                                                <p class="card-footer">
+                                                    <span class="name-author">
+                                                        @*<img src="@user.hinhAnh" class="img-fluid rounded-circle m-0" height="30px" width="30px" />*@
+                                                        @Html.DisplayFor(modelItem => item.nguoiLienHe)
+                                                    </span>
+                                                    <span class="btn-info-author">
+                                                        <button type="button" class="btn btn-info">@Html.DisplayFor(modelItem => item.sdtNguoiLienHe)</button>
+                                                        <button type="button" class="btn btn-outline-primary">Zalo</button>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-3 m-2 rounded">
+            <section class="section">
+                <h5>Theo giá thuê</h5>
+                <ul class="list-group list-group-flush list-group-horizontal">
+                    <li class="list-group-item">Dưới 1 triệu</li>
+                    <li class="list-group-item">Từ 1 - 3 triệu</li>
+                </ul>
+                <ul class="list-group list-group-flush list-group-horizontal">
+                    <li class="list-group-item">Từ 3 - 4 triệu</li>
+                    <li class="list-group-item">Từ 4 - 5 triệu</li>
+                </ul>
+                <ul class="list-group list-group-flush list-group-horizontal">
+                    <li class="list-group-item">Từ 5 - 6 triệu</li>
+                    <li class="list-group-item">Trên 6 triệu</li>
+                </ul>
+            </section>
+            <section class="section">
+                <h5>Theo giá thuê</h5>
+                <ul class="list-group list-group-flush list-group-horizontal">
+                    <li class="list-group-item">Dưới 1 triệu</li>
+                    <li class="list-group-item">Từ 1 - 3 triệu</li>
+                </ul>
+                <ul class="list-group list-group-flush list-group-horizontal">
+                    <li class="list-group-item">Từ 3 - 4 triệu</li>
+                    <li class="list-group-item">Từ 4 - 5 triệu</li>
+                </ul>
+                <ul class="list-group list-group-flush list-group-horizontal">
+                    <li class="list-group-item">Từ 5 - 6 triệu</li>
+                    <li class="list-group-item">Trên 6 triệu</li>
+                </ul>
+            </section>
+            <section class="section">
+                <h5>Theo giá thuê</h5>
+                <ul class="list-group list-group-flush list-group-horizontal">
+                    <li class="list-group-item">Dưới 1 triệu</li>
+                    <li class="list-group-item">Từ 1 - 3 triệu</li>
+                </ul>
+                <ul class="list-group list-group-flush list-group-horizontal">
+                    <li class="list-group-item">Từ 3 - 4 triệu</li>
+                    <li class="list-group-item">Từ 4 - 5 triệu</li>
+                </ul>
+                <ul class="list-group list-group-flush list-group-horizontal">
+                    <li class="list-group-item">Từ 5 - 6 triệu</li>
+                    <li class="list-group-item">Trên 6 triệu</li>
+                </ul>
+            </section>
+            <section class="section">
+                <h5>Tin mới đăng</h5>
+                <ul class="list-group list-unstyled">
+                    <li class="">
+                        <div class="card mb-3" style="max-width: 100%;">
+                            <div class="row g-0">
+                                <div class="col-md-4 scale-img">
+                                    <img src="~/img/TPHCM.jpg" class="img-fluid rounded m-0" height="100%" width="100%" />
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <p class="card-title text-danger text-truncate">Tòa nhà 7 tầng sàn 115m2 - 425 mặt phố Nguyễn Khang cho thuê MB&VP</p>
+                                        <p class="card-text text-secondary">3triệu/tháng</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="">
+                        <div class="card mb-3" style="max-width: 100%;">
+                            <div class="row g-0">
+                                <div class="col-md-4 scale-img">
+                                    <img src="~/img/TPHCM.jpg" class="img-fluid rounded m-0" height="100%" width="100%" />
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <p class="card-title text-danger text-truncate">Tòa nhà 7 tầng sàn 115m2 - 425 mặt phố Nguyễn Khang cho thuê MB&VP</p>
+                                        <p class="card-text text-secondary">3triệu/tháng</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="">
+                        <div class="card mb-3" style="max-width: 100%;">
+                            <div class="row g-0">
+                                <div class="col-md-4 scale-img">
+                                    <img src="~/img/TPHCM.jpg" class="img-fluid rounded m-0" height="100%" width="100%" />
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <p class="card-title text-danger text-truncate">Tòa nhà 7 tầng sàn 115m2 - 425 mặt phố Nguyễn Khang cho thuê MB&VP</p>
+                                        <p class="card-text text-secondary">3triệu/tháng</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>
+<script>
+    var popups = document.querySelectorAll('.filter-popup');
+    console.log(popups)
+
+    function showPopup(popupType) {
+        console.log(popupType)
+        popups.forEach(function (popup) {
+            if (popup.getAttribute('data-popup-type') === popupType) {
+                popup.style.display = 'block';
+            } else {
+                popup.style.display = 'none';
+            }
+        });
+    }
+
+
+
+    function closePopup(type) {
+        var popupToClose = document.querySelector('.js-filter-popup-' + type);
+        popupToClose.style.display = 'none';
+    }
+
+    function selectLocation(selectedOption, cityName, districtCode) {
+        var diaDiem = document.getElementById('diadiem');
+        var inputDD = document.getElementById('inputDiaDiemDaChon');
+        inputDD.value = districtCode;
+        console.log("inputDD: " + inputDD.value)
+        diaDiem.innerHTML = cityName + " - " + selectedOption.textContent.trim();
+        closePopup('khuvuc');
+    }
+
+    function selectDienTich(option) {
+        var dientichChon = document.getElementById('dientichchon');
+        var min;
+        var max;
+
+        if (option.textContent.includes('Dưới')) {
+            min = 0;
+            max = parseInt(option.textContent.match(/\d+/)[0]);
+        } else {
+            var ranges = option.textContent.match(/\d+/g);
+            min = parseInt(ranges[0]);
+            max = parseInt(ranges[1]);
+        }
+
+        dientichChon.innerHTML = `Từ ${min}m - ${max}m`;
+        var intputMin = document.getElementById('inputGiaMin');
+        var intputMax = document.getElementById('inputGiaMax');
+        intputMin.value = min;
+        intputMax.value = max;
+        console.log("inputDienTic" + intputMin.value + " " + intputMax.value)
+
+        closePopup('dientich');
+    }
+
+    //PRICE
+    const rangeInput = document.querySelectorAll(".range-input input"),
+        priceInput = document.querySelectorAll(".price-input input"),
+        progress = document.getElementById("progress");
+    //console.log(rangeInput)
+    console.log(progress)
+
+    let priceGap = 1000;
+
+    rangeInput.forEach(input => {
+        input.addEventListener("input", e => {
+            let minVal = parseInt(rangeInput[0].value),
+                maxVal = parseInt(rangeInput[1].value);
+
+            if (maxVal - minVal < priceGap) {
+                console.log(e.target.className + "check")
+                if (e.target.className === "range-min") {
+                    rangeInput[0].value = maxVal - priceGap;
+                } else {
+                    rangeInput[1].value = minVal + priceGap;
+                }
+
+            } else {
+                priceInput[0].value = minVal;
+                priceInput[1].value = maxVal;
+                console.log(rangeInput[0].max, rangeInput[1].max)
+                progress.style.left = (minVal / rangeInput[0].max) * 100 + "%";
+                progress.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+            }
+        });
+    })
+
+    priceInput.forEach(input => {
+        input.addEventListener("input", e => {
+            let minVal = parseInt(priceInput[0].value),
+                maxVal = parseInt(priceInput[1].value);
+
+            if ((maxVal - minVal >= priceGap) && maxVal <= 15000) {
+                console.log(e.target.className + "check")
+                if (e.target.className === "input-min") {
+                    rangeInput[0].value = minVal;
+                    progress.style.left = (minVal / rangeInput[0].max) * 100 + "%";
+
+                } else {
+                    rangeInput[1].value = maxVal;
+                    progress.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+
+                }
+
+            }
+        });
+    })
+
+    function getDatatoPrice() {
+        var minInput = document.getElementById("range-min").value;
+        var maxInput = document.getElementById("range-max").value;
+        console.log(minInput, maxInput)
+        var giachon = document.getElementById('giachon');
+        giachon.innerHTML = minInput + " - " + maxInput
+
+        var intputMin = document.getElementById('inputDienTichMin');
+        var intputMax = document.getElementById('inputDienTichMax');
+        intputMin.value = minInput;
+        intputMax.value = maxInput;
+        console.log("Gia" + intputMin.value + " " + intputMax.value)
+
+        closePopup('price');
+
+    }
+
+
+
+
+
+
+</script>

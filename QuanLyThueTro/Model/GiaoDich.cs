@@ -18,6 +18,6 @@ namespace QuanLyThueTro.Model
 
         public string? idUser { get; set; }
         [ForeignKey("idUser")]
-        public Users users { get; set; }
+        public Users? users { get; set; }
     }
 }

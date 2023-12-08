@@ -1,0 +1,155 @@
+﻿﻿
+@model Client_QuanLythueTro.Models.VNPayResponseModel
+
+@{
+    ViewData["Title"] = "PaymentCallback";
+    Layout = "~/Views/ChuChoThue/Layout/_LayoutCaNhan.cshtml";
+    ViewBag.MainPageLink = "~/ChuChoThue/DangKyDichVu";
+    ViewBag.MainPage = "Bảng giá dịch vụ";
+    ViewBag.CurrentPage = "Thanh toán thành công";
+}
+
+<style>
+    import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0C4160;
+    padding: 20px 10px;
+}
+
+.card {
+    max-width: 800px;
+    margin: auto;
+    color: black;
+    border-radius: 20px;
+}
+
+p {
+    margin: 0px;
+}
+
+.container .h8 {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.btn.btn-primary {
+    width: 50%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    padding: 0 15px;
+    background-image: linear-gradient(to right, #77A1D3 0%, #79CBCA 51%, #77A1D3 100%);
+    border: none;
+    transition: 0.5s;
+    background-size: 50% auto;
+
+}
+
+
+.btn.btn.btn-primary:hover {
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
+}
+
+
+
+.btn.btn-primary:hover .fas.fa-arrow-right {
+    transform: translate(15px);
+    transition: transform 0.2s ease-in;
+}
+
+.form-control {
+    color: white;
+    background-color: #223C60;
+    border: 2px solid transparent;
+    height: 60px;
+    padding-left: 20px;
+    vertical-align: middle;
+}
+
+.form-control:focus {
+    color: white;
+    background-color: #0C4160;
+    border: 2px solid #2d4dda;
+    box-shadow: none;
+}
+
+.text {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+::placeholder {
+    font-size: 14px;
+    font-weight: 600;
+}
+</style>
+
+<div class="container p-0">
+    <div class="card px-4">
+        <p class="h8 py-3">Thanh toán Thành công</p>
+        <p class="h8 py-3 text-danger">Vui lòng chụp lại màn hình này để cung cấp minh chứng khi cần thiết!</p>
+        <div class="row">
+            <div class="col-6">
+                <div class="d-flex flex-column">
+                    <p class="text mb-1">Họ tên Khách hàng: </p>
+                    <input class="form-control mb-3" type="text" value="@Model.Username">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="d-flex flex-column">
+                    <p class="text mb-1">Tổng tiền: </p>
+                    <input class="form-control mb-3" type="text" value="@Model.Amount">
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="d-flex flex-column">
+                    <p class="text mb-1">Dịch vụ: </p>
+                    <input class="form-control mb-3" type="text" value="@Model.InfoDichVu">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="d-flex flex-column">
+                    <p class="text mb-1">Phương thức thanh toán</p>
+                    <input class="form-control mb-3" type="text" value="@Model.PaymentMethod">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="d-flex flex-column">
+                    <p class="text mb-1">Mã giao dịch: </p>
+                    <input class="form-control mb-3" type="text" value="@Model.PaymentId">
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="d-flex flex-column">
+                    <p class="text mb-1">Số hóa đơn: </p>
+                    <input class="form-control mb-3" type="text" placeholder="Name" value="@Model.OrderId" readonly>
+                </div>
+            </div>
+            <div class="col-12">
+                <a class="btn btn-primary mb-3" href="~/ChuChoThue/DangKyDichVu">
+                    <span class="fas fa-arrow-left"></span>
+                    <span class="ps-3">Trở lại</span>
+                </a>
+                <a class="btn btn-danger mb-3" href="~/ChuChoThue/CreateTinDangPT">
+                    <span class="ps-3">Tạo tin đăng đầu tiên với dịch vụ này</span>
+                    <span class="fas fa-arrow-right"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
