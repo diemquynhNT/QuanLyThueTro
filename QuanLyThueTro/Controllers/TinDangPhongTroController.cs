@@ -59,7 +59,7 @@ namespace QuanLyThueTro.Controllers
                               tienDien: phongTro.tienDien,
                               tienNuoc: phongTro.tienNuoc,
                               tienDichVu: phongTro.tienDichVu,
-                              item.luotTruyCap,
+                              //item.luotTruyCap,
                               item.idUser,
                               item.trangThaiTinDang,
                               item.idDichVu);
@@ -103,7 +103,7 @@ namespace QuanLyThueTro.Controllers
                           tienDien: phongTro.tienDien,
                           tienNuoc: phongTro.tienNuoc,
                           tienDichVu: phongTro.tienDichVu,
-                          tinDang.luotTruyCap,
+                          //tinDang.luotTruyCap,
                           tinDang.idUser,
                           tinDang.trangThaiTinDang,
                           tinDang.idDichVu);
@@ -145,7 +145,7 @@ namespace QuanLyThueTro.Controllers
                               tienDien: phongTro.tienDien,
                               tienNuoc: phongTro.tienNuoc,
                               tienDichVu: phongTro.tienDichVu,
-                              t.luotTruyCap,
+                              //t.luotTruyCap,
                               t.idUser,
                               t.trangThaiTinDang,
                               t.idDichVu);
