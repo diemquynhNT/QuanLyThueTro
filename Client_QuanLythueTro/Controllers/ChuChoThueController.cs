@@ -104,8 +104,54 @@ namespace Client_QuanLythueTro.Controllers
             TempData["tinh"] = thanhpho;
             return View(listTin);
         }
+        [HttpPost]
+        public IActionResult TinTheoTinhThanh(string inputHuyen, string inputTinh, string inputGiaMin, string inputGiaMax, string inputDienTichMin, string inputDienTichMax)
+        {
+            List<TinDang> listTin = new List<TinDang>();
 
-        
+            if (inputTinh == null && inputDienTichMax == null && inputGiaMax == null)
+            {
+                listTin = apiTinDang.ListTinDang().Where(t => t.trangThaiTinDang == true).ToList();
+                return View(listTin);
+            }
+            if (inputDienTichMax == null && inputGiaMax == null)
+            {
+                listTin = apiTinDang.ListTinDangByIdKhuVuc(inputHuyen, inputTinh);
+                return View(listTin);
+            }
+            if (inputDienTichMax == null)
+            {
+                float minPrice = float.Parse(inputGiaMin);
+                float maxPrice = float.Parse(inputGiaMax);
+                return View(apiTinDang.ListTinDangByPrice(inputHuyen, inputTinh, minPrice, maxPrice));
+            }
+            else if (inputGiaMax == null)
+            {
+                float min = float.Parse(inputDienTichMin);
+                float max = float.Parse(inputDienTichMax);
+                return View(apiTinDang.ListTinDangByDienTich(inputHuyen, inputTinh, min, max));
+            }
+            else
+            {
+                float minPrice = float.Parse(inputGiaMin);
+                float maxPrice = float.Parse(inputGiaMax);
+                float min = float.Parse(inputDienTichMin);
+                float max = float.Parse(inputDienTichMax);
+                listTin = apiTinDang.ListTinDangByDienTichPrice(inputHuyen, inputTinh, min, max, minPrice, maxPrice);
+                return View(listTin);
+            }
+        }
+
+
+        public IActionResult TinTheoTinhThanhKhuVuc(string huyen,string tinh)
+        {
+            List<TinDang> listTin = new List<TinDang>();
+            listTin = apiTinDang.ListTinDangByIdKhuVuc(huyen, tinh);
+            TempData["tinh"] = huyen+", "+tinh;
+            return View(listTin);
+        }
+
+
         public IActionResult DetailTinDangPT(string id)
         {
             TinDang tinDang = callTinDangPT.GetTinDang(id);

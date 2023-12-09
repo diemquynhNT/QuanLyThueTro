@@ -21,18 +21,21 @@ namespace Client_QuanLythueTro.Controllers
         private readonly APIGateWayTinDang apiGateWay;
         private readonly APIGateWayDichVu apiGateWayDichVu;
         private readonly APIGateWayKhuVuc apiGateWayKhuVuc;
+        private readonly GiaoDich_Gateway apiGateWayGiaoDich;
 
-        public NVKDController(APIGateWayTinDang aPIGate, APIGateWayDichVu apiGateWayDichVu, APIGateWayKhuVuc APIGateWayKhuVuc)
+        public NVKDController(APIGateWayTinDang aPIGate, APIGateWayDichVu apiGateWayDichVu, APIGateWayKhuVuc APIGateWayKhuVuc, GiaoDich_Gateway apiGateWayGiaoDich)
         {
             this.apiGateWay = aPIGate;
             this.apiGateWayDichVu = apiGateWayDichVu;
             this.apiGateWayKhuVuc = APIGateWayKhuVuc;
+            this.apiGateWayGiaoDich = apiGateWayGiaoDich;
         }
        
         // GET: NVKDController
         public ActionResult TrangChu()
         {
             List<TinDang> listTin = apiGateWay.ListTinDang();
+            TempData["listGiaoDich"]= apiGateWayGiaoDich.ListGiaoDich().Where(t=>t.ngayGiaoDich.Month==DateTime.Now.Month).ToList();
             return View(listTin);
         }
         private void BindDropDownList()
@@ -320,6 +323,13 @@ namespace Client_QuanLythueTro.Controllers
             ViewBag.Cityname = cityname;
             return View(listTin);
         }
+
+        public ActionResult QuanLyGiaoDich()
+        {
+            var list = apiGateWayGiaoDich.ListGiaoDich();
+            return View(list);
+        }
+        
 
 
 
