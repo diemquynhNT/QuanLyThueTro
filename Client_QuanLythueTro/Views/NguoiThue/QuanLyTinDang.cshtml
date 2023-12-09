@@ -17,27 +17,15 @@
     {
         user = JsonConvert.DeserializeObject<Users>(userJson);
     }
+    List<Breadcrumb> listLink = ViewBag.Breadcrumbs;
 
 }
-@if (TempData["mess"]!=null){
-    var checkMessage = TempData["mess"];
-    if (checkMessage == "thanhcong")
-    {
-        <script>
-            swal("Đã thêm tin đăng mới !!!", "Nhân viên sẽ duyệt tin trong thời gian sớm nhất!!! ", "success")
-        </script>
 
-    }
-    else if (checkMessage == "loi")
-    {
-        <script>
-            swal("Lỗi !!!", "Lỗi xử lý !!! ", "error")
-        </script>
-    }
-}
+
 <div class="col-sm-3">
     <h4>Quản lý tin đăng</h4>
 </div>
+
         <div class="row" style="padding:10px">
             <div class="col-sm-5">
                 @using (Html.BeginForm("QuanLyTinDang", "NguoiThue", FormMethod.Post, new { @class = "" }))
@@ -64,7 +52,7 @@
                 }
             </div>
             <div class="col-sm-2">
-                <a class="btn btn-danger btn-sm" href="/NguoiThue/CreateTinDang" previewlistener="true">Đăng tin mới</a>
+        <a class="btn btn-danger btn-sm" asp-controller="NguoiThue" asp-action="CreateTinDang" asp-route-idUser="@user.idUser" previewlistener="true">Đăng tin mới</a>
             </div>
             <div class="col-sm-2">
                 <a class="btn btn-success btn-sm" asp-action="CreateLichXem" asp-controller="NguoiThue" asp-route-id="@user.idUser" previewlistener="true">
@@ -168,10 +156,10 @@
                                     }
                                     </td>
                                     <td>
-                                        <a href="/NguoiThue/EditTinDang/@item.idTinDang" class="btn btn-outline-dark btn-sm" ata-toggle="tooltip" title="">
+                                    <a href="/NguoiThue/EditTinDang/@item.idTinDang?idUser=@idUser" class="btn btn-outline-dark btn-sm" ata-toggle="tooltip" title="">
                                         <i class="fas fa-edit"></i>
                                         </a>
-                                    <a class="btn btn-outline-dark btn-sm position-relative" asp-controller="NguoiThue" asp-action="QuanLyLichXemPhong" asp-route-idTin="@item.idTinDang">
+                                    <a class="btn btn-outline-dark btn-sm position-relative" asp-controller="NguoiThue" asp-action="QuanLyLichXemPhong" asp-route-idTin="@item.idTinDang" asp-route-idUser="@idUser">
                                         <i class='bx bx-calendar'></i>
                                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="countCell-@item.idTinDang">
                                             <span class="visually-hidden">unread messages</span>

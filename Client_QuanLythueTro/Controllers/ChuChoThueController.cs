@@ -11,9 +11,11 @@ using Client_QuanLythueTro.Services;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.RegularExpressions;
+using SmartBreadcrumbs.Attributes;
 
 namespace Client_QuanLythueTro.Controllers
 {
+  
     public class ChuChoThueController : Controller
     {
         private readonly TinDang_PhongTro_GateWay callTinDangPT;
@@ -22,6 +24,7 @@ namespace Client_QuanLythueTro.Controllers
         private readonly APIGateWayDichVu _callDichVu;
         private readonly GiaoDich_Gateway _callGiaoDich;
         private readonly IPaymentService _paymentService;
+
 
         public ChuChoThueController(TinDang_PhongTro_GateWay callTinDangPT, LichXemPhong_GateWay callLichXemPhong, IPaymentService paymentService, APIGateWayDichVu callDichVu, GiaoDich_Gateway callGiaoDich, APIGateWayTinDang apiTinDang)
         {
@@ -51,6 +54,7 @@ namespace Client_QuanLythueTro.Controllers
 
         public IActionResult IndexTinDangPT()
         {
+            
             List<TinDang> listTin = callTinDangPT.ListTinDangPhongTro();
             return View(listTin);
         }
@@ -92,6 +96,7 @@ namespace Client_QuanLythueTro.Controllers
             }
         }
 
+    
         public IActionResult TinTheoTinhThanh(string thanhpho)
         {
             List<TinDang> listTin = new List<TinDang>();
@@ -99,8 +104,54 @@ namespace Client_QuanLythueTro.Controllers
             TempData["tinh"] = thanhpho;
             return View(listTin);
         }
+        [HttpPost]
+        public IActionResult TinTheoTinhThanh(string inputHuyen, string inputTinh, string inputGiaMin, string inputGiaMax, string inputDienTichMin, string inputDienTichMax)
+        {
+            List<TinDang> listTin = new List<TinDang>();
 
-        
+            if (inputTinh == null && inputDienTichMax == null && inputGiaMax == null)
+            {
+                listTin = apiTinDang.ListTinDang().Where(t => t.trangThaiTinDang == true).ToList();
+                return View(listTin);
+            }
+            if (inputDienTichMax == null && inputGiaMax == null)
+            {
+                listTin = apiTinDang.ListTinDangByIdKhuVuc(inputHuyen, inputTinh);
+                return View(listTin);
+            }
+            if (inputDienTichMax == null)
+            {
+                float minPrice = float.Parse(inputGiaMin);
+                float maxPrice = float.Parse(inputGiaMax);
+                return View(apiTinDang.ListTinDangByPrice(inputHuyen, inputTinh, minPrice, maxPrice));
+            }
+            else if (inputGiaMax == null)
+            {
+                float min = float.Parse(inputDienTichMin);
+                float max = float.Parse(inputDienTichMax);
+                return View(apiTinDang.ListTinDangByDienTich(inputHuyen, inputTinh, min, max));
+            }
+            else
+            {
+                float minPrice = float.Parse(inputGiaMin);
+                float maxPrice = float.Parse(inputGiaMax);
+                float min = float.Parse(inputDienTichMin);
+                float max = float.Parse(inputDienTichMax);
+                listTin = apiTinDang.ListTinDangByDienTichPrice(inputHuyen, inputTinh, min, max, minPrice, maxPrice);
+                return View(listTin);
+            }
+        }
+
+
+        public IActionResult TinTheoTinhThanhKhuVuc(string huyen,string tinh)
+        {
+            List<TinDang> listTin = new List<TinDang>();
+            listTin = apiTinDang.ListTinDangByIdKhuVuc(huyen, tinh);
+            TempData["tinh"] = huyen+", "+tinh;
+            return View(listTin);
+        }
+
+
         public IActionResult DetailTinDangPT(string id)
         {
             TinDang tinDang = callTinDangPT.GetTinDang(id);

@@ -7,7 +7,16 @@
     ViewBag.Name = "Edit account nhân viên";
 }
 
+@{
+    var checkMessage = TempData["AlertMessage"];
+    if (checkMessage == "thanhcong")
+    {
+        <script>
+            swal("Yêu cầu thành công", "Đã cập nhật thành công !!! ", "success")
+        </script>
 
+    }
+}
 <div class="tile" style="margin:10px 20px;">
     <h3 class="tile-title">THÔNG TIN NHÂN VIÊN</h3>
     <div class="tile-body contenner">
@@ -20,7 +29,7 @@
                    <div class="col-sm-12" style="text-align: center;">
                             <img id="hinh" class="rounded-circle" width="150" height="150" style="margin-bottom: 14px; text-align: center;" />
                             <br />
-                            <a class="btn btn-sm" ata-toggle="tooltip" title="Đổi password" data-toggle="modal" data-target="#ChangeImage">
+                            <a class="btn btn-outline-secondary btn-sm" title="Đổi hình" data-bs-toggle="modal" data-bs-target="#ChangeImage" data-bs-toggle="tooltip">
                                 Đổi hình
                             </a>
                         </div>
@@ -117,14 +126,14 @@
             </div>
             
             <div class="col-sm-2">
-                <a class="btn btn-warning btn-sm" ata-toggle="tooltip" title="Vô hiệu hóa" data-toggle="modal" data-target="#ChangePassModal">
+                <a class="btn btn-warning btn-sm" title="Đổi mật khẩu" data-bs-toggle="modal" data-bs-target="#ChangePassModal" data-bs-toggle="tooltip">
                     Đổi mật khẩu
                 </a>
             </div>
             @if(Model.trangThai)
             {
                 <div class="col-sm-2">
-                    <a class="btn btn-danger btn-sm" ata-toggle="tooltip" title="Vô hiệu hóa" data-toggle="modal" data-target="#TerminalUser">
+                    <a class="btn btn-warning btn-sm" title="Vô hiệu hóa" data-bs-toggle="modal" data-bs-target="#TerminalUser" data-bs-toggle="tooltip">
                         Vô hiệu hóa
                     </a>
                 </div>
@@ -132,7 +141,7 @@
             else
             {
                 <div class="col-sm-2">
-                    <a class="btn btn-success btn-sm" ata-toggle="tooltip" title="Kích hoạt" data-toggle="modal" data-target="#KichHoatUser">
+                    <a class="btn btn-success btn-sm" title="Kích hoạt" data-bs-toggle="modal" data-bs-target="#KichHoatUser" data-bs-toggle="tooltip">
                         Kích hoạt
                     </a>
                 </div>
@@ -142,93 +151,113 @@
         </div>
     </div>
 </div>
-@{
-    var ktr = ViewBag.thongbao;
-    if (ktr == "thanhcong")
-    {
-        <script>
-            swal("Thành công", "Cập nhật thành công", "success");
-        </script>
-    }
-}
 
-    <div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="ChangePassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <h4 style="text-align:center;padding:20px;">
-                        ĐỔI MẬT KHẨU
-                    </h4>
-                    <div class="form-group">
-                        <b>Nhập mật khẩu mới</b>
-                        <input id="newPass" name="newPass" class="form-control" type="password" required />
-                    </div>
-                    <div class="form-group">
-                        <b>Xác nhận mật khẩu</b>
-                    <input name="repass" id="repass" class="form-control" type="password" onchange="ValidatePass()" />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
-                    <button class="btn btn-success" onclick="changePass()" id="btnSave" type="submit">Thay đổi</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-   <div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="ChangeImage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <label class="control-label">Chọn hình ảnh</label>
-                <input type="file" id="hinhthaydoi" name="hinhthaydoi" style="padding-bottom: 20px;" onchange="showImagePreview(event)" required />
-                    <br />
-                    <img id="hinhchon"  class="rounded-circle" width="150" height="150" style="margin-bottom: 14px; text-align: center;" />
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
-                <button class="btn btn-success btn-sm" onclick="changeUserImage()" type="submit">Thay đổi</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-<div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="TerminalUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="ChangePassModal" tabindex="-1" aria-labelledby="ChangePassModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Đổi mật khẩu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group password-container">
+                    <b>Nhập mật khẩu mới</b>
+                    <input id="newPass" name="newPass" class="form-control" type="password" required />
+                    <span class="show-btn"><i class="fas fa-eye" onclick="togglePassword('newPass')"></i></span>
+                </div>
+                <div class="form-group password-container">
+                    <b>Xác nhận mật khẩu</b>
+                    <input name="repass" id="repass" class="form-control" type="password" />
+                    <span class="show-btn"><i class="fas fa-eye" onclick="togglePassword('repass')"></i></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-sucess" onclick="ValidatePass()" id="btnSave">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .password-container {
+        position: relative;
+    }
+
+    .show-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        cursor: pointer;
+    }
+
+</style>
+
+<div class="modal fade" id="ChangeImage" tabindex="-1" aria-labelledby="ChangeImage" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cập nhật ảnh</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <label class="control-label">Chọn hình ảnh</label>
+                <input type="file" id="hinhthaydoi" name="hinhthaydoi" style="padding-bottom: 20px;" onchange="showImagePreview(event)" required />
+                <br />
+                <img id="hinhchon" class="rounded-circle" width="150" height="150" style="margin-bottom: 14px; text-align: center;" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" onclick="changeUserImage()">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="TerminalUser" tabindex="-1" aria-labelledby="TerminalUser" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">XÁC NHẬN VÔ HIỆU HÓA</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <div class="modal-body">
                 <h4 style="text-align:center;padding:20px 20px 0px 20px;">
-                    XÁC NHẬN VÔ HIỆU HÓA @Model.hoTen - @Model.idUser
+                     @Model.hoTen - @Model.idUser
                 </h4>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
-                <button class="btn btn-danger" onclick="TerminateUser()"  type="submit">Hủy kích hoạt</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger" onclick="TerminateUser()">Hủy tài khoản</button>
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="KichHoatUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+
+<div class="modal fade" id="KichHoatUser" tabindex="-1" aria-labelledby="KichHoatUser" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">XÁC NHẬN KÍCH HOẠT</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <div class="modal-body">
                 <h4 style="text-align:center;padding:20px;">
-                    XÁC NHẬN KÍCH HOẠT @Model.hoTen - @Model.idUser
+                     @Model.hoTen - @Model.idUser
                 </h4>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
-                <button class="btn btn-success" onclick="KichHoat()" type="submit">Kích hoạt</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" onclick="KichHoat()">Kích hoạt</button>
             </div>
         </div>
     </div>
 </div>
-@*<input name="idUser" id="idUser" class="form-control" value="@Model.idUser" style="visibility:hidden" />
-*@
+
 <script>
     var idUser = document.getElementById("idUser").value;
     console.log(idUser)
+
     function showImagePreview(event) {
         var input = event.target;
         var img = document.getElementById("hinhchon");
@@ -238,6 +267,7 @@
         }
         reader.readAsDataURL(input.files[0]);
     }
+
     async function changeUserImage() {
         var url = "https://localhost:7034/api/Users/ChangeImage?id=" + idUser;
         const formData = new FormData();
@@ -261,10 +291,19 @@
             console.error("Lỗi:", error);
         }
     }
+   
+    function togglePassword(type) {
+        var passField = document.getElementById(type);
+        if (passField.type === "password") {
+            passField.type = "text";
+        } else {
+            passField.type = "password";
+        }
+    }
     function ValidatePass() {
         var p1 = document.getElementById('newPass').value;
         var p2 = document.getElementById('repass').value;
-        console.log("p" + p1+" "+p2);
+        console.log("p" + p1 + " " + p2);
         var url = `https://localhost:7034/api/Users/ValidatePass?pass=${p1}&repass=${p2}`;
         fetch(url)
             .then(function (response) {
@@ -275,27 +314,22 @@
             .then(function (data) {
                 console.log("data", data);
                 if (data === true) {
-                    document.getElementById("newPass").style.borderColor = "green";
-                    document.getElementById("repass").style.borderColor = "green";
-                    document.getElementById("btnSave").style.visibility = "visible";
+                    changePass(p1)
                 } else {
-                    document.getElementById("newPass").style.borderColor = "red";
-                    document.getElementById("repass").style.borderColor = "red";
-                    document.getElementById("btnSave").style.visibility = "hidden";
+                    swal("Lỗi !!! ", "Mật khẩu chưa phù hợp  !!! ", "error")
                 }
             })
             .catch(function (error) {
                 console.error("Error:", error);
             });
     }
-
-    function changePass() {
-        var p1 = document.getElementById('newPass').value;
+    function changePass(passNew) {
+        console.log(passNew);
         var url = `https://localhost:7034/api/Users/ChangePass`;
         console.log(url);
         const formData = new FormData();
         formData.append('id', idUser);
-        formData.append('pass', p1);
+        formData.append('pass', passNew);
         const options = {
             method: "PUT",
             body: formData

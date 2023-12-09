@@ -5,6 +5,7 @@
     Layout = "~/Views/Admin/LayoutAdmin.cshtml";
     ViewBag.guest = "active";
     ViewBag.Name = "Quản lý tài khoản khách hàng";
+    ViewBag.title = "Quản lý tải khoản khách hàng";
 }
 
 <div class="tab-content">
@@ -22,28 +23,24 @@
             <div class="col-md-12">
                 <div class="tile">
                     <div class="row" style="padding:10px;">
-                       @* <p>
-                            <a asp-action="CreateUser" class="btn btn-success btn-sm">Thêm mới</a>
-                        </p>*@
-                      
-                        @*<div class="col-sm-4">
-                        @using (Html.BeginForm("QLDonHang", "KeToan", FormMethod.Post, new { @clas = "" }))
-                        {
-                        <div class="row">
-
-                        <div class="col-sm-2">
-                        @Html.DropDownList("thangs", (IEnumerable<SelectListItem>)TempData["thangs"], htmlAttributes: new { @class = "form-control-sm" })
-                        </div>
-                        <div class="col-sm-2">
-                        @Html.DropDownList("tinhtrangdh", (IEnumerable<SelectListItem>)TempData["tinhtrangdh"], htmlAttributes: new { @class = "form-control-sm", })
-                        </div>
-                        <div class="col-sm-2">
-                        <input type="submit" class="btn btn-danger btn-sm" value="Tìm kiếm">
-                        </div>
-                        </div>
-                        }
+                 @*       <div class="col-sm-2">
+                            <a asp-action="CreateGuest" class="btn btn-success btn-sm">Tạo tài khoản khách hàng</a>
                         </div>*@
-
+                        <div class="col-sm-4">
+                            @using (Html.BeginForm("QuanLyKhachHang", "Admin", FormMethod.Post, new { @class = "" }))
+                            {
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <select class="form-control-sm" name="loai" id="trangThai">
+                                            <option>All</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="submit" class="btn btn-success btn-sm" value="Tìm kiếm">
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     </div>
                     <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
                         <div class="row" id="printMe">
@@ -78,9 +75,19 @@
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.hoTen)
                                                 </td>
+                                                @if (item.idChucVu == "CT")
+                                                {
+                                                    <td>
+                                                        Chủ trọ
+                                                    </td>
+                                                }
+                                                else
+                                                {
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.idChucVu)
+                                                    Người thuê
                                                 </td>
+                                                }
+
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.idLoaiTK)
                                                 </td>
@@ -130,3 +137,26 @@
     </div>
 
 </div>
+<script>
+    function getLoaiTK() {
+        var url = 'https://localhost:7034/api/LoaiTaiKhoans';
+        console.log(url)
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                var selectElementSearch = document.getElementById('trangThai');
+                console.log(data)
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].idLoaiTK!="NV")
+                    {
+                        var option = document.createElement('option');
+                        option.value = data[i].idLoaiTK;
+                        option.text = data[i].tenLoaiTK;
+                        selectElementSearch.add(option);
+                    }
+                    
+                }
+            });
+    }
+    getLoaiTK();
+</script>

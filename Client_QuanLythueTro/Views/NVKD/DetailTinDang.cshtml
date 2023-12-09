@@ -80,27 +80,27 @@
                         </table>
                     </div>
                 </div>
-                <div class="row element-button">
-                    <a class="btn btn-delete btn-sm print-file" title="In" onclick="myApp.printTable()">
-                        <i class="fas fa-print"></i> In dữ liệu
-                    </a>
-                </div>
             </div>
         </div>
     </div>
 
 </div>
 
+<div class=" element-button">
+    <a class="btn btn-delete btn-sm print-file" title="In" onclick="myApp.printTable()">
+        <i class="fas fa-print"></i> In dữ liệu
+    </a>
+</div>
 <script>
-    //In dữ liệu
+
     var myApp = new function () {
-        this.printTable = function () {
-            var tab = document.getElementById('sampleTable');
+        this.printTable = function (tableId) {
+            var tab = document.getElementById(tableId);
             var win = window.open('', '', 'height=800px,width=1200px');
             win.document.write(tab.outerHTML);
             win.document.close();
             win.print();
         }
     }
+    
 </script>
-<div>

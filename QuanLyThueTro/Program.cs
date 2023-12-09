@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using NuGet.Packaging.Signing;
 using QuanLyThueTro.Data;
 using QuanLyThueTro.Services;
+using SmartBreadcrumbs.Extensions;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +28,6 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
-
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var secretKey = builder.Configuration["AppSettings:SecretKey"];
@@ -55,6 +56,7 @@ builder.Services.AddAuthentication
 
 //add cors
 builder.Services.AddCors();
+
 
 
 //automapper

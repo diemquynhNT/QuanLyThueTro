@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Client_QuanLythueTro.Models.GiaoDich>
+
+@{
+    ViewData["Title"] = "QuanLyGiaoDich";
+    Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
+    ViewBag.money = "active";
+    ViewBag.Name = "Quản lý giao dịch";
+}
+
+<div class="tab-content">
+<div class="col-md-12">
+    <div class="tile">
+        <div class="col-sm-12 table-responsive">
+            <table class="table table-hover table-bordered js-copytextarea dataTable no-footer" cellpadding="0" cellspacing="0" border="0" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+                <thead>
+                    <tr role="row">
+                        <th class="sorting" tabindex="0" aria-controls="sampleTable">Mã</th>
+                        <th class="sorting" tabindex="0" aria-controls="sampleTable" width="100">Loại dịch vụ</th>
+                            <th class="sorting" tabindex="0" aria-controls="sampleTable" width="100">Tổng tiền</th>
+                        <th class="sorting" tabindex="0" aria-controls="sampleTable">Ngày giao dịch</th>
+                        <th class="sorting" tabindex="0" aria-controls="sampleTable" width="100">Note</th>
+                        <th class="sorting" tabindex="0" aria-controls="sampleTable">Mã user</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.idGiaoDich)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.loaiDichVu)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tongTien)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ngayGiaoDich)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.note)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.idUser)
+                                </td>
+                                @*<td>
+                                    <a href="/NVKD/DetailTinDang/@item.idTinDang" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                </td>*@
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</div>

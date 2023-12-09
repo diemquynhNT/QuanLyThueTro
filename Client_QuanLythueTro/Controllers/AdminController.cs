@@ -10,29 +10,46 @@ namespace Client_QuanLythueTro.Controllers
     public class AdminController : Controller
     {
         private readonly APIGateWayUsers apiGateWay;
-        public AdminController(APIGateWayUsers aPIGate)
+        private readonly APIGateWayTinDang apiGateWayTinDang;
+
+        public AdminController(APIGateWayUsers aPIGate, APIGateWayTinDang apiGateWayTinDang)
         {
             this.apiGateWay = aPIGate;
+            this.apiGateWayTinDang = apiGateWayTinDang;
         }
-        
+       
+
         public ActionResult TrangChuAdmin()
         {
-            
-            return View();
+            List<Users> listNv = apiGateWay.ListUsers().Where(t=>t.trangThai==true && t.idLoaiTK!="NV").ToList();
+            List<Users> listGuest = apiGateWay.ListUsers().Where(t => t.trangThai == true && t.idLoaiTK=="NV").ToList();
+            TempData["soKH"] = listGuest;
+            TempData["sonv"] = listNv;
+            List<TinDang> listTin = apiGateWayTinDang.ListTinDang().ToList();
+
+            return View(listTin);
         }
         public ActionResult QuanLyNhanVien()
         {
 
-            List<Users> listEmloyee = apiGateWay.ListEmployee();
+            List<Users> listEmloyee = apiGateWay.ListUsers().Where(t=> t.idLoaiTK == "NV").ToList();
             return View(listEmloyee);
         }
-
-        public ActionResult QuanLyKhachHang()
+        [HttpPost]
+        public ActionResult QuanLyNhanVien(string trangThai)
         {
+            List<Users> list = new List<Users>();
+            if(trangThai=="All")
+                list = apiGateWay.ListUsers().Where(t => t.idLoaiTK == "NV").ToList();
+            else if(trangThai=="Ngưng hoạt động")
+                list = apiGateWay.ListUsers().Where(t=>t.idLoaiTK == "NV" && t.trangThai==false).ToList();
+            else
+                list = apiGateWay.ListUsers().Where(t =>t.idLoaiTK == "NV" && t.trangThai == true).ToList();
 
-            List<Users> list = apiGateWay.ListGuest();
             return View(list);
         }
+
+        
         public JsonResult ValidatePass(string pass1,string pass2)
         {
             System.Threading.Thread.Sleep(200);
@@ -101,7 +118,8 @@ namespace Client_QuanLythueTro.Controllers
             try
             {
                 apiGateWay.UpdateUsers(u);
-                return RedirectToAction("QuanLyNhanVien");
+                TempData["AlertMessage"] = "thanhcong";
+                return RedirectToAction("EditUsers", new { idUser = u.idUser });
             }
             catch
             {
@@ -137,7 +155,47 @@ namespace Client_QuanLythueTro.Controllers
                 return RedirectToAction("EditUser/" + id);
             }
         }
+        public ActionResult QuanLyKhachHang()
+        {
+            List<Users> listGuest = apiGateWay.ListUsers().Where(t => t.idLoaiTK != "NV").ToList();
+            return View(listGuest);
+        }
+        [HttpPost]
+        public ActionResult QuanLyKhachHang(string loai)
+        {
+            List<Users> list = new List<Users>();
+            if (loai == "All")
+                list = apiGateWay.ListUsers().Where(t => t.idLoaiTK != "NV").ToList();
+            else
+                list = apiGateWay.ListUsers().Where(t => t.idLoaiTK == loai ).ToList();
+            return View(list);
+        }
+        public ActionResult CreateGuest()
+        {
 
+            Users u = new Users();
+            return View(u);
+        }
+
+        // POST: AdminController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateGuest(Users u, IFormFile Avatar)
+        {
+            try
+            {
+
+                u.Avatar = Avatar;
+                apiGateWay.CreateUser(u);
+                TempData["mess"] = "oke";
+                return RedirectToAction("QuanLyNhanVien");
+            }
+            catch
+            {
+                TempData["mess"] = "loi";
+                return View();
+            }
+        }
         public ActionResult EditGuest(string id)
         {
 
@@ -145,7 +203,6 @@ namespace Client_QuanLythueTro.Controllers
             return View(users);
         }
 
-        // POST: AdminController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditGuest(Users u)
@@ -165,5 +222,12 @@ namespace Client_QuanLythueTro.Controllers
             Users users = apiGateWay.GetUser(id);
             return View(users);
         }
+
+        public ActionResult ThongTinCongTy()
+        {
+            return View();
+        }
+
+      
     }
 }
