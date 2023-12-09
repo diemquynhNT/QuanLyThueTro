@@ -428,5 +428,11 @@ namespace Client_QuanLythueTro.Controllers
             }
         }
 
+        public IActionResult HopDongThueTro()
+        {
+            return View();
+        }
+
+
     }
 }
