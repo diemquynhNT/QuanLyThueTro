@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json.Linq;
 using NuGet.Common;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Web;
@@ -20,20 +21,22 @@ namespace Client_QuanLythueTro.Controllers
         private readonly APIGateWayTinDang apiGateWay;
         private readonly APIGateWayDichVu apiGateWayDichVu;
         private readonly APIGateWayKhuVuc apiGateWayKhuVuc;
+        private readonly GiaoDich_Gateway apiGateWayGiaoDich;
 
-        public NVKDController(APIGateWayTinDang aPIGate, APIGateWayDichVu apiGateWayDichVu, APIGateWayKhuVuc APIGateWayKhuVuc)
+        public NVKDController(APIGateWayTinDang aPIGate, APIGateWayDichVu apiGateWayDichVu, APIGateWayKhuVuc APIGateWayKhuVuc, GiaoDich_Gateway apiGateWayGiaoDich)
         {
             this.apiGateWay = aPIGate;
             this.apiGateWayDichVu = apiGateWayDichVu;
             this.apiGateWayKhuVuc = APIGateWayKhuVuc;
+            this.apiGateWayGiaoDich = apiGateWayGiaoDich;
         }
        
         // GET: NVKDController
         public ActionResult TrangChu()
         {
             List<TinDang> listTin = apiGateWay.ListTinDang();
-            ViewBag.list = listTin;
-            return View();
+            TempData["listGiaoDich"]= apiGateWayGiaoDich.ListGiaoDich().Where(t=>t.ngayGiaoDich.Month==DateTime.Now.Month).ToList();
+            return View(listTin);
         }
         private void BindDropDownList()
         {
@@ -89,7 +92,6 @@ namespace Client_QuanLythueTro.Controllers
 
         public ActionResult CreateTinDang()
         {
-
             TinDang tin = new TinDang();
             return View(tin);
         }
@@ -97,13 +99,14 @@ namespace Client_QuanLythueTro.Controllers
         // POST: NVKDController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateTinDang(TinDang tin)
+        public async Task<ActionResult> CreateTinDang(TinDang tin, List<IFormFile> listimg)
         {
             try
             {
-                TinDang newTin= apiGateWay.CreateTinDang(tin);
+                TinDang newTin = apiGateWay.CreateTinDang(tin);
+                apiGateWay.CreateImage(newTin.idTinDang, listimg);
                 TempData["mess"] = "thanhcong";
-                return RedirectToAction("AddImgToTinDang", new { idTinDang = newTin.idTinDang });
+                return RedirectToAction("QuanLyTinDang");
             }
             catch (Exception ex)
             {
@@ -111,11 +114,11 @@ namespace Client_QuanLythueTro.Controllers
 
             }
         }
-        public ActionResult AddImgToTinDang(string idTinDang)
-        {
-            ViewBag.id = idTinDang;
-            return View();
-        }
+        //public ActionResult AddImgToTinDang(string idTinDang)
+        //{
+        //    ViewBag.id = idTinDang;
+        //    return View();
+        //}
 
         // GET: NVKDController/Edit/5
         public ActionResult EditTin(string id)
@@ -132,7 +135,8 @@ namespace Client_QuanLythueTro.Controllers
             try
             {
                 apiGateWay.UpdateTin(tin);
-                return RedirectToAction("QuanLyTinDang");
+                TempData["AlertMessage"] = "thanhcong";
+                return RedirectToAction("EditTin", new { idTinDang = tin.idTinDang });
             }
             catch (Exception ex)
             {
@@ -311,9 +315,22 @@ namespace Client_QuanLythueTro.Controllers
 
         public ActionResult QuanLyKhuVuc()
         {
-            List<Khuvucs> list=apiGateWayKhuVuc.ListKhuvuc();
+            return View();
+        }
+        public ActionResult QuanLyTinThanhPho(string cityname)
+        {
+            var listTin = apiGateWay.ListTinDangByIdThanhPho(cityname);
+            ViewBag.Cityname = cityname;
+            return View(listTin);
+        }
+
+        public ActionResult QuanLyGiaoDich()
+        {
+            var list = apiGateWayGiaoDich.ListGiaoDich();
             return View(list);
         }
+        
+
 
 
     }

@@ -2,9 +2,15 @@
 using Client_QuanLythueTro.Models;
 using Client_QuanLythueTro.Services;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using SmartBreadcrumbs.Extensions;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 builder.Services.AddScoped<APIGateWayTinDang>();
 builder.Services.AddScoped<APIGateWayDichVu>();
@@ -32,7 +38,6 @@ var app = builder.Build();
 
 app.UseSession();
 
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -40,6 +45,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -50,6 +56,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=ChuChoThue}/{action=IndexTinDangPT}/{id?}");
+    pattern: "{controller=Login}/{action=Login}/{id?}");
 
 app.Run();

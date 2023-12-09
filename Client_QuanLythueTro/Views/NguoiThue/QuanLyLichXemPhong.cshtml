@@ -2,7 +2,7 @@
 @using Newtonsoft.Json
 @using Microsoft.AspNetCore.Http
 @{
-    ViewData["Title"] = "QuanLyLichXemPhong";
+    ViewData["Title"] = "Quản lý lịch xem phòng";
     Layout = "~/Views/NguoiThue/LayoutMain/LayoutMainNguoiThue.cshtml";
     ViewBag.title = "Quản lý cá nhân";
     ViewBag.qltd = "active";
@@ -63,7 +63,7 @@
                                     </td>
                                 }
                                 <td>
-                                <a class="btn btn-success btn-sm" asp-action="DetailLichXem" asp-controller="NguoiThue" asp-route-idLichXem="@item.idLichXem">
+                                <a class="btn btn-success btn-sm" asp-action="DetailLichXem" asp-controller="NguoiThue" asp-route-idLichXem="@item.idLichXem" asp-route-idUser="@user.idUser" asp-route-idTin="@TempData["IdTin"]">
                                         Thông tin
                                 </a>
                                 </td>

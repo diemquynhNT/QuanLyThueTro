@@ -1,9 +1,12 @@
-﻿
+﻿@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
+
 @{
     ViewData["Title"] = "TrangChu";
     Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
     ViewBag.Name = "Trang chủ";
     ViewBag.home = "active";
+    ViewBag.title = "Trang chủ";
+    List<GiaoDich> listGiaoDich = (List<GiaoDich>)TempData["listGiaoDich"];
 }
 
 <div class="main-content">
@@ -14,16 +17,16 @@
                     <a href="">
                         <div class="stat-card">
                             <div class="stat-card__content">
-                                <p class="text-uppercase mb-1 text-muted">TIN ĐĂNG</p>
-                                <h4>Tổng</h4>
+                                <p class="text-uppercase mb-1 text-muted">TIN ĐĂNG TRONG THÁNG</p>
+                                <h4>Tổng @Model.Where(t=>t.ngayTaoTin.Month==DateTime.Now.Month).Count()</h4>
                                 <div style="font-size:16px">
-                                    <span class="text-success font-weight-bold ">+ 18 </span>
+                                    <span class="text-success font-weight-bold ">+ @Model.Where(t=>t.ngayTaoTin.Month==DateTime.Now.Month && t.ngayTaoTin.Date==DateTime.Now.Date ).Count() </span>
                                     <span class="text-muted">tin trong ngày</span>
                                 </div>
                             </div>
                             <div class="stat-card__icon stat-card__icon--success">
                                 <div class="stat-card__icon-circle" style=" background: rgba(0, 123, 255, 0.2);">
-                                    <i class="fa fa-clipboard-check" style="color: rgb(0, 28, 64);"></i>
+                                    <i class="bx bx-news" style="color: rgb(0, 28, 64);"></i>
                                 </div>
                             </div>
                         </div>
@@ -34,9 +37,9 @@
                         <div class="stat-card">
                             <div class="stat-card__content">
                                 <p class="text-uppercase mb-1 text-muted">TIN CHỜ DUYỆT</p>
-                                <h4> 76 Tin</h4>
+                                <h4> @Model.Where(t=>t.trangThaiTinDang==false).Count() Tin</h4>
                                 <div style="font-size:16px">
-                                    <span class="text-success font-weight-bold ">+</span>
+                                    <span class="text-success font-weight-bold ">+@Model.Where(t=>t.ngayTaoTin.Month==DateTime.Now.Month && t.ngayTaoTin.Date==DateTime.Now.Date && t.trangThaiTinDang==false ).Count()</span>
                                     <span class="text-muted">tin mới</span>
                                 </div>
                             </div>
@@ -53,15 +56,15 @@
                         <div class="stat-card">
                             <div class="stat-card__content">
                                 <p class="text-uppercase mb-1 text-muted">GIAO DỊCH</p>
-                                <h4> 432 giao dịch</h4>
+                                <h4> @listGiaoDich.Count() giao dịch</h4>
                                 <div style="font-size:16px">
-                                    <span class="text-success font-weight-bold ">+</span>
+                                    <span class="text-success font-weight-bold ">+ @listGiaoDich.Where(t=>t.ngayGiaoDich.Date==DateTime.Now.Date).Count()</span>
                                     <span class="text-muted"> giao dịch mới</span>
                                 </div>
                             </div>
                             <div class="stat-card__icon stat-card__icon--success">
                                 <div class="stat-card__icon-circle" style=" background: rgba(0, 123, 255, 0.2);">
-                                    <i class="fa fa-truck" style="color: rgb(0, 28, 64);"></i>
+                                    <i class="bx bx-credit-card" style="color: rgb(0, 28, 64);"></i>
                                 </div>
                             </div>
                         </div>
@@ -72,10 +75,10 @@
                     <a href="#tinhtrangdl">
                         <div class="stat-card">
                             <div class="stat-card__content">
-                                <p class="text-uppercase mb-1 text-muted">GÓI TIN</p>
-                                <h4>10 gói</h4>
+                                <p class="text-uppercase mb-1 text-muted">GÓI TIN DỊCH VỤ</p>
+                                <h4> 4 gói</h4>
                                 <div style="font-size:16px">
-                                    <span class="text-muted">34 Sắp hết hạn</span>
+                                    <span class="text-muted">Hoạt động</span>
                                 </div>
                             </div>
                             <div class="stat-card__icon stat-card__icon--success">
@@ -87,33 +90,13 @@
                     </a>
                 </div>
                 <div class="col-sm-4">
-                    <a href="#congno">
-                        <div class="stat-card">
-                            <div class="stat-card__content">
-                                <p class="text-uppercase mb-1 text-muted">GÓI TÀI KHOẢN</p>
-                                <h4>
-                                    2 Gói /h4>
-                                    <div style="font-size:16px">
-                                        <span class="text-muted">2 Loại</span>
-                                    </div>
-                            </div>
-                            <div class="stat-card__icon stat-card__icon--success">
-                                <div class="stat-card__icon-circle" style="background: #CBFAD5; ">
-                                    <i class="fa fa-money-bill" style="color: green;"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-sm-4">
                     <a href="">
                         <div class="stat-card">
                             <div class="stat-card__content">
-                                <p class="text-uppercase mb-1 text-muted">DOANH THU</p>
-                                <h4>doanh thu</h4>
+                                <p class="text-uppercase mb-1 text-muted">GÓI TÀI KHOẢN</p>
+                                <h4>4 gói</h4>
                                 <div style="font-size:16px">
-                                    <span class="text-muted">Doanh thu tính theo tháng</span>
+                                    <span class="text-muted">Hoạt độngtháng</span>
                                 </div>
                             </div>
                             <div class="stat-card__icon stat-card__icon--success">
@@ -125,11 +108,38 @@
                     </a>
 
                 </div>
+                @{
+                    double tien = 0;
+                    foreach(var item in listGiaoDich)
+                    {
+                        tien += item.tongTien;
+                    }
+                }
+                <div class="col-sm-4">
+                    <a href="#congno">
+                        <div class="stat-card">
+                            <div class="stat-card__content">
+                                <p class="text-uppercase mb-1 text-muted">DOANH THU</p>
+                                <h4>  @tien</h4>
+                                    <div style="font-size:16px">
+                                        <span class="text-muted">Hoạt động</span>
+                                    </div>
+                            </div>
+                            <div class="stat-card__icon stat-card__icon--success">
+                                <div class="stat-card__icon-circle" style="background: #CBFAD5; ">
+                                    <i class="fa fa-money-bill" style="color: green;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+              
             </div>
         </div>
     </div>
     @{
-        List<TinDang> list = ViewBag.list;
+        List<TinDang> list = Model.Where(t => t.ngayTaoTin.Month == DateTime.Now.Month && t.ngayTaoTin.Date == DateTime.Now.Date).ToList();
     }
     <div class="col-md-12" id="congno">
         <div class="tile">

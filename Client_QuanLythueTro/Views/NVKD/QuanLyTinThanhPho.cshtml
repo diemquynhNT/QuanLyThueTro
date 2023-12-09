@@ -1,0 +1,179 @@
+﻿@model IEnumerable<Client_QuanLythueTro.Models.TinDang>
+@using Client_QuanLythueTro.APIGateWay;
+
+@{
+    ViewData["Title"] = "QuanLyTinThanhPho";
+    Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
+    TinDang_PhongTro_GateWay callTinDangPT = new TinDang_PhongTro_GateWay();
+    ViewBag.kv = "active";
+    ViewBag.Name = "Khu vực hoạt động";
+}
+<input value="@ViewBag.Cityname" id="cityname" style="visibility:hidden" />
+
+<div id="chartContainer" style="height: 370px; width: 100%; margin:0px 10px"></div>
+
+<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+<script>
+    window.onload = function () {
+
+        var city = document.getElementById("cityname").value;
+
+        fetch('https://localhost:7034/api/TinDangPhongTro')
+            .then(response => response.json())
+            .then(data => {
+                const monthlyTotals = calculateMonthlyTotals(data, city);
+                updateChart(monthlyTotals);
+            })
+            .catch(error => {
+                console.error('Lỗi khi lấy dữ liệu:', error);
+            });
+
+        function calculateMonthlyTotals(data, cityName) {
+            const currentYear = new Date().getFullYear();
+            const totalsByMonth = Array(12).fill(0);
+            data.forEach(listing => {
+                const listingDate = new Date(listing.ngayBatDau);
+                const listingCity = listing.diaChi;
+
+                if (listingDate && listingCity && listingCity.includes(cityName) && listingDate.getFullYear() === currentYear) {
+                    const month = listingDate.getMonth();
+                    totalsByMonth[month]++;
+                }
+            });
+            return totalsByMonth;
+        }
+
+
+        function updateChart(monthlyTotals) {
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                theme: "light2", //
+                exportEnabled: true,
+                title: {
+                    text: "Thống kê tại "+city
+                },
+                data: [{
+                    type: "column",
+                    dataPoints: [
+                        { label: "Tháng 1", y: monthlyTotals[0] },
+                        { label: "Tháng 2", y: monthlyTotals[1] },
+                        { label: "Tháng 3", y: monthlyTotals[2] },
+                        { label: "Tháng 4", y: monthlyTotals[3] },
+                        { label: "Tháng 5", y: monthlyTotals[4] },
+                        { label: "Tháng 6", y: monthlyTotals[5] },
+                        { label: "Tháng 7", y: monthlyTotals[6] },
+                        { label: "Tháng 8", y: monthlyTotals[7] },
+                        { label: "Tháng 9", y: monthlyTotals[8] },
+                        { label: "Tháng 10", y: monthlyTotals[9] },
+                        { label: "Tháng 11", y: monthlyTotals[10] },
+                        { label: "Tháng 12", y: monthlyTotals[11] }
+                    ]
+                }]
+            });
+            chart.render();
+        }
+    }
+
+</script>
+
+<hr />
+
+<div class="tab-content">
+            <div class="col-md-12">
+                <div class="tile">
+                    <div class="col-sm-12 table-responsive">
+        <table class="table table-hover table-bordered js-copytextarea dataTable no-footer" cellpadding="0" cellspacing="0" border="0" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+            <thead>
+                <tr role="row">
+                    <th class="sorting" tabindex="0" aria-controls="sampleTable">Hình</th>
+                    <th class="sorting" tabindex="0" aria-controls="sampleTable">Mã</th>
+                    <th class="sorting" tabindex="0" aria-controls="sampleTable" width="100">Tiêu đề</th>
+                    <th class="sorting" tabindex="0" aria-controls="sampleTable">Loại</th>
+                    <th class="sorting" tabindex="0" aria-controls="sampleTable" width="100">Khu vực</th>
+                    <th class="sorting" tabindex="0" aria-controls="sampleTable">Status</th>
+                    <th class="sorting" tabindex="0" aria-controls="sampleTable">Hạn</th>>
+                    <th class="sorting">Chức năng</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @{
+                            List<string> imgList = callTinDangPT.ListImages(item.idTinDang);
+                        }
+                        <td>
+                            <img src="@imgList[0]" alt="..." width="100" height="100">
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.idTinDang)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.tieuDe)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.loaiTin)
+                        </td>
+                        <td>
+                        </td>
+                        @if (item.trangThaiTinDang)
+                        {
+                            <td>
+                                Đã duyệt
+                            </td>
+                        }
+                        else
+                        {
+
+                            <td>
+                                Chưa duyệt
+                            </td>
+                        }
+
+                        @{
+                            var ngaybd = String.Format("{0:d/M/yyyy}", item.ngayBatDau);
+                            var ngaykt = String.Format("{0:d/M/yyyy}", item.ngayKetThuc);
+                        }
+                        <td>
+                            @ngaybd - @ngaykt
+                        </td>
+
+                    @*    <td>
+                            <a href="/NVKD/EditTin/@item.idTinDang" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="/NVKD/DetailTinDang/@item.idTinDang" class="btn btn-outline-primary btn-sm" ata-toggle="tooltip" title="">
+                                <i class="fas fa-info-circle"></i>
+                            </a>
+                            <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modal-@item.idTinDang" data-bs-toggle="tooltip" title="Delete">
+                                <i class="fas fa-trash" style="color:red"></i>
+                            </a>
+                            <div class="modal fade" id="modal-@item.idTinDang" tabindex="-1" aria-labelledby="modal-@item.idTinDang" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Xóa tin</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Xác nhận xóa tin
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-sucess" onclick="DeleteTin(`@item.idTinDang`,`@item.trangThaiTinDang`)">Cập nhật</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>*@
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+</div>

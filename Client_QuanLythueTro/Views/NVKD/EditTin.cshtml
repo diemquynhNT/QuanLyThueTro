@@ -1,16 +1,28 @@
 ﻿@model Client_QuanLythueTro.Models.TinDang
-
+@using Client_QuanLythueTro.APIGateWay;
 @{
-    ViewData["Title"] = "EditTin";
+    ViewData["Title"] = "Thông tin";
     Layout = "~/Views/NVKD/LayoutNVKD/LayoutNVKD.cshtml";
     ViewBag.post = "active";
-    ViewBag.Name = "Edittin";
+    ViewBag.Name = "Cập nhật thông tin";
+    TinDang_PhongTro_GateWay callTinDangPT = new TinDang_PhongTro_GateWay();
+    List<string> imgList = callTinDangPT.ListImages(Model.idTinDang);
 }
 <link href="~/css/uploadimg.css" rel="stylesheet" />
+@{
+    var checkMessage = TempData["AlertMessage"];
+    if (checkMessage == "thanhcong")
+    {
+        <script>
+            swal("Yêu cầu thành công", "Đã cập nhật thành công !!! ", "success")
+        </script>
+
+    }
+}
 <div class="container">
     <div class="col-md-12">
         <div class="tile" id="printMe">
-            <h4 style="text-align:center">EDIT TIN MỚI</h4>
+            <h4 style="text-align:center">TIN ĐĂNG</h4>
             <form asp-action="EditTin">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 @Html.HiddenFor(model => model.idTinDang)
@@ -29,8 +41,7 @@
                         <input asp-for="loaiTin" class="form-control" required />
                         <span asp-validation-for="loaiTin" class="text-danger"></span>
                     </div>
-                    <hr />
-                    <h4 class="col-sm-12">">THÔNG TIN LIÊN HỆ</h4>
+                    <h4 class="col-sm-12">THÔNG TIN LIÊN HỆ</h4>
                     <hr />
                     <div class="form-group col-sm-6">
                         <b>Người liên hệ</b>
@@ -42,7 +53,6 @@
                         <input asp-for="sdtNguoiLienHe" class="form-control" required />
                         <span asp-validation-for="sdtNguoiLienHe" class="text-danger"></span>
                     </div>
-                    <hr />
                     <h4 class="col-sm-12">THÔNG TIN ĐĂNG TIN</h4>
                     <hr />
                     <div class="form-group col-sm-12">
@@ -81,14 +91,8 @@
                         <b>Hạn kết thúc</b>
                         <input value="@Model.ngayKetThuc" readonly class="form-control" />
                     </div>
-                    <hr />
                     <h4 class="col-sm-12">THÔNG TIN PHÒNG</h4>
                     <hr />
-                    <div class="form-group col-sm-6">
-                        <b>Khu vực</b>
-                        <input asp-for="idKhuVuc" class="form-control" readonly />
-                        <span asp-validation-for="idKhuVuc" class="text-danger"></span>
-                    </div>
                     <div class="form-group col-sm-6">
                         <b>Địa chỉ</b>
                         <input asp-for="diaChi" class="form-control" required />
@@ -142,75 +146,141 @@
                 </div>
             </form>
             <div class="form-group col-sm-12">
-                <h3>Hình ảnh</h3>
-                <a class="btn btn-sm" ata-toggle="tooltip" title="Thêm hình" data-toggle="modal" data-target="#MoreImage">
+                <h3 style="padding:10px 0">Hình ảnh phòng</h3>
+                <a class="btn btn-outline-dark btn-sm" style="margin:10px 0" data-bs-toggle="modal" data-bs-target="#MoreImage" data-bs-toggle="tooltip" title="Delete">
                     Thêm hình
                 </a>
-                <div>
-                    <div id="img-form">
-                        <div class="queued-div"></div>
+                <div class="modal fade" id="MoreImage" tabindex="-1" aria-labelledby="MoreImage" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Xác nhận</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group col-sm-12">
+                                    <h3>Chọn hình</h3>
+                                    <div id="imageUploadForm">
+                                        <div class="input-div">
+                                            <input type="file" class="listimg" id="listimg" name="listimg" multiple accept="image/png, image/jpeg, image/jpg">
+                                        </div>
+                                        <div id="saved-form">
+                                            <div class="saved-div"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success" onclick="ClickUpdateImage(`@Model.idTinDang`)">Thêm mới</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div id="demo" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        @for (int i = 0; i < imgList.Count; i++)
+                        {
+                            string act = "";
+                            if (i == 0) act = "active";
+                            <button type="button" data-bs-target="#demo" data-bs-slide-to="@i" class="@act"></button>
+                        }
+                        @*                        <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+                        *@
+                    </div>
+
+                    <div class="carousel-inner" style="height:350px; width:100%;">
+                        @for (int i = 0; i < imgList.Count; i++)
+                        {
+                            string act = "";
+                            if (i == 0) act = "active";
+                            <div class="carousel-item @act" style="width:100%; height:100%; text-align:center; background-color:black;">
+                                <img src="@imgList[i]" alt="Los Angeles" class="d-block" style="height:100%; object-fit: cover; margin:auto;" onclick="">
+
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
+
             </div>
+            <hr />
         </div>
     </div>
+    <div class="row" style="padding:10px;">
+        <div class="col-sm-2">
+            <a asp-action="QuanLyTinDang" class=" btn btn-warning btn-sm">Back to List</a>
+        </div>
+        @if (Model.trangThaiTinDang)
+        {
+            <div class="col-sm-2">
+                <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#Huy" data-bs-toggle="tooltip" title="Hủy">
+                    Hủy
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="col-sm-2">
+                <a class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#Duyet" data-bs-toggle="tooltip" title="Duyệt">
+                    Duyệt tin
+                </a>
+            </div>
+        }
+    </div>
 </div>
+
 <input value="@Model.idTinDang" id="idTin" style="visibility:hidden" />
-<div class="row" style="padding:10px;">
-    <div class="col-sm-2">
-        <a asp-action="QuanLyTinDang" class=" btn btn-warning btn-sm">Back to List</a>
-    </div>
-    @if (Model.trangThaiTinDang)
-    {
-        <div class="col-sm-2">
-            <a class="btn btn-danger btn-sm" ata-toggle="tooltip" title="Hủy duyệt" data-toggle="modal" data-target="#HuyDuyet">
-                Hủy duyệt
-            </a>
-        </div>
-    }
-    else
-    {
-        <div class="col-sm-2">
-            <a class="btn btn-success btn-sm" ata-toggle="tooltip" title="Kích hoạt" data-toggle="modal" data-target="#Duyet">
-                Duyệt tin
-            </a>
-        </div>
-    }
-</div>
-<div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="Duyet" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="Duyet" tabindex="-1" aria-labelledby="Duyet" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Duyệt tin</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <div class="modal-body">
-                <h4 style="text-align:center;padding:20px 20px 0px 20px;">
-                    XÁC NHẬN DUYỆT TIN @Model.idTinDang
-                </h4>
+                Xác nhận duyêt tin - @Model.idTinDang
             </div>
             <div class="modal-footer">
-                <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
-                <button class="btn btn-success" onclick="DuyetTin()" type="submit">Duyệt</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="HuyDuyet" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h4 style="text-align:center;padding:20px 20px 0px 20px;">
-                    XÁC NHẬN HỦY DUYỆT TIN @Model.idTinDang
-                </h4>
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
-                <button class="btn btn-success" onclick="HuyDuyetTin()" type="submit">Hủy Duyệt</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" onclick="DuyetTin()">Duyệt</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" style="padding:100px 350px;margin:50px;text-align:center" id="MoreImage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+
+<div class="modal fade" id="Huy" tabindex="-1" aria-labelledby="Huy" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Hủy duyệt</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Xác nhận hủy duyêt tin - @Model.idTinDang
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger" onclick="HuyDuyetTin()">Hủy duyệt</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="MoreImage" tabindex="-1" aria-labelledby="MoreImage" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <div class="modal-body">
                 <div class="form-group col-sm-12">
                     <h3>Chọn hình</h3>
@@ -221,14 +291,12 @@
                         <div id="saved-form">
                             <div class="saved-div"></div>
                         </div>
-                        <div class="form-group">
-                            <input type="submit" onclick="ClickUpdateImage()" value="Cập nhật" class="btn btn-success btn-sm" />
-                        </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-secondary" data-dismiss="modal">Đóng</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" onclick="ClickUpdateImage(`@Model.idTinDang`)">Thêm mới</button>
             </div>
         </div>
     </div>
@@ -327,8 +395,10 @@
                 return response.blob();
             })
             .then(function (data) {
-                alert("thanh cong")
-                location.reload();
+                swal("Yêu cầu thành công", "Đã duyệt thành công !!! ", "success")
+                    .then((value) => {
+                        location.reload();
+                    });
             })
             .catch(function (error) {
                 console.log("Error: " + error);
@@ -344,8 +414,10 @@
                 return response.blob();
             })
             .then(function (data) {
-                alert("thanh cong")
-                location.reload();
+                 swal("Yêu cầu thành công", "Đã huy tin thành công !!! ", "success")
+                .then((value) => {
+                    location.reload();
+                });
             })
             .catch(function (error) {
                 console.log("Error: " + error);
@@ -353,15 +425,20 @@
             });
     }
 
-    async function ClickUpdateImage() {
+    async function ClickUpdateImage(id) {
         const formData = new FormData();
         const imageFiles = document.getElementById("listimg").files;
         for (let i = 0; i < imageFiles.length; i++) {
-            formData.append("list", imageFiles[i]);
+            formData.append("files", imageFiles[i]);
         }
-        formData.append("id", id);
+        var url = "https://localhost:7034/api/TinDangPhongTro/AddImages/" + id;
 
-        var url = "https://localhost:7034/api/TinDang/AddImageToTinDang?id=" + id;
+        swal({
+            title: "Đang xử lý yêu cầu",
+            text: "Vui lòng đợi trong khi chúng tôi xử lý yêu cầu của bạn...",
+            button: false
+        });
+
         const response = await fetch(url, {
             method: "POST",
             body: formData
@@ -369,11 +446,14 @@
 
         if (response.ok) {
             console.log("oke");
-            alert("thanh cong")
-            location.reload()
+            swal("Yêu cầu thành công", "Đã thêm tin thành công !!! ", "success")
+                .then((value) => {
+                    location.reload();
+                });
         } else {
             console.error("Lỗi:", response.status);
         }
     }
+
 
 </script>

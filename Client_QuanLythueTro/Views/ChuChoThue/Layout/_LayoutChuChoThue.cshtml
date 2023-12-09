@@ -140,6 +140,31 @@
     </nav>
     <!-- header section ends -->
     <div class="container">
+            @{
+                List<Breadcrumb> listLink = ViewBag.Breadcrumbs;
+            }
+            <main role="main" class="ml-sm-auto col-lg-10" style="margin-top: 20px;">
+                <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        @if(listLink !=null)
+                        {
+                            foreach (var breadcrumb in listLink)
+                            {
+                                <li class="breadcrumb-item">
+                                    @if (!string.IsNullOrEmpty(breadcrumb.Url))
+                                    {
+                                        <a href="@breadcrumb.Url">@breadcrumb.Label</a>
+                                    }
+                                    else
+                                    {
+                                        <span>@breadcrumb.Label</span>
+                                    }
+                                </li>
+                            }
+                            <li class="breadcrumb-item active" aria-current="page">@ViewBag.title</li>
+                        }
+                    </ol>
+                </nav>
         @RenderBody()
     </div>
      <footer class="border-top footer text-muted">
