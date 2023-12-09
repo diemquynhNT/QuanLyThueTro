@@ -19,6 +19,8 @@ builder.Services.AddScoped<TinDang_PhongTro_GateWay>();
 builder.Services.AddScoped<LichXemPhong_GateWay>();
 builder.Services.AddScoped<APIGateWayKhuVuc>();
 builder.Services.AddScoped<GiaoDich_Gateway>();
+
+builder.Services.Configure<MomoOptionModel>(builder.Configuration.GetSection("MomoAPI"));
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<APIGateWayLichXemPhong>();
 

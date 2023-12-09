@@ -24,9 +24,9 @@ namespace Client_QuanLythueTro.Controllers
         private readonly APIGateWayDichVu _callDichVu;
         private readonly GiaoDich_Gateway _callGiaoDich;
         private readonly IPaymentService _paymentService;
+        private readonly APIGateWayUsers _callWayUsers;
 
-
-        public ChuChoThueController(TinDang_PhongTro_GateWay callTinDangPT, LichXemPhong_GateWay callLichXemPhong, IPaymentService paymentService, APIGateWayDichVu callDichVu, GiaoDich_Gateway callGiaoDich, APIGateWayTinDang apiTinDang)
+        public ChuChoThueController(TinDang_PhongTro_GateWay callTinDangPT, LichXemPhong_GateWay callLichXemPhong, IPaymentService paymentService, APIGateWayDichVu callDichVu, GiaoDich_Gateway callGiaoDich, APIGateWayTinDang apiTinDang, APIGateWayUsers callWayUsers = null)
         {
             this.callTinDangPT = callTinDangPT;
             _callLichXemPhong = callLichXemPhong;
@@ -34,7 +34,7 @@ namespace Client_QuanLythueTro.Controllers
             _callDichVu = callDichVu;
             _callGiaoDich = callGiaoDich;
             this.apiTinDang = apiTinDang;
-
+            _callWayUsers = callWayUsers;
         }
 
         public Users GetUser()
@@ -336,7 +336,7 @@ namespace Client_QuanLythueTro.Controllers
         }
 
         [HttpPost]
-        public IActionResult DangKyDichVu(VNPayInformationModel model, string madv, int httt)
+        public async Task<IActionResult> DangKyDichVu(VNPayInformationModel model, string madv, int httt)
         {
             var dichvu = _callDichVu.GetGoiTin(madv);
             model.OrderType = madv;
@@ -348,13 +348,33 @@ namespace Client_QuanLythueTro.Controllers
             {
                 var url = _paymentService.CreateVNPaymentUrl(model, HttpContext);
                 return Redirect(url);
+            }else if(httt == 3)
+            {
+                MomoInfoModel momoModel = new MomoInfoModel();
+                momoModel.FullName = model.Name;
+                momoModel.Amount = model.Amount;
+                momoModel.OrderId = "123456789";
+                momoModel.OrderInfo = model.OrderDescription;
+                var response = await _paymentService.CreatePaymentAsync(momoModel);
+                return Redirect(response.PayUrl);
             }
 
             return View();
             
         }
 
-        public IActionResult PaymentCallback()
+        [HttpGet]
+        public IActionResult MomoPaymentCallBack()
+        {
+            var response = _paymentService.PaymentExecuteAsync(HttpContext.Request.Query);
+            if(response.ErrorCode != 42)
+            {
+                return View(response);
+            }else
+                return RedirectToAction("DangKyDichVu");
+        }
+
+        public IActionResult VNPayPaymentCallback()
         {
             var response = _paymentService.VNPaymentExecute(Request.Query);
             if(response.VnPayResponseCode == "00")
@@ -386,6 +406,26 @@ namespace Client_QuanLythueTro.Controllers
             Users user = GetUser();
             IEnumerable<GiaoDich> giaoDiches = _callGiaoDich.GetGiaoDich(user.idUser);
             return View(giaoDiches);
+        }
+
+        public IActionResult ThongTinCaNhan(string id)
+        {
+            Users u = _callWayUsers.GetUser(id);
+            return View(u);
+        }
+        [HttpPost]
+        public IActionResult ThongTinCaNhan(Users u)
+        {
+            try
+            {
+                _callWayUsers.UpdateUsers(u);
+                TempData["thongbao"] = "thanhcong";
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
         }
 
     }
