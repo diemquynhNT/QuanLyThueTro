@@ -330,7 +330,10 @@ namespace Client_QuanLythueTro.Controllers
             return View(list);
         }
         
-
+        public ActionResult ThongTinCT()
+        {
+            return View();
+        }
 
 
     }
