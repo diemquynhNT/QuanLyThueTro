@@ -47,16 +47,16 @@
         fetch('https://localhost:7034/api/TinDangPhongTro')
             .then(response => response.json())
             .then(data => {
-             
+                console.log(data)
 
                 data.forEach(item => {
-                    if (item.diaChi && item.diaChi.indexOf('Hồ Chí Minh') !== -1 && getMonthItem(item.ngayTaoTin) === currentMonth && getYearItem(item.ngayTaoTin) === currentYear &&
+                    if (item.diaChi && item.diaChi.indexOf('Hồ Chí Minh') !== -1 && getMonthItem(item.ngayKetThuc) === currentMonth && getYearItem(item.ngayKetThuc) === currentYear &&
                         item.trangThaiTinDang == true) {
                         listHCM.push(item);
-                    } else if (item.diaChi && item.diaChi.indexOf('Hà Nội') !== -1 && getMonthItem(item.ngayTaoTin) === currentMonth && getYearItem(item.ngayTaoTin) === currentYear && item.trangThaiTinDang == true) {
+                    } else if (item.diaChi && item.diaChi.indexOf('Hà Nội') !== -1 && getMonthItem(item.ngayKetThuc) === currentMonth && getYearItem(item.ngayKetThuc) === currentYear && item.trangThaiTinDang == true) {
                         listHN.push(item);
                     }
-                    else if (getMonthItem(item.ngayTaoTin) === currentMonth && getYearItem(item.ngayTaoTin) === currentYear && item.trangThaiTinDang == true) {
+                    else if (getMonthItem(item.ngayKetThuc) === currentMonth && getYearItem(item.ngayKetThuc) === currentYear && item.trangThaiTinDang == true) {
                         listother.push(item);
                     }
                 });

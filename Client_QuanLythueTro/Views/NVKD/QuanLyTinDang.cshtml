@@ -45,7 +45,6 @@
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Mã</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable" width="100">Tiêu đề</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Loại</th>
-                                            <th class="sorting" tabindex="0" aria-controls="sampleTable" width="100">Khu vực</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Status</th>
                                             <th class="sorting" tabindex="0" aria-controls="sampleTable">Hạn</th>>
                                             <th class="sorting">Chức năng</th>
@@ -71,8 +70,7 @@
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.loaiTin)
                                                 </td>
-                                                <td>
-                                                </td>
+                                             
                                                 @if (item.trangThaiTinDang)
                                                 {
                                                     <td>
@@ -117,7 +115,7 @@
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-sucess" onclick="DeleteTin(`@item.idTinDang`,`@item.trangThaiTinDang`)">Cập nhật</button>
+                                                                <button type="submit" class="btn btn-danger" onclick="DeleteTin(`@item.idTinDang`,`@item.trangThaiTinDang`)">Xóa</button>
                                                                 </div>
                                                             </div>
                                                         </div>
